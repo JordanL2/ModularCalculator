@@ -1,0 +1,6 @@
+eff = 35 miles/gallon;
+usage = 1/eff;
+usage * 100 miles;
+usage to ml/km;
+usage to mm^2;
+usage to acres;

@@ -1,0 +1,7 @@
+orbitheight = 35862.9695km; # Height of satellite above the ground
+earthmass = 5.97237e24kg;
+earthradius = 6378.137km;
+gm = G earthmass;
+orbitradius = earthradius + orbitheight;
+time = 2 pi (orbitradius^3 / gm)^0.5;
+format(round(time, 3));

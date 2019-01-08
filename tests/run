@@ -1,0 +1,8 @@
+#!/bin/sh
+
+cd "$(dirname "$0")"
+./testbasiccalculator.py
+./testadvancedcalculator.py
+./testscientificcalculator.py
+./testcomputingcalculator.py
+./testsyntaxerrorhandling.py
