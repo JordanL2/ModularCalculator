@@ -6,11 +6,46 @@ Designed to make it easy to add a calculator into another Python application, wi
 
 Also has a Qt interface, allowing it to be used as a desktop app. The supported features are aimed at making a tool useful for scientific, engineering or computing work.
 
+# Requirements
+
+* Linux (probably)
+* Python 3.4+
+* Qt 5 (not sure specifically which minor version is minimum)
+* PyQt5
+
 # Usage
 
-Requires Linux (probably), Python 3.4+, Qt 5 (not sure specifically which minor version is minimum), PyQt5.
-
+## As a Graphical App
 Run the "run" shell script to launch the interface. This can also be symlinked to, for example from /usr/bin.
+
+## As a Component in a Python App
+Import the ModularCalculator class:
+```
+from modularcalculator.modularcalculator import ModularCalculator
+```
+
+You can initialise the object with the name of a preset, which will auto-install all features associated with the preset:
+```
+c = ModularCalculator('Advanced')
+```
+See what presets are available and their features in features/list.py.
+
+Otherwise, initialise an empty ModularCalculator and add the features you want. You'll need to call setup() when you've finished adding features.
+```
+c = ModularCalculator()
+c.add_features(['numerical.basicarithmetic', 'numerical.decimalnumbers', 'structure.operators'])
+c.setup()
+```
+Each feature's dependencies will also be installed automatically.
+
+Then, call calculate() with the expression to be calculated.
+
+```
+response = c.calculate('2+3')
+print(response.results[0].value)
+```
+
+These examples are available in examples/basic_integration.py.
 
 # To Do
 
