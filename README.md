@@ -14,10 +14,10 @@ Run the "run" shell script to launch the interface. This can also be symlinked t
 
 # To Do
 
-ENGINE
+## Engine
 * Unit normalisation - make it possible to configure to use right-most unit as standard rather than left-most
 
-FEATURES
+## Features
 * User defined functions - external files which can be called and passed parameters, last statement in file is the return value for the function
 * Dates:
 	* Timezones?
@@ -25,14 +25,11 @@ FEATURES
 		* Date function to increment a particular element of the date, eg dateincrement('2017-01-01', 3, 'year') => '2020-01-01' (also: datedecrement)
 		* Alternatively, dateadd checks if the unit is year or month, and number is integer, and increments year/month in that case - too much black magic
 
-OPERATORS
-* forceto - changes the units, with no value conversion or unit compatibility checking
-
-FUNCTIONS
+## Functions
 * Functions for orbital mechanics
 * Function to convert lumens and frequency to watts
 
-UNITS
+## Units
 * Pressure
 	* PSI
 	* Atmospheres
@@ -49,9 +46,9 @@ UNITS
 	* Should systems preference be a feature_option? Also other unitnormaliser options?
 	* Can kWh become recognisable? Also all other prefixes
 
-CONSTANTS
+## Constants
 
-GUI
+## Graphical Interface
 * Functionality:
 	* Ability to reorder unit system preference
 	* Ability to select features calculator has, screen to customise calculator, if calculator fails to init display error message
@@ -88,7 +85,6 @@ GUI
 	* Icon
 	* When units are in short form, no space between value and unit in answer display
 
+## Code Quality
 
-GENERAL / CODE QUALITY
-
-DOCUMENTATION
+## Documentation
