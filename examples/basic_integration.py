@@ -10,6 +10,5 @@ print(response.results[0].value)
 # Empty calculator with features manually installed
 c = ModularCalculator()
 c.add_features(['numerical.basicarithmetic', 'numerical.decimalnumbers', 'structure.operators'])
-c.setup()
 response = c.calculate('2+3')
 print(response.results[0].value)

@@ -30,15 +30,14 @@ c = ModularCalculator('Advanced')
 ```
 See what presets are available and their features in features/list.py.
 
-Otherwise, initialise an empty ModularCalculator and add the features you want. You'll need to call setup() when you've finished adding features.
+Otherwise, initialise an empty ModularCalculator and add the features you want.
 ```
 c = ModularCalculator()
 c.add_features(['numerical.basicarithmetic', 'numerical.decimalnumbers', 'structure.operators'])
-c.setup()
 ```
-Each feature's dependencies will also be installed automatically.
+Each feature's dependencies will also be installed automatically. You can call add_features() as many times as you want, you don't need to add all your features in one go.
 
-Then, call calculate() with the expression to be calculated.
+Then, call calculate() with the expression to be calculated. This returns a response object, containing a list of results. Since this is a single statement, there is only one result here.
 
 ```
 response = c.calculate('2+3')

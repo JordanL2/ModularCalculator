@@ -28,8 +28,7 @@ class ModularCalculator(NumericalEngine):
         return self.preset_list.keys()
 
     def load_preset(self, preset):
-            self.add_features(self.preset_list[preset])
-            self.setup()
+        self.add_features(self.preset_list[preset])
 
     def list_features(self):
         return self.feature_list
@@ -66,6 +65,7 @@ class ModularCalculator(NumericalEngine):
                         self.add_features(dependency, debug)
                 self.feature_list[name].install(self)
                 self.installed_features.add(name)
+        self.setup()
 
     def add_feature_to_be_installed(self, name):
         if name in self.features_to_install:
