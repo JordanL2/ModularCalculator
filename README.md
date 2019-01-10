@@ -1,10 +1,11 @@
 # Description
 
-A powerful, modular calculator engine written in Python.
+A powerful, modular calculator written in Python.
 
-Designed to make it easy to add a calculator into another Python application, with the specific features required.
+Designed to make it easy to add a calculator into another Python application, with the specific features required. Adding custom features is possible.
 
 Also has a Qt interface, allowing it to be used as a desktop app. The supported features are aimed at making a tool useful for scientific, engineering or computing work.
+
 
 # Requirements
 
@@ -12,6 +13,7 @@ Also has a Qt interface, allowing it to be used as a desktop app. The supported 
 * Python 3.4+
 * Qt 5 (todo - figure out precisely which minor version is minimum)
 * PyQt5
+
 
 # Usage
 
@@ -30,12 +32,12 @@ c = ModularCalculator('Advanced')
 ```
 See what presets are available and their features in features/list.py.
 
-Otherwise, initialise an empty ModularCalculator and add the features you want.
+Otherwise, initialise an empty ModularCalculator and add the features you want, using each feature's id field.
 ```
 c = ModularCalculator()
 c.add_features(['numerical.basicarithmetic', 'numerical.decimalnumbers', 'structure.operators'])
 ```
-Each feature's dependencies will also be installed automatically. You can call add_features() as many times as you want, you don't need to add all your features in one go.
+Each feature's dependencies will also be installed automatically. The order of the features doesn't matter, if each feature's dependencies and installation order hints have been defined correctly they will be installed in the correct order. Because installation order matters, it is best to install all your features in one call to add_features().
 
 Then, call calculate() with the expression to be calculated. This returns a response object, containing a list of results. Since this is a single statement, there is only one result here.
 
@@ -45,6 +47,7 @@ print(response.results[0].value)
 ```
 
 These examples are available in examples/basic_integration.py.
+
 
 # To Do
 
@@ -93,7 +96,7 @@ These examples are available in examples/basic_integration.py.
 		* Way of seeing possible inputs for an operator or function - number of inputs, types allowed for each input
 	* Dialog that allows editing of feature options
 	* Scientific notation number display option
-	* Auto-select dark theme if needed
+	* Auto-select dark theme if system theme is dark
 
 * Usability / quality of life:
 	* Remember what file was loaded, display in title, Save saves to it, add Save As
