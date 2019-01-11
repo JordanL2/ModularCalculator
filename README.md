@@ -46,7 +46,7 @@ response = c.calculate('2+3')
 print(response.results[0].value)
 ```
 
-These examples are available in examples/basic_integration.py.
+These examples are available in examples/basic_integration.py. See examples/advanced_integration.py for a guide to adding custom features.
 
 
 # To Do
