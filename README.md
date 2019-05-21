@@ -65,6 +65,7 @@ These examples are available in examples/basic_integration.py. See examples/adva
 ## Functions
 * Functions for orbital mechanics
 * Function to convert lumens and frequency to watts
+* Parameter help info for operations, display it on parameter validation error
 
 ## Units
 * Pressure
@@ -97,6 +98,7 @@ These examples are available in examples/basic_integration.py. See examples/adva
 	* Dialog that allows editing of feature options
 	* Scientific notation number display option
 	* Auto-select dark theme if system theme is dark
+	* Option to reset variable state at start of multi-statement execution
 
 * Usability / quality of life:
 	* Remember what file was loaded, display in title, Save saves to it, add Save As

@@ -10,7 +10,7 @@ from PyQt5.QtGui import QFontDatabase
 
 class CalculatorTextEdit(QTextEdit):
 
-    def __init__(self, interface, calculator):
+    def __init__(self, interface):
         super().__init__()
         editFont = QFontDatabase.systemFont(QFontDatabase.FixedFont)
         editFont.setBold(True)
@@ -18,13 +18,15 @@ class CalculatorTextEdit(QTextEdit):
         self.setFont(editFont)
 
         self.interface = interface
-        self.calculator = calculator
         self.highlighter = SyntaxHighlighter()
         self.defaultStyling()
         self.initStyling()
         self.oldText = None
 
         self.autoExecute = True
+
+    def setCalculator(self, calculator):
+        self.calculator = calculator
 
     def defaultStyling(self):
         self.syntax = {

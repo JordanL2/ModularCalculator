@@ -8,7 +8,7 @@ from modularcalculator.interface.statefulapplication import *
 from modularcalculator.interface.textedit import *
 
 import sys
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QMessageBox, QSplitter, QAction, QFileDialog
 import functools
 
@@ -17,17 +17,20 @@ class ModularCalculatorInterface(StatefulApplication):
 
     def __init__(self):
         super().__init__()
-        self.calculator = ModularCalculator('Computing')
         self.initUI()
         self.initMenu()
         self.restoreAllState()
         self.entry.setFocus()
         self.show()
+        self.calcTimer = QTimer()
+        self.calcTimer.setSingleShot(True)
+        self.calcTimer.timeout.connect(self.initCalculator)
+        self.calcTimer.start(0)
 
     def initUI(self):
         self.display = CalculatorDisplay()
 
-        self.entry = CalculatorTextEdit(self, self.calculator)
+        self.entry = CalculatorTextEdit(self)
 
         self.splitter = QSplitter()
         self.splitter.setOrientation(Qt.Vertical)
@@ -100,22 +103,25 @@ class ModularCalculatorInterface(StatefulApplication):
         self.optionsSimplifyUnits.triggered.connect(self.setUnitSimplification)
         optionsMenu.addAction(self.optionsSimplifyUnits)
 
+    def initCalculator(self):
+        self.calculator = ModularCalculator('Computing')
+        self.entry.setCalculator(self.calculator)
+        self.entry.restoreState(self.fetchStateText("textContent"))
+        self.setTheme(self.fetchStateText("theme"))
+        self.setAutoExecute(self.fetchStateBoolean("viewSyntaxParsingAutoExecutes", True))
+        self.setPrecision(self.fetchStateNumber("precision", 30))
+        self.setUnitSimplification(self.fetchStateBoolean("simplifyUnits", True))
+
     def restoreAllState(self):
         self.restoreGeometry(self.fetchState("mainWindowGeometry"))
         self.restoreState(self.fetchState("mainWindowState"))
         self.splitter.restoreState(self.fetchState("splitterSizes"))
 
         self.display.restoreState(self.fetchStateMap("displayOutput"))
-        self.entry.restoreState(self.fetchStateText("textContent"))
 
         self.viewFinalOnly.setChecked(self.fetchStateBoolean("viewFinalOnly", False))
         self.viewClearForMulti.setChecked(self.fetchStateBoolean("viewClearForMulti", False))
-        self.setTheme(self.fetchStateText("theme"))
         self.setShortUnits(self.fetchStateBoolean("viewShortUnits", False))
-        self.setAutoExecute(self.fetchStateBoolean("viewSyntaxParsingAutoExecutes", True))
-
-        self.setPrecision(self.fetchStateNumber("precision", 30))
-        self.setUnitSimplification(self.fetchStateBoolean("simplifyUnits", True))
 
     def storeAllState(self):
         self.storeState("mainWindowGeometry", self.saveGeometry())
