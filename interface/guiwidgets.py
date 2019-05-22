@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
-from PyQt5.QtWidgets import QInputDialog, QWidgetAction, QSpinBox, QLabel, QHBoxLayout, QWidget
+from PyQt5.QtCore import Qt, QStringListModel
+from PyQt5.QtWidgets import QInputDialog, QWidgetAction, QSpinBox, QLabel, QHBoxLayout, QVBoxLayout, QWidget, QListView, QDialog, QAbstractItemView, QPushButton
 
 
 class SelectionDialog(QInputDialog):
@@ -14,6 +15,47 @@ class SelectionDialog(QInputDialog):
         self.setLabelText(label)
         self.textValueSelected.connect(okFunction)
         self.setVisible(True)
+
+
+class SortableListModel(QStringListModel):
+
+    def flags(self, index):
+        if index.isValid():
+            return Qt.ItemIsEnabled | Qt.ItemIsSelectable | Qt.ItemIsDragEnabled
+        return super().flags(index)
+
+
+class SortableList(QDialog):
+
+    def __init__(self, parent, title, label, items, okFunction):
+        super().__init__(parent)
+
+        self.okFunction = okFunction
+
+        layout = QVBoxLayout()
+
+        labelWidget = QLabel(label)
+        layout.addWidget(labelWidget)
+
+        self.stringModel = SortableListModel()
+        self.stringModel.setStringList(items)
+
+        listView = QListView(self)
+        listView.setModel(self.stringModel)
+        listView.setDragDropMode(QAbstractItemView.InternalMove)
+        layout.addWidget(listView)
+
+        button = QPushButton("OK", self)
+        button.clicked.connect(self.ok)
+        layout.addWidget(button)
+
+        self.setLayout(layout)
+        self.setWindowTitle(title)
+        self.setVisible(True)
+
+    def ok(self):
+        self.okFunction(self.stringModel.stringList())
+        self.close()
 
 
 class MenuSpinBox(QWidgetAction):

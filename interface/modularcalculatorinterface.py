@@ -51,22 +51,29 @@ class ModularCalculatorInterface(StatefulApplication):
         menubar = self.menuBar()
         
         fileMenu = menubar.addMenu('File')
+        
         fileOpen = QAction('Open', self)
         fileOpen.triggered.connect(self.open)
         fileMenu.addAction(fileOpen)
+        
         fileSave = QAction('Save', self)
         fileSave.triggered.connect(self.save)
         fileMenu.addAction(fileSave)
 
         viewMenu = menubar.addMenu('View')
+        
         viewClear = QAction('Clear', self)
         viewClear.triggered.connect(self.display.clear)
         viewMenu.addAction(viewClear)
+        
         viewMultiMenu = viewMenu.addMenu('Multi-Statements')
+        
         self.viewFinalOnly = QAction('Only Show Final Answer', self, checkable=True)
         viewMultiMenu.addAction(self.viewFinalOnly)
+        
         self.viewClearForMulti = QAction('Always Clear Output', self, checkable=True)
         viewMultiMenu.addAction(self.viewClearForMulti)
+        
         viewThemeMenu = viewMenu.addMenu('Theme')
         self.themeActions = {}
         for theme in sorted(self.entry.syntax.keys(), key=str.lower):
@@ -74,44 +81,55 @@ class ModularCalculatorInterface(StatefulApplication):
             self.themeActions[themeAction] = theme
             themeAction.triggered.connect(functools.partial(self.setTheme, theme))
             viewThemeMenu.addAction(themeAction)
+        
         self.viewShortUnits = QAction('Units in Short Form', self, checkable=True)
         self.viewShortUnits.triggered.connect(self.setShortUnits)
         viewMenu.addAction(self.viewShortUnits)
+        
         self.viewSyntaxParsingAutoExecutes = QAction('Syntax Parsing Performs Evaluation', self, checkable=True)
         self.viewSyntaxParsingAutoExecutes.triggered.connect(self.setAutoExecute)
         viewMenu.addAction(self.viewSyntaxParsingAutoExecutes)
 
         insertMenu = menubar.addMenu('Insert')
+        
         insertConstant = QAction('Constant', self)
         insertConstant.triggered.connect(self.insertConstant)
         insertMenu.addAction(insertConstant)
+        
         insertFunction = QAction('Function', self)
         insertFunction.triggered.connect(self.insertFunction)
         insertMenu.addAction(insertFunction)
+        
         insertOperator = QAction('Operator', self)
         insertOperator.triggered.connect(self.insertOperator)
         insertMenu.addAction(insertOperator)
+        
         insertUnit = QAction('Unit', self)
         insertUnit.triggered.connect(self.insertUnit)
         insertMenu.addAction(insertUnit)
 
         optionsMenu = menubar.addMenu('Options')
+        
         self.precisionSpinBox = MenuSpinBox(self, 'Precision', 1, 50)
         self.precisionSpinBox.spinbox.valueChanged.connect(self.setPrecision)
         optionsMenu.addAction(self.precisionSpinBox)
+        
         self.optionsSimplifyUnits = QAction('Simplify Units', self, checkable=True)
         self.optionsSimplifyUnits.triggered.connect(self.setUnitSimplification)
         optionsMenu.addAction(self.optionsSimplifyUnits)
 
-    def initCalculator(self, calculator=None):
-        if calculator is None:
-            self.calculator = ModularCalculator('Computing')
-        else:
-            self.calculator = calculator
+        self.optionsUnitSystemPreference = QAction('Unit System Preference', self)
+        self.optionsUnitSystemPreference.triggered.connect(self.setUnitSystemPreference)
+        optionsMenu.addAction(self.optionsUnitSystemPreference)
+
+    def initCalculator(self):
+        self.setCalculator(ModularCalculator('Computing'))
+        self.restoreCalculatorState()
+
+    def setCalculator(self, calculator):
+        self.calculator = calculator
         self.entry.setCalculator(self.calculator)
         self.entry.refresh()
-        self.setPrecision(self.fetchStateNumber("precision", 30))
-        self.setUnitSimplification(self.fetchStateBoolean("simplifyUnits", True))
 
     def restoreAllState(self):
         self.restoreGeometry(self.fetchState("mainWindowGeometry"))
@@ -129,6 +147,13 @@ class ModularCalculatorInterface(StatefulApplication):
         self.viewClearForMulti.setChecked(self.fetchStateBoolean("viewClearForMulti", False))
         self.setShortUnits(self.fetchStateBoolean("viewShortUnits", False))
 
+    def restoreCalculatorState(self):
+        self.setPrecision(self.fetchStateNumber("precision", 30))
+        self.setUnitSimplification(self.fetchStateBoolean("simplifyUnits", True))
+        unitSystems = self.fetchStateArray("unitSystemsPreference")
+        if unitSystems is not None and len(unitSystems) > 0:
+            self.calculator.unit_normaliser.systems_preference = unitSystems
+
     def storeAllState(self):
         self.storeState("mainWindowGeometry", self.saveGeometry())
         self.storeState("mainWindowState", self.saveState())
@@ -145,6 +170,8 @@ class ModularCalculatorInterface(StatefulApplication):
 
         self.storeStateNumber("precision", self.precisionSpinBox.spinbox.value())
         self.storeStateBoolean("simplifyUnits", self.optionsSimplifyUnits.isChecked())
+
+        self.storeStateArray("unitSystemsPreference", self.calculator.unit_normaliser.systems_preference)
 
     def calc(self):
         question = self.entry.getContents().rstrip()
@@ -237,6 +264,12 @@ class ModularCalculatorInterface(StatefulApplication):
 
     def selectUnit(self, unit):
         self.entry.insert(unit)
+
+    def setUnitSystemPreference(self):
+        SortableList(self, 'Unit System Preference', 'Order unit systems by preference, most prefered at top', self.calculator.unit_normaliser.systems_preference, self.updateUnitSystemPreference)
+
+    def updateUnitSystemPreference(self, items):
+        self.calculator.unit_normaliser.systems_preference = items
 
 
 if __name__ == '__main__':

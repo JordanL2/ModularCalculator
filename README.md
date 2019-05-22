@@ -66,6 +66,7 @@ These examples are available in examples/basic_integration.py. See examples/adva
 * Functions for orbital mechanics
 * Function to convert lumens and frequency to watts
 * Parameter help info for operations, display it on parameter validation error
+* Function to convert a number into standard form
 
 ## Units
 * Pressure
@@ -88,17 +89,17 @@ These examples are available in examples/basic_integration.py. See examples/adva
 
 ## Graphical Interface
 * Functionality:
-	* Ability to reorder unit system preference
 	* Ability to select features calculator has, screen to customise calculator, if calculator fails to init display error message
 	* Show available information for the Insert dialogs:
 		* Insert Unit dialog categoried by system (in order of system preference), then dimension
 			* Checkbox to hide prefixed units
-		* Insert Function / Operator dialogs categoried by category
+		* Insert Function / Operator dialogs categorised by category
 		* Way of seeing possible inputs for an operator or function - number of inputs, types allowed for each input
 	* Dialog that allows editing of feature options
 	* Scientific notation number display option
 	* Auto-select dark theme if system theme is dark
 	* Option to reset variable state at start of multi-statement execution
+	* Option to display results in standard form
 
 * Usability / quality of life:
 	* Remember what file was loaded, display in title, Save saves to it, add Save As
