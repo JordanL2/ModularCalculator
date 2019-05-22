@@ -12,6 +12,9 @@ class CalculatorTextEdit(QTextEdit):
 
     def __init__(self, interface):
         super().__init__()
+
+        self.calculator = None
+
         editFont = QFontDatabase.systemFont(QFontDatabase.FixedFont)
         editFont.setBold(True)
         editFont.setPointSize(12)
@@ -87,7 +90,7 @@ class CalculatorTextEdit(QTextEdit):
         self.checkSyntax()
 
     def checkSyntax(self, force=False):
-        if self.oldText is None or self.oldText != self.toHtml() or force:
+        if self.calculator is not None and (self.oldText is None or self.oldText != self.toHtml() or force):
             expr = self.getContents()
             items = []
             i = 0
@@ -140,4 +143,4 @@ class CalculatorTextEdit(QTextEdit):
         return self.getContents()
 
     def restoreState(self, text):
-        self.setContents(text)
+        self.setPlainText(text)

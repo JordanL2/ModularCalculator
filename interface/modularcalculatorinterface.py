@@ -103,12 +103,13 @@ class ModularCalculatorInterface(StatefulApplication):
         self.optionsSimplifyUnits.triggered.connect(self.setUnitSimplification)
         optionsMenu.addAction(self.optionsSimplifyUnits)
 
-    def initCalculator(self):
-        self.calculator = ModularCalculator('Computing')
+    def initCalculator(self, calculator=None):
+        if calculator is None:
+            self.calculator = ModularCalculator('Computing')
+        else:
+            self.calculator = calculator
         self.entry.setCalculator(self.calculator)
-        self.entry.restoreState(self.fetchStateText("textContent"))
-        self.setTheme(self.fetchStateText("theme"))
-        self.setAutoExecute(self.fetchStateBoolean("viewSyntaxParsingAutoExecutes", True))
+        self.entry.refresh()
         self.setPrecision(self.fetchStateNumber("precision", 30))
         self.setUnitSimplification(self.fetchStateBoolean("simplifyUnits", True))
 
@@ -118,6 +119,11 @@ class ModularCalculatorInterface(StatefulApplication):
         self.splitter.restoreState(self.fetchState("splitterSizes"))
 
         self.display.restoreState(self.fetchStateMap("displayOutput"))
+        
+        self.entry.restoreState(self.fetchStateText("textContent"))
+        self.setTheme(self.fetchStateText("theme"))
+        
+        self.setAutoExecute(self.fetchStateBoolean("viewSyntaxParsingAutoExecutes", True))
 
         self.viewFinalOnly.setChecked(self.fetchStateBoolean("viewFinalOnly", False))
         self.viewClearForMulti.setChecked(self.fetchStateBoolean("viewClearForMulti", False))
