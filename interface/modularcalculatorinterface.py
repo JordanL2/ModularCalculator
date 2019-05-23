@@ -266,10 +266,14 @@ class ModularCalculatorInterface(StatefulApplication):
         self.entry.insert(unit)
 
     def setUnitSystemPreference(self):
-        SortableList(self, 'Unit System Preference', 'Order unit systems by preference, most prefered at top', self.calculator.unit_normaliser.systems_preference, self.updateUnitSystemPreference)
+        SortableList(self, 
+            'Unit System Preference', 
+            'Order unit systems by preference, most prefered at top', 
+            [self.calculator.unit_normaliser.systems[s].name for s in self.calculator.unit_normaliser.systems_preference], 
+            self.updateUnitSystemPreference)
 
-    def updateUnitSystemPreference(self, items):
-        self.calculator.unit_normaliser.systems_preference = items
+    def updateUnitSystemPreference(self, systemNames):
+        self.calculator.unit_normaliser.systems_preference = [s for n in systemNames for s in [s for s in self.calculator.unit_normaliser.systems if self.calculator.unit_normaliser.systems[s].name == n]]
 
 
 if __name__ == '__main__':
