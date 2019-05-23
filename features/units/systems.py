@@ -79,7 +79,7 @@ class UnitSystemUS:
 
 class UnitSystemUK:
 
-    name = 'Imperial'
+    name = 'British Imperial'
 
 class UnitSystemASU:
 

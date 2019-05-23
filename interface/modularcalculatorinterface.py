@@ -266,7 +266,7 @@ class ModularCalculatorInterface(StatefulApplication):
         self.entry.insert(unit)
 
     def setUnitSystemPreference(self):
-        SortableList(self, 
+        SortableListDialog(self, 
             'Unit System Preference', 
             'Order unit systems by preference, most prefered at top', 
             [self.calculator.unit_normaliser.systems[s].name for s in self.calculator.unit_normaliser.systems_preference], 

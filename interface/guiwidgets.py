@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from PyQt5.QtCore import Qt, QStringListModel
+from PyQt5.QtCore import Qt, QStringListModel, QSize
 from PyQt5.QtWidgets import QInputDialog, QWidgetAction, QSpinBox, QLabel, QHBoxLayout, QVBoxLayout, QWidget, QListView, QDialog, QAbstractItemView, QPushButton
 
 
@@ -16,6 +16,9 @@ class SelectionDialog(QInputDialog):
         self.textValueSelected.connect(okFunction)
         self.setVisible(True)
 
+    def sizeHint(self):
+        return QSize(super().sizeHint() * 2)
+
 
 class SortableListModel(QStringListModel):
 
@@ -25,7 +28,13 @@ class SortableListModel(QStringListModel):
         return super().flags(index)
 
 
-class SortableList(QDialog):
+class SortableListView(QListView):
+
+    def sizeHint(self):
+        return QSize(self.width(), self.sizeHintForRow(0) * self.model().rowCount() + 10)
+
+
+class SortableListDialog(QDialog):
 
     def __init__(self, parent, title, label, items, okFunction):
         super().__init__(parent)
@@ -40,7 +49,7 @@ class SortableList(QDialog):
         self.stringModel = SortableListModel()
         self.stringModel.setStringList(items)
 
-        listView = QListView(self)
+        listView = SortableListView(self)
         listView.setModel(self.stringModel)
         listView.setDragDropMode(QAbstractItemView.InternalMove)
         layout.addWidget(listView)
