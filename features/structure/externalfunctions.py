@@ -19,10 +19,10 @@ class ExternalFunctionsFeature(Feature):
         return 'Structure'
 
     def title():
-        return 'Functions'
+        return 'User Defined Functions'
 
     def desc():
-        return 'Enables external functions'
+        return 'Enables functions defined by the user'
 
     def dependencies():
         return ['state.assignment', 'structure.functions']
