@@ -1,6 +1,17 @@
+# This sets the parameters only if they're not already set, for developing and testing this function
+PARAM0 ||= 2000km;
+PARAM1 ||= 5.97237e24kg;
+PARAM2 ||= 6378.137km;
+
+# Gets variables from parameters
 orbitheight = PARAM0;
 mass = PARAM1;
 radius = PARAM2;
+
+# Perform the calculation
 gm = G mass;
 orbitradius = radius + orbitheight;
 period = 2 pi (orbitradius^3 / gm)^0.5;
+
+# This is the final statement, so it is the function's return value
+period

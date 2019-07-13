@@ -1,2 +1,2 @@
-function = './examples/orbit_period.txt';
-format(round(@function(35862.9695km, 5.97237e24kg, 6378.137km), 3))
+orbit_function = './examples/orbit_period.txt';
+format(round(@orbit_function(35862.9695km, 5.97237e24kg, 6378.137km), 3))

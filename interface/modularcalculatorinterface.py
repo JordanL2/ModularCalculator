@@ -176,6 +176,7 @@ class ModularCalculatorInterface(StatefulApplication):
     def calc(self):
         question = self.entry.getContents().rstrip()
         try:
+            self.calculator.vars = {}
             response = self.calculator.calculate(question)
             if len(response.results) > 1 and self.viewClearForMulti.isChecked():
                 self.display.clear()

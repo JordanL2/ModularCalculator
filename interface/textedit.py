@@ -97,6 +97,7 @@ class CalculatorTextEdit(QTextEdit):
             items = []
             i = 0
             backupVars = self.calculator.vars.copy()
+            self.calculator.vars = {}
             try:
                 result = self.calculator.calculate(expr, {'parse_only': not self.autoExecute})
                 items = result.items
