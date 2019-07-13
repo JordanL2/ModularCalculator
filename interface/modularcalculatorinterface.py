@@ -78,13 +78,6 @@ class ModularCalculatorInterface(StatefulApplication):
         viewClear.triggered.connect(self.display.clear)
         viewClear.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_L))
         viewMenu.addAction(viewClear)
-
-        self.viewSingleAction = QAction('Single mode', self, checkable=True)
-        viewMenu.addAction(self.viewSingleAction)
-        self.viewSingleAction.triggered.connect(self.setSingleMode)
-        self.viewMultiAction = QAction('Multi mode', self, checkable=True)
-        self.viewMultiAction.triggered.connect(self.setMultiMode)
-        viewMenu.addAction(self.viewMultiAction)
         
         viewThemeMenu = viewMenu.addMenu('Theme')
         self.themeActions = {}
@@ -125,14 +118,21 @@ class ModularCalculatorInterface(StatefulApplication):
         self.precisionSpinBox = MenuSpinBox(self, 'Precision', 1, 50)
         self.precisionSpinBox.spinbox.valueChanged.connect(self.setPrecision)
         optionsMenu.addAction(self.precisionSpinBox)
-        
-        self.optionsSimplifyUnits = QAction('Simplify units', self, checkable=True)
-        self.optionsSimplifyUnits.triggered.connect(self.setUnitSimplification)
-        optionsMenu.addAction(self.optionsSimplifyUnits)
+
+        self.optionsSingleAction = QAction('Single mode', self, checkable=True)
+        optionsMenu.addAction(self.optionsSingleAction)
+        self.optionsSingleAction.triggered.connect(self.setSingleMode)
+        self.optionsMultiAction = QAction('Multi mode', self, checkable=True)
+        self.optionsMultiAction.triggered.connect(self.setMultiMode)
+        optionsMenu.addAction(self.optionsMultiAction)
 
         self.optionsUnitSystemPreference = QAction('Unit system preference', self)
         self.optionsUnitSystemPreference.triggered.connect(self.setUnitSystemPreference)
         optionsMenu.addAction(self.optionsUnitSystemPreference)
+
+        self.optionsSimplifyUnits = QAction('Simplify units', self, checkable=True)
+        self.optionsSimplifyUnits.triggered.connect(self.setUnitSimplification)
+        optionsMenu.addAction(self.optionsSimplifyUnits)
 
     def initCalculator(self):
         self.setCalculator(ModularCalculator('Computing'))
@@ -154,8 +154,8 @@ class ModularCalculatorInterface(StatefulApplication):
         self.setCurrentFile(self.fetchStateText("currentFile"))
 
         self.multiMode = (self.fetchStateBoolean("multiMode", False))
-        self.viewSingleAction.setChecked(not self.multiMode)
-        self.viewMultiAction.setChecked(self.multiMode)
+        self.optionsSingleAction.setChecked(not self.multiMode)
+        self.optionsMultiAction.setChecked(self.multiMode)
         
         self.setTheme(self.fetchStateText("theme"))
         
@@ -250,13 +250,13 @@ class ModularCalculatorInterface(StatefulApplication):
 
     def setSingleMode(self):
         self.multiMode = False
-        self.viewSingleAction.setChecked(True)
-        self.viewMultiAction.setChecked(False)
+        self.optionsSingleAction.setChecked(True)
+        self.optionsMultiAction.setChecked(False)
 
     def setMultiMode(self):
         self.multiMode = True
-        self.viewSingleAction.setChecked(False)
-        self.viewMultiAction.setChecked(True)
+        self.optionsSingleAction.setChecked(False)
+        self.optionsMultiAction.setChecked(True)
 
     def setUnitSimplification(self, value):
         self.optionsSimplifyUnits.setChecked(value)
