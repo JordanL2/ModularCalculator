@@ -28,6 +28,8 @@ class CalculatorTextEdit(QTextEdit):
 
         self.autoExecute = True
 
+        self.selectPrevious = None
+
     def setCalculator(self, calculator):
         self.calculator = calculator
 
@@ -89,13 +91,35 @@ class CalculatorTextEdit(QTextEdit):
         else:
             if e.key() in (Qt.Key_Return, Qt.Key_Enter) and not (e.modifiers() & Qt.ShiftModifier):
                 self.interface.calc()
+                self.clearContents()
+                self.selectPrevious = None
+            elif e.key() == Qt.Key_Up:
+                self.selectPreviousEntry(-1)
+            elif e.key() == Qt.Key_Down:
+                self.selectPreviousEntry(1)
             else:
+                self.selectPrevious = None
                 super().keyPressEvent(e)
         self.checkSyntax()
 
     def mouseReleaseEvent(self, e):
         super().mouseReleaseEvent(e)
         self.checkSyntax()
+
+    def selectPreviousEntry(self, direction):
+        previous = self.interface.display.rawOutput
+        if self.selectPrevious is None:
+            self.originalContent = self.getContents()
+            self.selectPrevious = len(previous)
+        self.selectPrevious += direction
+        if self.selectPrevious < 0:
+            self.selectPrevious = len(previous)
+        if self.selectPrevious > len(previous):
+            self.selectPrevious = 0
+        if self.selectPrevious == len(previous):
+            self.setContents(self.originalContent)
+        else:
+            self.setContents(previous[self.selectPrevious][0])
 
     def checkSyntax(self, force=False):
         if self.calculator is not None and (self.oldText is None or self.oldText != self.toHtml() or force):
@@ -148,6 +172,9 @@ class CalculatorTextEdit(QTextEdit):
     def setContents(self, text):
         self.setPlainText(text)
         self.checkSyntax()
+
+    def clearContents(self):
+        self.setContents('')
 
     def saveState(self):
         return self.getContents()
