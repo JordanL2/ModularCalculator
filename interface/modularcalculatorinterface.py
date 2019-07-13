@@ -201,6 +201,8 @@ class ModularCalculatorInterface(StatefulApplication):
             for i, result in enumerate(response.results):
                 if hasattr(result, 'value'):
                     self.display.addAnswer(result.expression, self.calculator.number_to_string(result.value), result.unit)
+            if not self.multiMode:
+                self.calculator.vars['ans'] = (response.results[-1].value, response.results[-1].unit)
         except CalculatingException as err:
             i = err.find_pos(question)
             row, column = self.rowsColumns(question, i)
