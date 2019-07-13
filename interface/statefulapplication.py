@@ -30,7 +30,9 @@ class StatefulApplication(QMainWindow):
     def storeState(self, name, value):
         self.settings.setValue(name, value)
 
-    def fetchStateText(self, name):
+    def fetchStateText(self, name, default=None):
+        if self.fetchState(name) is None:
+            return default
         return self.fetchState(name).decode('utf-8')
 
     def storeStateText(self, name, value):

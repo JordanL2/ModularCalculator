@@ -45,12 +45,15 @@ class ModularCalculatorInterface(StatefulApplication):
         mainWidget = QWidget()
         mainWidget.setLayout(grid)
         self.setCentralWidget(mainWidget)
-        self.setWindowTitle('Modular Calculator')
 
     def initMenu(self):
         menubar = self.menuBar()
         
         fileMenu = menubar.addMenu('File')
+        
+        fileNew = QAction('New', self)
+        fileNew.triggered.connect(self.new)
+        fileMenu.addAction(fileNew)
         
         fileOpen = QAction('Open', self)
         fileOpen.triggered.connect(self.open)
@@ -59,6 +62,10 @@ class ModularCalculatorInterface(StatefulApplication):
         fileSave = QAction('Save', self)
         fileSave.triggered.connect(self.save)
         fileMenu.addAction(fileSave)
+        
+        fileSaveAs = QAction('Save as', self)
+        fileSaveAs.triggered.connect(self.saveAs)
+        fileMenu.addAction(fileSaveAs)
 
         viewMenu = menubar.addMenu('View')
         
@@ -136,12 +143,14 @@ class ModularCalculatorInterface(StatefulApplication):
         self.splitter.restoreState(self.fetchState("splitterSizes"))
 
         self.display.restoreState(self.fetchStateMap("displayOutput"))
+        self.entry.restoreState(self.fetchStateText("textContent"))
+        
+        self.setCurrentFile(self.fetchStateText("currentFile"))
 
         self.multiMode = (self.fetchStateBoolean("multiMode", False))
         self.viewSingleAction.setChecked(not self.multiMode)
         self.viewMultiAction.setChecked(self.multiMode)
         
-        self.entry.restoreState(self.fetchStateText("textContent"))
         self.setTheme(self.fetchStateText("theme"))
         
         self.setAutoExecute(self.fetchStateBoolean("viewSyntaxParsingAutoExecutes", True))
@@ -162,6 +171,8 @@ class ModularCalculatorInterface(StatefulApplication):
 
         self.storeStateMap("displayOutput", self.display.saveState())
         self.storeStateText("textContent", self.entry.saveState())
+        
+        self.storeStateText("currentFile", self.currentFile)
         
         self.storeStateBoolean("multiMode", self.multiMode)
         self.storeStateText("theme", self.entry.theme)
@@ -201,18 +212,35 @@ class ModularCalculatorInterface(StatefulApplication):
             column += 1
         return row, column
 
+    def new(self):
+        self.entry.clearContents()
+        self.setCurrentFile(None)
+
     def open(self):
         filename, _ = QFileDialog.getOpenFileName(self, "Open File", "", "All Files (*)")
         if filename:
             fh = open(filename, 'r')
             text = str.join("", fh.readlines())
             self.entry.setContents(text)
+            self.setCurrentFile(filename)
 
     def save(self):
+        fh = open(self.currentFile, 'w')
+        fh.write(self.entry.getContents())
+
+    def saveAs(self):
         filename, _ = QFileDialog.getSaveFileName(self, "Save File", "", "All Files (*)")
         if filename:
             fh = open(filename, 'w')
             fh.write(self.entry.getContents())
+            self.setCurrentFile(filename)
+
+    def setCurrentFile(self, file):
+        self.currentFile = file
+        if self.currentFile is None:
+            self.setWindowTitle('Modular Calculator')
+        else:
+            self.setWindowTitle("Modular Calculator - {}".format(self.currentFile))
 
     def setSingleMode(self):
         self.multiMode = False

@@ -96,7 +96,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 	* Option to display results in standard form
 
 * Usability / quality of life:
-	* Remember what file was loaded, display in title, Save saves to it, add Save As
 	* Hotkeys:
 		* Ctrl+C - clear output
 		* Ctrl+N - clear input, unset filename
