@@ -55,7 +55,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 * Unit normalisation - make it possible to configure to use right-most unit as standard rather than left-most
 
 ## Features
-* User defined functions - external files which can be called and passed parameters, last statement in file is the return value for the function
 * Dates:
 	* Timezones?
 	* Adding years/months to dates issue:
@@ -96,7 +95,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 		* Insert Function / Operator dialogs categorised by category
 		* Way of seeing possible inputs for an operator or function - number of inputs, types allowed for each input
 	* Dialog that allows editing of feature options
-	* Scientific notation number display option
 	* Auto-select dark theme if system theme is dark
 	* Option to reset variable state at start of multi-statement execution
 	* Option to display results in standard form

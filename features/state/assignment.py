@@ -35,7 +35,7 @@ class AssignmentFeature(Feature):
 
         calculator.validators['variable'] = AssignmentFeature.validate_variable
 
-    var_regex = re.compile(r'([a-zA-Z]+)')
+    var_regex = re.compile(r'([a-zA-Z][a-zA-Z0-9]*)')
 
     def parse_var(self, expr, i, items, flags):
         next = expr[i:]

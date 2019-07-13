@@ -3,5 +3,5 @@ earthmass = 5.97237e24kg;
 earthradius = 6378.137km;
 gm = G earthmass;
 orbitradius = earthradius + orbitheight;
-time = 2 pi (orbitradius^3 / gm)^0.5;
-format(round(time, 3));
+period = 2 pi (orbitradius^3 / gm)^0.5;
+format(round(period, 3));

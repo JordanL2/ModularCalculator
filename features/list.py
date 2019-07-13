@@ -32,6 +32,7 @@ import modularcalculator.features.strings.stringcomparison
 import modularcalculator.features.strings.stringfunctions
 import modularcalculator.features.strings.strings
 
+import modularcalculator.features.structure.externalfunctions
 import modularcalculator.features.structure.functions
 import modularcalculator.features.structure.innerexpressions
 import modularcalculator.features.structure.operators
@@ -117,6 +118,7 @@ feature_list = dict([(f.id(), f) for f in [
     modularcalculator.features.strings.stringfunctions.StringFunctionsFeature,
     modularcalculator.features.strings.strings.StringsFeature,
 
+    modularcalculator.features.structure.externalfunctions.ExternalFunctionsFeature,
     modularcalculator.features.structure.functions.FunctionsFeature,
     modularcalculator.features.structure.innerexpressions.InnerExpressionsFeature,
     modularcalculator.features.structure.operators.OperatorsFeature,
@@ -219,4 +221,5 @@ presets['Computing'] = presets['Scientific'] + [
     'strings.stringcomparison',
     'strings.stringfunctions',
     'strings.strings',
+    'structure.externalfunctions',
 ]

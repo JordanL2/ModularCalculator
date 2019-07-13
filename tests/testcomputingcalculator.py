@@ -188,6 +188,8 @@ tests = [
     { 'test': "'2012-01-02T11:45:56' +% 5 seconds", 'expected': '2012-01-02T11:46:01' },
     { 'test': "'2012-01-02T11:45:56' -% 5 seconds", 'expected': '2012-01-02T11:45:51' },
 
+    { 'test': "f = './examples/ext_func_addition.txt'; @f(5 - 4, 2)", 'expected': Decimal('3') },
+
 #    { 'test': r"", 'expected': '' },
 ]
 
