@@ -1,0 +1,6 @@
+orbitheight = PARAM0;
+mass = PARAM1;
+radius = PARAM2;
+gm = G mass;
+orbitradius = radius + orbitheight;
+period = 2 pi (orbitradius^3 / gm)^0.5;

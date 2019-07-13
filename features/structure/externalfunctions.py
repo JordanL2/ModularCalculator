@@ -111,7 +111,11 @@ class ExternalFunctionItem(RecursiveOperandItem):
         try:
             result = self.calculator.calculate(func_content)
         except ExecutionException as err:
+            self.calculator.vars = backup_vars
             raise ExecutionException("Could not execute function '{}'".format(self.name), [], None)
+        except Exception as err:
+            self.calculator.vars = backup_vars
+            raise err
         final_result = result.results[-1]
 
         self.calculator.vars = backup_vars

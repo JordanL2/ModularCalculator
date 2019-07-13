@@ -1,0 +1,2 @@
+f = './examples/ext_func_addition.txt';
+@f(1, 2) + PARAM2

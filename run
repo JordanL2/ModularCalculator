@@ -2,4 +2,5 @@
 
 DIR=`dirname "$(readlink -f "$0")"`
 export PYTHONPATH=${DIR}/..
+cd $DIR
 ${DIR}/interface/modularcalculatorinterface.py
