@@ -76,7 +76,7 @@ class ModularCalculatorInterface(StatefulApplication):
         
         viewClear = QAction('Clear', self)
         viewClear.triggered.connect(self.display.clear)
-        viewClear.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_W))
+        viewClear.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_L))
         viewMenu.addAction(viewClear)
 
         self.viewSingleAction = QAction('Single mode', self, checkable=True)
