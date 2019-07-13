@@ -81,10 +81,16 @@ class CalculatorTextEdit(QTextEdit):
         self.css += '</style>'
 
     def keyPressEvent(self, e):
-        if e.key() in (Qt.Key_Return, Qt.Key_Enter) and not (e.modifiers() & Qt.ShiftModifier):
-            self.interface.calc()
+        if self.interface.multiMode:
+            if e.key() in (Qt.Key_Return, Qt.Key_Enter) and (e.modifiers() & Qt.ControlModifier):
+                self.interface.calc()
+            else:
+                super().keyPressEvent(e)
         else:
-            super().keyPressEvent(e)
+            if e.key() in (Qt.Key_Return, Qt.Key_Enter) and not (e.modifiers() & Qt.ShiftModifier):
+                self.interface.calc()
+            else:
+                super().keyPressEvent(e)
         self.checkSyntax()
 
     def mouseReleaseEvent(self, e):
@@ -97,7 +103,8 @@ class CalculatorTextEdit(QTextEdit):
             items = []
             i = 0
             backupVars = self.calculator.vars.copy()
-            self.calculator.vars = {}
+            if self.interface.multiMode:
+                self.calculator.vars = {}
             try:
                 result = self.calculator.calculate(expr, {'parse_only': not self.autoExecute})
                 items = result.items

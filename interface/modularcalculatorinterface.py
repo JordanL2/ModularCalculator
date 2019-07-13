@@ -65,14 +65,13 @@ class ModularCalculatorInterface(StatefulApplication):
         viewClear = QAction('Clear', self)
         viewClear.triggered.connect(self.display.clear)
         viewMenu.addAction(viewClear)
-        
-        viewMultiMenu = viewMenu.addMenu('Multi-Statements')
-        
-        self.viewFinalOnly = QAction('Only Show Final Answer', self, checkable=True)
-        viewMultiMenu.addAction(self.viewFinalOnly)
-        
-        self.viewClearForMulti = QAction('Always Clear Output', self, checkable=True)
-        viewMultiMenu.addAction(self.viewClearForMulti)
+
+        self.viewSingleAction = QAction('Single Mode', self, checkable=True)
+        viewMenu.addAction(self.viewSingleAction)
+        self.viewSingleAction.triggered.connect(self.setSingleMode)
+        self.viewMultiAction = QAction('Multi Mode', self, checkable=True)
+        self.viewMultiAction.triggered.connect(self.setMultiMode)
+        viewMenu.addAction(self.viewMultiAction)
         
         viewThemeMenu = viewMenu.addMenu('Theme')
         self.themeActions = {}
@@ -137,14 +136,16 @@ class ModularCalculatorInterface(StatefulApplication):
         self.splitter.restoreState(self.fetchState("splitterSizes"))
 
         self.display.restoreState(self.fetchStateMap("displayOutput"))
+
+        self.multiMode = (self.fetchStateBoolean("multiMode", False))
+        self.viewSingleAction.setChecked(not self.multiMode)
+        self.viewMultiAction.setChecked(self.multiMode)
         
         self.entry.restoreState(self.fetchStateText("textContent"))
         self.setTheme(self.fetchStateText("theme"))
         
         self.setAutoExecute(self.fetchStateBoolean("viewSyntaxParsingAutoExecutes", True))
 
-        self.viewFinalOnly.setChecked(self.fetchStateBoolean("viewFinalOnly", False))
-        self.viewClearForMulti.setChecked(self.fetchStateBoolean("viewClearForMulti", False))
         self.setShortUnits(self.fetchStateBoolean("viewShortUnits", False))
 
     def restoreCalculatorState(self):
@@ -162,8 +163,7 @@ class ModularCalculatorInterface(StatefulApplication):
         self.storeStateMap("displayOutput", self.display.saveState())
         self.storeStateText("textContent", self.entry.saveState())
         
-        self.storeStateBoolean("viewFinalOnly", self.viewFinalOnly.isChecked())
-        self.storeStateBoolean("viewClearForMulti", self.viewClearForMulti.isChecked())
+        self.storeStateBoolean("multiMode", self.multiMode)
         self.storeStateText("theme", self.entry.theme)
         self.storeStateBoolean("viewShortUnits", self.viewShortUnits.isChecked())
         self.storeStateBoolean("viewSyntaxParsingAutoExecutes", self.viewSyntaxParsingAutoExecutes.isChecked())
@@ -176,12 +176,13 @@ class ModularCalculatorInterface(StatefulApplication):
     def calc(self):
         question = self.entry.getContents().rstrip()
         try:
-            self.calculator.vars = {}
+            if self.multiMode:
+                self.calculator.vars = {}
             response = self.calculator.calculate(question)
-            if len(response.results) > 1 and self.viewClearForMulti.isChecked():
+            if self.multiMode:
                 self.display.clear()
             for i, result in enumerate(response.results):
-                if (i == len(response.results) - 1 or not self.viewFinalOnly.isChecked()) and hasattr(result, 'value'):
+                if hasattr(result, 'value'):
                     self.display.addAnswer(result.expression, self.calculator.number_to_string(result.value), result.unit)
         except CalculatingException as err:
             i = err.find_pos(question)
@@ -212,6 +213,16 @@ class ModularCalculatorInterface(StatefulApplication):
         if filename:
             fh = open(filename, 'w')
             fh.write(self.entry.getContents())
+
+    def setSingleMode(self):
+        self.multiMode = False
+        self.viewSingleAction.setChecked(True)
+        self.viewMultiAction.setChecked(False)
+
+    def setMultiMode(self):
+        self.multiMode = True
+        self.viewSingleAction.setChecked(False)
+        self.viewMultiAction.setChecked(True)
 
     def setUnitSimplification(self, value):
         self.optionsSimplifyUnits.setChecked(value)
