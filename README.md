@@ -99,7 +99,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 	* Indicator when file has been changed since last save
 	* Warn user when leaving a file and it hasn't been saved
 	* Single Mode: Auto insert "ans" at start of content if content starts with an operator that should have left operands
-	* Show PARAMs in user def functions start at 1 not 0?
 	* Insert Date - easily add a date into the calculation
 	* Option to disable syntax highlighting
 	* Tabs
