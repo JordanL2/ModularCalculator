@@ -89,7 +89,7 @@ class CalculatorTextEdit(QTextEdit):
             else:
                 super().keyPressEvent(e)
         else:
-            if e.key() in (Qt.Key_Return, Qt.Key_Enter) and not (e.modifiers() & Qt.ShiftModifier):
+            if e.key() in (Qt.Key_Return, Qt.Key_Enter):
                 self.interface.calc()
                 self.clearContents()
                 self.selectPrevious = None
@@ -119,7 +119,7 @@ class CalculatorTextEdit(QTextEdit):
         if self.selectPrevious == len(previous):
             self.setContents(self.originalContent)
         else:
-            self.setContents(previous[self.selectPrevious][0])
+            self.setContents(previous[self.selectPrevious][0].strip())
 
     def checkSyntax(self, force=False):
         if self.calculator is not None and (self.oldText is None or self.oldText != self.toHtml() or force):
