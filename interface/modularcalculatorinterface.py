@@ -9,6 +9,7 @@ from modularcalculator.interface.textedit import *
 
 import sys
 from PyQt5.QtCore import Qt, QTimer
+from PyQt5.QtGui import QKeySequence
 from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QMessageBox, QSplitter, QAction, QFileDialog
 import functools
 
@@ -53,24 +54,29 @@ class ModularCalculatorInterface(StatefulApplication):
         
         fileNew = QAction('New', self)
         fileNew.triggered.connect(self.new)
+        fileNew.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_N))
         fileMenu.addAction(fileNew)
         
         fileOpen = QAction('Open', self)
         fileOpen.triggered.connect(self.open)
+        fileOpen.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_O))
         fileMenu.addAction(fileOpen)
         
         fileSave = QAction('Save', self)
         fileSave.triggered.connect(self.save)
+        fileSave.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_S))
         fileMenu.addAction(fileSave)
         
         fileSaveAs = QAction('Save as', self)
         fileSaveAs.triggered.connect(self.saveAs)
+        fileSaveAs.setShortcut(QKeySequence(Qt.CTRL + Qt.SHIFT + Qt.Key_S))
         fileMenu.addAction(fileSaveAs)
 
         viewMenu = menubar.addMenu('View')
         
         viewClear = QAction('Clear', self)
         viewClear.triggered.connect(self.display.clear)
+        viewClear.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_W))
         viewMenu.addAction(viewClear)
 
         self.viewSingleAction = QAction('Single mode', self, checkable=True)
