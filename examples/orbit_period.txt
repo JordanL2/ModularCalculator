@@ -1,6 +1,4 @@
 # This sets the parameters only if they're not already set, for developing and testing this function
-PARAM0 ||= false;
-PARAM0 ? 'We are now running function ' +$ PARAM0 : 'We are running this function as a test';
 PARAM1 ||= 2000km;
 PARAM2 ||= 5.97237e24kg;
 PARAM3 ||= 6378.137km;

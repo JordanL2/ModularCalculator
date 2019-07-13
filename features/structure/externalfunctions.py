@@ -108,7 +108,7 @@ class ExternalFunctionItem(RecursiveOperandItem):
         backup_vars = self.calculator.vars
 
         self.calculator.vars = {}
-        self.calculator.vars['PARAM0'] = path
+        self.calculator.vars['PARAM0'] = (path, None)
         for i, var in enumerate(inputs):
             self.calculator.vars["PARAM{}".format(i + 1)] = (var.value, var.unit)
         try:
