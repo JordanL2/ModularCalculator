@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cd "$(dirname "$0/..")"
+cd "$(dirname "$0/")/.."
 ./tests/testbasiccalculator.py
 ./tests/testadvancedcalculator.py
 ./tests/testscientificcalculator.py

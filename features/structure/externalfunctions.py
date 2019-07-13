@@ -97,15 +97,21 @@ class ExternalFunctionItem(RecursiveOperandItem):
                 self.text = err.truncate(self.text)
                 raise ExecutionException(err.message, [self], err.next, True)
 
-        fh = open(path, 'r')
-        func_content = str.join("", fh.readlines())
+        try:
+            fh = open(path, 'r')
+            func_content = str.join("", fh.readlines())
+        except:
+            raise ExecutionException("Could not read file '{}'".format(path), [], None)
 
         backup_vars = self.calculator.vars
 
         self.calculator.vars = {}
         for i, var in enumerate(inputs):
             self.calculator.vars["PARAM{}".format(i)] = (var.value, var.unit)
-        result = self.calculator.calculate(func_content)
+        try:
+            result = self.calculator.calculate(func_content)
+        except ExecutionException as err:
+            raise ExecutionException("Could not execute function '{}'".format(self.name), [], None)
         final_result = result.results[-1]
 
         self.calculator.vars = backup_vars

@@ -27,7 +27,7 @@ class CalculatingException(CalculatorException):
         if self.next is not None:
             ii = text.find(self.next, i)
             if ii == -1:
-                raise Exception("Could not find '{0}'' in '{1}' after character {2}".format(self.next, text, i))
+                raise Exception("Could not find '{0}' in '{1}' after character {2}".format(self.next, text, i))
             i = ii
         return i
 
