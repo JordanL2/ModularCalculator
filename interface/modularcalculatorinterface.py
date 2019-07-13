@@ -66,10 +66,10 @@ class ModularCalculatorInterface(StatefulApplication):
         viewClear.triggered.connect(self.display.clear)
         viewMenu.addAction(viewClear)
 
-        self.viewSingleAction = QAction('Single Mode', self, checkable=True)
+        self.viewSingleAction = QAction('Single mode', self, checkable=True)
         viewMenu.addAction(self.viewSingleAction)
         self.viewSingleAction.triggered.connect(self.setSingleMode)
-        self.viewMultiAction = QAction('Multi Mode', self, checkable=True)
+        self.viewMultiAction = QAction('Multi mode', self, checkable=True)
         self.viewMultiAction.triggered.connect(self.setMultiMode)
         viewMenu.addAction(self.viewMultiAction)
         
@@ -81,11 +81,11 @@ class ModularCalculatorInterface(StatefulApplication):
             themeAction.triggered.connect(functools.partial(self.setTheme, theme))
             viewThemeMenu.addAction(themeAction)
         
-        self.viewShortUnits = QAction('Units in Short Form', self, checkable=True)
+        self.viewShortUnits = QAction('Units in short form', self, checkable=True)
         self.viewShortUnits.triggered.connect(self.setShortUnits)
         viewMenu.addAction(self.viewShortUnits)
         
-        self.viewSyntaxParsingAutoExecutes = QAction('Syntax Parsing Performs Evaluation', self, checkable=True)
+        self.viewSyntaxParsingAutoExecutes = QAction('Syntax parsing performs evaluation', self, checkable=True)
         self.viewSyntaxParsingAutoExecutes.triggered.connect(self.setAutoExecute)
         viewMenu.addAction(self.viewSyntaxParsingAutoExecutes)
 
@@ -113,11 +113,11 @@ class ModularCalculatorInterface(StatefulApplication):
         self.precisionSpinBox.spinbox.valueChanged.connect(self.setPrecision)
         optionsMenu.addAction(self.precisionSpinBox)
         
-        self.optionsSimplifyUnits = QAction('Simplify Units', self, checkable=True)
+        self.optionsSimplifyUnits = QAction('Simplify units', self, checkable=True)
         self.optionsSimplifyUnits.triggered.connect(self.setUnitSimplification)
         optionsMenu.addAction(self.optionsSimplifyUnits)
 
-        self.optionsUnitSystemPreference = QAction('Unit System Preference', self)
+        self.optionsUnitSystemPreference = QAction('Unit system preference', self)
         self.optionsUnitSystemPreference.triggered.connect(self.setUnitSystemPreference)
         optionsMenu.addAction(self.optionsUnitSystemPreference)
 

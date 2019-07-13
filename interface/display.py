@@ -54,7 +54,7 @@ class CalculatorDisplay(QTextEdit):
                 unit = unit.symbol()
             else:
                 unit = unit.get_name(answer)
-            unit = ' ' + unit
+                unit = ' ' + unit
         else:
             unit = ''
         return self.answerHtml.format(n % len(self.colours), htmlSafe(question), htmlSafe(answer), htmlSafe(unit))

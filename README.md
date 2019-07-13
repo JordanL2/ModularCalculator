@@ -52,7 +52,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 # To Do
 
 ## Engine
-* Unit normalisation - make it possible to configure to use right-most unit as standard rather than left-most
 
 ## Features
 * Dates:
@@ -62,8 +61,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 		* Alternatively, dateadd checks if the unit is year or month, and number is integer, and increments year/month in that case - too much black magic
 
 ## Functions
-* Functions for orbital mechanics
-* Function to convert lumens and frequency to watts
 * Parameter help info for operations, display it on parameter validation error
 * Function to convert a number into standard form
 
@@ -96,7 +93,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 		* Way of seeing possible inputs for an operator or function - number of inputs, types allowed for each input
 	* Dialog that allows editing of feature options
 	* Auto-select dark theme if system theme is dark
-	* Option to reset variable state at start of multi-statement execution
 	* Option to display results in standard form
 
 * Usability / quality of life:
@@ -106,10 +102,8 @@ These examples are available in examples/basic_integration.py. See examples/adva
 		* Ctrl+N - clear input, unset filename
 		* Ctrl+S - save
 		* Ctrl+O - open
-	* Option to autoformat date results
 	* Insert Date - easily add a date into the calculation
 	* Option to disable syntax highlighting
-	* Option to clear input on execute
 	* Tabs
 
 * Stability:
@@ -121,7 +115,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 
 * Aesthetics and polish:
 	* Icon
-	* When units are in short form, no space between value and unit in answer display
 
 ## Code Quality
 
