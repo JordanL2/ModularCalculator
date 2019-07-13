@@ -7,6 +7,7 @@ from modularcalculator.features.feature import Feature
 from modularcalculator.features.structure.functions import *
 
 import re
+import os.path
 
 
 class ExternalFunctionsFeature(Feature):
@@ -82,6 +83,7 @@ class ExternalFunctionItem(RecursiveOperandItem):
         if self.name not in self.calculator.vars:
             raise ExecutionException("Variable {} not found".format(self.name), [self], '', True)
         path = self.calculator.vars[self.name][0]
+        path = os.path.expanduser(path)
         
         inputs = []
         itemsi = 2
