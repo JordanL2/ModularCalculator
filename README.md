@@ -96,7 +96,7 @@ These examples are available in examples/basic_integration.py. See examples/adva
 	* Option to display results in standard form
 
 * Usability / quality of life:
-	* Warn user when leaving a file and it hasn't been saved
+	* Warn user when leaving a file and it hasn't been saved - New, Open, switching to single mode
 	* Single Mode: Auto insert "ans" at start of content if content starts with an operator that should have left operands
 	* Insert Ans - inserts the variable "ans" - should have hotkey - only show this when ans is set
 	* Insert Date - easily add a date into the calculation
