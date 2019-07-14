@@ -146,6 +146,8 @@ class CalculatorTextEdit(QTextEdit):
             if i < len(expr):
                 newhtml += "<span class='{0}'>{1}</span>".format('error', htmlSafe(expr[i:]))
             self.updateHtml(newhtml)
+            if self.interface.multiMode and not self.interface.currentFileModified:
+                self.interface.setCurrentFile(self.interface.currentFile, True)
         self.oldText = self.toHtml()
 
     def refresh(self):

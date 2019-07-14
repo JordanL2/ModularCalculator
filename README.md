@@ -96,7 +96,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 	* Option to display results in standard form
 
 * Usability / quality of life:
-	* Indicator when file has been changed since last save
 	* Warn user when leaving a file and it hasn't been saved
 	* Single Mode: Auto insert "ans" at start of content if content starts with an operator that should have left operands
 	* Insert Ans - inserts the variable "ans" - should have hotkey - only show this when ans is set

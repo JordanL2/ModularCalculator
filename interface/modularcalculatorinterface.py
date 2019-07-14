@@ -157,7 +157,7 @@ class ModularCalculatorInterface(StatefulApplication):
         self.display.restoreState(self.fetchStateMap("displayOutput"))
         self.entry.restoreState(self.fetchStateText("textContent"))
         
-        self.setCurrentFile(self.fetchStateText("currentFile"))
+        self.setCurrentFile(self.fetchStateText("currentFile"), self.fetchStateBoolean("currentFileModified", False))
 
         if self.fetchStateBoolean("multiMode", False):
             self.setMultiMode()
@@ -186,6 +186,7 @@ class ModularCalculatorInterface(StatefulApplication):
         self.storeStateText("textContent", self.entry.saveState())
         
         self.storeStateText("currentFile", self.currentFile)
+        self.storeStateBoolean("currentFileModified", self.currentFileModified)
         
         self.storeStateBoolean("multiMode", self.multiMode)
         self.storeStateText("theme", self.entry.theme)
@@ -239,12 +240,13 @@ class ModularCalculatorInterface(StatefulApplication):
                 fh = open(filename, 'r')
                 text = str.join("", fh.readlines())
                 self.entry.setContents(text)
-                self.setCurrentFile(filename)
+                self.setCurrentFile(filename, False)
 
     def save(self):
         if self.multiMode:
             fh = open(self.currentFile, 'w')
             fh.write(self.entry.getContents())
+            self.setCurrentFile(self.currentFile, False)
 
     def saveAs(self):
         if self.multiMode:
@@ -252,12 +254,15 @@ class ModularCalculatorInterface(StatefulApplication):
             if filename:
                 fh = open(filename, 'w')
                 fh.write(self.entry.getContents())
-                self.setCurrentFile(filename)
+                self.setCurrentFile(filename, False)
 
-    def setCurrentFile(self, file):
+    def setCurrentFile(self, file, modified=False):
         self.currentFile = file
+        self.currentFileModified = modified
         if self.currentFile is None:
             self.setWindowTitle('Modular Calculator')
+        elif self.currentFileModified:
+            self.setWindowTitle("Modular Calculator - {} *".format(self.currentFile))
         else:
             self.setWindowTitle("Modular Calculator - {}".format(self.currentFile))
 
