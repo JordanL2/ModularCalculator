@@ -81,7 +81,11 @@ class CalculatorTextEdit(QTextEdit):
         self.css += '</style>'
 
     def keyPressEvent(self, e):
-        super().keyPressEvent(e)
+        if e.key() == Qt.Key_Tab:
+            spaces = 4 - (self.textCursor().columnNumber() % 4)
+            self.insert(' ' * spaces)
+        else:
+            super().keyPressEvent(e)
         self.checkSyntax()
 
     def mouseReleaseEvent(self, e):

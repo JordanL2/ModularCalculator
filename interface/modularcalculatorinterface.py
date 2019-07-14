@@ -67,7 +67,7 @@ class ModularCalculatorInterface(StatefulApplication):
         self.fileSave.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_S))
         self.fileMenu.addAction(self.fileSave)
         
-        fileSaveAs = QAction('Save as', self)
+        fileSaveAs = QAction('Save as...', self)
         fileSaveAs.triggered.connect(self.saveAs)
         fileSaveAs.setShortcut(QKeySequence(Qt.CTRL + Qt.SHIFT + Qt.Key_S))
         self.fileMenu.addAction(fileSaveAs)
@@ -208,11 +208,15 @@ class ModularCalculatorInterface(StatefulApplication):
         return row, column
 
     def new(self):
+        if self.checkIfNeedToSave():
+            return
         self.entry.clearContents()
         self.display.clear()
         self.setCurrentFile(None)
 
     def open(self):
+        if self.checkIfNeedToSave():
+            return
         filename, _ = QFileDialog.getOpenFileName(self, "Open File", "", "All Files (*)")
         if filename:
             fh = open(filename, 'r')
@@ -231,6 +235,15 @@ class ModularCalculatorInterface(StatefulApplication):
             fh = open(filename, 'w')
             fh.write(self.entry.getContents())
             self.setCurrentFile(filename, False)
+
+    def checkIfNeedToSave(self):
+        if self.currentFile is not None and self.currentFileModified:
+            response = QMessageBox.question(self, 'Unsaved File', "Save changes to {} before closing?".format(self.currentFile), QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.Cancel)
+            if response == QMessageBox.Yes:
+                self.save()
+            elif response == QMessageBox.Cancel:
+                return True
+        return False
 
     def setCurrentFile(self, file, modified=False):
         self.currentFile = file
