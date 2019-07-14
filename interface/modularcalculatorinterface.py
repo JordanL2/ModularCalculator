@@ -50,34 +50,29 @@ class ModularCalculatorInterface(StatefulApplication):
     def initMenu(self):
         menubar = self.menuBar()
         
-        fileMenu = menubar.addMenu('File')
+        self.fileMenu = menubar.addMenu('File')
         
         fileNew = QAction('New', self)
         fileNew.triggered.connect(self.new)
         fileNew.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_N))
-        fileMenu.addAction(fileNew)
+        self.fileMenu.addAction(fileNew)
         
         fileOpen = QAction('Open', self)
         fileOpen.triggered.connect(self.open)
         fileOpen.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_O))
-        fileMenu.addAction(fileOpen)
+        self.fileMenu.addAction(fileOpen)
         
         fileSave = QAction('Save', self)
         fileSave.triggered.connect(self.save)
         fileSave.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_S))
-        fileMenu.addAction(fileSave)
+        self.fileMenu.addAction(fileSave)
         
         fileSaveAs = QAction('Save as', self)
         fileSaveAs.triggered.connect(self.saveAs)
         fileSaveAs.setShortcut(QKeySequence(Qt.CTRL + Qt.SHIFT + Qt.Key_S))
-        fileMenu.addAction(fileSaveAs)
+        self.fileMenu.addAction(fileSaveAs)
 
         viewMenu = menubar.addMenu('View')
-        
-        viewClear = QAction('Clear', self)
-        viewClear.triggered.connect(self.display.clear)
-        viewClear.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_L))
-        viewMenu.addAction(viewClear)
         
         viewThemeMenu = viewMenu.addMenu('Theme')
         self.themeActions = {}
@@ -95,23 +90,34 @@ class ModularCalculatorInterface(StatefulApplication):
         self.viewSyntaxParsingAutoExecutes.triggered.connect(self.setAutoExecute)
         viewMenu.addAction(self.viewSyntaxParsingAutoExecutes)
 
-        insertMenu = menubar.addMenu('Insert')
+        actionMenu = menubar.addMenu('Action')
+
+        self.executeAction = QAction('Execute', self)
+        self.executeAction.triggered.connect(self.calc)
+        actionMenu.addAction(self.executeAction)
         
-        insertConstant = QAction('Constant', self)
+        actionClear = QAction('Clear', self)
+        actionClear.triggered.connect(self.display.clear)
+        actionClear.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_L))
+        actionMenu.addAction(actionClear)
+
+        actionMenu.addSeparator()
+        
+        insertConstant = QAction('Insert constant', self)
         insertConstant.triggered.connect(self.insertConstant)
-        insertMenu.addAction(insertConstant)
+        actionMenu.addAction(insertConstant)
         
-        insertFunction = QAction('Function', self)
+        insertFunction = QAction('Insert function', self)
         insertFunction.triggered.connect(self.insertFunction)
-        insertMenu.addAction(insertFunction)
+        actionMenu.addAction(insertFunction)
         
-        insertOperator = QAction('Operator', self)
+        insertOperator = QAction('Insert operator', self)
         insertOperator.triggered.connect(self.insertOperator)
-        insertMenu.addAction(insertOperator)
+        actionMenu.addAction(insertOperator)
         
-        insertUnit = QAction('Unit', self)
+        insertUnit = QAction('Insert unit', self)
         insertUnit.triggered.connect(self.insertUnit)
-        insertMenu.addAction(insertUnit)
+        actionMenu.addAction(insertUnit)
 
         optionsMenu = menubar.addMenu('Options')
         
@@ -122,7 +128,7 @@ class ModularCalculatorInterface(StatefulApplication):
         self.optionsSingleAction = QAction('Single mode', self, checkable=True)
         optionsMenu.addAction(self.optionsSingleAction)
         self.optionsSingleAction.triggered.connect(self.setSingleMode)
-        self.optionsMultiAction = QAction('Multi mode', self, checkable=True)
+        self.optionsMultiAction = QAction('Scripted mode', self, checkable=True)
         self.optionsMultiAction.triggered.connect(self.setMultiMode)
         optionsMenu.addAction(self.optionsMultiAction)
 
@@ -153,9 +159,10 @@ class ModularCalculatorInterface(StatefulApplication):
         
         self.setCurrentFile(self.fetchStateText("currentFile"))
 
-        self.multiMode = (self.fetchStateBoolean("multiMode", False))
-        self.optionsSingleAction.setChecked(not self.multiMode)
-        self.optionsMultiAction.setChecked(self.multiMode)
+        if self.fetchStateBoolean("multiMode", False):
+            self.setMultiMode()
+        else:
+            self.setSingleMode()
         
         self.setTheme(self.fetchStateText("theme"))
         
@@ -221,27 +228,31 @@ class ModularCalculatorInterface(StatefulApplication):
         return row, column
 
     def new(self):
-        self.entry.clearContents()
-        self.setCurrentFile(None)
+        if self.multiMode:
+            self.entry.clearContents()
+            self.setCurrentFile(None)
 
     def open(self):
-        filename, _ = QFileDialog.getOpenFileName(self, "Open File", "", "All Files (*)")
-        if filename:
-            fh = open(filename, 'r')
-            text = str.join("", fh.readlines())
-            self.entry.setContents(text)
-            self.setCurrentFile(filename)
+        if self.multiMode:
+            filename, _ = QFileDialog.getOpenFileName(self, "Open File", "", "All Files (*)")
+            if filename:
+                fh = open(filename, 'r')
+                text = str.join("", fh.readlines())
+                self.entry.setContents(text)
+                self.setCurrentFile(filename)
 
     def save(self):
-        fh = open(self.currentFile, 'w')
-        fh.write(self.entry.getContents())
+        if self.multiMode:
+            fh = open(self.currentFile, 'w')
+            fh.write(self.entry.getContents())
 
     def saveAs(self):
-        filename, _ = QFileDialog.getSaveFileName(self, "Save File", "", "All Files (*)")
-        if filename:
-            fh = open(filename, 'w')
-            fh.write(self.entry.getContents())
-            self.setCurrentFile(filename)
+        if self.multiMode:
+            filename, _ = QFileDialog.getSaveFileName(self, "Save File", "", "All Files (*)")
+            if filename:
+                fh = open(filename, 'w')
+                fh.write(self.entry.getContents())
+                self.setCurrentFile(filename)
 
     def setCurrentFile(self, file):
         self.currentFile = file
@@ -254,11 +265,17 @@ class ModularCalculatorInterface(StatefulApplication):
         self.multiMode = False
         self.optionsSingleAction.setChecked(True)
         self.optionsMultiAction.setChecked(False)
+        self.executeAction.setShortcut(QKeySequence(Qt.Key_Return))
+        self.fileMenu.setDisabled(True)
+        self.currentFile = None
+        self.entry.clearContents()
 
     def setMultiMode(self):
         self.multiMode = True
         self.optionsSingleAction.setChecked(False)
         self.optionsMultiAction.setChecked(True)
+        self.executeAction.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_Return))
+        self.fileMenu.setDisabled(False)
 
     def setUnitSimplification(self, value):
         self.optionsSimplifyUnits.setChecked(value)

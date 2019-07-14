@@ -93,7 +93,7 @@ class CalculatorTextEdit(QTextEdit):
                 self.interface.calc()
                 self.clearContents()
                 self.selectPrevious = None
-            elif e.key() == Qt.Key_Up:
+            if e.key() == Qt.Key_Up:
                 self.selectPreviousEntry(-1)
             elif e.key() == Qt.Key_Down:
                 self.selectPreviousEntry(1)
