@@ -62,10 +62,10 @@ class ModularCalculatorInterface(StatefulApplication):
         fileOpen.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_O))
         self.fileMenu.addAction(fileOpen)
         
-        fileSave = QAction('Save', self)
-        fileSave.triggered.connect(self.save)
-        fileSave.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_S))
-        self.fileMenu.addAction(fileSave)
+        self.fileSave = QAction('Save', self)
+        self.fileSave.triggered.connect(self.save)
+        self.fileSave.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_S))
+        self.fileMenu.addAction(self.fileSave)
         
         fileSaveAs = QAction('Save as', self)
         fileSaveAs.triggered.connect(self.saveAs)
@@ -237,10 +237,13 @@ class ModularCalculatorInterface(StatefulApplication):
         self.currentFileModified = modified
         if self.currentFile is None:
             self.setWindowTitle('Modular Calculator')
+            self.fileSave.setDisabled(True)
         elif self.currentFileModified:
             self.setWindowTitle("Modular Calculator - {} *".format(self.currentFile))
+            self.fileSave.setDisabled(False)
         else:
             self.setWindowTitle("Modular Calculator - {}".format(self.currentFile))
+            self.fileSave.setDisabled(True)
 
     def setUnitSimplification(self, value):
         self.optionsSimplifyUnits.setChecked(value)

@@ -97,6 +97,8 @@ These examples are available in examples/basic_integration.py. See examples/adva
 
 * Usability / quality of life:
 	* Warn user when leaving a file and it hasn't been saved - New, Open
+	* Option to switch between ; and new-lines for statement terminators
+	* Tab inserts spaces until column number hits next multiple of four
 	* Insert Date - easily add a date into the calculation
 	* Tabs
 
