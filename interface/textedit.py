@@ -28,8 +28,6 @@ class CalculatorTextEdit(QTextEdit):
 
         self.autoExecute = True
 
-        self.selectPrevious = None
-
     def setCalculator(self, calculator):
         self.calculator = calculator
 
@@ -83,40 +81,12 @@ class CalculatorTextEdit(QTextEdit):
         self.css += '</style>'
 
     def keyPressEvent(self, e):
-        if self.interface.multiMode:
-            super().keyPressEvent(e)
-        else:
-            if e.key() in (Qt.Key_Return, Qt.Key_Enter):
-                self.interface.calc()
-                self.clearContents()
-                self.selectPrevious = None
-            if e.key() == Qt.Key_Up:
-                self.selectPreviousEntry(-1)
-            elif e.key() == Qt.Key_Down:
-                self.selectPreviousEntry(1)
-            else:
-                self.selectPrevious = None
-                super().keyPressEvent(e)
+        super().keyPressEvent(e)
         self.checkSyntax()
 
     def mouseReleaseEvent(self, e):
         super().mouseReleaseEvent(e)
         self.checkSyntax()
-
-    def selectPreviousEntry(self, direction):
-        previous = self.interface.display.rawOutput
-        if self.selectPrevious is None:
-            self.originalContent = self.getContents()
-            self.selectPrevious = len(previous)
-        self.selectPrevious += direction
-        if self.selectPrevious < 0:
-            self.selectPrevious = len(previous)
-        if self.selectPrevious > len(previous):
-            self.selectPrevious = 0
-        if self.selectPrevious == len(previous):
-            self.setContents(self.originalContent)
-        else:
-            self.setContents(previous[self.selectPrevious][0].strip())
 
     def checkSyntax(self, force=False):
         if self.calculator is not None and (self.oldText is None or self.oldText != self.toHtml() or force):
@@ -124,8 +94,7 @@ class CalculatorTextEdit(QTextEdit):
             items = []
             i = 0
             backupVars = self.calculator.vars.copy()
-            if self.interface.multiMode:
-                self.calculator.vars = {}
+            self.calculator.vars = {}
             try:
                 result = self.calculator.calculate(expr, {'parse_only': not self.autoExecute})
                 items = result.items
@@ -146,7 +115,7 @@ class CalculatorTextEdit(QTextEdit):
             if i < len(expr):
                 newhtml += "<span class='{0}'>{1}</span>".format('error', htmlSafe(expr[i:]))
             self.updateHtml(newhtml)
-            if self.interface.multiMode and not self.interface.currentFileModified and not force:
+            if not self.interface.currentFileModified and not force:
                 self.interface.setCurrentFile(self.interface.currentFile, True)
         self.oldText = self.toHtml()
 

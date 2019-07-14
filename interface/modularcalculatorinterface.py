@@ -95,11 +95,7 @@ class ModularCalculatorInterface(StatefulApplication):
         self.executeAction = QAction('Execute', self)
         self.executeAction.triggered.connect(self.calc)
         actionMenu.addAction(self.executeAction)
-        
-        actionClear = QAction('Clear', self)
-        actionClear.triggered.connect(self.display.clear)
-        actionClear.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_L))
-        actionMenu.addAction(actionClear)
+        self.executeAction.setShortcuts([QKeySequence(Qt.CTRL + Qt.Key_Enter), QKeySequence(Qt.CTRL + Qt.Key_Return)])
 
         actionMenu.addSeparator()
         
@@ -125,20 +121,13 @@ class ModularCalculatorInterface(StatefulApplication):
         self.precisionSpinBox.spinbox.valueChanged.connect(self.setPrecision)
         optionsMenu.addAction(self.precisionSpinBox)
 
-        self.optionsSingleAction = QAction('Single mode', self, checkable=True)
-        optionsMenu.addAction(self.optionsSingleAction)
-        self.optionsSingleAction.triggered.connect(self.setSingleMode)
-        self.optionsMultiAction = QAction('Scripted mode', self, checkable=True)
-        self.optionsMultiAction.triggered.connect(self.setMultiMode)
-        optionsMenu.addAction(self.optionsMultiAction)
+        self.optionsSimplifyUnits = QAction('Simplify units', self, checkable=True)
+        self.optionsSimplifyUnits.triggered.connect(self.setUnitSimplification)
+        optionsMenu.addAction(self.optionsSimplifyUnits)
 
         self.optionsUnitSystemPreference = QAction('Unit system preference', self)
         self.optionsUnitSystemPreference.triggered.connect(self.setUnitSystemPreference)
         optionsMenu.addAction(self.optionsUnitSystemPreference)
-
-        self.optionsSimplifyUnits = QAction('Simplify units', self, checkable=True)
-        self.optionsSimplifyUnits.triggered.connect(self.setUnitSimplification)
-        optionsMenu.addAction(self.optionsSimplifyUnits)
 
     def initCalculator(self):
         self.setCalculator(ModularCalculator('Computing'))
@@ -158,11 +147,6 @@ class ModularCalculatorInterface(StatefulApplication):
         self.entry.restoreState(self.fetchStateText("textContent"))
         
         self.setCurrentFile(self.fetchStateText("currentFile"), self.fetchStateBoolean("currentFileModified", False))
-
-        if self.fetchStateBoolean("multiMode", False):
-            self.setMultiMode()
-        else:
-            self.setSingleMode()
         
         self.setTheme(self.fetchStateText("theme"))
         
@@ -188,7 +172,6 @@ class ModularCalculatorInterface(StatefulApplication):
         self.storeStateText("currentFile", self.currentFile)
         self.storeStateBoolean("currentFileModified", self.currentFileModified)
         
-        self.storeStateBoolean("multiMode", self.multiMode)
         self.storeStateText("theme", self.entry.theme)
         self.storeStateBoolean("viewShortUnits", self.viewShortUnits.isChecked())
         self.storeStateBoolean("viewSyntaxParsingAutoExecutes", self.viewSyntaxParsingAutoExecutes.isChecked())
@@ -201,16 +184,12 @@ class ModularCalculatorInterface(StatefulApplication):
     def calc(self):
         question = self.entry.getContents().rstrip()
         try:
-            if self.multiMode:
-                self.calculator.vars = {}
+            self.calculator.vars = {}
             response = self.calculator.calculate(question)
-            if self.multiMode:
-                self.display.clear()
+            self.display.clear()
             for i, result in enumerate(response.results):
                 if hasattr(result, 'value'):
                     self.display.addAnswer(result.expression, self.calculator.number_to_string(result.value), result.unit)
-            if not self.multiMode:
-                self.calculator.vars['ans'] = (response.results[-1].value, response.results[-1].unit)
         except CalculatingException as err:
             i = err.find_pos(question)
             row, column = self.rowsColumns(question, i)
@@ -229,32 +208,29 @@ class ModularCalculatorInterface(StatefulApplication):
         return row, column
 
     def new(self):
-        if self.multiMode:
-            self.entry.clearContents()
-            self.setCurrentFile(None)
+        self.entry.clearContents()
+        self.display.clear()
+        self.setCurrentFile(None)
 
     def open(self):
-        if self.multiMode:
-            filename, _ = QFileDialog.getOpenFileName(self, "Open File", "", "All Files (*)")
-            if filename:
-                fh = open(filename, 'r')
-                text = str.join("", fh.readlines())
-                self.entry.setContents(text)
-                self.setCurrentFile(filename, False)
+        filename, _ = QFileDialog.getOpenFileName(self, "Open File", "", "All Files (*)")
+        if filename:
+            fh = open(filename, 'r')
+            text = str.join("", fh.readlines())
+            self.entry.setContents(text)
+            self.setCurrentFile(filename, False)
 
     def save(self):
-        if self.multiMode:
-            fh = open(self.currentFile, 'w')
-            fh.write(self.entry.getContents())
-            self.setCurrentFile(self.currentFile, False)
+        fh = open(self.currentFile, 'w')
+        fh.write(self.entry.getContents())
+        self.setCurrentFile(self.currentFile, False)
 
     def saveAs(self):
-        if self.multiMode:
-            filename, _ = QFileDialog.getSaveFileName(self, "Save File", "", "All Files (*)")
-            if filename:
-                fh = open(filename, 'w')
-                fh.write(self.entry.getContents())
-                self.setCurrentFile(filename, False)
+        filename, _ = QFileDialog.getSaveFileName(self, "Save File", "", "All Files (*)")
+        if filename:
+            fh = open(filename, 'w')
+            fh.write(self.entry.getContents())
+            self.setCurrentFile(filename, False)
 
     def setCurrentFile(self, file, modified=False):
         self.currentFile = file
@@ -265,22 +241,6 @@ class ModularCalculatorInterface(StatefulApplication):
             self.setWindowTitle("Modular Calculator - {} *".format(self.currentFile))
         else:
             self.setWindowTitle("Modular Calculator - {}".format(self.currentFile))
-
-    def setSingleMode(self):
-        self.multiMode = False
-        self.optionsSingleAction.setChecked(True)
-        self.optionsMultiAction.setChecked(False)
-        self.executeAction.setShortcuts([QKeySequence(Qt.Key_Enter), QKeySequence(Qt.Key_Return)])
-        self.fileMenu.setDisabled(True)
-        self.setCurrentFile(None)
-        self.entry.clearContents()
-
-    def setMultiMode(self):
-        self.multiMode = True
-        self.optionsSingleAction.setChecked(False)
-        self.optionsMultiAction.setChecked(True)
-        self.executeAction.setShortcuts([QKeySequence(Qt.CTRL + Qt.Key_Enter), QKeySequence(Qt.CTRL + Qt.Key_Return)])
-        self.fileMenu.setDisabled(False)
 
     def setUnitSimplification(self, value):
         self.optionsSimplifyUnits.setChecked(value)
