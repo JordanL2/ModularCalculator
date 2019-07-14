@@ -84,10 +84,7 @@ class CalculatorTextEdit(QTextEdit):
 
     def keyPressEvent(self, e):
         if self.interface.multiMode:
-            if e.key() in (Qt.Key_Return, Qt.Key_Enter) and (e.modifiers() & Qt.ControlModifier):
-                self.interface.calc()
-            else:
-                super().keyPressEvent(e)
+            super().keyPressEvent(e)
         else:
             if e.key() in (Qt.Key_Return, Qt.Key_Enter):
                 self.interface.calc()

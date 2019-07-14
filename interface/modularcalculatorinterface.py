@@ -265,16 +265,16 @@ class ModularCalculatorInterface(StatefulApplication):
         self.multiMode = False
         self.optionsSingleAction.setChecked(True)
         self.optionsMultiAction.setChecked(False)
-        self.executeAction.setShortcut(QKeySequence(Qt.Key_Return))
+        self.executeAction.setShortcuts([QKeySequence(Qt.Key_Enter), QKeySequence(Qt.Key_Return)])
         self.fileMenu.setDisabled(True)
-        self.currentFile = None
+        self.setCurrentFile(None)
         self.entry.clearContents()
 
     def setMultiMode(self):
         self.multiMode = True
         self.optionsSingleAction.setChecked(False)
         self.optionsMultiAction.setChecked(True)
-        self.executeAction.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_Return))
+        self.executeAction.setShortcuts([QKeySequence(Qt.CTRL + Qt.Key_Enter), QKeySequence(Qt.CTRL + Qt.Key_Return)])
         self.fileMenu.setDisabled(False)
 
     def setUnitSimplification(self, value):
