@@ -118,6 +118,8 @@ tests = [
     { 'test': r"a = 1; b = 2; true ? a : b = 3; a - b", 'expected': Decimal(1) },
     { 'test': r"a = 1; b = 2; false ? a : b = 3; a - b", 'expected': Decimal(-2) },
     { 'test': r"false ? (1/0) : 2", 'expected': Decimal(2) },
+    { 'test': r"false & (1/0)", 'expected': False },
+    { 'test': r"true | (1/0)", 'expected': True },
 
     { 'test': r"'ABC' =~ '\\w'", 'expected': True },
     { 'test': r"'ABC' =~ '\\d'", 'expected': False },

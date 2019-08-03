@@ -218,7 +218,7 @@ class Engine:
                 inputs.append(this_item)
 
         try:
-            if errorFound is not None:
+            if errorFound is not None and not op.inputs_can_be_exceptions:
                 op_result = errorFound
             else:
                 op_result = op.call(self, inputs, flags)

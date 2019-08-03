@@ -40,6 +40,8 @@ class Operation:
         self.units_multi = False
         self.units_normalise = True
 
+        self.inputs_can_be_exceptions = False
+
     def add_value_restriction(self, fromparam, toparam, objtypes):
         if objtypes is not None:
             if not isinstance(objtypes, list):
@@ -50,15 +52,20 @@ class Operation:
         self.unit_restrictions.append({'fromparam': fromparam, 'toparam': toparam, 'dimensions': dimensions})
 
     def call(self, calculator, inputs, flags):
-        for i in inputs:
-            if isinstance(i, ExceptionOperandResult):
-                return i
+        if not self.inputs_can_be_exceptions:
+            for i in inputs:
+                if isinstance(i, ExceptionOperandResult):
+                    return i
 
         values = [i.value for i in inputs]
+        for i, inp in enumerate(inputs):
+            if isinstance(inp, ExceptionOperandResult):
+                values[i] = inp
         units = [i.unit for i in inputs]
         refs = [i.ref for i in inputs]
 
-        self.validate(calculator, values, units, refs)
+        if not self.inputs_can_be_exceptions:
+            self.validate(calculator, values, units, refs)
 
         result_value, result_unit, result_ref = None, None, None
         if calculator.unit_normaliser is not None and self.units_normalise:
@@ -67,6 +74,8 @@ class Operation:
         try:
             result = self.ref(calculator, values, units, refs, flags.copy())
             result_value = result.value
+            if isinstance(result_value, ExceptionOperandResult):
+                return result_value
             if result.unit_override:
                 result_unit = result.unit
             if result.ref_override:

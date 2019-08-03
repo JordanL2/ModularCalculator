@@ -34,8 +34,8 @@ tests = [
 
     { 'test': r"true ? 1 : 2 3",        'expected': { 'message': r"Could not parse: 3",                       'pos': 13, 'items': ['true',' ','?',' ','1',' ',':',' ','2',' '] } },
     { 'test': r"true ? 1 2 : 3",        'expected': { 'message': r"Could not parse: 2 : 3",                   'pos': 9,  'items': ['true',' ','?',' ','1',' '] } },
-    { 'test': r"true ? 1 : (+)",        'expected': { 'message': r"Missing left operands for operator +",          'pos': 12, 'items': ['true',' ','?',' ','1',' ',':',' ','('] } },
-    { 'test': r"true ? 1 : ( +)",       'expected': { 'message': r"Missing left operands for operator +",          'pos': 13, 'items': ['true',' ','?',' ','1',' ',':',' ','(',' '] } },
+    { 'test': r"false ? 1 : (+)",        'expected': { 'message': r"Missing left operands for operator +",          'pos': 13, 'items': ['false',' ','?',' ','1',' ',':',' ','('] } },
+    { 'test': r"false ? 1 : ( +)",       'expected': { 'message': r"Missing left operands for operator +",          'pos': 14, 'items': ['false',' ','?',' ','1',' ',':',' ','(',' '] } },
     { 'test': r"true ? 1 : 2 : 3",      'expected': { 'message': r"Could not execute operator: :",   'pos': 13,  'items': ['true',' ','?',' ','1',' ',':',' ','2',' '] } },
     { 'test': r"true : false ? 1 : 2",  'expected': { 'message': r"Could not execute operator: :",    'pos': 5, 'items': ['true',' '] } },
     
