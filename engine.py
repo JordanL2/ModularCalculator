@@ -56,7 +56,7 @@ class Engine:
                 if len(functional_items(items)) > 0 and not ('parse_only' in flags and flags['parse_only']):
                     starttime = time.perf_counter()
                     answer = self.execute(items, flags)
-                    if isinstance(answer, ExceptionOperandResult):
+                    if isinstance(answer.value, Exception):
                         raise answer.value
                     result.set_timing('exec', time.perf_counter() - starttime)
                     starttime = time.perf_counter()
@@ -159,8 +159,8 @@ class Engine:
             if not isinstance(items[0], OperandResult):
                 raise ExecutionException("Not a value: \"{0}\"".format(str(items[0])), original_items[0:items[0]._INDEX], None)
             
-            if isinstance(items[0], ExceptionOperandResult):
-                return ExceptionOperandResult(self.restore_non_functional_items(items[0].value, original_items))
+            if isinstance(items[0].value, Exception):
+                return OperandResult(self.restore_non_functional_items(items[0].value, original_items), None, None)
             return items[0]
         except CalculatingException as err:
             raise self.restore_non_functional_items(err, original_items)
@@ -179,9 +179,9 @@ class Engine:
                 item._INDEX = item_index
             except ExecutionException as err:
                 err.items = previous_items + err.items
-                return ExceptionOperandResult(err)
+                return OperandResult(err, None, None)
             except CalculatorException as err:
-                return ExceptionOperandResult(ExecutionException(err.message, previous_items, item.text))
+                return OperandResult(ExecutionException(err.message, previous_items, item.text), None, None)
         return item
 
     def execute_operator(self, sym, items, i, opwidth, original_items, flags):
@@ -213,7 +213,7 @@ class Engine:
             else:
                 if not isinstance(this_item, OperandResult):
                     raise ExecutionException("Invalid input for operator {0} - '{1}'".format(sym, str(this_item)), previous_items, sym)
-                if errorFound is None and isinstance(this_item, ExceptionOperandResult):
+                if errorFound is None and isinstance(this_item.value, Exception):
                     errorFound = this_item
                 inputs.append(this_item)
 

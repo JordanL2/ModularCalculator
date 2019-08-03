@@ -54,7 +54,7 @@ class Operation:
     def call(self, calculator, inputs, flags):
         if not self.inputs_can_be_exceptions:
             for i in inputs:
-                if isinstance(i, ExceptionOperandResult):
+                if isinstance(i.value, Exception):
                     return i
 
         values = [i.value for i in inputs]
@@ -70,8 +70,6 @@ class Operation:
         try:
             result = self.ref(calculator, values, units, refs, flags.copy())
             result_value = result.value
-            if isinstance(result_value, Exception):
-                return ExceptionOperandResult(result_value)
             if result.unit_override:
                 result_unit = result.unit
             if result.ref_override:
