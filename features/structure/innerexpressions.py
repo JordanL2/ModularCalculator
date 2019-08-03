@@ -64,6 +64,8 @@ class InnerExpressionItem(RecursiveOperandItem):
     def value(self, flags):
         try:
             val = self.calculator.execute(self.items, flags.copy())
+            if isinstance(val, ExceptionOperandResult):
+                raise val.err
             self.unit = val.unit
             self.ref = val.ref
             return val.value

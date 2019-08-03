@@ -111,3 +111,10 @@ class OperandResult:
         if self.unit is not None:
             return str(self.value) + ' ' + str(self.unit)
         return str(self.value)
+
+
+class ExceptionOperandResult(OperandResult):
+
+    def __init__(self, err):
+        super().__init__(None, None, None)
+        self.err = err

@@ -50,6 +50,10 @@ class Operation:
         self.unit_restrictions.append({'fromparam': fromparam, 'toparam': toparam, 'dimensions': dimensions})
 
     def call(self, calculator, inputs, flags):
+        for i in inputs:
+            if isinstance(i, ExceptionOperandResult):
+                return i
+
         values = [i.value for i in inputs]
         units = [i.unit for i in inputs]
         refs = [i.ref for i in inputs]
