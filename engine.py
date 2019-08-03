@@ -160,7 +160,7 @@ class Engine:
                 raise ExecutionException("Not a value: \"{0}\"".format(str(items[0])), original_items[0:items[0]._INDEX], None)
             
             if isinstance(items[0].value, Exception):
-                return OperandResult(self.restore_non_functional_items(items[0].value, original_items), None, None)
+                items[0].value = self.restore_non_functional_items(items[0].value, original_items)
             return items[0]
         except CalculatingException as err:
             raise self.restore_non_functional_items(err, original_items)
@@ -204,7 +204,6 @@ class Engine:
         expected_items = linputs + rinputs
 
         inputs = []
-        errorFound = None
         for index, this_item in enumerate(actual_items):
             expected_item = expected_items[index]
             if isinstance(expected_item, str):
@@ -213,16 +212,11 @@ class Engine:
             else:
                 if not isinstance(this_item, OperandResult):
                     raise ExecutionException("Invalid input for operator {0} - '{1}'".format(sym, str(this_item)), previous_items, sym)
-                if errorFound is None and isinstance(this_item.value, Exception):
-                    errorFound = this_item
                 inputs.append(this_item)
 
         try:
-            if errorFound is not None and not op.inputs_can_be_exceptions:
-                op_result = errorFound
-            else:
-                op_result = op.call(self, inputs, flags)
-                op_result._INDEX = item_index
+            op_result = op.call(self, inputs, flags)
+            op_result._INDEX = item_index
         except CalculatorException as err:
             values = str.join(', ', ["'" + str(op_input) + "'" for op_input in inputs])
             itemtext = None
