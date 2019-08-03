@@ -65,7 +65,7 @@ class InnerExpressionItem(RecursiveOperandItem):
         try:
             val = self.calculator.execute(self.items, flags.copy())
             if isinstance(val, ExceptionOperandResult):
-                raise val.err
+                raise val.value
             self.unit = val.unit
             self.ref = val.ref
             return val.value

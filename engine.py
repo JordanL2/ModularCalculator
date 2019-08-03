@@ -57,7 +57,7 @@ class Engine:
                     starttime = time.perf_counter()
                     answer = self.execute(items, flags)
                     if isinstance(answer, ExceptionOperandResult):
-                        raise answer.err
+                        raise answer.value
                     result.set_timing('exec', time.perf_counter() - starttime)
                     starttime = time.perf_counter()
                     final = self.finalize(answer)
@@ -160,7 +160,7 @@ class Engine:
                 raise ExecutionException("Not a value: \"{0}\"".format(str(items[0])), original_items[0:items[0]._INDEX], None)
             
             if isinstance(items[0], ExceptionOperandResult):
-                return ExceptionOperandResult(self.restore_non_functional_items(items[0].err, original_items))
+                return ExceptionOperandResult(self.restore_non_functional_items(items[0].value, original_items))
             return items[0]
         except CalculatingException as err:
             raise self.restore_non_functional_items(err, original_items)
@@ -258,4 +258,4 @@ class Engine:
         return answer
 
     def validate_exception(self, value, unit, ref):
-        return isinstance(value, ExceptionOperandResult)
+        return isinstance(value, Exception)

@@ -58,9 +58,6 @@ class Operation:
                     return i
 
         values = [i.value for i in inputs]
-        for i, inp in enumerate(inputs):
-            if isinstance(inp, ExceptionOperandResult):
-                values[i] = inp
         units = [i.unit for i in inputs]
         refs = [i.ref for i in inputs]
 
@@ -73,8 +70,8 @@ class Operation:
         try:
             result = self.ref(calculator, values, units, refs, flags.copy())
             result_value = result.value
-            if isinstance(result_value, ExceptionOperandResult):
-                return result_value
+            if isinstance(result_value, Exception):
+                return ExceptionOperandResult(result_value)
             if result.unit_override:
                 result_unit = result.unit
             if result.ref_override:

@@ -116,5 +116,4 @@ class OperandResult:
 class ExceptionOperandResult(OperandResult):
 
     def __init__(self, err):
-        super().__init__(None, None, None)
-        self.err = err
+        super().__init__(err, None, None)
