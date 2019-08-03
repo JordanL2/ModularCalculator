@@ -64,8 +64,7 @@ class Operation:
         units = [i.unit for i in inputs]
         refs = [i.ref for i in inputs]
 
-        if not self.inputs_can_be_exceptions:
-            self.validate(calculator, values, units, refs)
+        self.validate(calculator, values, units, refs)
 
         result_value, result_unit, result_ref = None, None, None
         if calculator.unit_normaliser is not None and self.units_normalise:

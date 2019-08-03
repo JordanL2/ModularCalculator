@@ -37,8 +37,8 @@ class BooleansFeature(Feature):
         calculator.add_op(OperatorDefinition('Numerical', '>=', BooleansFeature.op_number_morethanequal, 1, 1, 'number'))
         calculator.add_op(OperatorDefinition('Numerical', '==', BooleansFeature.op_number_equals, 1, 1, 'number'))
         calculator.add_op(OperatorDefinition('Numerical', '!=', BooleansFeature.op_number_notequals, 1, 1, 'number'))
-        calculator.add_op(OperatorDefinition('Boolean', '&', BooleansFeature.op_boolean_and, 1, 1, 'boolean'), {'inputs_can_be_exceptions': True})
-        calculator.add_op(OperatorDefinition('Boolean', '|', BooleansFeature.op_boolean_or, 1, 1, 'boolean'), {'inputs_can_be_exceptions': True})
+        calculator.add_op(OperatorDefinition('Boolean', '&', BooleansFeature.op_boolean_and, 1, 1, ['boolean', None]), {'inputs_can_be_exceptions': True})
+        calculator.add_op(OperatorDefinition('Boolean', '|', BooleansFeature.op_boolean_or, 1, 1, ['boolean', None]), {'inputs_can_be_exceptions': True})
         calculator.add_op(OperatorDefinition('Boolean', '?', BooleansFeature.op_boolean_conditional, 1, [1, ':', 1], ['boolean', None, None]), {'units_normalise': False, 'inputs_can_be_exceptions': True})
 
         calculator.add_number_caster('boolean', BooleansFeature.number_bool)
