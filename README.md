@@ -96,6 +96,7 @@ These examples are available in examples/basic_integration.py. See examples/adva
 	* Option to display results in standard form
 
 * Usability / quality of life:
+	* Click previous answer to insert it
 	* Option to switch between ; and new-lines for statement terminators
 	* Insert Date - easily add a date into the calculation
 	* Tabs

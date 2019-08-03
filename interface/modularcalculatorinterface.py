@@ -186,7 +186,8 @@ class ModularCalculatorInterface(StatefulApplication):
         try:
             self.calculator.vars = {}
             response = self.calculator.calculate(question)
-            self.display.clear()
+            if len(response.results) > 1:
+                self.display.clear()
             for i, result in enumerate(response.results):
                 if hasattr(result, 'value'):
                     self.display.addAnswer(result.expression, self.calculator.number_to_string(result.value), result.unit)
