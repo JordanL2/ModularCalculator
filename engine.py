@@ -15,7 +15,7 @@ class Engine:
         self.parsers = []
         self.ops = []
         self.finalizers = []
-        self.validators = {}
+        self.validators = {'exception': Engine.validate_exception}
         
         self.multiply_op = None
         self.divide_op = None
@@ -256,3 +256,6 @@ class Engine:
         for finalizer in self.finalizers:
             answer = finalizer['ref'](self, answer)
         return answer
+
+    def validate_exception(self, value, unit, ref):
+        return isinstance(value, ExceptionOperandResult)
