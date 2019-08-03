@@ -109,8 +109,8 @@ class Engine:
                 raise ExecutionException("Empty expression", [], None)
 
             for i, item in enumerate(items):
-                items[i]._INDEX = i
                 items[i] = self.execute_operand(items[i], original_items[0:i], flags)
+                items[i]._INDEX = i
 
             while True:
                 for prec in self.ops:
@@ -173,10 +173,8 @@ class Engine:
 
     def execute_operand(self, item, previous_items, flags):
         if isinstance(item, OperandItem):
-            item_index = item._INDEX
             try:
                 item = item.result(flags)
-                item._INDEX = item_index
             except ExecutionException as err:
                 err.items = previous_items + err.items
                 return OperandResult(err, None, None)
