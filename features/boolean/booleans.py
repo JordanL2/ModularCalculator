@@ -107,8 +107,6 @@ class BooleansFeature(Feature):
         return None
 
     def validate_boolean(self, value, unit, ref):
-        if isinstance(value, ExceptionOperandResult):
-            return False
         try:
             BooleansFeature.boolean(self, value)
             return True
