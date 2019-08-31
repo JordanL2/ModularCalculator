@@ -53,7 +53,7 @@ class CalculatorDisplay(QTextEdit):
             if self.options['shortunits']:
                 unit = unit.symbol()
             else:
-                unit = unit.get_name(answer)
+                unit = unit.get_name(Decimal(answer))
                 unit = ' ' + unit
         else:
             unit = ''

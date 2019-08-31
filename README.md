@@ -100,6 +100,7 @@ These examples are available in examples/basic_integration.py. See examples/adva
 	* Option to switch between ; and new-lines for statement terminators
 	* Insert Date - easily add a date into the calculation
 	* Tabs
+	* Ctrl+S does save as when no filename
 
 * Stability:
 	* Restoring state should be able to cope with exceptions and reset the state if found

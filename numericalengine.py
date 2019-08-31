@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from modularcalculator.engine import Engine
+from modularcalculator.objects.exceptions import *
 
 from decimal import *
 import math
