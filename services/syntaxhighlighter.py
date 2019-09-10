@@ -14,13 +14,18 @@ class SyntaxHighlighter:
         highlight = []
 
         i = 0
+        prev_item = None
         for item in items:
             itemtext = item.text
             ii = text.find(itemtext, i)
             if ii == -1:
                 raise CalculatorException("Could not find {0} in {1} after character {2}".format(itemtext, text, i))
             if i != ii:
-                print("Error in", text, "- Unexpected characters at", i, "- (" + text[i:ii] + ")")
+                if prev_item is None or not prev_item.truncated:
+                    print("Error in", text, "- Unexpected characters at", i, "- (" + text[i:ii] + ")")
+                    for item2 in self.items:
+                        print("Item:", "|" + item2.text + "|")
+                    print("End of items.\n")
                 highlight.append((self.defaulttype, text[i:ii]))
                 i = ii
             itemtype = item.desc()
@@ -30,6 +35,7 @@ class SyntaxHighlighter:
             else:
                 highlight.append((itemtype, itemtext))
             i += len(itemtext)
+            prev_item = item
         if i < len(text):
             print("Error in", text, "- Unexpected characters at", i, "- (" + text[i:] + ")")
             highlight.append((self.defaulttype, text[i:]))

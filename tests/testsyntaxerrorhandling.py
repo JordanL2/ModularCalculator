@@ -46,7 +46,7 @@ tests = [
     
     { 'test': "dateadd('2017-01-01', 3)",  'expected': { 'message': r"Function dateadd parameter 2 must have unit dimensions: time^1",  'pos': 0, 'items': [] } },
 
-    { 'test': "(1/0) :",  'expected': { 'message': r"Could not execute operator: :",  'pos': 6, 'items': ['(','1','/0',' '] } },
+    { 'test': "(1/0) :",  'expected': { 'message': r"Could not execute operator: :",  'pos': 6, 'items': ['(','1',' '] } },
 
     { 'test': r"f = './examples/does_not_exist'; @f(1, 2)", 'expected': { 'exception': ParsingException, 'message': r"Could not read file './examples/does_not_exist'", 'pos': 33, 'items': ['f',' ','=',' ',"'./examples/does_not_exist'",';',' '] } },
     { 'test': r"f = './examples/ext_func_addition2.txt'; @f(1, 2)", 'expected': { 'exception': ParsingException, 'message': r"Could not execute function 'f'", 'pos': 41, 'items': ['f',' ','=',' ',"'./examples/ext_func_addition2.txt'",';',' '] } },

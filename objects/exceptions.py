@@ -17,13 +17,19 @@ class CalculatingException(CalculatorException):
 
     def find_pos(self, text):
         i = 0
+        prev_item = None
         for item in self.items:
             ii = text.find(item.text, i)
             if ii == -1:
                 raise Exception("Could not find item")
             if ii != i:
-                print("Error in", text, "- Unexpected characters at", i, "- (" + text[i:ii] + ")")
+                if prev_item is None or not prev_item.truncated:
+                    print("Error in", "|" + text + "|", "- Unexpected characters at", i, "- |" + text[i:ii] + "|")
+                    for item2 in self.items:
+                        print("Item:", "|" + item2.text + "|")
+                    print("End of items.\n")
             i = ii + len(item.text)
+            prev_item = item
         if self.next is not None:
             ii = text.find(self.next, i)
             if ii == -1:

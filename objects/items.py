@@ -21,6 +21,7 @@ class Item:
     
     def __init__(self, text):
         self.text = text
+        self.truncated = False
 
     def __str__(self):
         return self.text

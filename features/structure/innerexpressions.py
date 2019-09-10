@@ -72,6 +72,7 @@ class InnerExpressionItem(RecursiveOperandItem):
         except ExecutionException as err:
             self.items = err.items
             self.text = err.truncate(self.text)
+            self.truncated = True
             raise ExecutionException(err.message, [self], err.next, True)
 
     def result(self, flags):

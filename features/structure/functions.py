@@ -111,6 +111,7 @@ class FunctionItem(RecursiveOperandItem):
                 self.items.extend(err.items)
                 err.items = self.items
                 self.text = err.truncate(self.text)
+                self.truncated = True
                 raise ExecutionException(err.message, [self], err.next, True)
         return func.call(self.calculator, inputs, flags)
 
