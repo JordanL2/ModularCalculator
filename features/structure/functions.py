@@ -102,11 +102,21 @@ class FunctionItem(RecursiveOperandItem):
         inputs = []
         itemsi = 2
         for i, arg in enumerate(self.args):
+            old_itemsi = itemsi
             try:
                 argresult = self.calculator.execute(arg, flags)
                 itemsi += len(arg) + 1
                 inputs.append(argresult)
             except ExecutionException as err:
+                self.items = self.items[0:itemsi]
+                self.items.extend(err.items)
+                err.items = self.items
+                self.text = err.truncate(self.text)
+                self.truncated = True
+                raise ExecutionException(err.message, [self], err.next, True)
+            if not func.inputs_can_be_exceptions and isinstance(argresult.value, Exception):
+                err = argresult.value
+                itemsi = old_itemsi
                 self.items = self.items[0:itemsi]
                 self.items.extend(err.items)
                 err.items = self.items

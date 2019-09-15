@@ -120,4 +120,4 @@ These examples are available in examples/basic_integration.py. See examples/adva
 
 # Bugs
 
-* Unit normalisation: "joules / m^3" gets simplified to "pascals"
+* Unit normalisation: "1 joule / 1 m^3" gets simplified to "1 pascal"

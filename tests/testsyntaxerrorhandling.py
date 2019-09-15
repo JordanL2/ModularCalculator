@@ -51,6 +51,8 @@ tests = [
     { 'test': r"f = './examples/does_not_exist'; @f(1, 2)", 'expected': { 'exception': ParsingException, 'message': r"Could not read file './examples/does_not_exist'", 'pos': 33, 'items': ['f',' ','=',' ',"'./examples/does_not_exist'",';',' '] } },
     { 'test': r"f = './examples/ext_func_addition2.txt'; @f(1, 2)", 'expected': { 'exception': ParsingException, 'message': r"Could not execute function 'f'", 'pos': 41, 'items': ['f',' ','=',' ',"'./examples/ext_func_addition2.txt'",';',' '] } },
 
+    { 'test': "round((+))",  'expected': { 'message': r"Missing left operands for operator +",  'pos': 7, 'items': ['round','(','('] } },
+
 #    { 'test': r"", 'expected': { 'exception': ParsingException, 'message': r"", 'pos': 0, 'items': [] } },
 ]
 

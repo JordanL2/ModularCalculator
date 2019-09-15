@@ -21,7 +21,7 @@ class CalculatingException(CalculatorException):
         for item in self.items:
             ii = text.find(item.text, i)
             if ii == -1:
-                raise Exception("Could not find item")
+                raise Exception("Could not find item |{}| in text |{}| after position {}".format(item.text, text, i))
             if ii != i:
                 if prev_item is None or not prev_item.truncated:
                     print("Error in", "|" + text + "|", "- Unexpected characters at", i, "- |" + text[i:ii] + "|")
