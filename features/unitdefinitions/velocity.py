@@ -29,6 +29,6 @@ class VelocityUnitFeature(AbstractUnitFeature):
 class UnitDefinitionKnot(UnitDefinition):
 
     namelist = ['knots','knot']
-    symbollist = ['knot']
+    symbollist = ['kn','kt']
     unitscale = Decimal('0.5144444444444444444444444444444444444444444444444444444444444')
     systems = ['nautical']

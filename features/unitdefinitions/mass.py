@@ -44,7 +44,6 @@ class UnitDefinitionGram(UnitDefinition):
 class UnitDefinitionTonne(UnitDefinition):
 
     namelist = ['tonnes','tonne']
-    symbollist = ['tonne']
     unitscale = Decimal('1000')
     systems = ['si']
 
@@ -79,13 +78,11 @@ class UnitDefinitionStone(UnitDefinition):
 class UnitDefinitionShortTon(UnitDefinition):
 
     namelist = ['short tonnes','short tonne']
-    symbollist = ['short ton']
     unitscale = Decimal('907.18474')
     systems = ['us']
 
 class UnitDefinitionLongTon(UnitDefinition):
 
     namelist = ['long tonnes','long tonne']
-    symbollist = ['long ton']
     unitscale = Decimal('1016.0469088')
     systems = ['uk']

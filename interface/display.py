@@ -50,7 +50,7 @@ class CalculatorDisplay(QTextEdit):
             else:
                 answer = answer.singular()
         if unit is not None:
-            if self.options['shortunits']:
+            if self.options['shortunits'] and unit.has_symbols():
                 unit = unit.symbol()
             else:
                 unit = unit.get_name(Decimal(answer))

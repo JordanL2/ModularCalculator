@@ -37,6 +37,9 @@ class AbstractUnitDefinition:
     def symbol(self):
         return self.symbols()[0]
 
+    def has_symbols(self):
+        return len(self.symbols()) > 0
+
     def names(self):
         if self.namelist is None:
             return []
@@ -284,6 +287,12 @@ class UnitPowerList(AbstractPowerList):
 
     def symbol(self):
         return self.name(False, True, False)
+
+    def has_symbols(self):
+        for unitpower in self.list():
+            if not unitpower.unit.has_symbols():
+                return False
+        return True
 
     def name(self, plural, symbol, negative_powers):
         mults = []

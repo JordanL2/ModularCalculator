@@ -44,7 +44,6 @@ class UnitDefinitionSecond(UnitDefinition):
 class UnitDefinitionMinute(UnitDefinition):
 
     namelist = ['minutes','minute']
-    symbollist = ['minute']
     unitscale = Decimal('60')
     systems = ['gregorian']
 
@@ -59,14 +58,12 @@ class UnitDefinitionHour(UnitDefinition):
 class UnitDefinitionDay(UnitDefinition):
 
     namelist = ['days','day']
-    symbollist = ['day']
     unitscale = Decimal('86400')
     systems = ['gregorian']
 
 class UnitDefinitionWeek(UnitDefinition):
 
     namelist = ['weeks','week']
-    symbollist = ['week']
     unitscale = Decimal('604800')
     systems = ['gregorian']
     use = False
@@ -74,7 +71,6 @@ class UnitDefinitionWeek(UnitDefinition):
 class UnitDefinitionMonth(UnitDefinition):
 
     namelist = ['months','month']
-    symbollist = ['month']
     unitscale = Decimal('2629746')
     systems = ['gregorian']
 

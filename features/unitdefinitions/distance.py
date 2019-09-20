@@ -52,14 +52,12 @@ class UnitDefinitionMeter(UnitDefinition):
 class UnitDefinitionLightYear(UnitDefinition):
 
     namelist = ['lightyears','lightyear']
-    symbollist = ['lightyear']
     unitscale = Decimal('9460730472580800')
     systems = ['asu']
 
 class UnitDefinitionLightWeek(UnitDefinition):
 
     namelist = ['lightweeks','lightweek']
-    symbollist = ['lightweek']
     unitscale = Decimal('181314478598400')
     systems = ['asu']
     use = False
@@ -67,28 +65,24 @@ class UnitDefinitionLightWeek(UnitDefinition):
 class UnitDefinitionLightDay(UnitDefinition):
 
     namelist = ['lightdays','lightday']
-    symbollist = ['lightday']
     unitscale = Decimal('25902068371200')
     systems = ['asu']
 
 class UnitDefinitionLightHour(UnitDefinition):
 
     namelist = ['lighthours','lighthour']
-    symbollist = ['lighthour']
     unitscale = Decimal('1079252848800')
     systems = ['asu']
 
 class UnitDefinitionLightMinute(UnitDefinition):
 
     namelist = ['lightminutes','lightminute']
-    symbollist = ['lightminute']
     unitscale = Decimal('17987547480')
     systems = ['asu']
 
 class UnitDefinitionLightSecond(UnitDefinition):
 
     namelist = ['lightseconds','lightsecond']
-    symbollist = ['lightsecond']
     unitscale = Decimal('299792458')
     systems = ['asu']
 

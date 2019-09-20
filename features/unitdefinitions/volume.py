@@ -56,14 +56,12 @@ class UnitDefinitionLiter(UnitDefinition):
 class UnitDefinitionUKFluidOunce(UnitDefinition):
 
     namelist = ['UK fluid ounces','UK fluid ounce']
-    symbollist = ['ukfloz','ukfl.oz']
     unitscale = Decimal('0.0000284130625')
     systems = ['uk']
 
 class UnitDefinitionUKGill(UnitDefinition):
 
     namelist = ['UK gills','UK gill']
-    symbollist = ['ukgill']
     unitscale = Decimal('0.0001420653125')
     systems = ['uk']
     use = False
@@ -71,14 +69,12 @@ class UnitDefinitionUKGill(UnitDefinition):
 class UnitDefinitionUKPint(UnitDefinition):
 
     namelist = ['UK pints','UK pint']
-    symbollist = ['ukpt']
     unitscale = Decimal('0.00056826125')
     systems = ['uk']
 
 class UnitDefinitionUKQuart(UnitDefinition):
 
     namelist = ['UK quarts','UK quart']
-    symbollist = ['ukquart']
     unitscale = Decimal('0.0011365225')
     systems = ['uk']
     use = False
@@ -86,28 +82,24 @@ class UnitDefinitionUKQuart(UnitDefinition):
 class UnitDefinitionUKGallon(UnitDefinition):
 
     namelist = ['UK gallons','UK gallon']
-    symbollist = ['ukgal']
     unitscale = Decimal('0.00454609')
     systems = ['uk']
 
 class UnitDefinitionUSDram(UnitDefinition):
 
     namelist = ['US drams','US dram']
-    symbollist = ['usdr']
     unitscale = Decimal('0.00000184834559765625')
     systems = ['us']
 
 class UnitDefinitionUSFluidOunce(UnitDefinition):
 
     namelist = ['US fluid ounces','US fluid ounce']
-    symbollist = ['usfloz','usfl.oz']
     unitscale = Decimal('0.0000295735295625')
     systems = ['us']
 
 class UnitDefinitionUSGill(UnitDefinition):
 
     namelist = ['US gills','US gill']
-    symbollist = ['usgill']
     unitscale = Decimal('0.00011829411825')
     systems = ['us']
     use = False
@@ -115,28 +107,24 @@ class UnitDefinitionUSGill(UnitDefinition):
 class UnitDefinitionUSCup(UnitDefinition):
 
     namelist = ['US cups','US cup']
-    symbollist = ['uscup']
     unitscale = Decimal('0.0002365882365')
     systems = ['us']
 
 class UnitDefinitionUSPint(UnitDefinition):
 
     namelist = ['US pints','US pint']
-    symbollist = ['uspt']
     unitscale = Decimal('0.000473176473')
     systems = ['us']
 
 class UnitDefinitionUSQuart(UnitDefinition):
 
     namelist = ['US quarts','US quart']
-    symbollist = ['usquart']
     unitscale = Decimal('0.000946352946')
     systems = ['us']
 
 class UnitDefinitionUSGallon(UnitDefinition):
 
     namelist = ['US gallons','US gallon']
-    symbollist = ['usgal']
     unitscale = Decimal('0.003785411784')
     systems = ['us']
 
@@ -153,7 +141,6 @@ class AmbiguousUnitDefinitionPint(AmbiguousUnitDefinition):
 class AmbiguousUnitDefinitionQuart(AmbiguousUnitDefinition):
 
     namelist = ['quarts','quart']
-    symbollist = ['quart']
 
 class AmbiguousUnitDefinitionGallon(AmbiguousUnitDefinition):
 

@@ -29,7 +29,6 @@ class AccelerationUnitFeature(AbstractUnitFeature):
 class UnitDefinitionGee(UnitDefinition):
 
     namelist = ['gees','gee']
-    symbollist = ['gee']
     unitscale = Decimal('9.80665')
     systems = []
     use_for_condense = False
