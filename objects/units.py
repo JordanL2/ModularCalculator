@@ -38,7 +38,7 @@ class AbstractUnitDefinition:
         return self.symbols()[0]
 
     def has_symbols(self):
-        return len(self.symbols()) > 0
+        return self.symbollist is not None and len(self.symbollist) > 0
 
     def names(self):
         if self.namelist is None:
