@@ -101,7 +101,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 	* Insert Date - easily add a date into the calculation
 	* Tabs
 	* Ctrl+S does save as when no filename
-	* Insert user defined function action
 
 * Stability:
 	* Restoring state should be able to cope with exceptions and reset the state if found

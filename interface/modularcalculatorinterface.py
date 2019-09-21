@@ -7,11 +7,13 @@ from modularcalculator.interface.guiwidgets import *
 from modularcalculator.interface.statefulapplication import *
 from modularcalculator.interface.textedit import *
 
-import sys
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QKeySequence
 from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QMessageBox, QSplitter, QAction, QFileDialog
+
 import functools
+import ntpath
+import sys
 
 
 class ModularCalculatorInterface(StatefulApplication):
@@ -95,17 +97,21 @@ class ModularCalculatorInterface(StatefulApplication):
         insertConstant.triggered.connect(self.insertConstant)
         actionMenu.addAction(insertConstant)
         
-        insertFunction = QAction('Insert function', self)
-        insertFunction.triggered.connect(self.insertFunction)
-        actionMenu.addAction(insertFunction)
+        insertUnit = QAction('Insert unit', self)
+        insertUnit.triggered.connect(self.insertUnit)
+        actionMenu.addAction(insertUnit)
         
         insertOperator = QAction('Insert operator', self)
         insertOperator.triggered.connect(self.insertOperator)
         actionMenu.addAction(insertOperator)
         
-        insertUnit = QAction('Insert unit', self)
-        insertUnit.triggered.connect(self.insertUnit)
-        actionMenu.addAction(insertUnit)
+        insertFunction = QAction('Insert function', self)
+        insertFunction.triggered.connect(self.insertFunction)
+        actionMenu.addAction(insertFunction)
+        
+        insertUserDefinedFunction = QAction('Insert user-defined function', self)
+        insertUserDefinedFunction.triggered.connect(self.insertUserDefinedFunction)
+        actionMenu.addAction(insertUserDefinedFunction)
 
         optionsMenu = menubar.addMenu('Options')
         
@@ -207,12 +213,12 @@ class ModularCalculatorInterface(StatefulApplication):
     def open(self):
         if self.checkIfNeedToSave():
             return
-        filename, _ = QFileDialog.getOpenFileName(self, "Open File", "", "All Files (*)")
-        if filename:
-            fh = open(filename, 'r')
+        filePath, _ = QFileDialog.getOpenFileName(self, "Open File", "", "All Files (*)")
+        if filePath:
+            fh = open(filePath, 'r')
             text = str.join("", fh.readlines())
             self.entry.setContents(text)
-            self.setCurrentFile(filename, False)
+            self.setCurrentFile(filePath, False)
 
     def save(self):
         fh = open(self.currentFile, 'w')
@@ -220,11 +226,11 @@ class ModularCalculatorInterface(StatefulApplication):
         self.setCurrentFile(self.currentFile, False)
 
     def saveAs(self):
-        filename, _ = QFileDialog.getSaveFileName(self, "Save File", "", "All Files (*)")
-        if filename:
-            fh = open(filename, 'w')
+        filePath, _ = QFileDialog.getSaveFileName(self, "Save File", "", "All Files (*)")
+        if filePath:
+            fh = open(filePath, 'w')
             fh.write(self.entry.getContents())
-            self.setCurrentFile(filename, False)
+            self.setCurrentFile(filePath, False)
 
     def checkIfNeedToSave(self):
         if self.currentFile is not None and self.currentFileModified:
@@ -279,6 +285,12 @@ class ModularCalculatorInterface(StatefulApplication):
 
     def selectFunction(self, func):
         self.entry.insert(func + '(')
+
+    def insertUserDefinedFunction(self):
+        filePath, _ = QFileDialog.getOpenFileName(self, "Select user-defined function file", "", "All Files (*)")
+        if filePath:
+            funcname = ntpath.basename(filePath)
+            self.entry.insert("{} = '{}';\n".format(funcname, filePath))
 
     def insertOperator(self):
         operators = sorted([op for op, opInfo in self.calculator.ops_list.items() if not opInfo.hidden], key=str)
