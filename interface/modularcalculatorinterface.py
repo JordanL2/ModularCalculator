@@ -12,7 +12,8 @@ from PyQt5.QtGui import QKeySequence
 from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QMessageBox, QSplitter, QAction, QFileDialog
 
 import functools
-import ntpath
+import os.path
+import string
 import sys
 
 
@@ -289,7 +290,13 @@ class ModularCalculatorInterface(StatefulApplication):
     def insertUserDefinedFunction(self):
         filePath, _ = QFileDialog.getOpenFileName(self, "Select user-defined function file", "", "All Files (*)")
         if filePath:
-            funcname = ntpath.basename(filePath)
+            funcname = os.path.basename(filePath)
+            whitelist = set(string.ascii_lowercase + string.ascii_uppercase + string.digits + '_')
+            funcname = ''.join(c for c in funcname if c in whitelist)
+            if funcname == '':
+                funcname = 'userDefinedFunction'
+            if funcname[0] in string.digits:
+                funcname = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'][int(funcname[0])] + funcname[1:]
             self.entry.insert("{} = '{}';\n".format(funcname, filePath))
 
     def insertOperator(self):
