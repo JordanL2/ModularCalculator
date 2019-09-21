@@ -72,7 +72,6 @@ class CalculatorTextEdit(QTextEdit):
                 'comment': "color: '#2ee5e9'",
             },
         }
-        self.theme = 'Light'
         value = (self.interface.palette().base().color().value())
         if value < 128:
             self.theme = 'Dark'
