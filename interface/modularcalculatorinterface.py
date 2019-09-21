@@ -74,14 +74,6 @@ class ModularCalculatorInterface(StatefulApplication):
 
         viewMenu = menubar.addMenu('View')
         
-        viewThemeMenu = viewMenu.addMenu('Theme')
-        self.themeActions = {}
-        for theme in sorted(self.entry.syntax.keys(), key=str.lower):
-            themeAction = QAction(theme, self, checkable=True)
-            self.themeActions[themeAction] = theme
-            themeAction.triggered.connect(functools.partial(self.setTheme, theme))
-            viewThemeMenu.addAction(themeAction)
-        
         self.viewShortUnits = QAction('Units in short form', self, checkable=True)
         self.viewShortUnits.triggered.connect(self.setShortUnits)
         viewMenu.addAction(self.viewShortUnits)
@@ -148,8 +140,6 @@ class ModularCalculatorInterface(StatefulApplication):
         
         self.setCurrentFile(self.fetchStateText("currentFile"), self.fetchStateBoolean("currentFileModified", False))
         
-        self.setTheme(self.fetchStateText("theme"))
-        
         self.setAutoExecute(self.fetchStateBoolean("viewSyntaxParsingAutoExecutes", True))
 
         self.setShortUnits(self.fetchStateBoolean("viewShortUnits", False))
@@ -172,7 +162,6 @@ class ModularCalculatorInterface(StatefulApplication):
         self.storeStateText("currentFile", self.currentFile)
         self.storeStateBoolean("currentFileModified", self.currentFileModified)
         
-        self.storeStateText("theme", self.entry.theme)
         self.storeStateBoolean("viewShortUnits", self.viewShortUnits.isChecked())
         self.storeStateBoolean("viewSyntaxParsingAutoExecutes", self.viewSyntaxParsingAutoExecutes.isChecked())
 
@@ -276,13 +265,6 @@ class ModularCalculatorInterface(StatefulApplication):
         self.viewSyntaxParsingAutoExecutes.setChecked(value)
         self.entry.autoExecute = value
         self.entry.refresh()
-
-    def setTheme(self, theme):
-        if theme in self.entry.syntax:
-            self.entry.theme = theme
-        self.entry.refresh()
-        for themeAction, themeActionTheme in self.themeActions.items():
-            themeAction.setChecked(themeActionTheme == self.entry.theme)
 
     def insertConstant(self):
         constants = sorted(self.calculator.constants.keys(), key=str)

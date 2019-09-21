@@ -22,7 +22,7 @@ class CalculatorTextEdit(QTextEdit):
 
         self.interface = interface
         self.highlighter = SyntaxHighlighter()
-        self.defaultStyling()
+        self.setTheme()
         self.initStyling()
         self.oldText = None
 
@@ -31,7 +31,7 @@ class CalculatorTextEdit(QTextEdit):
     def setCalculator(self, calculator):
         self.calculator = calculator
 
-    def defaultStyling(self):
+    def setTheme(self):
         self.syntax = {
             'Light': {
                 'error': "color: '#bc0000'",
@@ -73,6 +73,11 @@ class CalculatorTextEdit(QTextEdit):
             },
         }
         self.theme = 'Light'
+        value = (self.interface.palette().base().color().value())
+        if value < 128:
+            self.theme = 'Dark'
+        else:
+            self.theme = 'Light'
 
     def initStyling(self):
         self.css = "<style>"
