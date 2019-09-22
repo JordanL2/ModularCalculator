@@ -98,7 +98,7 @@ class ModularCalculatorInterface(StatefulApplication):
         insertConstant.triggered.connect(self.insertConstant)
         actionMenu.addAction(insertConstant)
         
-        insertDate = QAction('Insert date', self)
+        insertDate = QAction('Insert date && time', self)
         insertDate.triggered.connect(self.insertDate)
         actionMenu.addAction(insertDate)
         
@@ -289,10 +289,10 @@ class ModularCalculatorInterface(StatefulApplication):
         self.entry.insert(constant)
 
     def insertDate(self):
-        DatePicker(self, 'Select Date', self.selectDate)
+        DatePicker(self, 'Select Date & Time', self.selectDate)
 
-    def selectDate(self, date):
-        self.entry.insert("'{0:04d}-{1:02d}-{2:02d}'".format(date.year(), date.month(), date.day()))
+    def selectDate(self, date, time):
+        self.entry.insert("'{0:04d}-{1:02d}-{2:02d}T{3:02d}:{4:02d}:{5:02d}'".format(date.year(), date.month(), date.day(), time.hour(), time.minute(), time.second()))
 
     def insertFunction(self):
         funcs = sorted(self.calculator.funcs.keys(), key=str)

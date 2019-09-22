@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 from PyQt5.QtCore import Qt, QStringListModel, QSize
-from PyQt5.QtWidgets import QListWidget, QWidgetAction, QSpinBox, QLabel, QHBoxLayout, QVBoxLayout, QWidget, QListView, QDialog, QAbstractItemView, QPushButton, QCalendarWidget
+from PyQt5.QtWidgets import QListWidget, QWidgetAction, QSpinBox, QLabel, QHBoxLayout, QVBoxLayout, QWidget, QListView, QDialog, QAbstractItemView, QPushButton, QCalendarWidget, QTimeEdit
 
 
 class SelectionDialog(QDialog):
@@ -111,6 +111,10 @@ class DatePicker(QDialog):
         self.datePicker = QCalendarWidget(self)
         layout.addWidget(self.datePicker)
 
+        self.timePicker = QTimeEdit(self)
+        self.timePicker.setDisplayFormat('hh:mm:ss')
+        layout.addWidget(self.timePicker)
+
         button = QPushButton("OK", self)
         button.clicked.connect(self.ok)
         layout.addWidget(button)
@@ -120,5 +124,5 @@ class DatePicker(QDialog):
         self.setVisible(True)
 
     def ok(self):
-        self.okFunction(self.datePicker.selectedDate())
+        self.okFunction(self.datePicker.selectedDate(), self.timePicker.time())
         self.close()

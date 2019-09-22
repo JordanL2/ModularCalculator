@@ -98,7 +98,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 
 * Usability / quality of life:
 	* Click previous answer to insert it
-	* Insert Date - easily add a date into the calculation - TODO needs time selection too
 
 * Stability:
 	* Auto-save state occasionally
