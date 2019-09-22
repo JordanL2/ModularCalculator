@@ -24,19 +24,103 @@ class StringComparisonFeature(Feature):
 
     @classmethod
     def install(cls, calculator):
-        calculator.add_op(OperatorDefinition('String', '<$', StringComparisonFeature.op_string_lessthan, 1, 1, 'string'))
-        calculator.add_op(OperatorDefinition('String', '>$', StringComparisonFeature.op_string_morethan, 1, 1, 'string'))
-        calculator.add_op(OperatorDefinition('String', '<=$', StringComparisonFeature.op_string_lessthanequal, 1, 1, 'string'))
-        calculator.add_op(OperatorDefinition('String', '>=$', StringComparisonFeature.op_string_morethanequal, 1, 1, 'string'))
-        calculator.add_op(OperatorDefinition('String', '==$', StringComparisonFeature.op_string_equals, 1, 1, 'string'))
-        calculator.add_op(OperatorDefinition('String', '!=$', StringComparisonFeature.op_string_notequals, 1, 1, 'string'))
+        calculator.add_op(OperatorDefinition(
+            'String', 
+            '<$', 
+            '', #TODO
+            StringComparisonFeature.op_string_lessthan, 
+            1, 
+            1, 
+            'string'))
+        calculator.add_op(OperatorDefinition(
+            'String', 
+            '>$', 
+            '', #TODO
+            StringComparisonFeature.op_string_morethan, 
+            1, 
+            1, 
+            'string'))
+        calculator.add_op(OperatorDefinition(
+            'String', 
+            '<=$', 
+            '', #TODO
+            StringComparisonFeature.op_string_lessthanequal, 
+            1, 
+            1, 
+            'string'))
+        calculator.add_op(OperatorDefinition(
+            'String', 
+            '>=$', 
+            '', #TODO
+            StringComparisonFeature.op_string_morethanequal, 
+            1, 
+            1, 
+            'string'))
+        calculator.add_op(OperatorDefinition(
+            'String', 
+            '==$', 
+            '', #TODO
+            StringComparisonFeature.op_string_equals, 
+            1, 
+            1, 
+            'string'))
+        calculator.add_op(OperatorDefinition(
+            'String', 
+            '!=$', 
+            '', #TODO
+            StringComparisonFeature.op_string_notequals, 
+            1, 
+            1, 
+            'string'))
         
-        calculator.add_op(OperatorDefinition('String Case-Insensitive', '<~', StringComparisonFeature.op_stringcaseless_lessthan, 1, 1, 'string'))
-        calculator.add_op(OperatorDefinition('String Case-Insensitive', '>~', StringComparisonFeature.op_stringcaseless_morethan, 1, 1, 'string'))
-        calculator.add_op(OperatorDefinition('String Case-Insensitive', '<=~', StringComparisonFeature.op_stringcaseless_lessthanequal, 1, 1, 'string'))
-        calculator.add_op(OperatorDefinition('String Case-Insensitive', '>=~', StringComparisonFeature.op_stringcaseless_morethanequal, 1, 1, 'string'))
-        calculator.add_op(OperatorDefinition('String Case-Insensitive', '==~', StringComparisonFeature.op_stringcaseless_equals, 1, 1, 'string'))
-        calculator.add_op(OperatorDefinition('String Case-Insensitive', '!=~', StringComparisonFeature.op_stringcaseless_notequals, 1, 1, 'string'))
+        calculator.add_op(OperatorDefinition(
+            'String Case-Insensitive', 
+            '<~', 
+            '', #TODO
+            StringComparisonFeature.op_stringcaseless_lessthan, 
+            1, 
+            1, 
+            'string'))
+        calculator.add_op(OperatorDefinition(
+            'String Case-Insensitive', 
+            '>~', 
+            '', #TODO
+            StringComparisonFeature.op_stringcaseless_morethan, 
+            1, 
+            1, 
+            'string'))
+        calculator.add_op(OperatorDefinition(
+            'String Case-Insensitive', 
+            '<=~', 
+            '', #TODO
+            StringComparisonFeature.op_stringcaseless_lessthanequal, 
+            1, 
+            1, 
+            'string'))
+        calculator.add_op(OperatorDefinition(
+            'String Case-Insensitive', 
+            '>=~', 
+            '', #TODO
+            StringComparisonFeature.op_stringcaseless_morethanequal, 
+            1, 
+            1, 
+            'string'))
+        calculator.add_op(OperatorDefinition(
+            'String Case-Insensitive', 
+            '==~', 
+            '', #TODO
+            StringComparisonFeature.op_stringcaseless_equals, 
+            1, 
+            1, 
+            'string'))
+        calculator.add_op(OperatorDefinition(
+            'String Case-Insensitive', 
+            '!=~', 
+            '', #TODO
+            StringComparisonFeature.op_stringcaseless_notequals, 
+            1, 
+            1, 
+            'string'))
 
     def op_string_lessthan(self, vals, units, refs, flags):
         return OperationResult(StringsFeature.string(self, vals[0]) < StringsFeature.string(self, vals[1]))

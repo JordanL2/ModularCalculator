@@ -28,16 +28,87 @@ class StringFunctionsFeature(Feature):
 
     @classmethod
     def install(cls, calculator):
-        calculator.funcs['length'] =  FunctionDefinition('String', 'length', StringFunctionsFeature.func_length, 1, 1, 'string')
-        calculator.funcs['lower'] =   FunctionDefinition('String', 'lower', StringFunctionsFeature.func_lower, 1, 1, 'string')
-        calculator.funcs['upper'] =   FunctionDefinition('String', 'upper', StringFunctionsFeature.func_upper, 1, 1, 'string')
-        calculator.funcs['lstrip'] =  FunctionDefinition('String', 'lstrip', StringFunctionsFeature.func_lstrip, 2, 2, 'string')
-        calculator.funcs['rstrip'] =  FunctionDefinition('String', 'rstrip', StringFunctionsFeature.func_rstrip, 2, 2, 'string')
-        calculator.funcs['strip'] =   FunctionDefinition('String', 'strip', StringFunctionsFeature.func_strip, 2, 2, 'string')
-        calculator.funcs['find'] =    FunctionDefinition('String', 'find', StringFunctionsFeature.func_find, 2, 2, 'string')
-        calculator.funcs['replace'] = FunctionDefinition('String', 'replace', StringFunctionsFeature.func_replace, 3, 3, 'string')
+        calculator.funcs['length'] =  FunctionDefinition(
+            'String', 
+            'length', 
+            '', #TODO
+            '', #TODO
+            StringFunctionsFeature.func_length, 
+            1, 
+            1, 
+            'string')
+        calculator.funcs['lower'] =   FunctionDefinition(
+            'String', 
+            'lower', 
+            '', #TODO
+            '', #TODO
+            StringFunctionsFeature.func_lower, 
+            1, 
+            1, 
+            'string')
+        calculator.funcs['upper'] =   FunctionDefinition(
+            'String', 
+            'upper', 
+            '', #TODO
+            '', #TODO
+            StringFunctionsFeature.func_upper, 
+            1, 
+            1, 
+            'string')
+        calculator.funcs['lstrip'] =  FunctionDefinition(
+            'String', 
+            'lstrip', 
+            '', #TODO
+            '', #TODO
+            StringFunctionsFeature.func_lstrip, 
+            2, 
+            2, 
+            'string')
+        calculator.funcs['rstrip'] =  FunctionDefinition(
+            'String', 
+            'rstrip', 
+            '', #TODO
+            '', #TODO
+            StringFunctionsFeature.func_rstrip, 
+            2, 
+            2, 
+            'string')
+        calculator.funcs['strip'] =   FunctionDefinition(
+            'String', 
+            'strip', 
+            '', #TODO
+            '', #TODO
+            StringFunctionsFeature.func_strip, 
+            2, 
+            2, 
+            'string')
+        calculator.funcs['find'] =    FunctionDefinition(
+            'String', 
+            'find', 
+            '', #TODO
+            '', #TODO
+            StringFunctionsFeature.func_find, 
+            2, 
+            2, 
+            'string')
+        calculator.funcs['replace'] = FunctionDefinition(
+            'String', 
+            'replace', 
+            '', #TODO
+            '', #TODO
+            StringFunctionsFeature.func_replace, 
+            3, 
+            3, 
+            'string')
         
-        calculator.funcs['substr'] =  FunctionDefinition('String', 'substr', StringFunctionsFeature.func_substr, 2, 3)
+        calculator.funcs['substr'] =  FunctionDefinition(
+            'String', 
+            'substr', 
+            '', #TODO
+            '', #TODO
+            StringFunctionsFeature.func_substr, 
+            2, 
+            3)
         calculator.funcs['substr'].add_value_restriction(0, 0, 'string')
         calculator.funcs['substr'].add_value_restriction(1, 2, 'number')
 

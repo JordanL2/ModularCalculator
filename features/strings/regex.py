@@ -29,18 +29,53 @@ class RegexFeature(Feature):
 
     @classmethod
     def install(cls, calculator):
-        calculator.add_op(OperatorDefinition('Regular Expression', '=~', RegexFeature.op_regex, 1, 1, 'string'))
-        calculator.add_op(OperatorDefinition('Regular Expression', '!~', RegexFeature.op_regexnot, 1, 1, 'string'))
+        calculator.add_op(OperatorDefinition(
+            'Regular Expression', 
+            '=~', 
+            '', #TODO
+            RegexFeature.op_regex, 
+            1, 
+            1, 
+            'string'))
+        calculator.add_op(OperatorDefinition(
+            'Regular Expression', 
+            '!~', 
+            '', #TODO
+            RegexFeature.op_regexnot, 
+            1, 
+            1, 
+            'string'))
 
-        calculator.funcs['regexget'] = FunctionDefinition('Regular Expression', 'regexget', RegexFeature.func_regexget, 2, 3)
+        calculator.funcs['regexget'] = FunctionDefinition(
+            'Regular Expression', 
+            'regexget', 
+            '', #TODO
+            '', #TODO
+            RegexFeature.func_regexget, 
+            2, 
+            3)
         calculator.funcs['regexget'].add_value_restriction(0, 1, 'string')
         calculator.funcs['regexget'].add_value_restriction(2, 2, 'number')
         
-        calculator.funcs['regexsub'] = FunctionDefinition('Regular Expression', 'regexsub', RegexFeature.func_regexsub, 3, 4)
+        calculator.funcs['regexsub'] = FunctionDefinition(
+            'Regular Expression', 
+            'regexsub', 
+            '', #TODO
+            '', #TODO
+            RegexFeature.func_regexsub, 
+            3, 
+            4)
         calculator.funcs['regexsub'].add_value_restriction(0, 2, 'string')
         calculator.funcs['regexsub'].add_value_restriction(3, 3, 'number')
 
-        calculator.funcs['regexcount'] = FunctionDefinition('Regular Expression', 'regexcount', RegexFeature.func_regexcount, 2, 2)
+        calculator.funcs['regexcount'] = FunctionDefinition(
+            'Regular Expression', 
+            'regexcount', 
+            '', #TODO
+            '', #TODO
+            RegexFeature.func_regexcount, 
+            2, 
+            2)
         calculator.funcs['regexcount'].add_value_restriction(0, 1, 'string')
 
     def op_regex(self, vals, units, refs, flags):

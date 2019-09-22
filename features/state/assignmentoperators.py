@@ -26,15 +26,85 @@ class AssignmentOperatorsFeature(Feature):
 
     @classmethod
     def install(cls, calculator):
-        calculator.add_op(OperatorDefinition('Assignment', '++', AssignmentOperatorsFeature.op_var_increment, 1, 0, ['variable']))
-        calculator.add_op(OperatorDefinition('Assignment', '--', AssignmentOperatorsFeature.op_var_decrement, 1, 0, ['variable']))
-        calculator.add_op(OperatorDefinition('Assignment', '+=', AssignmentOperatorsFeature.op_var_add, 1, 1, ['variable', 'number']), {'units_normalise': False})
-        calculator.add_op(OperatorDefinition('Assignment', '-=', AssignmentOperatorsFeature.op_var_subtract, 1, 1, ['variable', 'number']), {'units_normalise': False})
-        calculator.add_op(OperatorDefinition('Assignment', '*=', AssignmentOperatorsFeature.op_var_multiply, 1, 1, ['variable', 'number']), {'units_normalise': False})
-        calculator.add_op(OperatorDefinition('Assignment', '/=', AssignmentOperatorsFeature.op_var_divide, 1, 1, ['variable', 'number']), {'units_normalise': False})
-        calculator.add_op(OperatorDefinition('Assignment', '^=', AssignmentOperatorsFeature.op_var_power, 1, 1, ['variable', 'number']), {'units_normalise': False})
-        calculator.add_op(OperatorDefinition('Assignment', '%=', AssignmentOperatorsFeature.op_var_modulus, 1, 1, ['variable', 'number']), {'units_normalise': False})
-        calculator.add_op(OperatorDefinition('Assignment', r'\=', AssignmentOperatorsFeature.op_var_integer_divide, 1, 1, ['variable', 'number']), {'units_normalise': False})
+        calculator.add_op(OperatorDefinition(
+            'Assignment', 
+            '++', 
+            '', #TODO
+            AssignmentOperatorsFeature.op_var_increment, 
+            1, 
+            0, 
+            ['variable']))
+        calculator.add_op(OperatorDefinition(
+            'Assignment', 
+            '--', 
+            '', #TODO
+            AssignmentOperatorsFeature.op_var_decrement, 
+            1, 
+            0, 
+            ['variable']))
+        calculator.add_op(OperatorDefinition(
+            'Assignment', 
+            '+=', 
+            '', #TODO
+            AssignmentOperatorsFeature.op_var_add, 
+            1, 
+            1, 
+            ['variable', 'number']), 
+        {'units_normalise': False})
+        calculator.add_op(OperatorDefinition(
+            'Assignment', 
+            '-=', 
+            '', #TODO
+            AssignmentOperatorsFeature.op_var_subtract, 
+            1, 
+            1, 
+            ['variable', 'number']), 
+        {'units_normalise': False})
+        calculator.add_op(OperatorDefinition(
+            'Assignment', 
+            '*=', 
+            '', #TODO
+            AssignmentOperatorsFeature.op_var_multiply, 
+            1, 
+            1, 
+            ['variable', 'number']), 
+        {'units_normalise': False})
+        calculator.add_op(OperatorDefinition(
+            'Assignment', 
+            '/=', 
+            '', #TODO
+            AssignmentOperatorsFeature.op_var_divide, 
+            1, 
+            1, 
+            ['variable', 'number']), 
+        {'units_normalise': False})
+        calculator.add_op(OperatorDefinition(
+            'Assignment', 
+            '^=', 
+            '', #TODO
+            AssignmentOperatorsFeature.op_var_power, 
+            1, 
+            1, 
+            ['variable', 'number']), 
+        {'units_normalise': False})
+        calculator.add_op(OperatorDefinition(
+            'Assignment', 
+            '%=', 
+            '', #TODO
+            AssignmentOperatorsFeature.op_var_modulus, 
+            1, 
+            1, 
+            ['variable', 'number']), 
+        {'units_normalise': False})
+        calculator.add_op(OperatorDefinition(
+            'Assignment', 
+            r'\=', 
+            '', #TODO
+            AssignmentOperatorsFeature.op_var_integer_divide, 
+            1, 
+            1, 
+            ['variable', 'number']), 
+        {'units_normalise': False})
 
     def op_var_increment(self, vals, units, refs, flags):
         return AssignmentOperatorsFeature.assignment_operator(self, '+', [vals[0], Decimal('1')], [units[0], None], [refs[0], None], flags)

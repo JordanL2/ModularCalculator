@@ -24,10 +24,11 @@ class OperationResult:
 
 class Operation:
 
-    def __init__(self, category, name, ref, minparams=None, maxparams=None, objtypes=None):
+    def __init__(self, category, name, description, syntax, ref, minparams=None, maxparams=None, objtypes=None):
         self.category = category
         self.name = name
-        self.description = 'this is ' + name
+        self.description = description
+        self.syntax = syntax
         self.ref = ref
 
         self.minparams = minparams
@@ -114,7 +115,7 @@ class Operation:
 
 class OperatorDefinition(Operation):
 
-    def __init__(self, category, name, ref, linputs, rinputs, objtypes):
+    def __init__(self, category, name, description, ref, linputs, rinputs, objtypes):
         self.symbol = name
         
         if linputs == 0:
@@ -131,14 +132,16 @@ class OperatorDefinition(Operation):
 
         num_of_params = len([i for i in linputs + rinputs if not isinstance(i, str)])
 
+        syntax = 'TODO' #TODO - generate this automatically
+
         if isinstance(objtypes, list):
             if len(objtypes) != num_of_params:
                 raise Exception("List of input allowed types must be same length as number of parameters")
-            super().__init__(category, "Operator " + name, ref, num_of_params, num_of_params)
+            super().__init__(category, "Operator " + name, description, syntax, ref, num_of_params, num_of_params)
             for i, objtype in enumerate(objtypes):
                 self.add_value_restriction(i, i, objtype)
         else:
-            super().__init__(category, "Operator " + name, ref, num_of_params, num_of_params, objtypes)
+            super().__init__(category, "Operator " + name, description, syntax, ref, num_of_params, num_of_params, objtypes)
 
         self.rtl = False
         self.hidden = False

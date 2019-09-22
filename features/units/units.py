@@ -38,10 +38,42 @@ class UnitsFeature(Feature):
         calculator.unit_multiply_op = 'UNIT_MULTIPLY'
         calculator.unit_divide_op = 'UNIT_DIVIDE'
 
-        calculator.add_op(OperatorDefinition('Units', 'to', UnitsFeature.op_unit_conversion, 1, 1, ['number with unit', 'unit']), {'units_normalise': False})
-        calculator.add_op(OperatorDefinition('Units', 'UNIT_ASSIGNMENT', BasicArithmeticFeature.op_number_multiply, 1, 1, ['number', 'unit']), {'units_normalise': False, 'hidden': True})
-        calculator.add_op(OperatorDefinition('Units', 'UNIT_MULTIPLY', BasicArithmeticFeature.op_number_multiply, 1, 1, 'unit'), {'units_normalise': False, 'hidden': True})
-        calculator.add_op(OperatorDefinition('Units', 'UNIT_DIVIDE', BasicArithmeticFeature.op_number_divide, 1, 1, 'unit'), {'units_normalise': False, 'hidden': True})
+        calculator.add_op(OperatorDefinition(
+            'Units', 
+            'to', 
+            '', #TODO
+            UnitsFeature.op_unit_conversion, 
+            1, 
+            1, 
+            ['number with unit', 'unit']), 
+        {'units_normalise': False})
+        calculator.add_op(OperatorDefinition(
+            'Units', 
+            'UNIT_ASSIGNMENT', 
+            '', #TODO
+            BasicArithmeticFeature.op_number_multiply, 
+            1, 
+            1, 
+            ['number', 'unit']), 
+        {'units_normalise': False, 'hidden': True})
+        calculator.add_op(OperatorDefinition(
+            'Units', 
+            'UNIT_MULTIPLY', 
+            '', #TODO
+            BasicArithmeticFeature.op_number_multiply, 
+            1, 
+            1, 
+            'unit'), 
+        {'units_normalise': False, 'hidden': True})
+        calculator.add_op(OperatorDefinition(
+            'Units', 
+            'UNIT_DIVIDE', 
+            '', #TODO
+            BasicArithmeticFeature.op_number_divide, 
+            1, 
+            1, 
+            'unit'), 
+        {'units_normalise': False, 'hidden': True})
 
         calculator.validators['unit'] = UnitsFeature.validate_unit
         calculator.validators['number with unit'] = UnitsFeature.validate_number_with_unit

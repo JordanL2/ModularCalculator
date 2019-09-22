@@ -28,7 +28,15 @@ class HexadecimalNumbersFeature(Feature):
     @classmethod
     def install(cls, calculator):
         calculator.add_parser('number_hex', HexadecimalNumbersFeature.parse_hex)
-        calculator.funcs['hex'] = FunctionDefinition('Bases', 'hex', HexadecimalNumbersFeature.func_hex, 1, 1, 'number')
+        calculator.funcs['hex'] = FunctionDefinition(
+            'Bases', 
+            'hex', 
+            '', #TODO
+            '', #TODO
+            HexadecimalNumbersFeature.func_hex, 
+            1, 
+            1, 
+            'number')
         calculator.add_number_caster('hexadecimal', HexadecimalNumbersFeature.number_hex)
 
     hex_prefix = '0x'

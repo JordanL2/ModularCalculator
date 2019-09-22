@@ -28,9 +28,33 @@ class BooleanFunctionsFeature(Feature):
 
     @classmethod
     def install(cls, calculator):
-        calculator.funcs['and'] = FunctionDefinition('Boolean', 'and', BooleanFunctionsFeature.func_and, 1, None, 'boolean')
-        calculator.funcs['or'] = FunctionDefinition('Boolean', 'or', BooleanFunctionsFeature.func_or, 1, None, 'boolean')
-        calculator.funcs['counttrue'] = FunctionDefinition('Boolean', 'counttrue', BooleanFunctionsFeature.func_counttrue, 1, None, 'boolean')
+        calculator.funcs['and'] = FunctionDefinition(
+            'Boolean', 
+            'and', 
+            'Returns true if all input is true', 
+            'and(var1...)',
+            BooleanFunctionsFeature.func_and, 
+            1, 
+            None, 
+            'boolean')
+        calculator.funcs['or'] = FunctionDefinition(
+            'Boolean', 
+            'or', 
+            'Returns true if at least one input is true', 
+            'or(var1...)',
+            BooleanFunctionsFeature.func_or, 
+            1, 
+            None, 
+            'boolean')
+        calculator.funcs['counttrue'] = FunctionDefinition(
+            'Boolean', 
+            'counttrue', 
+            'Returns the number of inputs that are true',
+            'counttrue(var1...)', 
+            BooleanFunctionsFeature.func_counttrue, 
+            1, 
+            None, 
+            'boolean')
 
     def func_and(self, vals, units, refs, flags):
         for val in vals:

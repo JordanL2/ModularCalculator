@@ -27,8 +27,22 @@ class StringsFeature(Feature):
     def install(cls, calculator):
         calculator.add_parser('string', StringsFeature.parse_string)
 
-        calculator.add_op(OperatorDefinition('String', '+$', StringsFeature.op_string_add, 1, 1, 'string'))
-        calculator.add_op(OperatorDefinition('String', '*$', StringsFeature.op_string_multiply, 1, 1, ['string', 'number']))
+        calculator.add_op(OperatorDefinition(
+            'String', 
+            '+$', 
+            '', #TODO
+            StringsFeature.op_string_add, 
+            1, 
+            1, 
+            'string'))
+        calculator.add_op(OperatorDefinition(
+            'String', 
+            '*$', 
+            '', #TODO
+            StringsFeature.op_string_multiply, 
+            1, 
+            1, 
+            ['string', 'number']))
         
         calculator.validators['string'] = StringsFeature.validate_string
 

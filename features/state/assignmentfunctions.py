@@ -27,8 +27,22 @@ class AssignmentFunctionsFeature(Feature):
 
     @classmethod
     def install(cls, calculator):
-        calculator.funcs['reset'] = FunctionDefinition('Assignment', 'reset', AssignmentFunctionsFeature.func_reset, 0, 0)
-        calculator.funcs['delete'] = FunctionDefinition('Assignment', 'delete', AssignmentFunctionsFeature.func_delete, 1, 1)
+        calculator.funcs['reset'] = FunctionDefinition(
+            'Assignment', 
+            'reset', 
+            '', #TODO
+            '', #TODO
+            AssignmentFunctionsFeature.func_reset, 
+            0, 
+            0)
+        calculator.funcs['delete'] = FunctionDefinition(
+            'Assignment', 
+            'delete', 
+            '', #TODO
+            '', #TODO
+            AssignmentFunctionsFeature.func_delete, 
+            1, 
+            1)
 
     def func_reset(self, vals, units, refs, flags):
         self.vars = {}

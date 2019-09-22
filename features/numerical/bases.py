@@ -24,7 +24,15 @@ class BasesFeature(Feature):
 
     @classmethod
     def install(cls, calculator):
-        calculator.funcs['dec'] = FunctionDefinition('Bases', 'dec', BasesFeature.func_dec, 1, 1, 'number')
+        calculator.funcs['dec'] = FunctionDefinition(
+            'Bases', 
+            'dec', 
+            '', #TODO
+            '', #TODO
+            BasesFeature.func_dec, 
+            1, 
+            1, 
+            'number')
 
     digits = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 

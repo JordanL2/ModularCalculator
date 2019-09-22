@@ -28,7 +28,15 @@ class OctalNumbersFeature(Feature):
     @classmethod
     def install(cls, calculator):
         calculator.add_parser('number_oct', OctalNumbersFeature.parse_oct)
-        calculator.funcs['oct'] = FunctionDefinition('Bases', 'oct', OctalNumbersFeature.func_oct, 1, 1, 'number')
+        calculator.funcs['oct'] = FunctionDefinition(
+            'Bases', 
+            'oct', 
+            '', #TODO
+            '', #TODO
+            OctalNumbersFeature.func_oct, 
+            1, 
+            1, 
+            'number')
         calculator.add_number_caster('octal', OctalNumbersFeature.number_oct)
 
     oct_prefix = '0o'

@@ -28,7 +28,15 @@ class ArbitraryBaseFeature(Feature):
     @classmethod
     def install(cls, calculator):
         calculator.add_parser('number_arbbase', ArbitraryBaseFeature.parse_arbbase)
-        calculator.funcs['base'] = FunctionDefinition('Bases', 'base', ArbitraryBaseFeature.func_base, 2, 2, 'number')
+        calculator.funcs['base'] = FunctionDefinition(
+            'Bases', 
+            'base', 
+            '', #TODO
+            '', #TODO
+            ArbitraryBaseFeature.func_base, 
+            2, 
+            2, 
+            'number')
         calculator.add_number_caster('arbitrarybase', ArbitraryBaseFeature.number_arbbase)
 
     arbbase_regex = re.compile(r'(\-?0\d{1,2}z[0-9A-Z]+(\.[0-9A-Z]+)?)', re.IGNORECASE)

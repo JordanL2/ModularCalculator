@@ -27,7 +27,15 @@ class OrbitalMechanicsFunctionsFeature(Feature):
 
     @classmethod
     def install(cls, calculator):
-        calculator.funcs['deltav'] = FunctionDefinition('Orbital Mechanics', 'deltav', OrbitalMechanicsFunctionsFeature.func_deltav, 3, 3, 'number')
+        calculator.funcs['deltav'] = FunctionDefinition(
+            'Orbital Mechanics', 
+            'deltav', 
+            '', #TODO
+            '', #TODO
+            OrbitalMechanicsFunctionsFeature.func_deltav, 
+            3, 
+            3, 
+            'number')
         calculator.funcs['deltav'].add_unit_restriction(0, 0, ['time', 1])
         calculator.funcs['deltav'].add_unit_restriction(1, 2, ['mass', 1])
         calculator.funcs['deltav'].units_multi = True

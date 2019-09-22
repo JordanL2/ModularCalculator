@@ -88,7 +88,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 ## Graphical Interface
 * Functionality:
 	* Show available information for the Insert dialogs:
-		* Insert Unit dialog : Checkbox to hide prefixed units
 		* Helpful description for each operator, function or unit in insert dialog:
 			* Way of seeing possible inputs for an operator or function - number of inputs, types allowed for each input
 			* Description for unit can contain its unit system, and other allowed names and symbols for it

@@ -29,8 +29,24 @@ class AssignmentFeature(Feature):
     def install(cls, calculator):
         calculator.add_parser('var', AssignmentFeature.parse_var)
 
-        calculator.add_op(OperatorDefinition('Assignment', '=', AssignmentFeature.op_var_set, 1, 1, ['variable', None]), {'units_normalise': False})
-        calculator.add_op(OperatorDefinition('Assignment', '||=', AssignmentFeature.op_var_set_if_empty, 1, 1, ['variable', None]), {'units_normalise': False})
+        calculator.add_op(OperatorDefinition(
+            'Assignment', 
+            '=', 
+            '', #TODO
+            AssignmentFeature.op_var_set, 
+            1, 
+            1, 
+            ['variable', None]), 
+        {'units_normalise': False})
+        calculator.add_op(OperatorDefinition(
+            'Assignment', 
+            '||=', 
+            '', #TODO
+            AssignmentFeature.op_var_set_if_empty, 
+            1, 
+            1, 
+            ['variable', None]), 
+        {'units_normalise': False})
 
         calculator.vars = {}
 

@@ -30,16 +30,90 @@ class BooleansFeature(Feature):
     def install(cls, calculator):
         calculator.add_parser('boolean', BooleansFeature.parse_boolean)
       
-        calculator.add_op(OperatorDefinition('Boolean', '!', BooleansFeature.op_boolean_not, 0, 1, 'boolean'), {'rtl': True})
-        calculator.add_op(OperatorDefinition('Numerical', '<', BooleansFeature.op_number_lessthan, 1, 1, 'number'))
-        calculator.add_op(OperatorDefinition('Numerical', '>', BooleansFeature.op_number_morethan, 1, 1, 'number'))
-        calculator.add_op(OperatorDefinition('Numerical', '<=', BooleansFeature.op_number_lessthanequal, 1, 1, 'number'))
-        calculator.add_op(OperatorDefinition('Numerical', '>=', BooleansFeature.op_number_morethanequal, 1, 1, 'number'))
-        calculator.add_op(OperatorDefinition('Numerical', '==', BooleansFeature.op_number_equals, 1, 1, 'number'))
-        calculator.add_op(OperatorDefinition('Numerical', '!=', BooleansFeature.op_number_notequals, 1, 1, 'number'))
-        calculator.add_op(OperatorDefinition('Boolean', '&', BooleansFeature.op_boolean_and, 1, 1, ['boolean', ['boolean', 'exception']]), {'inputs_can_be_exceptions': True})
-        calculator.add_op(OperatorDefinition('Boolean', '|', BooleansFeature.op_boolean_or, 1, 1, ['boolean', ['boolean', 'exception']]), {'inputs_can_be_exceptions': True})
-        calculator.add_op(OperatorDefinition('Boolean', '?', BooleansFeature.op_boolean_conditional, 1, [1, ':', 1], ['boolean', None, None]), {'units_normalise': False, 'inputs_can_be_exceptions': True})
+        calculator.add_op(OperatorDefinition(
+            'Boolean', 
+            '!', 
+            'Not',
+            BooleansFeature.op_boolean_not, 
+            0, 
+            1, 
+            'boolean'),
+        {'rtl': True})
+        calculator.add_op(OperatorDefinition(
+            'Numerical', 
+            '<',
+            'Less than',
+            BooleansFeature.op_number_lessthan, 
+            1, 
+            1, 
+            'number'))
+        calculator.add_op(OperatorDefinition(
+            'Numerical', 
+            '>', 
+            'More than',
+            BooleansFeature.op_number_morethan, 
+            1, 
+            1, 
+            'number'))
+        calculator.add_op(OperatorDefinition(
+            'Numerical', 
+            '<=', 
+            '',
+            BooleansFeature.op_number_lessthanequal, 
+            1, 
+            1, 
+            'number'))
+        calculator.add_op(OperatorDefinition(
+            'Numerical', 
+            '>=', 
+            '',
+            BooleansFeature.op_number_morethanequal, 
+            1, 
+            1, 
+            'number'))
+        calculator.add_op(OperatorDefinition(
+            'Numerical', 
+            '==', 
+            '',
+            BooleansFeature.op_number_equals, 
+            1, 
+            1, 
+            'number'))
+        calculator.add_op(OperatorDefinition(
+            'Numerical', 
+            '!=', 
+            '',
+            BooleansFeature.op_number_notequals, 
+            1, 
+            1, 
+            'number'))
+        calculator.add_op(OperatorDefinition(
+            'Boolean', 
+            '&', 
+            '',
+            BooleansFeature.op_boolean_and, 
+            1, 
+            1, 
+            ['boolean', ['boolean', 'exception']]),
+        {'inputs_can_be_exceptions': True})
+        calculator.add_op(OperatorDefinition(
+            'Boolean', 
+            '|', 
+            '',
+            BooleansFeature.op_boolean_or, 
+            1, 
+            1, 
+            ['boolean', ['boolean', 'exception']]), 
+        {'inputs_can_be_exceptions': True})
+        calculator.add_op(OperatorDefinition(
+            'Boolean', 
+            '?', 
+            '',
+            BooleansFeature.op_boolean_conditional, 
+            1, 
+            [1, ':', 1], 
+            ['boolean', None, None]), 
+        {'units_normalise': False, 'inputs_can_be_exceptions': True})
 
         calculator.add_number_caster('boolean', BooleansFeature.number_bool)
 

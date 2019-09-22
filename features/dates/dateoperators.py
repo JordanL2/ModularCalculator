@@ -24,11 +24,25 @@ class DateOperatorsFeature(Feature):
 
     @classmethod
     def install(cls, calculator):
-        date_add_op = OperatorDefinition('Date', '+%', DateOperatorsFeature.op_date_add, 1, 1, ['date', 'number'])
+        date_add_op = OperatorDefinition(
+            'Date', 
+            '+%', 
+            '', #TODO
+            DateOperatorsFeature.op_date_add, 
+            1, 
+            1, 
+            ['date', 'number'])
         date_add_op.add_unit_restriction(1, 1, ['time', 1])
         calculator.add_op(date_add_op, {'units_normalise': False})
 
-        date_sub_op = OperatorDefinition('Date', '-%', DateOperatorsFeature.op_date_subtract, 1, 1, ['date', 'number'])
+        date_sub_op = OperatorDefinition(
+            'Date', 
+            '-%', 
+            '', #TODO
+            DateOperatorsFeature.op_date_subtract, 
+            1, 
+            1, 
+            ['date', 'number'])
         date_sub_op.add_unit_restriction(1, 1, ['time', 1])
         calculator.add_op(date_sub_op, {'units_normalise': False})
 

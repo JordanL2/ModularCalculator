@@ -28,12 +28,26 @@ class GeneralUnitFunctionsFeature(Feature):
 
     @classmethod
     def install(cls, calculator):
-        calculator.funcs['format'] = FunctionDefinition('Units', 'format', GeneralUnitFunctionsFeature.func_format, 1, 2)
+        calculator.funcs['format'] = FunctionDefinition(
+            'Units', 
+            'format', 
+            '', #TODO
+            '', #TODO
+            GeneralUnitFunctionsFeature.func_format, 
+            1, 
+            2)
         calculator.funcs['format'].add_value_restriction(0, 0, 'number with unit')
         calculator.funcs['format'].add_value_restriction(1, 1, 'unitsystem')
         calculator.funcs['format'].units_normalise = False
         
-        calculator.funcs['compact'] = FunctionDefinition('Units', 'compact', GeneralUnitFunctionsFeature.func_compact, 1, 1)
+        calculator.funcs['compact'] = FunctionDefinition(
+            'Units', 
+            'compact', 
+            '', #TODO
+            '', #TODO
+            GeneralUnitFunctionsFeature.func_compact, 
+            1, 
+            1)
         calculator.funcs['compact'].add_value_restriction(0, 0, 'number with unit')
 
     def func_format(self, vals, units, refs, flags):

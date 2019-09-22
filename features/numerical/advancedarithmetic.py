@@ -26,8 +26,22 @@ class AdvancedArithmeticFeature(Feature):
 
     @classmethod
     def install(cls, calculator):
-        calculator.add_op(OperatorDefinition('Numerical', '%', AdvancedArithmeticFeature.op_number_modulus, 1, 1, 'number'))
-        calculator.add_op(OperatorDefinition('Numerical', '\\', AdvancedArithmeticFeature.op_number_integer_divide, 1, 1, 'number'))
+        calculator.add_op(OperatorDefinition(
+            'Numerical', 
+            '%', 
+            '', #TODO
+            AdvancedArithmeticFeature.op_number_modulus, 
+            1, 
+            1, 
+            'number'))
+        calculator.add_op(OperatorDefinition(
+            'Numerical', 
+            '\\', 
+            '', #TODO
+            AdvancedArithmeticFeature.op_number_integer_divide, 
+            1, 
+            1, 
+            'number'))
 
     def op_number_modulus(self, vals, units, refs, flags):
         return OperationResult(self.number(vals[0]) % self.number(vals[1]))

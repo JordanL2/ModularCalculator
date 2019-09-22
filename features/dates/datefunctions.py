@@ -34,29 +34,73 @@ class DateFunctionsFeature(Feature):
 
     @classmethod
     def install(cls, calculator):
-        calculator.funcs['datecreate'] =  FunctionDefinition('Date', 'datecreate', DateFunctionsFeature.func_datecreate, 3, 7, 'number')
+        calculator.funcs['datecreate'] =  FunctionDefinition(
+            'Date', 
+            'datecreate', 
+            '', #TODO
+            '', #TODO
+            DateFunctionsFeature.func_datecreate, 
+            3, 
+            7, 
+            'number')
         calculator.funcs['datecreate'].units_normalise = False
 
-        calculator.funcs['dateformat'] =  FunctionDefinition('Date', 'dateformat', DateFunctionsFeature.func_dateformat, 1, 1, 'date')
+        calculator.funcs['dateformat'] =  FunctionDefinition(
+            'Date', 
+            'dateformat', 
+            '', #TODO
+            '', #TODO
+            DateFunctionsFeature.func_dateformat, 
+            1, 
+            1, 
+            'date')
         calculator.funcs['dateformat'].units_normalise = False
         
-        calculator.funcs['dateadd'] =  FunctionDefinition('Date', 'dateadd', DateFunctionsFeature.func_dateadd, 2, 2)
+        calculator.funcs['dateadd'] =  FunctionDefinition(
+            'Date', 
+            'dateadd', 
+            '', #TODO
+            '', #TODO
+            DateFunctionsFeature.func_dateadd, 
+            2, 
+            2)
         calculator.funcs['dateadd'].add_value_restriction(0, 0, 'date')
         calculator.funcs['dateadd'].add_value_restriction(1, 1, 'number')
         calculator.funcs['dateadd'].add_unit_restriction(1, 1, ['time', 1])
         calculator.funcs['dateadd'].units_normalise = False
         
-        calculator.funcs['datesubtract'] =  FunctionDefinition('Date', 'datesubtract', DateFunctionsFeature.func_datesubtract, 2, 2)
+        calculator.funcs['datesubtract'] =  FunctionDefinition(
+            'Date', 
+            'datesubtract', 
+            '', #TODO
+            '', #TODO
+            DateFunctionsFeature.func_datesubtract, 
+            2, 
+            2)
         calculator.funcs['datesubtract'].add_value_restriction(0, 0, 'date')
         calculator.funcs['datesubtract'].add_value_restriction(1, 1, 'number')
         calculator.funcs['datesubtract'].add_unit_restriction(1, 1, ['time', 1])
         calculator.funcs['datesubtract'].units_normalise = False
         
-        calculator.funcs['datedifference'] =  FunctionDefinition('Date', 'datedifference', DateFunctionsFeature.func_datedifference, 3, 3)
+        calculator.funcs['datedifference'] =  FunctionDefinition(
+            'Date', 
+            'datedifference', 
+            '', #TODO
+            '', #TODO
+            DateFunctionsFeature.func_datedifference, 
+            3, 
+            3)
         calculator.funcs['datedifference'].add_value_restriction(0, 1, 'date')
         calculator.funcs['datedifference'].add_value_restriction(2, 2, 'unit')
         
-        calculator.funcs['now'] =  FunctionDefinition('Date', 'now', DateFunctionsFeature.func_now, 0, 0)
+        calculator.funcs['now'] =  FunctionDefinition(
+            'Date', 
+            'now', 
+            '', #TODO
+            '', #TODO
+            DateFunctionsFeature.func_now, 
+            0, 
+            0)
 
         calculator.feature_options['dates.dates'][datestr] =          {'Format': '%A, %d-%b-%Y', 'Padding': ''}
         calculator.feature_options['dates.dates'][datetimestr] =      {'Format': '%A, %d-%b-%Y at %H:%M:%S', 'Padding': ''}

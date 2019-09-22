@@ -28,35 +28,243 @@ class NumericalFunctionsFeature(Feature):
 
     @classmethod
     def install(cls, calculator):
-        calculator.funcs['abs'] = FunctionDefinition('Numerical', 'abs', NumericalFunctionsFeature.func_abs, 1, 1, 'number')
-        calculator.funcs['floor'] = FunctionDefinition('Numerical', 'floor', NumericalFunctionsFeature.func_floor, 1, 1, 'number')
-        calculator.funcs['ceil'] = FunctionDefinition('Numerical', 'ceil', NumericalFunctionsFeature.func_ceil, 1, 1, 'number')
-        calculator.funcs['round'] = FunctionDefinition('Numerical', 'round', NumericalFunctionsFeature.func_round, 1, 2, 'number')
+        calculator.funcs['abs'] = FunctionDefinition(
+            'Numerical', 
+            'abs', 
+            '', #TODO
+            '', #TODO
+            NumericalFunctionsFeature.func_abs, 
+            1, 
+            1, 
+            'number')
+        calculator.funcs['floor'] = FunctionDefinition(
+            'Numerical', 
+            'floor', 
+            '', #TODO
+            '', #TODO
+            NumericalFunctionsFeature.func_floor, 
+            1, 
+            1, 
+            'number')
+        calculator.funcs['ceil'] = FunctionDefinition(
+            'Numerical', 
+            'ceil', 
+            '', #TODO
+            '', #TODO
+            NumericalFunctionsFeature.func_ceil, 
+            1, 
+            1, 
+            'number')
+        calculator.funcs['round'] = FunctionDefinition(
+            'Numerical', 
+            'round', 
+            '', #TODO
+            '', #TODO
+            NumericalFunctionsFeature.func_round, 
+            1, 
+            2, 
+            'number')
         calculator.funcs['round'].units_normalise = False
-        calculator.funcs['fact'] = FunctionDefinition('Numerical', 'fact', NumericalFunctionsFeature.func_fact, 1, 1, 'number')
-        calculator.funcs['exp'] = FunctionDefinition('Numerical', 'exp', NumericalFunctionsFeature.func_exp, 1, 1, 'number')
-        calculator.funcs['log'] = FunctionDefinition('Numerical', 'log', NumericalFunctionsFeature.func_log, 1, 1, 'number')
+        calculator.funcs['fact'] = FunctionDefinition(
+            'Numerical', 
+            'fact', 
+            '', #TODO
+            '', #TODO
+            NumericalFunctionsFeature.func_fact, 
+            1, 
+            1, 
+            'number')
+        calculator.funcs['exp'] = FunctionDefinition(
+            'Numerical', 
+            'exp', 
+            '', #TODO
+            '', #TODO
+            NumericalFunctionsFeature.func_exp, 
+            1, 
+            1, 
+            'number')
+        calculator.funcs['log'] = FunctionDefinition(
+            'Numerical', 
+            'log', 
+            '', #TODO
+            '', #TODO
+            NumericalFunctionsFeature.func_log, 
+            1, 
+            1, 
+            'number')
         
-        calculator.funcs['sin'] = FunctionDefinition('Trigonometry', 'sin', NumericalFunctionsFeature.func_sin, 1, 1, 'number')
-        calculator.funcs['cos'] = FunctionDefinition('Trigonometry', 'cos', NumericalFunctionsFeature.func_cos, 1, 1, 'number')
-        calculator.funcs['tan'] = FunctionDefinition('Trigonometry', 'tan', NumericalFunctionsFeature.func_tan, 1, 1, 'number')
-        calculator.funcs['asin'] = FunctionDefinition('Trigonometry', 'asin', NumericalFunctionsFeature.func_asin, 1, 1, 'number')
-        calculator.funcs['acos'] = FunctionDefinition('Trigonometry', 'acos', NumericalFunctionsFeature.func_acos, 1, 1, 'number')
-        calculator.funcs['atan'] = FunctionDefinition('Trigonometry', 'atan', NumericalFunctionsFeature.func_atan, 1, 1, 'number')
-        calculator.funcs['sinh'] = FunctionDefinition('Trigonometry', 'sinh', NumericalFunctionsFeature.func_sinh, 1, 1, 'number')
-        calculator.funcs['cosh'] = FunctionDefinition('Trigonometry', 'cosh', NumericalFunctionsFeature.func_cosh, 1, 1, 'number')
-        calculator.funcs['tanh'] = FunctionDefinition('Trigonometry', 'tanh', NumericalFunctionsFeature.func_tanh, 1, 1, 'number')
-        calculator.funcs['asinh'] = FunctionDefinition('Trigonometry', 'asinh', NumericalFunctionsFeature.func_asinh, 1, 1, 'number')
-        calculator.funcs['acosh'] = FunctionDefinition('Trigonometry', 'acosh', NumericalFunctionsFeature.func_acosh, 1, 1, 'number')
-        calculator.funcs['atanh'] = FunctionDefinition('Trigonometry', 'atanh', NumericalFunctionsFeature.func_atanh, 1, 1, 'number')
+        calculator.funcs['sin'] = FunctionDefinition(
+            'Trigonometry', 
+            'sin', 
+            '', #TODO
+            '', #TODO
+            NumericalFunctionsFeature.func_sin, 
+            1, 
+            1, 
+            'number')
+        calculator.funcs['cos'] = FunctionDefinition(
+            'Trigonometry', 
+            'cos', 
+            '', #TODO
+            '', #TODO
+            NumericalFunctionsFeature.func_cos, 
+            1, 
+            1, 
+            'number')
+        calculator.funcs['tan'] = FunctionDefinition(
+            'Trigonometry', 
+            'tan', 
+            '', #TODO
+            '', #TODO
+            NumericalFunctionsFeature.func_tan, 
+            1, 
+            1, 
+            'number')
+        calculator.funcs['asin'] = FunctionDefinition(
+            'Trigonometry', 
+            'asin', 
+            '', #TODO
+            '', #TODO
+            NumericalFunctionsFeature.func_asin, 
+            1, 
+            1, 
+            'number')
+        calculator.funcs['acos'] = FunctionDefinition(
+            'Trigonometry', 
+            'acos', 
+            '', #TODO
+            '', #TODO
+            NumericalFunctionsFeature.func_acos, 
+            1, 
+            1, 
+            'number')
+        calculator.funcs['atan'] = FunctionDefinition(
+            'Trigonometry', 
+            'atan', 
+            '', #TODO
+            '', #TODO
+            NumericalFunctionsFeature.func_atan, 
+            1, 
+            1, 
+            'number')
+        calculator.funcs['sinh'] = FunctionDefinition(
+            'Trigonometry', 
+            'sinh', 
+            '', #TODO
+            '', #TODO
+            NumericalFunctionsFeature.func_sinh, 
+            1, 
+            1, 
+            'number')
+        calculator.funcs['cosh'] = FunctionDefinition(
+            'Trigonometry', 
+            'cosh', 
+            '', #TODO
+            '', #TODO
+            NumericalFunctionsFeature.func_cosh, 
+            1, 
+            1, 
+            'number')
+        calculator.funcs['tanh'] = FunctionDefinition(
+            'Trigonometry', 
+            'tanh', 
+            '', #TODO
+            '', #TODO
+            NumericalFunctionsFeature.func_tanh, 
+            1, 
+            1, 
+            'number')
+        calculator.funcs['asinh'] = FunctionDefinition(
+            'Trigonometry', 
+            'asinh', 
+            '', #TODO
+            '', #TODO
+            NumericalFunctionsFeature.func_asinh, 
+            1, 
+            1, 
+            'number')
+        calculator.funcs['acosh'] = FunctionDefinition(
+            'Trigonometry', 
+            'acosh', 
+            '', #TODO
+            '', #TODO
+            NumericalFunctionsFeature.func_acosh, 
+            1, 
+            1, 
+            'number')
+        calculator.funcs['atanh'] = FunctionDefinition(
+            'Trigonometry', 
+            'atanh', 
+            '', #TODO
+            '', #TODO
+            NumericalFunctionsFeature.func_atanh, 
+            1, 
+            1, 
+            'number')
 
-        calculator.funcs['sum'] = FunctionDefinition('Statistics', 'sum', NumericalFunctionsFeature.func_sum, 1, None, 'number')
-        calculator.funcs['min'] = FunctionDefinition('Statistics', 'min', NumericalFunctionsFeature.func_min, 1, None, 'number')
-        calculator.funcs['max'] = FunctionDefinition('Statistics', 'max', NumericalFunctionsFeature.func_max, 1, None, 'number')
-        calculator.funcs['mean'] = FunctionDefinition('Statistics', 'mean', NumericalFunctionsFeature.func_mean, 1, None, 'number')
-        calculator.funcs['median'] = FunctionDefinition('Statistics', 'median', NumericalFunctionsFeature.func_median, 1, None, 'number')
-        calculator.funcs['mode'] = FunctionDefinition('Statistics', 'mode', NumericalFunctionsFeature.func_mode, 1, None, 'number')
-        calculator.funcs['stdev'] = FunctionDefinition('Statistics', 'stdev', NumericalFunctionsFeature.func_stdev, 1, None, 'number')
+        calculator.funcs['sum'] = FunctionDefinition(
+            'Statistics', 
+            'sum', 
+            '', #TODO
+            '', #TODO
+            NumericalFunctionsFeature.func_sum, 
+            1, 
+            None, 
+            'number')
+        calculator.funcs['min'] = FunctionDefinition(
+            'Statistics', 
+            'min', 
+            '', #TODO
+            '', #TODO
+            NumericalFunctionsFeature.func_min, 
+            1, 
+            None, 
+            'number')
+        calculator.funcs['max'] = FunctionDefinition(
+            'Statistics', 
+            'max', 
+            '', #TODO
+            '', #TODO
+            NumericalFunctionsFeature.func_max, 
+            1, 
+            None, 
+            'number')
+        calculator.funcs['mean'] = FunctionDefinition(
+            'Statistics', 
+            'mean', 
+            '', #TODO
+            '', #TODO
+            NumericalFunctionsFeature.func_mean, 
+            1, 
+            None, 
+            'number')
+        calculator.funcs['median'] = FunctionDefinition(
+            'Statistics', 
+            'median', 
+            '', #TODO
+            '', #TODO
+            NumericalFunctionsFeature.func_median, 
+            1, 
+            None, 
+            'number')
+        calculator.funcs['mode'] = FunctionDefinition(
+            'Statistics', 
+            'mode', 
+            '', #TODO
+            '', #TODO
+            NumericalFunctionsFeature.func_mode, 
+            1, 
+            None, 
+            'number')
+        calculator.funcs['stdev'] = FunctionDefinition(
+            'Statistics', 
+            'stdev', 
+            '', #TODO
+            '', #TODO
+            NumericalFunctionsFeature.func_stdev, 
+            1, 
+            None, 
+            'number')
 
     def func_abs(self, vals, units, refs, flags):
         return OperationResult(Decimal(abs(self.number(vals[0]))))

@@ -28,7 +28,15 @@ class BinaryNumbersFeature(Feature):
     @classmethod
     def install(cls, calculator):
         calculator.add_parser('number_bin', BinaryNumbersFeature.parse_bin)
-        calculator.funcs['bin'] = FunctionDefinition('Bases', 'bin', BinaryNumbersFeature.func_bin, 1, 1, 'number')
+        calculator.funcs['bin'] = FunctionDefinition(
+            'Bases', 
+            'bin', 
+            '', #TODO
+            '', #TODO
+            BinaryNumbersFeature.func_bin, 
+            1, 
+            1, 
+            'number')
         calculator.add_number_caster('binary', BinaryNumbersFeature.number_bin)
 
     bin_prefix = '0b'
