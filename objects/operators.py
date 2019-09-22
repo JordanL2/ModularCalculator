@@ -132,7 +132,15 @@ class OperatorDefinition(Operation):
 
         num_of_params = len([i for i in linputs + rinputs if not isinstance(i, str)])
 
-        syntax = 'TODO' #TODO - generate this automatically
+        c = 0
+        syntax_list = []
+        for l in linputs + [name] + rinputs:
+            if l == 1:
+                c += 1
+                syntax_list.append("var{}".format(c))
+            else:
+                syntax_list.append(l)
+        syntax = ' '.join(syntax_list)
 
         if isinstance(objtypes, list):
             if len(objtypes) != num_of_params:
