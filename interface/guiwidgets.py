@@ -1,20 +1,36 @@
 #!/usr/bin/python3
 
 from PyQt5.QtCore import Qt, QStringListModel, QSize
-from PyQt5.QtWidgets import QInputDialog, QWidgetAction, QSpinBox, QLabel, QHBoxLayout, QVBoxLayout, QWidget, QListView, QDialog, QAbstractItemView, QPushButton, QCalendarWidget
+from PyQt5.QtWidgets import QListWidget, QWidgetAction, QSpinBox, QLabel, QHBoxLayout, QVBoxLayout, QWidget, QListView, QDialog, QAbstractItemView, QPushButton, QCalendarWidget
 
 
-class SelectionDialog(QInputDialog):
+class SelectionDialog(QDialog):
 
     def __init__(self, parent, title, label, items, okFunction):
         super().__init__(parent)
-        self.setInputMode(QInputDialog.TextInput)
-        self.setComboBoxItems(items)
-        self.setOption(QInputDialog.UseListViewForComboBoxItems, True)
+
+        self.okFunction = okFunction
+
+        layout = QVBoxLayout()
+
+        labelWidget = QLabel(label)
+        layout.addWidget(labelWidget)
+
+        self.list = QListWidget(self)
+        self.list.addItems(items)
+        layout.addWidget(self.list)
+
+        button = QPushButton("OK", self)
+        button.clicked.connect(self.ok)
+        layout.addWidget(button)
+
+        self.setLayout(layout)
         self.setWindowTitle(title)
-        self.setLabelText(label)
-        self.textValueSelected.connect(okFunction)
         self.setVisible(True)
+
+    def ok(self):
+        self.okFunction(self.list.currentItem().text())
+        self.close()
 
     def sizeHint(self):
         return QSize(super().sizeHint() * 2)
