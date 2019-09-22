@@ -27,5 +27,5 @@ class PowerUnitFeature(AbstractUnitFeature):
 class UnitDefinitionWatt(UnitDefinition):
 
     namelist = ['watts','watt']
-    symbollist = 'W'
+    symbollist = ['W']
     systems = ['si']

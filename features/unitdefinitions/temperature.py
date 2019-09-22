@@ -32,7 +32,7 @@ class TemperatureUnitFeature(AbstractUnitFeature):
 class UnitDefinitionKelvin(UnitDefinition):
 
     namelist = ['kelvin','kelvin']
-    symbollist = 'K'
+    symbollist = ['K']
     systems = ['si']
 
 

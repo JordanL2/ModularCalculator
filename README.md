@@ -89,7 +89,9 @@ These examples are available in examples/basic_integration.py. See examples/adva
 * Functionality:
 	* Show available information for the Insert dialogs:
 		* Insert Unit dialog : Checkbox to hide prefixed units
-		* Way of seeing possible inputs for an operator or function - number of inputs, types allowed for each input
+		* Helpful description for each operator, function or unit in insert dialog:
+			* Way of seeing possible inputs for an operator or function - number of inputs, types allowed for each input
+			* Description for unit can contain its unit system, and other allowed names and symbols for it
 	* Ability to select features calculator has, screen to customise calculator, if calculator fails to init display error message
 	* Dialog that allows editing of feature options
 	* Option to display results in standard form

@@ -38,12 +38,13 @@ class SelectionDialog(QDialog):
 
 class CategorisedSelectionDialog(QDialog):
 
-    def __init__(self, parent, title, label, items, okFunction):
+    def __init__(self, parent, title, label, items, descriptions, okFunction):
         super().__init__(parent)
 
         self.okFunction = okFunction
 
         self.items = items
+        self.descriptions = descriptions
 
         layout = QVBoxLayout()
 
@@ -58,6 +59,11 @@ class CategorisedSelectionDialog(QDialog):
         layout.addWidget(self.list)
         self.setList()
         self.category.currentTextChanged.connect(self.setList)
+        self.list.currentTextChanged.connect(self.showDescription)
+
+        self.itemDescription = QLabel('')
+        if len(descriptions) > 0:
+            layout.addWidget(self.itemDescription)
 
         button = QPushButton("OK", self)
         button.clicked.connect(self.ok)
@@ -72,9 +78,20 @@ class CategorisedSelectionDialog(QDialog):
         self.list.clear()
         self.list.addItems(listItems)
 
+    def showDescription(self):
+        if self.currentItem() is not None and self.currentItem() in self.descriptions:
+            self.itemDescription.setText(self.descriptions[self.currentItem()])
+        else:
+            self.itemDescription.setText('')
+
+    def currentItem(self):
+        if self.list.currentItem() is None:
+            return None
+        return self.list.currentItem().text()
+
     def ok(self):
         if self.list.currentItem() is not None:
-            self.okFunction(self.list.currentItem().text())
+            self.okFunction(self.currentItem())
             self.close()
 
     def sizeHint(self):

@@ -27,6 +27,7 @@ class Operation:
     def __init__(self, category, name, ref, minparams=None, maxparams=None, objtypes=None):
         self.category = category
         self.name = name
+        self.description = 'this is ' + name
         self.ref = ref
 
         self.minparams = minparams
