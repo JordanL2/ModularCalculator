@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 from PyQt5.QtCore import Qt, QStringListModel, QSize
-from PyQt5.QtWidgets import QListWidget, QWidgetAction, QSpinBox, QLabel, QHBoxLayout, QVBoxLayout, QWidget, QListView, QDialog, QAbstractItemView, QPushButton, QCalendarWidget, QTimeEdit
+from PyQt5.QtWidgets import QListWidget, QWidgetAction, QSpinBox, QLabel, QHBoxLayout, QVBoxLayout, QWidget, QListView, QDialog, QAbstractItemView, QPushButton, QCalendarWidget, QTimeEdit, QComboBox
 
 
 class SelectionDialog(QDialog):
@@ -31,6 +31,51 @@ class SelectionDialog(QDialog):
     def ok(self):
         self.okFunction(self.list.currentItem().text())
         self.close()
+
+    def sizeHint(self):
+        return QSize(super().sizeHint() * 2)
+
+
+class CategorisedSelectionDialog(QDialog):
+
+    def __init__(self, parent, title, label, items, okFunction):
+        super().__init__(parent)
+
+        self.okFunction = okFunction
+
+        self.items = items
+
+        layout = QVBoxLayout()
+
+        labelWidget = QLabel(label)
+        layout.addWidget(labelWidget)
+
+        self.category = QComboBox(self)
+        self.category.addItems(sorted(self.items.keys(), key=str))
+        layout.addWidget(self.category)
+
+        self.list = QListWidget(self)
+        layout.addWidget(self.list)
+        self.setList()
+        self.category.currentTextChanged.connect(self.setList)
+
+        button = QPushButton("OK", self)
+        button.clicked.connect(self.ok)
+        layout.addWidget(button)
+
+        self.setLayout(layout)
+        self.setWindowTitle(title)
+        self.setVisible(True)
+
+    def setList(self):
+        listItems = sorted(self.items[self.category.currentText()], key=lambda u: str(u).lower())
+        self.list.clear()
+        self.list.addItems(listItems)
+
+    def ok(self):
+        if self.list.currentItem() is not None:
+            self.okFunction(self.list.currentItem().text())
+            self.close()
 
     def sizeHint(self):
         return QSize(super().sizeHint() * 2)

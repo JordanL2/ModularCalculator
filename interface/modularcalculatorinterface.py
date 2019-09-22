@@ -295,8 +295,13 @@ class ModularCalculatorInterface(StatefulApplication):
         self.entry.insert("'{0:04d}-{1:02d}-{2:02d}T{3:02d}:{4:02d}:{5:02d}'".format(date.year(), date.month(), date.day(), time.hour(), time.minute(), time.second()))
 
     def insertFunction(self):
-        funcs = sorted(self.calculator.funcs.keys(), key=str)
-        SelectionDialog(self, 'Insert Function', 'Select function to insert', funcs, self.selectFunction)
+        funcs = {}
+        for f in self.calculator.funcs:
+            category = self.calculator.funcs[f].category
+            if category not in funcs:
+                funcs[category] = []
+            funcs[category].append(f)
+        CategorisedSelectionDialog(self, 'Insert Function', 'Select function to insert', funcs, self.selectFunction)
 
     def selectFunction(self, func):
         self.entry.insert(func + '(')
@@ -314,15 +319,25 @@ class ModularCalculatorInterface(StatefulApplication):
             self.entry.insert("{} = '{}';\n".format(funcname, filePath))
 
     def insertOperator(self):
-        operators = sorted([op for op, opInfo in self.calculator.ops_list.items() if not opInfo.hidden], key=str)
-        SelectionDialog(self, 'Insert Operator', 'Select operator to insert', operators, self.selectOperator)
+        operators = {}
+        for op, opInfo in self.calculator.ops_list.items():
+            if not opInfo.hidden:
+                category = opInfo.category
+                if category not in operators:
+                    operators[category] = []
+                operators[category].append(op)
+        CategorisedSelectionDialog(self, 'Insert Operator', 'Select operator to insert', operators, self.selectOperator)
 
     def selectOperator(self, operator):
         self.entry.insert(operator)
 
     def insertUnit(self):
-        units = sorted([u.singular() for a in self.calculator.unit_normaliser.units.values() for u in a], key=lambda u: u.lower())
-        SelectionDialog(self, 'Insert Unit', 'Select unit to insert', units, self.selectUnit)
+        units = {}
+        for dimension in self.calculator.unit_normaliser.units:
+            units[dimension] = []
+            for unit in self.calculator.unit_normaliser.units[dimension]:
+                units[dimension].append(unit.singular())
+        CategorisedSelectionDialog(self, 'Insert Unit', 'Select unit to insert', units, self.selectUnit)
 
     def selectUnit(self, unit):
         self.entry.insert(unit)

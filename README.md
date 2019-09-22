@@ -78,17 +78,17 @@ These examples are available in examples/basic_integration.py. See examples/adva
 * Solid Angles - minutes and seconds
 * Questions to look into:
 	* Connection between angle and solid angle (solid angle = angle * angle ?)
-	* Should systems preference be a feature_option? Also other unitnormaliser options?
-	* Can kWh become recognisable? Also all other prefixes
+	* Can kWh become recognisable? Also all other prefixes, and "mph"
+		* possibly a composite unit type eg "kWh" => ['kilowatt', 'hour']
+		* allows simplification from the element units into the composite unit, eg "1 kW * 3 h" = "3 kWh"
+		* alternatively just add "mph" and "kWh" etc as velocity and energy units, disable simplification to them
 
 ## Constants
 
 ## Graphical Interface
 * Functionality:
 	* Show available information for the Insert dialogs:
-		* Insert Unit dialog categoried by system (in order of system preference), then dimension
-			* Checkbox to hide prefixed units
-		* Insert Function / Operator dialogs categorised by category
+		* Insert Unit dialog : Checkbox to hide prefixed units
 		* Way of seeing possible inputs for an operator or function - number of inputs, types allowed for each input
 	* Ability to select features calculator has, screen to customise calculator, if calculator fails to init display error message
 	* Dialog that allows editing of feature options
