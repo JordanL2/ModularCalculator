@@ -222,6 +222,9 @@ class ModularCalculatorInterface(StatefulApplication):
             self.setCurrentFile(filePath, False)
 
     def save(self):
+        if self.currentFile is None:
+            self.saveAs()
+            return
         fh = open(self.currentFile, 'w')
         fh.write(self.entry.getContents())
         self.setCurrentFile(self.currentFile, False)
@@ -247,13 +250,10 @@ class ModularCalculatorInterface(StatefulApplication):
         self.currentFileModified = modified
         if self.currentFile is None:
             self.setWindowTitle('Modular Calculator')
-            self.fileSave.setDisabled(True)
         elif self.currentFileModified:
             self.setWindowTitle("Modular Calculator - {} *".format(self.currentFile))
-            self.fileSave.setDisabled(False)
         else:
             self.setWindowTitle("Modular Calculator - {}".format(self.currentFile))
-            self.fileSave.setDisabled(True)
 
     def setUnitSimplification(self, value):
         self.optionsSimplifyUnits.setChecked(value)
