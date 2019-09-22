@@ -85,24 +85,22 @@ These examples are available in examples/basic_integration.py. See examples/adva
 
 ## Graphical Interface
 * Functionality:
-	* Ability to select features calculator has, screen to customise calculator, if calculator fails to init display error message
 	* Show available information for the Insert dialogs:
 		* Insert Unit dialog categoried by system (in order of system preference), then dimension
 			* Checkbox to hide prefixed units
 		* Insert Function / Operator dialogs categorised by category
 		* Way of seeing possible inputs for an operator or function - number of inputs, types allowed for each input
+	* Ability to select features calculator has, screen to customise calculator, if calculator fails to init display error message
 	* Dialog that allows editing of feature options
-	* Auto-select dark theme if system theme is dark
 	* Option to display results in standard form
+	* Option to switch between ; and new-lines for statement terminators
+	* Tabs
 
 * Usability / quality of life:
 	* Click previous answer to insert it
-	* Option to switch between ; and new-lines for statement terminators
-	* Tabs
 	* Insert Date - easily add a date into the calculation
 
 * Stability:
-	* Restoring state should be able to cope with exceptions and reset the state if found
 	* Auto-save state occasionally
 
 * Performance:

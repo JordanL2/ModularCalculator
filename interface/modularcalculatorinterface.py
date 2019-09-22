@@ -138,18 +138,22 @@ class ModularCalculatorInterface(StatefulApplication):
         self.entry.refresh()
 
     def restoreAllState(self):
-        self.restoreGeometry(self.fetchState("mainWindowGeometry"))
-        self.restoreState(self.fetchState("mainWindowState"))
-        self.splitter.restoreState(self.fetchState("splitterSizes"))
+        try:
+            self.restoreGeometry(self.fetchState("mainWindowGeometry"))
+            self.restoreState(self.fetchState("mainWindowState"))
+            self.splitter.restoreState(self.fetchState("splitterSizes"))
 
-        self.display.restoreState(self.fetchStateMap("displayOutput"))
-        self.entry.restoreState(self.fetchStateText("textContent"))
-        
-        self.setCurrentFile(self.fetchStateText("currentFile"), self.fetchStateBoolean("currentFileModified", False))
-        
-        self.setAutoExecute(self.fetchStateBoolean("viewSyntaxParsingAutoExecutes", True))
+            self.display.restoreState(self.fetchStateMap("displayOutput"))
+            self.entry.restoreState(self.fetchStateText("textContent"))
+            
+            self.setCurrentFile(self.fetchStateText("currentFile"), self.fetchStateBoolean("currentFileModified", False))
+            
+            self.setAutoExecute(self.fetchStateBoolean("viewSyntaxParsingAutoExecutes", True))
 
-        self.setShortUnits(self.fetchStateBoolean("viewShortUnits", False))
+            self.setShortUnits(self.fetchStateBoolean("viewShortUnits", False))
+        except Exception as e:
+            print("Exception when trying to restore state")
+            print(e)
 
     def restoreCalculatorState(self):
         self.setPrecision(self.fetchStateNumber("precision", 30))
