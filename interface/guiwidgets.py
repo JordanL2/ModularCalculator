@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 from PyQt5.QtCore import Qt, QStringListModel, QSize
-from PyQt5.QtWidgets import QInputDialog, QWidgetAction, QSpinBox, QLabel, QHBoxLayout, QVBoxLayout, QWidget, QListView, QDialog, QAbstractItemView, QPushButton
+from PyQt5.QtWidgets import QInputDialog, QWidgetAction, QSpinBox, QLabel, QHBoxLayout, QVBoxLayout, QWidget, QListView, QDialog, QAbstractItemView, QPushButton, QCalendarWidget
 
 
 class SelectionDialog(QInputDialog):
@@ -81,3 +81,28 @@ class MenuSpinBox(QWidgetAction):
         widget = QWidget()
         widget.setLayout(layout)
         self.setDefaultWidget(widget)
+
+
+class DatePicker(QDialog):
+
+    def __init__(self, parent, title, okFunction):
+        super().__init__(parent)
+
+        self.okFunction = okFunction
+
+        layout = QVBoxLayout()
+
+        self.datePicker = QCalendarWidget(self)
+        layout.addWidget(self.datePicker)
+
+        button = QPushButton("OK", self)
+        button.clicked.connect(self.ok)
+        layout.addWidget(button)
+
+        self.setLayout(layout)
+        self.setWindowTitle(title)
+        self.setVisible(True)
+
+    def ok(self):
+        self.okFunction(self.datePicker.selectedDate())
+        self.close()
