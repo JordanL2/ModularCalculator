@@ -346,7 +346,7 @@ class ModularCalculatorInterface(StatefulApplication):
                 units[dimensionTitle].append(unitName)
                 altnames = []
                 for name in unit.names() + unit.symbols():
-                    if name not in altnames:
+                    if name not in altnames and name != unitName:
                         altnames.append(name)
                 altnames = ', '.join(altnames)
                 if unit.systems is None or len(unit.systems) == 0:
