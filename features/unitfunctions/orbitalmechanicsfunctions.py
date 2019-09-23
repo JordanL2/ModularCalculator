@@ -31,7 +31,7 @@ class OrbitalMechanicsFunctionsFeature(Feature):
             'Orbital Mechanics', 
             'deltav', 
             'Calculate vacuum delta-V for a spacecraft',
-            ['isp(seconds)', 'start-mass', 'end-mass'],
+            ['ISP', 'start-mass', 'end-mass'],
             OrbitalMechanicsFunctionsFeature.func_deltav, 
             3, 
             3, 
