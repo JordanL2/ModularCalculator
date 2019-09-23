@@ -27,7 +27,7 @@ class DateOperatorsFeature(Feature):
         date_add_op = OperatorDefinition(
             'Date', 
             '+%', 
-            '', #TODO
+            'Add a time period to a date',
             DateOperatorsFeature.op_date_add, 
             1, 
             1, 
@@ -38,7 +38,7 @@ class DateOperatorsFeature(Feature):
         date_sub_op = OperatorDefinition(
             'Date', 
             '-%', 
-            '', #TODO
+            'Subtract a time period from a date',
             DateOperatorsFeature.op_date_subtract, 
             1, 
             1, 

@@ -31,8 +31,8 @@ class ArbitraryBaseFeature(Feature):
         calculator.funcs['base'] = FunctionDefinition(
             'Bases', 
             'base', 
-            '', #TODO
-            '', #TODO
+            'Convert a base-10 number into any base',
+            'base(number, base)',
             ArbitraryBaseFeature.func_base, 
             2, 
             2, 

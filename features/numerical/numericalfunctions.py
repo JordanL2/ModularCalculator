@@ -31,8 +31,8 @@ class NumericalFunctionsFeature(Feature):
         calculator.funcs['abs'] = FunctionDefinition(
             'Numerical', 
             'abs', 
-            '', #TODO
-            '', #TODO
+            'Absolute',
+            'abs(number)',
             NumericalFunctionsFeature.func_abs, 
             1, 
             1, 
@@ -40,8 +40,8 @@ class NumericalFunctionsFeature(Feature):
         calculator.funcs['floor'] = FunctionDefinition(
             'Numerical', 
             'floor', 
-            '', #TODO
-            '', #TODO
+            'Round downwards to nearest integer',
+            'floor(number)',
             NumericalFunctionsFeature.func_floor, 
             1, 
             1, 
@@ -49,8 +49,8 @@ class NumericalFunctionsFeature(Feature):
         calculator.funcs['ceil'] = FunctionDefinition(
             'Numerical', 
             'ceil', 
-            '', #TODO
-            '', #TODO
+            'Round upwards to nearest integer',
+            'ceil(number)',
             NumericalFunctionsFeature.func_ceil, 
             1, 
             1, 
@@ -58,8 +58,8 @@ class NumericalFunctionsFeature(Feature):
         calculator.funcs['round'] = FunctionDefinition(
             'Numerical', 
             'round', 
-            '', #TODO
-            '', #TODO
+            'Round to nearest integer or number of decimal places',
+            'round(number, [places])',
             NumericalFunctionsFeature.func_round, 
             1, 
             2, 
@@ -68,8 +68,8 @@ class NumericalFunctionsFeature(Feature):
         calculator.funcs['fact'] = FunctionDefinition(
             'Numerical', 
             'fact', 
-            '', #TODO
-            '', #TODO
+            'Factorial',
+            'fact(number)',
             NumericalFunctionsFeature.func_fact, 
             1, 
             1, 
@@ -77,8 +77,8 @@ class NumericalFunctionsFeature(Feature):
         calculator.funcs['exp'] = FunctionDefinition(
             'Numerical', 
             'exp', 
-            '', #TODO
-            '', #TODO
+            'Return e to the power of given number',
+            'exp(number)',
             NumericalFunctionsFeature.func_exp, 
             1, 
             1, 
@@ -86,8 +86,8 @@ class NumericalFunctionsFeature(Feature):
         calculator.funcs['log'] = FunctionDefinition(
             'Numerical', 
             'log', 
-            '', #TODO
-            '', #TODO
+            'Natural logarithm',
+            'log(number)',
             NumericalFunctionsFeature.func_log, 
             1, 
             1, 
@@ -96,8 +96,8 @@ class NumericalFunctionsFeature(Feature):
         calculator.funcs['sin'] = FunctionDefinition(
             'Trigonometry', 
             'sin', 
-            '', #TODO
-            '', #TODO
+            'Sine',
+            'sin(radians)',
             NumericalFunctionsFeature.func_sin, 
             1, 
             1, 
@@ -105,8 +105,8 @@ class NumericalFunctionsFeature(Feature):
         calculator.funcs['cos'] = FunctionDefinition(
             'Trigonometry', 
             'cos', 
-            '', #TODO
-            '', #TODO
+            'Cosine',
+            'cos(radians)',
             NumericalFunctionsFeature.func_cos, 
             1, 
             1, 
@@ -114,8 +114,8 @@ class NumericalFunctionsFeature(Feature):
         calculator.funcs['tan'] = FunctionDefinition(
             'Trigonometry', 
             'tan', 
-            '', #TODO
-            '', #TODO
+            'Tangent',
+            'tan(radians)',
             NumericalFunctionsFeature.func_tan, 
             1, 
             1, 
@@ -123,8 +123,8 @@ class NumericalFunctionsFeature(Feature):
         calculator.funcs['asin'] = FunctionDefinition(
             'Trigonometry', 
             'asin', 
-            '', #TODO
-            '', #TODO
+            'Inverse sine',
+            'asin(radians)',
             NumericalFunctionsFeature.func_asin, 
             1, 
             1, 
@@ -132,8 +132,8 @@ class NumericalFunctionsFeature(Feature):
         calculator.funcs['acos'] = FunctionDefinition(
             'Trigonometry', 
             'acos', 
-            '', #TODO
-            '', #TODO
+            'Inverse cosine',
+            'acos(radians)',
             NumericalFunctionsFeature.func_acos, 
             1, 
             1, 
@@ -141,8 +141,8 @@ class NumericalFunctionsFeature(Feature):
         calculator.funcs['atan'] = FunctionDefinition(
             'Trigonometry', 
             'atan', 
-            '', #TODO
-            '', #TODO
+            'Inverse tangent',
+            'atan(radians)',
             NumericalFunctionsFeature.func_atan, 
             1, 
             1, 
@@ -150,8 +150,8 @@ class NumericalFunctionsFeature(Feature):
         calculator.funcs['sinh'] = FunctionDefinition(
             'Trigonometry', 
             'sinh', 
-            '', #TODO
-            '', #TODO
+            'Hyperbolic sine',
+            'sinh(radians)',
             NumericalFunctionsFeature.func_sinh, 
             1, 
             1, 
@@ -159,8 +159,8 @@ class NumericalFunctionsFeature(Feature):
         calculator.funcs['cosh'] = FunctionDefinition(
             'Trigonometry', 
             'cosh', 
-            '', #TODO
-            '', #TODO
+            'Hyperbolic cosine',
+            'cosh(radians)',
             NumericalFunctionsFeature.func_cosh, 
             1, 
             1, 
@@ -168,8 +168,8 @@ class NumericalFunctionsFeature(Feature):
         calculator.funcs['tanh'] = FunctionDefinition(
             'Trigonometry', 
             'tanh', 
-            '', #TODO
-            '', #TODO
+            'Hyperbolic tangent',
+            'tanh(radians)',
             NumericalFunctionsFeature.func_tanh, 
             1, 
             1, 
@@ -177,8 +177,8 @@ class NumericalFunctionsFeature(Feature):
         calculator.funcs['asinh'] = FunctionDefinition(
             'Trigonometry', 
             'asinh', 
-            '', #TODO
-            '', #TODO
+            'Inverse hyperbolic sine',
+            'asinh(radians)',
             NumericalFunctionsFeature.func_asinh, 
             1, 
             1, 
@@ -186,8 +186,8 @@ class NumericalFunctionsFeature(Feature):
         calculator.funcs['acosh'] = FunctionDefinition(
             'Trigonometry', 
             'acosh', 
-            '', #TODO
-            '', #TODO
+            'Inverse hyperbolic cosine',
+            'acosh(radians)',
             NumericalFunctionsFeature.func_acosh, 
             1, 
             1, 
@@ -195,8 +195,8 @@ class NumericalFunctionsFeature(Feature):
         calculator.funcs['atanh'] = FunctionDefinition(
             'Trigonometry', 
             'atanh', 
-            '', #TODO
-            '', #TODO
+            'Inverse hyperbolic tangent',
+            'atanh(radians)',
             NumericalFunctionsFeature.func_atanh, 
             1, 
             1, 
@@ -205,8 +205,8 @@ class NumericalFunctionsFeature(Feature):
         calculator.funcs['sum'] = FunctionDefinition(
             'Statistics', 
             'sum', 
-            '', #TODO
-            '', #TODO
+            'Sum all values',
+            'sum(number1, ...)',
             NumericalFunctionsFeature.func_sum, 
             1, 
             None, 
@@ -214,8 +214,8 @@ class NumericalFunctionsFeature(Feature):
         calculator.funcs['min'] = FunctionDefinition(
             'Statistics', 
             'min', 
-            '', #TODO
-            '', #TODO
+            'Minimum of all values',
+            'min(number1, ...)',
             NumericalFunctionsFeature.func_min, 
             1, 
             None, 
@@ -223,8 +223,8 @@ class NumericalFunctionsFeature(Feature):
         calculator.funcs['max'] = FunctionDefinition(
             'Statistics', 
             'max', 
-            '', #TODO
-            '', #TODO
+            'Maximum of all values',
+            'max(number1, ...)',
             NumericalFunctionsFeature.func_max, 
             1, 
             None, 
@@ -232,8 +232,8 @@ class NumericalFunctionsFeature(Feature):
         calculator.funcs['mean'] = FunctionDefinition(
             'Statistics', 
             'mean', 
-            '', #TODO
-            '', #TODO
+            'Average of all values',
+            'mean(number1, ...)',
             NumericalFunctionsFeature.func_mean, 
             1, 
             None, 
@@ -241,8 +241,8 @@ class NumericalFunctionsFeature(Feature):
         calculator.funcs['median'] = FunctionDefinition(
             'Statistics', 
             'median', 
-            '', #TODO
-            '', #TODO
+            'Median of all values',
+            'median(number1, ...)',
             NumericalFunctionsFeature.func_median, 
             1, 
             None, 
@@ -250,8 +250,8 @@ class NumericalFunctionsFeature(Feature):
         calculator.funcs['mode'] = FunctionDefinition(
             'Statistics', 
             'mode', 
-            '', #TODO
-            '', #TODO
+            'Mode of all values',
+            'mode(number1, ...)',
             NumericalFunctionsFeature.func_mode, 
             1, 
             None, 
@@ -259,8 +259,8 @@ class NumericalFunctionsFeature(Feature):
         calculator.funcs['stdev'] = FunctionDefinition(
             'Statistics', 
             'stdev', 
-            '', #TODO
-            '', #TODO
+            'Standard deviation of all values',
+            'stdev(number1, ...)',
             NumericalFunctionsFeature.func_stdev, 
             1, 
             None, 

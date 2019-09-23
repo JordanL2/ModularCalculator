@@ -58,7 +58,7 @@ class BooleansFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'Numerical', 
             '<=', 
-            '',
+            'Less than or equal to',
             BooleansFeature.op_number_lessthanequal, 
             1, 
             1, 
@@ -66,7 +66,7 @@ class BooleansFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'Numerical', 
             '>=', 
-            '',
+            'More than or equal to',
             BooleansFeature.op_number_morethanequal, 
             1, 
             1, 
@@ -74,7 +74,7 @@ class BooleansFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'Numerical', 
             '==', 
-            '',
+            'Equal to',
             BooleansFeature.op_number_equals, 
             1, 
             1, 
@@ -82,7 +82,7 @@ class BooleansFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'Numerical', 
             '!=', 
-            '',
+            'Not equal to',
             BooleansFeature.op_number_notequals, 
             1, 
             1, 
@@ -90,7 +90,7 @@ class BooleansFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'Boolean', 
             '&', 
-            '',
+            'And',
             BooleansFeature.op_boolean_and, 
             1, 
             1, 
@@ -99,7 +99,7 @@ class BooleansFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'Boolean', 
             '|', 
-            '',
+            'Or',
             BooleansFeature.op_boolean_or, 
             1, 
             1, 
@@ -108,7 +108,7 @@ class BooleansFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'Boolean', 
             '?', 
-            '',
+            'Ternary - If A is true, then B, else C',
             BooleansFeature.op_boolean_conditional, 
             1, 
             [1, ':', 1], 

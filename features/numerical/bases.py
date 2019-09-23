@@ -27,8 +27,8 @@ class BasesFeature(Feature):
         calculator.funcs['dec'] = FunctionDefinition(
             'Bases', 
             'dec', 
-            '', #TODO
-            '', #TODO
+            'Convert a number from any base to base-10',
+            'dec(number)',
             BasesFeature.func_dec, 
             1, 
             1, 

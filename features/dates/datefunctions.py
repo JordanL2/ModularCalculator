@@ -37,8 +37,8 @@ class DateFunctionsFeature(Feature):
         calculator.funcs['datecreate'] =  FunctionDefinition(
             'Date', 
             'datecreate', 
-            '', #TODO
-            '', #TODO
+            'Create a date',
+            'datecreate(year, month, day, [hour, minute, second, [microsecond]])',
             DateFunctionsFeature.func_datecreate, 
             3, 
             7, 
@@ -48,8 +48,8 @@ class DateFunctionsFeature(Feature):
         calculator.funcs['dateformat'] =  FunctionDefinition(
             'Date', 
             'dateformat', 
-            '', #TODO
-            '', #TODO
+            'Nicely format a date for easy reading',
+            'dateformat(date)',
             DateFunctionsFeature.func_dateformat, 
             1, 
             1, 
@@ -59,8 +59,8 @@ class DateFunctionsFeature(Feature):
         calculator.funcs['dateadd'] =  FunctionDefinition(
             'Date', 
             'dateadd', 
-            '', #TODO
-            '', #TODO
+            'Add a time period to a date',
+            'dateadd(date, time)',
             DateFunctionsFeature.func_dateadd, 
             2, 
             2)
@@ -72,8 +72,8 @@ class DateFunctionsFeature(Feature):
         calculator.funcs['datesubtract'] =  FunctionDefinition(
             'Date', 
             'datesubtract', 
-            '', #TODO
-            '', #TODO
+            'Subtract a time period from a date',
+            'datesubtract(date, time)',
             DateFunctionsFeature.func_datesubtract, 
             2, 
             2)
@@ -85,8 +85,8 @@ class DateFunctionsFeature(Feature):
         calculator.funcs['datedifference'] =  FunctionDefinition(
             'Date', 
             'datedifference', 
-            '', #TODO
-            '', #TODO
+            'Determine the length of time between two dates',
+            'datedifference(date1, date2)',
             DateFunctionsFeature.func_datedifference, 
             3, 
             3)
@@ -96,8 +96,8 @@ class DateFunctionsFeature(Feature):
         calculator.funcs['now'] =  FunctionDefinition(
             'Date', 
             'now', 
-            '', #TODO
-            '', #TODO
+            'Return the current date and time',
+            'now()',
             DateFunctionsFeature.func_now, 
             0, 
             0)

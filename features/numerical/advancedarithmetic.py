@@ -29,7 +29,7 @@ class AdvancedArithmeticFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'Numerical', 
             '%', 
-            '', #TODO
+            'Modulus',
             AdvancedArithmeticFeature.op_number_modulus, 
             1, 
             1, 
@@ -37,7 +37,7 @@ class AdvancedArithmeticFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'Numerical', 
             '\\', 
-            '', #TODO
+            'Integer divide - Truncates non-integer component',
             AdvancedArithmeticFeature.op_number_integer_divide, 
             1, 
             1, 

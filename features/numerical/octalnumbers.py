@@ -31,8 +31,8 @@ class OctalNumbersFeature(Feature):
         calculator.funcs['oct'] = FunctionDefinition(
             'Bases', 
             'oct', 
-            '', #TODO
-            '', #TODO
+            'Convert a number into octal',
+            'oct(number)',
             OctalNumbersFeature.func_oct, 
             1, 
             1, 

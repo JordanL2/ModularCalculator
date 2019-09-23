@@ -63,6 +63,8 @@ These examples are available in examples/basic_integration.py. See examples/adva
 ## Functions
 * Parameter help info for operations, display it on parameter validation error
 * Function to convert a number into standard form
+* log - allow a second param for given base
+* floor / ceil - allow second param for places
 
 ## Units
 * Pressure

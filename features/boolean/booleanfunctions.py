@@ -31,7 +31,7 @@ class BooleanFunctionsFeature(Feature):
         calculator.funcs['and'] = FunctionDefinition(
             'Boolean', 
             'and', 
-            'Returns true if all input is true', 
+            'Return true if all input is true', 
             'and(var1...)',
             BooleanFunctionsFeature.func_and, 
             1, 
@@ -40,7 +40,7 @@ class BooleanFunctionsFeature(Feature):
         calculator.funcs['or'] = FunctionDefinition(
             'Boolean', 
             'or', 
-            'Returns true if at least one input is true', 
+            'Return true if at least one input is true', 
             'or(var1...)',
             BooleanFunctionsFeature.func_or, 
             1, 
@@ -49,7 +49,7 @@ class BooleanFunctionsFeature(Feature):
         calculator.funcs['counttrue'] = FunctionDefinition(
             'Boolean', 
             'counttrue', 
-            'Returns the number of inputs that are true',
+            'Return the number of inputs that are true',
             'counttrue(var1...)', 
             BooleanFunctionsFeature.func_counttrue, 
             1, 

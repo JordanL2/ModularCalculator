@@ -28,7 +28,7 @@ class BasicArithmeticFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'Numerical', 
             '^', 
-            '', #TODO
+            'Power',
             BasicArithmeticFeature.op_number_power, 
             1, 
             1, 
@@ -37,7 +37,7 @@ class BasicArithmeticFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'Numerical', 
             '*', 
-            '', #TODO
+            'Multiply',
             BasicArithmeticFeature.op_number_multiply, 
             1, 
             1, 
@@ -46,7 +46,7 @@ class BasicArithmeticFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'Numerical', 
             '/', 
-            '', #TODO
+            'Divide',
             BasicArithmeticFeature.op_number_divide, 
             1, 
             1, 
@@ -55,7 +55,7 @@ class BasicArithmeticFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'Numerical', 
             '+', 
-            '', #TODO
+            'Add',
             BasicArithmeticFeature.op_number_add, 
             1, 
             1, 
@@ -64,7 +64,7 @@ class BasicArithmeticFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'Numerical', 
             '-', 
-            '', #TODO
+            'Subtract',
             BasicArithmeticFeature.op_number_subtract, 
             1, 
             1, 
@@ -73,7 +73,7 @@ class BasicArithmeticFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'Numerical', 
             'IMPLICIT_MULTIPLY', 
-            '', #TODO
+            'Implicitly multiply two values next to each other',
             BasicArithmeticFeature.op_number_multiply, 
             1, 
             1, 

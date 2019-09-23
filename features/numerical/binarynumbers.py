@@ -31,8 +31,8 @@ class BinaryNumbersFeature(Feature):
         calculator.funcs['bin'] = FunctionDefinition(
             'Bases', 
             'bin', 
-            '', #TODO
-            '', #TODO
+            'Convert a number into binary',
+            'bin(number)',
             BinaryNumbersFeature.func_bin, 
             1, 
             1, 

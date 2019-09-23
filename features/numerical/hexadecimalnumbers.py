@@ -31,8 +31,8 @@ class HexadecimalNumbersFeature(Feature):
         calculator.funcs['hex'] = FunctionDefinition(
             'Bases', 
             'hex', 
-            '', #TODO
-            '', #TODO
+            'Convert a number into hexadecimal',
+            'hex(number)',
             HexadecimalNumbersFeature.func_hex, 
             1, 
             1, 
