@@ -132,12 +132,12 @@ class OperatorDefinition(Operation):
 
         num_of_params = len([i for i in linputs + rinputs if not isinstance(i, str)])
 
-        c = 0
+        c = 64
         syntax_list = []
         for l in linputs + [name] + rinputs:
             if l == 1:
                 c += 1
-                syntax_list.append("var{}".format(c))
+                syntax_list.append(chr(c))
             else:
                 syntax_list.append(l)
         syntax = ' '.join(syntax_list)

@@ -82,7 +82,7 @@ class CategorisedSelectionDialog(QDialog):
         if self.currentItem() is not None and self.currentItem() in self.descriptions:
             self.itemDescription.setText(self.descriptions[self.currentItem()])
         else:
-            self.itemDescription.setText('')
+            self.itemDescription.setText(" \n ")
 
     def currentItem(self):
         if self.list.currentItem() is None:
