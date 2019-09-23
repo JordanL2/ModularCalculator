@@ -49,7 +49,7 @@ class RegexFeature(Feature):
         calculator.funcs['regexget'] = FunctionDefinition(
             'Regular Expression', 
             'regexget', 
-            'Match value against regex, then return either the first of a specific match group',
+            'Return either first or a specific occurrence of a pattern in a value',
             'regexget(value, pattern, [group])',
             RegexFeature.func_regexget, 
             2, 
