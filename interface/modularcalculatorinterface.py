@@ -306,7 +306,8 @@ class ModularCalculatorInterface(StatefulApplication):
         CategorisedSelectionDialog(self, 'Insert Function', 'Select function to insert', funcs, descriptions, self.selectFunction)
 
     def selectFunction(self, func):
-        self.entry.insert(func + '(')
+        funcInfo = self.calculator.funcs[func]
+        self.entry.insert("{}({})".format(func, ', '.join(funcInfo.syntax)))
 
     def insertUserDefinedFunction(self):
         filePath, _ = QFileDialog.getOpenFileName(self, "Select user-defined function file", "", "All Files (*)")
