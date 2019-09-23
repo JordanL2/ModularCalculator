@@ -32,7 +32,7 @@ class OctalNumbersFeature(Feature):
             'Bases', 
             'oct', 
             'Convert a number into octal',
-            'oct(number)',
+            ['number'],
             OctalNumbersFeature.func_oct, 
             1, 
             1, 

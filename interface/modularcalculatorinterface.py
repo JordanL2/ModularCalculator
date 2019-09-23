@@ -302,7 +302,7 @@ class ModularCalculatorInterface(StatefulApplication):
             if category not in funcs:
                 funcs[category] = []
             funcs[category].append(func)
-            descriptions[func] = "{}\n{}".format(funcInfo.description, funcInfo.syntax)
+            descriptions[func] = "{}\n{}({})".format(funcInfo.description, func, ', '.join(funcInfo.syntax))
         CategorisedSelectionDialog(self, 'Insert Function', 'Select function to insert', funcs, descriptions, self.selectFunction)
 
     def selectFunction(self, func):
@@ -329,7 +329,7 @@ class ModularCalculatorInterface(StatefulApplication):
                 if category not in operators:
                     operators[category] = []
                 operators[category].append(op)
-                descriptions[op] = "{}\n{}".format(opInfo.description, opInfo.syntax)
+                descriptions[op] = "{}\n{}".format(opInfo.description, ' '.join(opInfo.syntax))
         CategorisedSelectionDialog(self, 'Insert Operator', 'Select operator to insert', operators, descriptions, self.selectOperator)
 
     def selectOperator(self, operator):

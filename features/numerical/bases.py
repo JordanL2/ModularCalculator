@@ -28,7 +28,7 @@ class BasesFeature(Feature):
             'Bases', 
             'dec', 
             'Convert a number from any base to base-10',
-            'dec(number)',
+            ['number'],
             BasesFeature.func_dec, 
             1, 
             1, 

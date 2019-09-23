@@ -50,7 +50,7 @@ class RegexFeature(Feature):
             'Regular Expression', 
             'regexget', 
             'Return either first or a specific occurrence of a pattern in a value',
-            'regexget(value, pattern, [group])',
+            ['value', 'pattern', '[group]'],
             RegexFeature.func_regexget, 
             2, 
             3)
@@ -61,7 +61,7 @@ class RegexFeature(Feature):
             'Regular Expression', 
             'regexsub', 
             'Replace all or a specific occurrence of a pattern with a replacement',
-            'regexsub(value, pattern, replacement, [group])',
+            ['value', 'pattern', 'replacement', '[group]'],
             RegexFeature.func_regexsub, 
             3, 
             4)
@@ -72,7 +72,7 @@ class RegexFeature(Feature):
             'Regular Expression', 
             'regexcount', 
             'Count the number of times a pattern appears in a value',
-            'regexcount(value, pattern)',
+            ['value', 'pattern'],
             RegexFeature.func_regexcount, 
             2, 
             2)

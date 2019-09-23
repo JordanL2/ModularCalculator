@@ -32,7 +32,7 @@ class BinaryNumbersFeature(Feature):
             'Bases', 
             'bin', 
             'Convert a number into binary',
-            'bin(number)',
+            ['number'],
             BinaryNumbersFeature.func_bin, 
             1, 
             1, 

@@ -38,7 +38,7 @@ class DateFunctionsFeature(Feature):
             'Date', 
             'datecreate', 
             'Create a date',
-            'datecreate(year, month, day, [hour, minute, second, [microsecond]])',
+            ['year', 'month', 'day', '[hour', 'minute', 'second', '[microsecond]]'],
             DateFunctionsFeature.func_datecreate, 
             3, 
             7, 
@@ -49,7 +49,7 @@ class DateFunctionsFeature(Feature):
             'Date', 
             'dateformat', 
             'Nicely format a date for easy reading',
-            'dateformat(date)',
+            ['date'],
             DateFunctionsFeature.func_dateformat, 
             1, 
             1, 
@@ -60,7 +60,7 @@ class DateFunctionsFeature(Feature):
             'Date', 
             'dateadd', 
             'Add a time period to a date',
-            'dateadd(date, time)',
+            ['date', 'time'],
             DateFunctionsFeature.func_dateadd, 
             2, 
             2)
@@ -73,7 +73,7 @@ class DateFunctionsFeature(Feature):
             'Date', 
             'datesubtract', 
             'Subtract a time period from a date',
-            'datesubtract(date, time)',
+            ['date', 'time'],
             DateFunctionsFeature.func_datesubtract, 
             2, 
             2)
@@ -86,7 +86,7 @@ class DateFunctionsFeature(Feature):
             'Date', 
             'datedifference', 
             'Determine the length of time between two dates',
-            'datedifference(date1, date2)',
+            ['date1', 'date2'],
             DateFunctionsFeature.func_datedifference, 
             3, 
             3)
@@ -97,7 +97,7 @@ class DateFunctionsFeature(Feature):
             'Date', 
             'now', 
             'Return the current date and time',
-            'now()',
+            [],
             DateFunctionsFeature.func_now, 
             0, 
             0)

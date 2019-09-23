@@ -32,7 +32,7 @@ class GeneralUnitFunctionsFeature(Feature):
             'Units', 
             'format', 
             'Nicely format a value with a unit, optionally specify the unit system to use',
-            'format(value, [system])',
+            ['value', '[system]'],
             GeneralUnitFunctionsFeature.func_format, 
             1, 
             2)
@@ -44,7 +44,7 @@ class GeneralUnitFunctionsFeature(Feature):
             'Units', 
             'compact', 
             'Explicitly simplify the units for a value',
-            'compact(value)',
+            ['value'],
             GeneralUnitFunctionsFeature.func_compact, 
             1, 
             1)

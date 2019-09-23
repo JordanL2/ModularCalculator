@@ -97,6 +97,7 @@ These examples are available in examples/basic_integration.py. See examples/adva
 
 * Usability / quality of life:
 	* Click previous answer to insert it
+	* Insert function inserts placeholder variables from syntax
 
 * Stability:
 	* Auto-save state occasionally

@@ -32,7 +32,7 @@ class HexadecimalNumbersFeature(Feature):
             'Bases', 
             'hex', 
             'Convert a number into hexadecimal',
-            'hex(number)',
+            ['number'],
             HexadecimalNumbersFeature.func_hex, 
             1, 
             1, 

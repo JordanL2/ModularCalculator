@@ -32,7 +32,7 @@ class ArbitraryBaseFeature(Feature):
             'Bases', 
             'base', 
             'Convert a base-10 number into any base',
-            'base(number, base)',
+            ['number', 'base'],
             ArbitraryBaseFeature.func_base, 
             2, 
             2, 

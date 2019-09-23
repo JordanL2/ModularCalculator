@@ -133,14 +133,13 @@ class OperatorDefinition(Operation):
         num_of_params = len([i for i in linputs + rinputs if not isinstance(i, str)])
 
         c = 64
-        syntax_list = []
+        syntax = []
         for l in linputs + [name] + rinputs:
             if l == 1:
                 c += 1
-                syntax_list.append(chr(c))
+                syntax.append(chr(c))
             else:
-                syntax_list.append(l)
-        syntax = ' '.join(syntax_list)
+                syntax.append(l)
 
         if isinstance(objtypes, list):
             if len(objtypes) != num_of_params:
