@@ -61,7 +61,7 @@ class CategorisedSelectionDialog(QDialog):
         self.category.currentTextChanged.connect(self.setList)
         self.list.currentTextChanged.connect(self.showDescription)
 
-        self.itemDescription = QLabel('')
+        self.itemDescription = QLabel(" \n ")
         if len(descriptions) > 0:
             layout.addWidget(self.itemDescription)
 

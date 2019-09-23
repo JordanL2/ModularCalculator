@@ -302,7 +302,7 @@ class ModularCalculatorInterface(StatefulApplication):
             if category not in funcs:
                 funcs[category] = []
             funcs[category].append(func)
-            descriptions[func] = "{} - {}".format(funcInfo.description, funcInfo.syntax)
+            descriptions[func] = "{}\n{}".format(funcInfo.description, funcInfo.syntax)
         CategorisedSelectionDialog(self, 'Insert Function', 'Select function to insert', funcs, descriptions, self.selectFunction)
 
     def selectFunction(self, func):
@@ -329,7 +329,7 @@ class ModularCalculatorInterface(StatefulApplication):
                 if category not in operators:
                     operators[category] = []
                 operators[category].append(op)
-                descriptions[op] = "{} - {}".format(opInfo.description, opInfo.syntax)
+                descriptions[op] = "{}\n{}".format(opInfo.description, opInfo.syntax)
         CategorisedSelectionDialog(self, 'Insert Operator', 'Select operator to insert', operators, descriptions, self.selectOperator)
 
     def selectOperator(self, operator):
@@ -343,13 +343,16 @@ class ModularCalculatorInterface(StatefulApplication):
             for unit in self.calculator.unit_normaliser.units[dimension]:
                 unitName = unit.singular()
                 units[dimension].append(unitName)
-                altnames = unit.names() + unit.symbols()
+                altnames = []
+                for name in unit.names() + unit.symbols():
+                    if name not in altnames:
+                        altnames.append(name)
                 altnames = ', '.join(altnames)
                 if unit.systems is None or len(unit.systems) == 0:
                     unitsystem = 'No unit system'
                 else:
                     unitsystem = self.calculator.unit_normaliser.systems[unit.systems[0]].name
-                descriptions[unitName] = "{}. Alternative names: {}".format(unitsystem, altnames)
+                descriptions[unitName] = "{}.\nAlternative names: {}".format(unitsystem, altnames)
         CategorisedSelectionDialog(self, 'Insert Unit', 'Select unit to insert', units, descriptions, self.selectUnit)
 
     def selectUnit(self, unit):
