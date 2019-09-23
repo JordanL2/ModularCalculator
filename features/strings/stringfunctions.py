@@ -31,8 +31,8 @@ class StringFunctionsFeature(Feature):
         calculator.funcs['length'] =  FunctionDefinition(
             'String', 
             'length', 
-            '', #TODO
-            '', #TODO
+            'Length of string',
+            'length(string)',
             StringFunctionsFeature.func_length, 
             1, 
             1, 
@@ -40,8 +40,8 @@ class StringFunctionsFeature(Feature):
         calculator.funcs['lower'] =   FunctionDefinition(
             'String', 
             'lower', 
-            '', #TODO
-            '', #TODO
+            'Lower-case a string',
+            'lower(string)',
             StringFunctionsFeature.func_lower, 
             1, 
             1, 
@@ -49,8 +49,8 @@ class StringFunctionsFeature(Feature):
         calculator.funcs['upper'] =   FunctionDefinition(
             'String', 
             'upper', 
-            '', #TODO
-            '', #TODO
+            'Upper-case a string',
+            'upper(string)',
             StringFunctionsFeature.func_upper, 
             1, 
             1, 
@@ -58,8 +58,8 @@ class StringFunctionsFeature(Feature):
         calculator.funcs['lstrip'] =  FunctionDefinition(
             'String', 
             'lstrip', 
-            '', #TODO
-            '', #TODO
+            'Remove all occurrences of a character from the left',
+            'lstrip(string, character)',
             StringFunctionsFeature.func_lstrip, 
             2, 
             2, 
@@ -67,8 +67,8 @@ class StringFunctionsFeature(Feature):
         calculator.funcs['rstrip'] =  FunctionDefinition(
             'String', 
             'rstrip', 
-            '', #TODO
-            '', #TODO
+            'Remove all occurrences of a character from the right',
+            'rstrip(string, character)',
             StringFunctionsFeature.func_rstrip, 
             2, 
             2, 
@@ -76,8 +76,8 @@ class StringFunctionsFeature(Feature):
         calculator.funcs['strip'] =   FunctionDefinition(
             'String', 
             'strip', 
-            '', #TODO
-            '', #TODO
+            'Remove all occurrences of a character from both ends',
+            'strip(string, character)',
             StringFunctionsFeature.func_strip, 
             2, 
             2, 
@@ -85,8 +85,8 @@ class StringFunctionsFeature(Feature):
         calculator.funcs['find'] =    FunctionDefinition(
             'String', 
             'find', 
-            '', #TODO
-            '', #TODO
+            'Return position of a substring in a string',
+            'find(string, substring)',
             StringFunctionsFeature.func_find, 
             2, 
             2, 
@@ -94,8 +94,8 @@ class StringFunctionsFeature(Feature):
         calculator.funcs['replace'] = FunctionDefinition(
             'String', 
             'replace', 
-            '', #TODO
-            '', #TODO
+            'Replace all occurrences of substring with replacement',
+            'replace(string, substring, replacement)',
             StringFunctionsFeature.func_replace, 
             3, 
             3, 
@@ -104,8 +104,8 @@ class StringFunctionsFeature(Feature):
         calculator.funcs['substr'] =  FunctionDefinition(
             'String', 
             'substr', 
-            '', #TODO
-            '', #TODO
+            'Return characters in a string from start position, optionally to end position',
+            'substr(string, start, end)',
             StringFunctionsFeature.func_substr, 
             2, 
             3)

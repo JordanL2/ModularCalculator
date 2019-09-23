@@ -32,7 +32,7 @@ class AssignmentFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'Assignment', 
             '=', 
-            '', #TODO
+            'Assign a value to a variable',
             AssignmentFeature.op_var_set, 
             1, 
             1, 
@@ -41,7 +41,7 @@ class AssignmentFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'Assignment', 
             '||=', 
-            '', #TODO
+            'Assign a value to a variable only if the variable doesn\'t exist yet',
             AssignmentFeature.op_var_set_if_empty, 
             1, 
             1, 

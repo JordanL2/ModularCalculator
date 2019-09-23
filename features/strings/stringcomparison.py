@@ -27,7 +27,7 @@ class StringComparisonFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'String', 
             '<$', 
-            '', #TODO
+            'Less than, alphabetical',
             StringComparisonFeature.op_string_lessthan, 
             1, 
             1, 
@@ -35,7 +35,7 @@ class StringComparisonFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'String', 
             '>$', 
-            '', #TODO
+            'More than, alphabetical',
             StringComparisonFeature.op_string_morethan, 
             1, 
             1, 
@@ -43,7 +43,7 @@ class StringComparisonFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'String', 
             '<=$', 
-            '', #TODO
+            'Less than or equal to, alphabetical',
             StringComparisonFeature.op_string_lessthanequal, 
             1, 
             1, 
@@ -51,7 +51,7 @@ class StringComparisonFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'String', 
             '>=$', 
-            '', #TODO
+            'More than or equal to, alphabetical',
             StringComparisonFeature.op_string_morethanequal, 
             1, 
             1, 
@@ -59,7 +59,7 @@ class StringComparisonFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'String', 
             '==$', 
-            '', #TODO
+            'Equal to, alphabetical',
             StringComparisonFeature.op_string_equals, 
             1, 
             1, 
@@ -67,7 +67,7 @@ class StringComparisonFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'String', 
             '!=$', 
-            '', #TODO
+            'Not equal to, alphabetical',
             StringComparisonFeature.op_string_notequals, 
             1, 
             1, 
@@ -76,7 +76,7 @@ class StringComparisonFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'String Case-Insensitive', 
             '<~', 
-            '', #TODO
+            'Less than, alphabetical, case-insensitive',
             StringComparisonFeature.op_stringcaseless_lessthan, 
             1, 
             1, 
@@ -84,7 +84,7 @@ class StringComparisonFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'String Case-Insensitive', 
             '>~', 
-            '', #TODO
+            'More than, alphabetical, case-insensitive',
             StringComparisonFeature.op_stringcaseless_morethan, 
             1, 
             1, 
@@ -92,7 +92,7 @@ class StringComparisonFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'String Case-Insensitive', 
             '<=~', 
-            '', #TODO
+            'Less than or equal to, alphabetical, case-insensitive',
             StringComparisonFeature.op_stringcaseless_lessthanequal, 
             1, 
             1, 
@@ -100,7 +100,7 @@ class StringComparisonFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'String Case-Insensitive', 
             '>=~', 
-            '', #TODO
+            'More than or equal to, alphabetical, case-insensitive',
             StringComparisonFeature.op_stringcaseless_morethanequal, 
             1, 
             1, 
@@ -108,7 +108,7 @@ class StringComparisonFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'String Case-Insensitive', 
             '==~', 
-            '', #TODO
+            'Equal to, alphabetical, case-insensitive',
             StringComparisonFeature.op_stringcaseless_equals, 
             1, 
             1, 
@@ -116,7 +116,7 @@ class StringComparisonFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'String Case-Insensitive', 
             '!=~', 
-            '', #TODO
+            'Not equal to, alphabetical, case-insensitive',
             StringComparisonFeature.op_stringcaseless_notequals, 
             1, 
             1, 

@@ -30,16 +30,16 @@ class AssignmentFunctionsFeature(Feature):
         calculator.funcs['reset'] = FunctionDefinition(
             'Assignment', 
             'reset', 
-            '', #TODO
-            '', #TODO
+            'Reset all variables',
+            'reset()',
             AssignmentFunctionsFeature.func_reset, 
             0, 
             0)
         calculator.funcs['delete'] = FunctionDefinition(
             'Assignment', 
             'delete', 
-            '', #TODO
-            '', #TODO
+            'Delete a variable',
+            'delete(variable)',
             AssignmentFunctionsFeature.func_delete, 
             1, 
             1)

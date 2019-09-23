@@ -30,7 +30,7 @@ class StringsFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'String', 
             '+$', 
-            '', #TODO
+            'Concatenate two strings',
             StringsFeature.op_string_add, 
             1, 
             1, 
@@ -38,7 +38,7 @@ class StringsFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'String', 
             '*$', 
-            '', #TODO
+            'Multiply a string a number of times',
             StringsFeature.op_string_multiply, 
             1, 
             1, 

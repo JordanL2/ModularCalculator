@@ -29,7 +29,7 @@ class AssignmentOperatorsFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'Assignment', 
             '++', 
-            '', #TODO
+            'Increment a variable',
             AssignmentOperatorsFeature.op_var_increment, 
             1, 
             0, 
@@ -37,7 +37,7 @@ class AssignmentOperatorsFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'Assignment', 
             '--', 
-            '', #TODO
+            'Decrement a variable',
             AssignmentOperatorsFeature.op_var_decrement, 
             1, 
             0, 
@@ -45,7 +45,7 @@ class AssignmentOperatorsFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'Assignment', 
             '+=', 
-            '', #TODO
+            'Addition assignment',
             AssignmentOperatorsFeature.op_var_add, 
             1, 
             1, 
@@ -54,7 +54,7 @@ class AssignmentOperatorsFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'Assignment', 
             '-=', 
-            '', #TODO
+            'Subtraction assignment',
             AssignmentOperatorsFeature.op_var_subtract, 
             1, 
             1, 
@@ -63,7 +63,7 @@ class AssignmentOperatorsFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'Assignment', 
             '*=', 
-            '', #TODO
+            'Multiplication assignment',
             AssignmentOperatorsFeature.op_var_multiply, 
             1, 
             1, 
@@ -72,7 +72,7 @@ class AssignmentOperatorsFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'Assignment', 
             '/=', 
-            '', #TODO
+            'Division assignment',
             AssignmentOperatorsFeature.op_var_divide, 
             1, 
             1, 
@@ -81,7 +81,7 @@ class AssignmentOperatorsFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'Assignment', 
             '^=', 
-            '', #TODO
+            'Power assignment',
             AssignmentOperatorsFeature.op_var_power, 
             1, 
             1, 
@@ -90,7 +90,7 @@ class AssignmentOperatorsFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'Assignment', 
             '%=', 
-            '', #TODO
+            'Modulus assignment',
             AssignmentOperatorsFeature.op_var_modulus, 
             1, 
             1, 
@@ -99,7 +99,7 @@ class AssignmentOperatorsFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'Assignment', 
             r'\=', 
-            '', #TODO
+            'Integer-division assignment',
             AssignmentOperatorsFeature.op_var_integer_divide, 
             1, 
             1, 

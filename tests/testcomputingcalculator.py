@@ -151,6 +151,7 @@ tests = [
     { 'test': r"strip('   ABCabc   ', ' ')", 'expected': 'ABCabc' },
     { 'test': r"find('ABCabc', 'ab')", 'expected': Decimal(3) },
     { 'test': r"replace('ABCabc', 'BC', 'fgh')", 'expected': 'Afghabc' },
+    { 'test': r"replace('ABCaBCbc', 'BC', 'fgh')", 'expected': 'Afghafghbc' },
     { 'test': r"substr('ABCabc', 3)", 'expected': 'abc' },
     { 'test': r"substr('ABCabc', -4)", 'expected': 'Cabc' },
     { 'test': r"substr('ABCabc', 3, 4)", 'expected': 'ab' },

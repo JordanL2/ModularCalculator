@@ -32,7 +32,7 @@ class RegexFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'Regular Expression', 
             '=~', 
-            '', #TODO
+            'Return true if value matches regex',
             RegexFeature.op_regex, 
             1, 
             1, 
@@ -40,7 +40,7 @@ class RegexFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'Regular Expression', 
             '!~', 
-            '', #TODO
+            'Return true if value doesn\'t match regex',
             RegexFeature.op_regexnot, 
             1, 
             1, 
@@ -49,8 +49,8 @@ class RegexFeature(Feature):
         calculator.funcs['regexget'] = FunctionDefinition(
             'Regular Expression', 
             'regexget', 
-            '', #TODO
-            '', #TODO
+            'Match value against regex, then return either the first of a specific match group',
+            'regexget(value, pattern, [group])',
             RegexFeature.func_regexget, 
             2, 
             3)
@@ -60,8 +60,8 @@ class RegexFeature(Feature):
         calculator.funcs['regexsub'] = FunctionDefinition(
             'Regular Expression', 
             'regexsub', 
-            '', #TODO
-            '', #TODO
+            'Replace all or a specific occurrence of a pattern with a replacement',
+            'regexsub(value, pattern, replacement, [group])',
             RegexFeature.func_regexsub, 
             3, 
             4)
@@ -71,8 +71,8 @@ class RegexFeature(Feature):
         calculator.funcs['regexcount'] = FunctionDefinition(
             'Regular Expression', 
             'regexcount', 
-            '', #TODO
-            '', #TODO
+            'Count the number of times a pattern appears in a value',
+            'regexcount(value, pattern)',
             RegexFeature.func_regexcount, 
             2, 
             2)
