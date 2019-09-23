@@ -352,7 +352,7 @@ class ModularCalculatorInterface(StatefulApplication):
                 if unit.systems is None or len(unit.systems) == 0:
                     unitsystem = 'No unit system'
                 else:
-                    unitsystem = self.calculator.unit_normaliser.systems[unit.systems[0]].name
+                    unitsystem = self.calculator.unit_normaliser.systems[self.calculator.unit_normaliser.get_preferred_system(unit.systems)].name
                 descriptions[unitName] = "{}.\nAlternative names: {}".format(unitsystem, altnames)
         CategorisedSelectionDialog(self, 'Insert Unit', 'Select unit to insert', units, descriptions, self.selectUnit)
 
