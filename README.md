@@ -97,6 +97,7 @@ These examples are available in examples/basic_integration.py. See examples/adva
 
 * Usability / quality of life:
 	* Click previous answer to insert it
+	* Improve Light theme, it's too dark and high contrast
 
 * Stability:
 	* Auto-save state occasionally

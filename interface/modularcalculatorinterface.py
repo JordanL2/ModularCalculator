@@ -8,8 +8,8 @@ from modularcalculator.interface.statefulapplication import *
 from modularcalculator.interface.textedit import *
 
 from PyQt5.QtCore import Qt, QTimer
-from PyQt5.QtGui import QKeySequence
-from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QMessageBox, QSplitter, QAction, QFileDialog
+from PyQt5.QtGui import QKeySequence, QCursor
+from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QMessageBox, QSplitter, QAction, QFileDialog, QToolTip
 
 import functools
 import os.path
@@ -85,36 +85,29 @@ class ModularCalculatorInterface(StatefulApplication):
         self.viewSyntaxParsingAutoExecutes.triggered.connect(self.setAutoExecute)
         viewMenu.addAction(self.viewSyntaxParsingAutoExecutes)
 
-        actionMenu = menubar.addMenu('Action')
-
-        self.executeAction = QAction('Execute', self)
-        self.executeAction.triggered.connect(self.calc)
-        actionMenu.addAction(self.executeAction)
-        self.executeAction.setShortcuts([QKeySequence(Qt.CTRL + Qt.Key_Enter), QKeySequence(Qt.CTRL + Qt.Key_Return)])
-
-        actionMenu.addSeparator()
+        actionMenu = menubar.addMenu('Insert')
         
-        insertConstant = QAction('Insert constant', self)
+        insertConstant = QAction('Constant', self)
         insertConstant.triggered.connect(self.insertConstant)
         actionMenu.addAction(insertConstant)
         
-        insertDate = QAction('Insert date && time', self)
+        insertDate = QAction('Date && time', self)
         insertDate.triggered.connect(self.insertDate)
         actionMenu.addAction(insertDate)
         
-        insertUnit = QAction('Insert unit', self)
+        insertUnit = QAction('Unit', self)
         insertUnit.triggered.connect(self.insertUnit)
         actionMenu.addAction(insertUnit)
         
-        insertOperator = QAction('Insert operator', self)
+        insertOperator = QAction('Operator', self)
         insertOperator.triggered.connect(self.insertOperator)
         actionMenu.addAction(insertOperator)
         
-        insertFunction = QAction('Insert function', self)
+        insertFunction = QAction('Function', self)
         insertFunction.triggered.connect(self.insertFunction)
         actionMenu.addAction(insertFunction)
         
-        insertUserDefinedFunction = QAction('Insert user-defined function', self)
+        insertUserDefinedFunction = QAction('User-defined function', self)
         insertUserDefinedFunction.triggered.connect(self.insertUserDefinedFunction)
         actionMenu.addAction(insertUserDefinedFunction)
 
@@ -131,6 +124,15 @@ class ModularCalculatorInterface(StatefulApplication):
         self.optionsUnitSystemPreference = QAction('Unit system preference', self)
         self.optionsUnitSystemPreference.triggered.connect(self.setUnitSystemPreference)
         optionsMenu.addAction(self.optionsUnitSystemPreference)
+
+        self.executeAction = QAction('Execute', self)
+        self.executeAction.triggered.connect(self.calc)
+        self.executeAction.hovered.connect(self.showExecuteToolTip)
+        menubar.addAction(self.executeAction)
+        self.executeAction.setShortcuts([QKeySequence(Qt.CTRL + Qt.Key_Enter), QKeySequence(Qt.CTRL + Qt.Key_Return)])
+
+    def showExecuteToolTip(self):
+        QToolTip.showText(QCursor.pos(), "Ctrl+Enter", self)
 
     def initCalculator(self):
         self.setCalculator(ModularCalculator('Computing'))
