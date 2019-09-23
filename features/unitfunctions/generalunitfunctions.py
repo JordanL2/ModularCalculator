@@ -31,8 +31,8 @@ class GeneralUnitFunctionsFeature(Feature):
         calculator.funcs['format'] = FunctionDefinition(
             'Units', 
             'format', 
-            '', #TODO
-            '', #TODO
+            'Nicely format a value with a unit, optionally specify the unit system to use',
+            'format(value, [system])',
             GeneralUnitFunctionsFeature.func_format, 
             1, 
             2)
@@ -43,8 +43,8 @@ class GeneralUnitFunctionsFeature(Feature):
         calculator.funcs['compact'] = FunctionDefinition(
             'Units', 
             'compact', 
-            '', #TODO
-            '', #TODO
+            'Explicitly simplify the units for a value',
+            'compact(value)',
             GeneralUnitFunctionsFeature.func_compact, 
             1, 
             1)

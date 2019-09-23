@@ -30,8 +30,8 @@ class OrbitalMechanicsFunctionsFeature(Feature):
         calculator.funcs['deltav'] = FunctionDefinition(
             'Orbital Mechanics', 
             'deltav', 
-            '', #TODO
-            '', #TODO
+            'Calculate vacuum delta-V for a spacecraft',
+            'deltav(isp(seconds), start-mass, end-mass)',
             OrbitalMechanicsFunctionsFeature.func_deltav, 
             3, 
             3, 

@@ -61,7 +61,7 @@ These examples are available in examples/basic_integration.py. See examples/adva
 		* Alternatively, dateadd checks if the unit is year or month, and number is integer, and increments year/month in that case - too much black magic
 
 ## Functions
-* Parameter help info for operations, display it on parameter validation error
+* Display operator/function syntax info on parameter validation error
 * Function to convert a number into standard form
 * log - allow a second param for given base
 * floor / ceil - allow second param for places
@@ -89,10 +89,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 
 ## Graphical Interface
 * Functionality:
-	* Show available information for the Insert dialogs:
-		* Helpful description for each operator, function or unit in insert dialog:
-			* Way of seeing possible inputs for an operator or function - number of inputs, types allowed for each input
-			* Description for unit can contain its unit system, and other allowed names and symbols for it
 	* Ability to select features calculator has, screen to customise calculator, if calculator fails to init display error message
 	* Dialog that allows editing of feature options
 	* Option to display results in standard form

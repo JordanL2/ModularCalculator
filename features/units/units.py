@@ -41,7 +41,7 @@ class UnitsFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'Units', 
             'to', 
-            '', #TODO
+            'Convert a value with a unit to another unit',
             UnitsFeature.op_unit_conversion, 
             1, 
             1, 
@@ -50,7 +50,7 @@ class UnitsFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'Units', 
             'UNIT_ASSIGNMENT', 
-            '', #TODO
+            'Assign a unit to a value',
             BasicArithmeticFeature.op_number_multiply, 
             1, 
             1, 
@@ -59,7 +59,7 @@ class UnitsFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'Units', 
             'UNIT_MULTIPLY', 
-            '', #TODO
+            'Multiply two units',
             BasicArithmeticFeature.op_number_multiply, 
             1, 
             1, 
@@ -68,7 +68,7 @@ class UnitsFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'Units', 
             'UNIT_DIVIDE', 
-            '', #TODO
+            'Divide two units',
             BasicArithmeticFeature.op_number_divide, 
             1, 
             1, 
