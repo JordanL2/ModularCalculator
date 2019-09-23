@@ -339,10 +339,11 @@ class ModularCalculatorInterface(StatefulApplication):
         units = {}
         descriptions = {}
         for dimension in self.calculator.unit_normaliser.units:
-            units[dimension] = []
+            dimensionTitle = self.calculator.unit_normaliser.dimensions[dimension]
+            units[dimensionTitle] = []
             for unit in self.calculator.unit_normaliser.units[dimension]:
                 unitName = unit.singular()
-                units[dimension].append(unitName)
+                units[dimensionTitle].append(unitName)
                 altnames = []
                 for name in unit.names() + unit.symbols():
                     if name not in altnames:
