@@ -132,8 +132,10 @@ class ModularCalculatorInterface(StatefulApplication):
         QToolTip.showText(QCursor.pos(), "Ctrl+Enter", self)
 
     def initCalculator(self):
-        self.calculator = ModularCalculator('Computing')
-        self.restoreCalculatorState()
+        self.setCalculator(ModularCalculator('Computing'))
+
+    def setCalculator(self, calculator):
+        self.calculator = calculator
         self.entry.setCalculator(self.calculator)
 
     def restoreAllState(self):
@@ -150,6 +152,8 @@ class ModularCalculatorInterface(StatefulApplication):
             self.setAutoExecute(self.fetchStateBoolean("viewSyntaxParsingAutoExecutes", True))
 
             self.setShortUnits(self.fetchStateBoolean("viewShortUnits", False))
+
+            self.restoreCalculatorState()
         except Exception as e:
             print("Exception when trying to restore state")
             print(e)
