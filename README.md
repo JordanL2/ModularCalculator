@@ -62,7 +62,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 
 ## Functions
 * Display operator/function syntax info on parameter validation error
-* Function to convert a number into standard form
 * log - allow a second param for given base
 * floor / ceil - allow second param for places
 
@@ -93,7 +92,7 @@ These examples are available in examples/basic_integration.py. See examples/adva
 	* Dialog that allows editing of feature options
 	* Option to display results passed through one of a list of functions
 		* oct, bin, hex
-		* standard form function when it's done
+		* scientific
 	* Option to switch between ; and new-lines for statement terminators
 	* Tabs
 

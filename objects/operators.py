@@ -78,7 +78,7 @@ class Operation:
                 result_ref = result.ref
         except CalculatorException as err:
             raise err
-        except Exception:
+        except Exception as err:
             raise CalculatorException("Could not execute {0}".format(self.name))
         
         return OperandResult(result_value, result_unit, result_ref)

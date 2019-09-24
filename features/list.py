@@ -19,6 +19,7 @@ import modularcalculator.features.numerical.decimalnumbers
 import modularcalculator.features.numerical.expnumbers
 import modularcalculator.features.numerical.hexadecimalnumbers
 import modularcalculator.features.numerical.numericalconstants
+import modularcalculator.features.numerical.numericalformatfunctions
 import modularcalculator.features.numerical.numericalfunctions
 import modularcalculator.features.numerical.octalnumbers
 import modularcalculator.features.numerical.statisticalfunctions
@@ -107,6 +108,7 @@ feature_list = dict([(f.id(), f) for f in [
     modularcalculator.features.numerical.expnumbers.ExpNumbersFeature,
     modularcalculator.features.numerical.hexadecimalnumbers.HexadecimalNumbersFeature,
     modularcalculator.features.numerical.numericalconstants.NumericalConstantsFeature,
+    modularcalculator.features.numerical.numericalformatfunctions.NumericalFormatFunctionsFeature,
     modularcalculator.features.numerical.numericalfunctions.NumericalFunctionsFeature,
     modularcalculator.features.numerical.octalnumbers.OctalNumbersFeature,
     modularcalculator.features.numerical.statisticalfunctions.StatisticalFunctionsFeature,
@@ -196,6 +198,7 @@ presets['Advanced'] = presets['Basic'] + [
 presets['Scientific'] = presets['Advanced'] + [
     'numerical.expnumbers',
     'numerical.numericalconstants',
+    'numerical.numericalformatfunctions',
     'numerical.numericalfunctions',
     'numerical.statisticalfunctions',
     'numerical.trigonometryfunctions',
