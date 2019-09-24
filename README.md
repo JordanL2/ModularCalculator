@@ -62,8 +62,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 
 ## Functions
 * Display operator/function syntax info on parameter validation error
-* log - allow a second param for given base
-* floor / ceil - allow second param for places
 
 ## Units
 * Pressure

@@ -28,6 +28,8 @@ tests = [
     
     { 'test': r"abs(-4)", 'expected': Decimal('4') },
     { 'test': r"fact(5)", 'expected': Decimal('120') },
+    { 'test': r"log(5)", 'expected': Decimal('1.609437912434100281799942422367') },
+    { 'test': r"log(5, 10)", 'expected': Decimal('0.698970004336018746471381746233') },
     
     { 'test': r"max(3, 5, 7)", 'expected': Decimal('7') },
     { 'test': r"mean(2, 3, 5, 6)", 'expected': Decimal('4') },

@@ -37,6 +37,7 @@ class NumericalFunctionsFeature(Feature):
             1, 
             1, 
             'number')
+
         calculator.funcs['floor'] = FunctionDefinition(
             'Numerical', 
             'floor', 
@@ -46,6 +47,7 @@ class NumericalFunctionsFeature(Feature):
             1, 
             1, 
             'number')
+
         calculator.funcs['ceil'] = FunctionDefinition(
             'Numerical', 
             'ceil', 
@@ -55,6 +57,7 @@ class NumericalFunctionsFeature(Feature):
             1, 
             1, 
             'number')
+
         calculator.funcs['round'] = FunctionDefinition(
             'Numerical', 
             'round', 
@@ -65,6 +68,7 @@ class NumericalFunctionsFeature(Feature):
             2, 
             'number')
         calculator.funcs['round'].units_normalise = False
+
         calculator.funcs['fact'] = FunctionDefinition(
             'Numerical', 
             'fact', 
@@ -74,6 +78,7 @@ class NumericalFunctionsFeature(Feature):
             1, 
             1, 
             'number')
+
         calculator.funcs['exp'] = FunctionDefinition(
             'Numerical', 
             'exp', 
@@ -83,25 +88,32 @@ class NumericalFunctionsFeature(Feature):
             1, 
             1, 
             'number')
+
         calculator.funcs['log'] = FunctionDefinition(
             'Numerical', 
             'log', 
-            'Natural logarithm',
-            ['number'],
+            'Natural logarithm, or logarithm to given base',
+            ['number', '[base]'],
             NumericalFunctionsFeature.func_log, 
             1, 
-            1, 
+            2, 
             'number')
 
 
     def func_abs(self, vals, units, refs, flags):
-        return OperationResult(Decimal(abs(self.number(vals[0]))))
+        res =  OperationResult(Decimal(abs(self.number(vals[0]))))
+        res.set_unit(units[0])
+        return res
 
     def func_floor(self, vals, units, refs, flags):
-        return OperationResult(Decimal(math.floor(self.number(vals[0]))))
+        res =  OperationResult(Decimal(math.floor(self.number(vals[0]))))
+        res.set_unit(units[0])
+        return res
 
     def func_ceil(self, vals, units, refs, flags):
-        return OperationResult(Decimal(math.ceil(self.number(vals[0]))))
+        res =  OperationResult(Decimal(math.ceil(self.number(vals[0]))))
+        res.set_unit(units[0])
+        return res
 
     def func_round(self, vals, units, refs, flags):
         if len(vals) == 1:
@@ -112,10 +124,19 @@ class NumericalFunctionsFeature(Feature):
         return res
 
     def func_fact(self, vals, units, refs, flags):
-        return OperationResult(Decimal(math.factorial(self.number(vals[0]))))
+        res =  OperationResult(Decimal(math.factorial(self.number(vals[0]))))
+        res.set_unit(units[0])
+        return res
 
     def func_exp(self, vals, units, refs, flags):
-        return OperationResult(Decimal(math.exp(self.number(vals[0]))))
+        res =  OperationResult(Decimal(math.exp(self.number(vals[0]))))
+        res.set_unit(units[0])
+        return res
 
     def func_log(self, vals, units, refs, flags):
-        return OperationResult(Decimal(math.log(self.number(vals[0]))))
+        if len(vals) == 1:
+            res = OperationResult(Decimal(math.log(self.number(vals[0]))))
+        else:
+            res = OperationResult(Decimal(math.log(self.number(vals[0]), int(vals[1]))))
+        res.set_unit(units[0])
+        return res
