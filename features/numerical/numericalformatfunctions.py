@@ -32,11 +32,12 @@ class NumericalFormatFunctionsFeature(Feature):
             'Numerical', 
             'scientific', 
             'Format number in scientific notation',
-            ['number'],
+            ['number', '[places]'],
             NumericalFormatFunctionsFeature.func_scientific, 
             1, 
             2, 
             'number')
+        calculator.funcs['scientific'].units_normalise = False
 
 
     def func_scientific(self, vals, units, refs, flags):
@@ -47,4 +48,6 @@ class NumericalFormatFunctionsFeature(Feature):
         scientificformat = '{0:.' + str(places) + 'E}'
         formattednumber = scientificformat.format(num)
         formattednumber = formattednumber.replace('+', '')
-        return OperationResult(formattednumber)
+        res = OperationResult(formattednumber)
+        res.set_unit(units[0])
+        return res

@@ -9,8 +9,9 @@ from PyQt5.QtGui import QFontDatabase, QGuiApplication
 
 class CalculatorDisplay(QTextEdit):
 
-    def __init__(self):
+    def __init__(self, interface):
         super().__init__()
+        self.interface = interface
         self.options = {}
         self.setReadOnly(True)
         self.defaultStyling()
@@ -53,7 +54,7 @@ class CalculatorDisplay(QTextEdit):
             if self.options['shortunits'] and unit.has_symbols():
                 unit = unit.symbol()
             else:
-                unit = unit.get_name(Decimal(answer))
+                unit = unit.get_name(self.interface.calculator.number(answer))
                 unit = ' ' + unit
         else:
             unit = ''

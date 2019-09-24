@@ -102,8 +102,6 @@ class NonFunctionalItem(Item):
 class OperandResult:
 
     def __init__(self, value, unit, ref):
-        if unit is not None and not isinstance(value, Decimal):
-            raise CalculatorException("Values must be numerical when unit is set")
         self.value = value
         self.unit = unit
         self.ref = ref

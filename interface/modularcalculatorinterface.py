@@ -23,16 +23,13 @@ class ModularCalculatorInterface(StatefulApplication):
         super().__init__()
         self.initUI()
         self.initMenu()
+        self.initCalculator()
         self.restoreAllState()
         self.entry.setFocus()
         self.show()
-        self.calcTimer = QTimer()
-        self.calcTimer.setSingleShot(True)
-        self.calcTimer.timeout.connect(self.initCalculator)
-        self.calcTimer.start(0)
 
     def initUI(self):
-        self.display = CalculatorDisplay()
+        self.display = CalculatorDisplay(self)
 
         self.entry = CalculatorTextEdit(self)
 
@@ -135,13 +132,9 @@ class ModularCalculatorInterface(StatefulApplication):
         QToolTip.showText(QCursor.pos(), "Ctrl+Enter", self)
 
     def initCalculator(self):
-        self.setCalculator(ModularCalculator('Computing'))
+        self.calculator = ModularCalculator('Computing')
         self.restoreCalculatorState()
-
-    def setCalculator(self, calculator):
-        self.calculator = calculator
         self.entry.setCalculator(self.calculator)
-        self.entry.refresh()
 
     def restoreAllState(self):
         try:
