@@ -63,10 +63,11 @@ tests = [
     { 'test': r"1.234e-2", 'expected': Decimal('0.01234') },
     { 'test': r"5.97237e24kg", 'expected': (Decimal('5972370000000000000000000'), 'kilograms') },
 
-    { 'test': r"scientific(123.456789)", 'expected': '1.235E2' },
+    { 'test': r"scientific(123.456789)", 'expected': '1.23456789E2' },
+    { 'test': r"scientific(123.456789, 3)", 'expected': '1.235E2' },
     { 'test': r"scientific(123.456789, 5)", 'expected': '1.23457E2' },
     { 'test': r"scientific(0.000123456789, 5)", 'expected': '1.23457E-4' },
-    { 'test': r"scientific(123.456789 miles)", 'expected': ('1.235E2', 'miles') },
+    { 'test': r"scientific(123.456789 miles)", 'expected': ('1.23456789E2', 'miles') },
 
     { 'test': r"3 meters to feet", 'expected': (Decimal('9.842519685039370078740157480315'), 'feet') },
     { 'test': r"3.5 meters to feet", 'expected': (Decimal('11.482939632545931758530183727034'), 'feet') },

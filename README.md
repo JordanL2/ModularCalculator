@@ -108,9 +108,12 @@ These examples are available in examples/basic_integration.py. See examples/adva
 * Aesthetics and polish:
 	* Icon
 
-## Code Quality
-
-## Documentation
+## Other
+* Wiki
+* Comment code
+* Add code license
+* Make flatpak
+* Move to do / bug list to github page
 
 
 # Bugs
