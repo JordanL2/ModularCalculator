@@ -310,15 +310,16 @@ class ModularCalculatorInterface(StatefulApplication):
     def selectDate(self, date, time):
         self.entry.insert("'{0:04d}-{1:02d}-{2:02d}T{3:02d}:{4:02d}:{5:02d}'".format(date.year(), date.month(), date.day(), time.hour(), time.minute(), time.second()))
 
-    def getAllFunctions(self):
+    def getAllFunctions(self, condition=None):
         funcs = {}
         descriptions = {}
         for func, funcInfo in self.calculator.funcs.items():
-            category = funcInfo.category
-            if category not in funcs:
-                funcs[category] = []
-            funcs[category].append(func)
-            descriptions[func] = "{}\n{}({})".format(funcInfo.description, func, ', '.join(funcInfo.syntax))
+            if condition is None or condition(funcInfo):
+                category = funcInfo.category
+                if category not in funcs:
+                    funcs[category] = []
+                funcs[category].append(func)
+                descriptions[func] = "{}\n{}({})".format(funcInfo.description, func, ', '.join(funcInfo.syntax))
         return funcs, descriptions
 
     def insertFunction(self):
@@ -391,7 +392,7 @@ class ModularCalculatorInterface(StatefulApplication):
         self.calculator.unit_normaliser.systems_preference = [s for n in systemNames for s in [s for s in self.calculator.unit_normaliser.systems if self.calculator.unit_normaliser.systems[s].name == n]]
 
     def setNumericalAnswerFormat(self):
-        funcs, descriptions = self.getAllFunctions()
+        funcs, descriptions = self.getAllFunctions(lambda f : f.minparams == 1 and len(f.value_restrictions) > 0 and 'number' in f.value_restrictions[0]['objtypes'])
         CategorisedSelectionDialog(self, 'Select Answer Format', 'Select function to format numerical answers', funcs, descriptions, self.setNumberFormatFunction)
 
 
