@@ -148,7 +148,7 @@ class ModularCalculatorInterface(StatefulApplication):
         self.entry.setCalculator(self.calculator)
 
     def setNumberFormatFunction(self, func=None):
-        if func is None or func == False:
+        if func is None or func == False or func == '':
             self.calculator.number_auto_func_set(None)
         else:
             self.calculator.number_auto_func_set(self.calculator.funcs[func])
@@ -179,6 +179,7 @@ class ModularCalculatorInterface(StatefulApplication):
         unitSystems = self.fetchStateArray("unitSystemsPreference")
         if unitSystems is not None and len(unitSystems) > 0:
             self.calculator.unit_normaliser.systems_preference = unitSystems
+        self.setNumberFormatFunction(self.fetchStateText("numericalAnswerFormat"))
 
     def storeAllState(self):
         self.storeState("mainWindowGeometry", self.saveGeometry())
@@ -194,10 +195,16 @@ class ModularCalculatorInterface(StatefulApplication):
         self.storeStateBoolean("viewShortUnits", self.viewShortUnits.isChecked())
         self.storeStateBoolean("viewSyntaxParsingAutoExecutes", self.viewSyntaxParsingAutoExecutes.isChecked())
 
+        self.storeCalculatorState()
+
+    def storeCalculatorState(self):
         self.storeStateNumber("precision", self.precisionSpinBox.spinbox.value())
         self.storeStateBoolean("simplifyUnits", self.optionsSimplifyUnits.isChecked())
-
         self.storeStateArray("unitSystemsPreference", self.calculator.unit_normaliser.systems_preference)
+        if self.calculator.number_auto_func is not None:
+            self.storeStateText("numericalAnswerFormat", self.calculator.number_auto_func.func)
+        else:
+            self.storeStateText("numericalAnswerFormat", None)
 
     def calc(self):
         question = self.entry.getContents().rstrip()
