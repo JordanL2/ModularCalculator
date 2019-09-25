@@ -76,10 +76,7 @@ class Operation:
                 result_unit = result.unit
             if result.ref_override:
                 result_ref = result.ref
-            operandResult = OperandResult(result_value, result_unit, result_ref)
-            if calculator.number_auto_func is not None and calculator.number_auto_func != self and calculator.validate_number(result_value, None, None):
-                operandResult = calculator.number_auto_func.call(calculator, [operandResult], flags)
-            return operandResult
+            return OperandResult(result_value, result_unit, result_ref)
 
         except CalculatorException as err:
             raise err

@@ -2,6 +2,7 @@
 
 from modularcalculator.engine import Engine
 from modularcalculator.objects.exceptions import *
+from modularcalculator.objects.items import *
 
 from decimal import *
 import math
@@ -79,10 +80,14 @@ class NumericalEngine(Engine):
 
     def finalize_number(self, val):
         if isinstance(val.value, Decimal):
+            val.value = self.number(val.value)
             val.value = self.round_number(val.value)
+            if self.number_auto_func is not None:
+                val.value = self.number_auto_func.call(self, [OperandResult(val.value, None, None)], {}).value
+                print(val.value)
         return val
 
-    def validate_number(self, value, unit, ref):
+    def validate_number(self, value, unit=None, ref=None):
         try:
             self.number(value)
             return True
