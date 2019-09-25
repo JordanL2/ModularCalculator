@@ -3,8 +3,14 @@
 from modularcalculator.objects import *
 from modularcalculator.numericalengine import NumericalEngine
 import modularcalculator.features.layout
-import modularcalculator.features.list
+import modularcalculator.features.presets
 from modularcalculator.features.feature import *
+
+import sys
+import inspect
+import pkgutil
+import os.path
+from importlib import import_module
 
 
 class ModularCalculator(NumericalEngine):
@@ -12,8 +18,10 @@ class ModularCalculator(NumericalEngine):
     def __init__(self, preset=None):
         super().__init__()
 
-        self.preset_list = modularcalculator.features.list.presets
-        self.feature_list = modularcalculator.features.list.feature_list
+        self.feature_list = {}
+        self.scan_files()
+
+        self.preset_list = modularcalculator.features.presets.presets
         self.parser_map = modularcalculator.features.layout.parser_map
         self.op_map = modularcalculator.features.layout.op_map
         self.number_caster_map = modularcalculator.features.layout.number_caster_map
@@ -23,6 +31,25 @@ class ModularCalculator(NumericalEngine):
         self.feature_options = {}
         if preset is not None:
             self.load_preset(preset)
+
+    def scan_files(self):
+        topdir = os.path.dirname(__file__) + '/features'
+        for dirname in next(os.walk(topdir))[1]:
+            feature_category = dirname.split('/')[-1]
+            if feature_category != '__pycache__':
+                for (_, file_name, _) in pkgutil.iter_modules([topdir + '/' + dirname]):
+                    package_name = 'modularcalculator.features.' + feature_category
+                    self.add_file(file_name, package_name)
+
+    def add_file(self, file_name, package_name):
+        imported_module = import_module('.' + file_name, package_name)
+        for i in dir(imported_module):
+            feature = getattr(imported_module, i)
+            if inspect.isclass(feature) and issubclass(feature, Feature):
+                try:
+                    self.feature_list[feature.id()] = feature
+                except Exception:
+                    pass
 
     def list_presets(self):
         return self.preset_list.keys()

@@ -222,8 +222,7 @@ class ModularCalculatorInterface(StatefulApplication):
             for i, result in enumerate(response.results):
                 if hasattr(result, 'value'):
                     result_value = result.value
-                    if self.calculator.validate_number(result_value, None, None):
-                        result_value = self.calculator.number_to_string(result_value)
+                    result_value = self.calculator.number_to_string(result_value)
                     self.display.addAnswer(result.expression, result_value, result.unit)
         except CalculatingException as err:
             i = err.find_pos(question)
