@@ -90,10 +90,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 * Functionality:
 	* Ability to select features calculator has, screen to customise calculator, if calculator fails to init display error message
 	* Dialog that allows editing of feature options
-	* Option to display results passed through one of a list of functions
-		* oct, bin, hex
-		* scientific
-		* or select any function
 	* Option to switch between ; and new-lines for statement terminators
 	* Tabs
 

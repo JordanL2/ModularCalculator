@@ -122,6 +122,14 @@ class ModularCalculatorInterface(StatefulApplication):
         self.optionsUnitSystemPreference.triggered.connect(self.setUnitSystemPreference)
         optionsMenu.addAction(self.optionsUnitSystemPreference)
 
+        self.optionsNumericalAnswerFormat = QAction('Numerical answer format', self)
+        self.optionsNumericalAnswerFormat.triggered.connect(self.setNumericalAnswerFormat)
+        optionsMenu.addAction(self.optionsNumericalAnswerFormat)
+
+        self.optionsNumericalAnswerFormat = QAction('Reset numerical answer format', self)
+        self.optionsNumericalAnswerFormat.triggered.connect(self.setNumberFormatFunction)
+        optionsMenu.addAction(self.optionsNumericalAnswerFormat)
+
         self.executeAction = QAction('Execute', self)
         self.executeAction.triggered.connect(self.calc)
         self.executeAction.hovered.connect(self.showExecuteToolTip)
@@ -139,8 +147,11 @@ class ModularCalculatorInterface(StatefulApplication):
         self.calculator = calculator
         self.entry.setCalculator(self.calculator)
 
-    def setNumberFormatFunction(self, func):
-        self.calculator.number_auto_func_set(self.calculator.funcs[func])
+    def setNumberFormatFunction(self, func=None):
+        if func is None or func == False:
+            self.calculator.number_auto_func_set(None)
+        else:
+            self.calculator.number_auto_func_set(self.calculator.funcs[func])
 
     def restoreAllState(self):
         try:
@@ -299,7 +310,7 @@ class ModularCalculatorInterface(StatefulApplication):
     def selectDate(self, date, time):
         self.entry.insert("'{0:04d}-{1:02d}-{2:02d}T{3:02d}:{4:02d}:{5:02d}'".format(date.year(), date.month(), date.day(), time.hour(), time.minute(), time.second()))
 
-    def insertFunction(self):
+    def getAllFunctions(self):
         funcs = {}
         descriptions = {}
         for func, funcInfo in self.calculator.funcs.items():
@@ -308,6 +319,10 @@ class ModularCalculatorInterface(StatefulApplication):
                 funcs[category] = []
             funcs[category].append(func)
             descriptions[func] = "{}\n{}({})".format(funcInfo.description, func, ', '.join(funcInfo.syntax))
+        return funcs, descriptions
+
+    def insertFunction(self):
+        funcs, descriptions = self.getAllFunctions()
         CategorisedSelectionDialog(self, 'Insert Function', 'Select function to insert', funcs, descriptions, self.selectFunction)
 
     def selectFunction(self, func):
@@ -374,6 +389,10 @@ class ModularCalculatorInterface(StatefulApplication):
 
     def updateUnitSystemPreference(self, systemNames):
         self.calculator.unit_normaliser.systems_preference = [s for n in systemNames for s in [s for s in self.calculator.unit_normaliser.systems if self.calculator.unit_normaliser.systems[s].name == n]]
+
+    def setNumericalAnswerFormat(self):
+        funcs, descriptions = self.getAllFunctions()
+        CategorisedSelectionDialog(self, 'Select Answer Format', 'Select function to format numerical answers', funcs, descriptions, self.setNumberFormatFunction)
 
 
 if __name__ == '__main__':
