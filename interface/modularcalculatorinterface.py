@@ -126,9 +126,10 @@ class ModularCalculatorInterface(StatefulApplication):
         self.optionsNumericalAnswerFormat.triggered.connect(self.setNumericalAnswerFormat)
         optionsMenu.addAction(self.optionsNumericalAnswerFormat)
 
-        self.optionsNumericalAnswerFormat = QAction('Reset numerical answer format', self)
-        self.optionsNumericalAnswerFormat.triggered.connect(self.setNumberFormatFunction)
-        optionsMenu.addAction(self.optionsNumericalAnswerFormat)
+        self.optionsResetNumericalAnswerFormat = QAction('', self)
+        self.optionsResetNumericalAnswerFormat.triggered.connect(self.setNumberFormatFunction)
+        self.optionsResetNumericalAnswerFormat.setVisible(False)
+        optionsMenu.addAction(self.optionsResetNumericalAnswerFormat)
 
         self.executeAction = QAction('Execute', self)
         self.executeAction.triggered.connect(self.calc)
@@ -150,8 +151,13 @@ class ModularCalculatorInterface(StatefulApplication):
     def setNumberFormatFunction(self, func=None):
         if func is None or func == False or func == '':
             self.calculator.number_auto_func_set(None)
+            self.optionsNumericalAnswerFormat.setVisible(True)
+            self.optionsResetNumericalAnswerFormat.setVisible(False)
         else:
             self.calculator.number_auto_func_set(self.calculator.funcs[func])
+            self.optionsNumericalAnswerFormat.setVisible(False)
+            self.optionsResetNumericalAnswerFormat.setVisible(True)
+            self.optionsResetNumericalAnswerFormat.setText("Reset numerical answer format ({})".format(func))
 
     def restoreAllState(self):
         try:

@@ -97,9 +97,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 	* Click previous answer to insert it
 	* Improve Light theme, it's too dark and high contrast
 	* Hotkeys for various insert operations, eg Ctrl+F = Insert Function
-	* Improve numerical format options
-		* Show just one button - button to select function if none set, or button to reset function if one is set
-		* Reset button should also show the current function in its text
 
 * Stability:
 	* Auto-save state occasionally
