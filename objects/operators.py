@@ -76,12 +76,15 @@ class Operation:
                 result_unit = result.unit
             if result.ref_override:
                 result_ref = result.ref
+            operandResult = OperandResult(result_value, result_unit, result_ref)
+            if calculator.number_auto_func is not None and calculator.number_auto_func != self and calculator.validate_number(result_value, None, None):
+                operandResult = calculator.number_auto_func.call(calculator, [operandResult], flags)
+            return operandResult
+
         except CalculatorException as err:
             raise err
         except Exception as err:
             raise CalculatorException("Could not execute {0}".format(self.name))
-        
-        return OperandResult(result_value, result_unit, result_ref)
 
     def validate(self, calculator, values, units, refs):
         if self.minparams is not None and len(values) < self.minparams:

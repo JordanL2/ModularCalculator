@@ -57,7 +57,7 @@ class OctalNumbersFeature(Feature):
         return None, None, None
 
     def func_oct(self, vals, units, refs, flags):
-        return OperationResult(BasesFeature.number_add_prefix(self, BasesFeature.dec_to_base(self, vals[0], 8), OctalNumbersFeature.oct_prefix))
+        return OperationResult(BasesFeature.number_add_prefix(self, BasesFeature.dec_to_base(self, self.number(vals[0]), 8), OctalNumbersFeature.oct_prefix))
 
     def number_oct(self, val):
         if isinstance(val, str) and OctalNumbersFeature.oct_regex.fullmatch(val):

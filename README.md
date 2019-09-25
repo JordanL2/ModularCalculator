@@ -52,6 +52,8 @@ These examples are available in examples/basic_integration.py. See examples/adva
 # To Do
 
 ## Engine
+* Method to import features to calculator with a file name
+	* Auto scan features dir for feature files and add them with this method, in list.py (which should then be renamed?)
 
 ## Features
 * Dates:
@@ -91,6 +93,7 @@ These examples are available in examples/basic_integration.py. See examples/adva
 	* Option to display results passed through one of a list of functions
 		* oct, bin, hex
 		* scientific
+		* or select any function
 	* Option to switch between ; and new-lines for statement terminators
 	* Tabs
 

@@ -132,11 +132,15 @@ class ModularCalculatorInterface(StatefulApplication):
         QToolTip.showText(QCursor.pos(), "Ctrl+Enter", self)
 
     def initCalculator(self):
-        self.setCalculator(ModularCalculator('Computing'))
+        calculator = ModularCalculator('Computing')
+        self.setCalculator(calculator)
 
     def setCalculator(self, calculator):
         self.calculator = calculator
         self.entry.setCalculator(self.calculator)
+
+    def setNumberFormatFunction(self, func):
+        self.calculator.number_auto_func_set(self.calculator.funcs[func])
 
     def restoreAllState(self):
         try:
@@ -193,6 +197,8 @@ class ModularCalculatorInterface(StatefulApplication):
                 self.display.clear()
             for i, result in enumerate(response.results):
                 if hasattr(result, 'value'):
+                    if self.calculator.number_auto_func is not None and self.calculator.validate_number(result.value, None, None):
+                        result.value = self.calculator.number_auto_func.call(self.calculator, [OperandResult(result.value, result.unit, None)], {}).value
                     self.display.addAnswer(result.expression, self.calculator.number_to_string(result.value), result.unit)
         except CalculatingException as err:
             i = err.find_pos(question)
