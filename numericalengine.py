@@ -84,7 +84,6 @@ class NumericalEngine(Engine):
             val.value = self.round_number(val.value)
             if self.number_auto_func is not None:
                 val.value = self.number_auto_func.call(self, [OperandResult(val.value, None, None)], {}).value
-                print(val.value)
         return val
 
     def validate_number(self, value, unit=None, ref=None):
