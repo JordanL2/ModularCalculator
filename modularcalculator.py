@@ -19,7 +19,7 @@ class ModularCalculator(NumericalEngine):
         super().__init__()
 
         self.feature_list = {}
-        self.scan_files()
+        self.scan_feature_files()
 
         self.preset_list = modularcalculator.features.presets.presets
         self.parser_map = modularcalculator.features.layout.parser_map
@@ -32,17 +32,20 @@ class ModularCalculator(NumericalEngine):
         if preset is not None:
             self.load_preset(preset)
 
-    def scan_files(self):
+    def scan_feature_files(self):
         topdir = os.path.dirname(__file__) + '/features'
         for dirname in next(os.walk(topdir))[1]:
             feature_category = dirname.split('/')[-1]
             if feature_category != '__pycache__':
                 for (_, file_name, _) in pkgutil.iter_modules([topdir + '/' + dirname]):
                     package_name = 'modularcalculator.features.' + feature_category
-                    self.add_file(file_name, package_name)
+                    self.import_feature(file_name, package_name)
 
-    def add_file(self, file_name, package_name):
-        imported_module = import_module('.' + file_name, package_name)
+    def import_feature(self, file_name, package_name=None):
+        if package_name is not None:
+            imported_module = import_module("{}.{}".format(package_name, file_name))
+        else:
+            imported_module = import_module(file_name)
         for i in dir(imported_module):
             feature = getattr(imported_module, i)
             if inspect.isclass(feature) and issubclass(feature, Feature):
