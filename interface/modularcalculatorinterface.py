@@ -2,6 +2,7 @@
 
 from modularcalculator.modularcalculator import *
 from modularcalculator.interface.display import *
+from modularcalculator.interface.featureconfig import *
 from modularcalculator.interface.guitools import *
 from modularcalculator.interface.guiwidgets import *
 from modularcalculator.interface.statefulapplication import *
@@ -131,6 +132,10 @@ class ModularCalculatorInterface(StatefulApplication):
         self.optionsResetNumericalAnswerFormat.triggered.connect(self.setNumberFormatFunction)
         self.optionsResetNumericalAnswerFormat.setVisible(False)
         optionsMenu.addAction(self.optionsResetNumericalAnswerFormat)
+
+        self.optionsFeatureConfig = QAction('Configure features', self)
+        self.optionsFeatureConfig.triggered.connect(self.openFeatureConfig)
+        optionsMenu.addAction(self.optionsFeatureConfig)
 
         self.executeAction = QAction('Execute', self)
         self.executeAction.triggered.connect(self.calc)
@@ -443,6 +448,14 @@ class ModularCalculatorInterface(StatefulApplication):
     def setNumericalAnswerFormat(self):
         funcs, descriptions = self.getAllFunctions(lambda f : f.minparams == 1 and len(f.value_restrictions) > 0 and 'number' in f.value_restrictions[0]['objtypes'])
         CategorisedSelectionDialog(self, 'Select Result Format', 'Select function to format numerical results', funcs, descriptions, self.setNumberFormatFunction)
+
+    def openFeatureConfig(self):
+        FeatureConfigDialog(self)
+
+    def commitFeatureConfig(self, calculator, importedFeatures):
+        self.replaceCalculator(calculator)
+        self.importedFeatures = importedFeatures
+        self.entry.refresh()
 
 
 if __name__ == '__main__':
