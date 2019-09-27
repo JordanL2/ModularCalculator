@@ -78,7 +78,7 @@ class MetaFeature(Feature):
 
     @classmethod
     def install(cls, calculator):
-        calculator.add_features(cls.subfeatures())
+        calculator.install_features(cls.subfeatures())
         
     def subfeatures():
         raise Exception("Override this method")

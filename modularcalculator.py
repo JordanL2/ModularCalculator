@@ -54,16 +54,24 @@ class ModularCalculator(NumericalEngine):
                 except Exception:
                     pass
 
+    def import_feature_file(self, file_path):
+        feature_dir = os.path.dirname(file_path)
+        feature_module = os.path.basename(file_path)
+        feature_module = os.path.splitext(feature_module)[0]
+        if feature_dir not in sys.path:
+            sys.path.append(feature_dir)
+        self.import_feature(feature_module)
+
     def list_presets(self):
         return self.preset_list.keys()
 
     def load_preset(self, preset):
-        self.add_features(self.preset_list[preset])
+        self.install_features(self.preset_list[preset])
 
     def list_features(self):
         return self.feature_list
 
-    def add_features(self, names, debug=False):
+    def install_features(self, names, debug=False):
         if isinstance(names, str):
             names = [names]
         
@@ -86,13 +94,13 @@ class ModularCalculator(NumericalEngine):
                     if do_before not in self.installed_features and do_before in self.features_to_install:
                         if debug:
                             print("... Must install after {0}, installing now".format(do_before))
-                        self.add_features(do_before, debug)
+                        self.install_features(do_before, debug)
                 dependencies = self.feature_list[name].dependencies()
                 for dependency in dependencies:
                     if dependency not in self.installed_features:
                         if debug:
                             print("... Missing dependency {0}, installing now".format(dependency))
-                        self.add_features(dependency, debug)
+                        self.install_features(dependency, debug)
                 self.feature_list[name].install(self)
                 self.installed_features.add(name)
         self.setup()
