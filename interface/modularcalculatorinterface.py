@@ -200,7 +200,7 @@ class ModularCalculatorInterface(StatefulApplication):
     def restoreCalculatorState(self):
         foundImportedFeatures = []
         for featureFile in self.importedFeatures:
-            print("Importing feature", featureFile)
+            print("Importing feature", featureFile) #TODO Remove debug
             try:
                 self.calculator.import_feature_file(featureFile)
                 foundImportedFeatures.append(featureFile)
@@ -210,7 +210,7 @@ class ModularCalculatorInterface(StatefulApplication):
 
         features = self.fetchStateArray("calculatorFeatures")
         if features is not None and len(features) > 0:
-            self.calculator.install_features(features, True, True)
+            self.calculator.install_features(features, True, True) #TODO disable debug
         else:
             self.calculator.load_preset('Computing')
 
@@ -220,10 +220,6 @@ class ModularCalculatorInterface(StatefulApplication):
         if unitSystems is not None and len(unitSystems) > 0:
             self.calculator.unit_normaliser.systems_preference = unitSystems
         self.setNumberFormatFunction(self.fetchStateText("numericalAnswerFormat"))
-
-        #feature_ids = self.calculator.import_feature_file('/home/jordan/AppData/ModularCalculator/orbitalmechanicsfunctions.py')
-        #self.importFeature('/home/jordan/AppData/ModularCalculator/orbitalmechanicsfunctions.py')
-        #self.calculator.install_features(['unitfunctions.orbitalmechanicsfunctions'])
 
     def storeAllState(self):
         self.storeStateArray("importedFeatures", list(set(self.importedFeatures)))
