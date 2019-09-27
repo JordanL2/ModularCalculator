@@ -97,10 +97,16 @@ class FeatureConfigDialog(QDialog):
 
     def itemChanged(self, item):
         feature = self.getItemsFeature(item)
+        featureId = feature.id()
         print(feature.title(), 'changed')
         if item.checkState() == 2:
             # if a meta feature, enable all children, then disable this item
+            # ensure all dependencies are checked
             pass
         else:
-            # uncheck all items that depend on this feature
-            pass
+            for checkFeatureId, checkFeature in self.calculator.feature_list.items():
+                if featureId in checkFeature.dependencies():
+                    checkFeatureItem = self.featureItems[checkFeatureId]
+                    if checkFeatureItem.checkState() == 2:
+                        checkFeatureItem.setCheckState(0)
+                
