@@ -15,6 +15,7 @@ import functools
 import os.path
 import string
 import sys
+import traceback
 
 
 class ModularCalculatorInterface(StatefulApplication):
@@ -186,6 +187,7 @@ class ModularCalculatorInterface(StatefulApplication):
         except Exception as e:
             print("Exception when trying to restore state")
             print(e)
+            print(traceback.format_exc())
 
     def restoreCalculatorState(self):
         features = self.fetchStateArray("calculatorFeatures")
