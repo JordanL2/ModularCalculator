@@ -42,6 +42,7 @@ class ModularCalculator(NumericalEngine):
                     self.import_feature(module_name, package_name)
 
     def import_feature(self, module_name, package_name=None):
+        ids = []
         if package_name is not None:
             imported_module = import_module("{}.{}".format(package_name, module_name))
         else:
@@ -50,9 +51,12 @@ class ModularCalculator(NumericalEngine):
             feature = getattr(imported_module, i)
             if inspect.isclass(feature) and issubclass(feature, Feature):
                 try:
-                    self.feature_list[feature.id()] = feature
+                    feature_id = feature.id()
+                    self.feature_list[feature_id] = feature
+                    ids.append(feature_id)
                 except Exception:
                     pass
+        return ids
 
     def import_feature_file(self, file_path):
         feature_dir = os.path.dirname(file_path)
@@ -60,7 +64,7 @@ class ModularCalculator(NumericalEngine):
         feature_module = os.path.splitext(feature_module)[0]
         if feature_dir not in sys.path:
             sys.path.append(feature_dir)
-        self.import_feature(feature_module)
+        return self.import_feature(feature_module)
 
     def list_presets(self):
         return self.preset_list.keys()

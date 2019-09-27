@@ -202,6 +202,8 @@ class ModularCalculatorInterface(StatefulApplication):
         self.setNumberFormatFunction(self.fetchStateText("numericalAnswerFormat"))
 
     def storeAllState(self):
+        self.storeCalculatorState()
+        
         self.storeState("mainWindowGeometry", self.saveGeometry())
         self.storeState("mainWindowState", self.saveState())
         self.storeState("splitterSizes", self.splitter.saveState())
@@ -214,8 +216,6 @@ class ModularCalculatorInterface(StatefulApplication):
         
         self.storeStateBoolean("viewShortUnits", self.viewShortUnits.isChecked())
         self.storeStateBoolean("viewSyntaxParsingAutoExecutes", self.viewSyntaxParsingAutoExecutes.isChecked())
-
-        self.storeCalculatorState()
 
     def storeCalculatorState(self):
         self.storeStateArray("calculatorFeatures", self.calculator.installed_features)
