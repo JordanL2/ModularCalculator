@@ -17,37 +17,13 @@ class FeatureConfigDialog(QDialog):
         self.parent = parent
 
         self.importedFeatures = parent.importedFeatures
+        self.calculator = self.buildCalculator(self.importedFeatures, [])
+        self.selectedFeatures = parent.calculator.installed_features
 
         layout = QVBoxLayout()
 
-        featuresByCategory = {}
-        for featureId, feature in parent.calculator.feature_list.items():
-            featureCategory = feature.category()
-            if featureCategory not in featuresByCategory:
-                featuresByCategory[featureCategory] = []
-            featuresByCategory[featureCategory].append(feature)
-
-        self.featureItems = {}
         self.featureList = QListWidget(self)
-        for featureCategory, features in featuresByCategory.items():
-            categoryItem = QListWidgetItem(featureCategory, self.featureList)
-            categoryFont = QFontDatabase.systemFont(QFontDatabase.TitleFont)
-            categoryFont.setBold(True)
-            categoryItem.setFont(categoryFont)
-            categoryItem.setFlags(Qt.NoItemFlags)
-
-            for feature in sorted(features, key=lambda f : f.title()):
-                featureId = feature.id()
-                featureTitle = feature.title()
-                featureInstalled = featureId in parent.calculator.installed_features
-
-                item = QListWidgetItem(featureTitle, self.featureList)
-                item.setCheckState(featureInstalled * 2)
-                item.setFlags(Qt.ItemIsEnabled)
-                self.featureItems[featureId] = item
-
-            spacerItem = QListWidgetItem('', self.featureList)
-            spacerItem.setFlags(Qt.NoItemFlags)
+        self.refreshFeatureList()
         layout.addWidget(self.featureList)
         self.featureList.itemClicked.connect(self.itemClicked)
         self.featureList.itemChanged.connect(self.itemChanged)
@@ -60,13 +36,50 @@ class FeatureConfigDialog(QDialog):
         self.setWindowTitle('Feature Configuration')
         self.setVisible(True)
 
-    def ok(self):
+    def refreshFeatureList(self):
+        featuresByCategory = {}
+        for featureId, feature in self.calculator.feature_list.items():
+            featureCategory = feature.category()
+            if featureCategory not in featuresByCategory:
+                featuresByCategory[featureCategory] = []
+            featuresByCategory[featureCategory].append(feature)
+        
+        self.featureItems = {}
+        self.featureList.clear()
+        for featureCategory, features in featuresByCategory.items():
+            categoryItem = QListWidgetItem(featureCategory, self.featureList)
+            categoryFont = QFontDatabase.systemFont(QFontDatabase.TitleFont)
+            categoryFont.setBold(True)
+            categoryItem.setFont(categoryFont)
+            categoryItem.setFlags(Qt.NoItemFlags)
+
+            for feature in sorted(features, key=lambda f : f.title()):
+                featureId = feature.id()
+                featureTitle = feature.title()
+                featureInstalled = featureId in self.selectedFeatures
+
+                item = QListWidgetItem(featureTitle, self.featureList)
+                item.setCheckState(featureInstalled * 2)
+                item.setFlags(Qt.ItemIsEnabled)
+                item.setData(Qt.UserRole, featureId)
+                self.featureItems[featureId] = item
+
+            spacerItem = QListWidgetItem('', self.featureList)
+            spacerItem.setFlags(Qt.NoItemFlags)
+
+    def buildCalculator(self, importedFeatures, features):
         calculator = ModularCalculator()
+        for importedFeature in importedFeatures:
+            calculator.import_feature_file(importedFeature)
+        calculator.install_features(features, True)
+        return calculator
+
+    def ok(self):
         featuresToInstall = []
         for featureId, item in self.featureItems.items():
             if item.checkState() == 2:
                 featuresToInstall.append(featureId)
-        calculator.install_features(featuresToInstall, True)
+        calculator = self.buildCalculator(self.importedFeatures, featuresToInstall)
         self.parent.commitFeatureConfig(calculator, self.importedFeatures)
         self.close()
 
@@ -79,5 +92,15 @@ class FeatureConfigDialog(QDialog):
         else:
             item.setCheckState(2)
 
+    def getItemsFeature(self, item):
+        return self.calculator.feature_list[item.data(Qt.UserRole)]
+
     def itemChanged(self, item):
-        print(item.text(), 'changed')
+        feature = self.getItemsFeature(item)
+        print(feature.title(), 'changed')
+        if item.checkState() == 2:
+            # if a meta feature, enable all children, then disable this item
+            pass
+        else:
+            # uncheck all items that depend on this feature
+            pass
