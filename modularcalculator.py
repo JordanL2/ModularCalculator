@@ -37,15 +37,15 @@ class ModularCalculator(NumericalEngine):
         for dirname in next(os.walk(topdir))[1]:
             feature_category = dirname.split('/')[-1]
             if feature_category != '__pycache__':
-                for (_, file_name, _) in pkgutil.iter_modules([topdir + '/' + dirname]):
+                for (_, module_name, _) in pkgutil.iter_modules([topdir + '/' + dirname]):
                     package_name = 'modularcalculator.features.' + feature_category
-                    self.import_feature(file_name, package_name)
+                    self.import_feature(module_name, package_name)
 
-    def import_feature(self, file_name, package_name=None):
+    def import_feature(self, module_name, package_name=None):
         if package_name is not None:
-            imported_module = import_module("{}.{}".format(package_name, file_name))
+            imported_module = import_module("{}.{}".format(package_name, module_name))
         else:
-            imported_module = import_module(file_name)
+            imported_module = import_module(module_name)
         for i in dir(imported_module):
             feature = getattr(imported_module, i)
             if inspect.isclass(feature) and issubclass(feature, Feature):

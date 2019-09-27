@@ -122,7 +122,7 @@ class ModularCalculatorInterface(StatefulApplication):
         self.optionsUnitSystemPreference.triggered.connect(self.setUnitSystemPreference)
         optionsMenu.addAction(self.optionsUnitSystemPreference)
 
-        self.optionsNumericalAnswerFormat = QAction('Numerical answer format', self)
+        self.optionsNumericalAnswerFormat = QAction('Numerical result format', self)
         self.optionsNumericalAnswerFormat.triggered.connect(self.setNumericalAnswerFormat)
         optionsMenu.addAction(self.optionsNumericalAnswerFormat)
 
@@ -157,7 +157,7 @@ class ModularCalculatorInterface(StatefulApplication):
             self.calculator.number_auto_func_set(self.calculator.funcs[func])
             self.optionsNumericalAnswerFormat.setVisible(False)
             self.optionsResetNumericalAnswerFormat.setVisible(True)
-            self.optionsResetNumericalAnswerFormat.setText("Reset numerical answer format ({})".format(func))
+            self.optionsResetNumericalAnswerFormat.setText("Reset numerical result format ({})".format(func))
 
     def restoreAllState(self):
         try:
@@ -406,7 +406,7 @@ class ModularCalculatorInterface(StatefulApplication):
 
     def setNumericalAnswerFormat(self):
         funcs, descriptions = self.getAllFunctions(lambda f : f.minparams == 1 and len(f.value_restrictions) > 0 and 'number' in f.value_restrictions[0]['objtypes'])
-        CategorisedSelectionDialog(self, 'Select Answer Format', 'Select function to format numerical answers', funcs, descriptions, self.setNumberFormatFunction)
+        CategorisedSelectionDialog(self, 'Select Result Format', 'Select function to format numerical results', funcs, descriptions, self.setNumberFormatFunction)
 
 
 if __name__ == '__main__':
