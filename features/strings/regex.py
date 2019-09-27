@@ -25,7 +25,7 @@ class RegexFeature(Feature):
         return 'Functions for regular expressions'
 
     def dependencies():
-        return ['strings.strings']
+        return ['strings.strings','structure.functions']
 
     @classmethod
     def install(cls, calculator):

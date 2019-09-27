@@ -202,7 +202,6 @@ tests = [
 
     { 'test': r"1 pint to ml", 'expected': (Decimal('473.176473'), 'milliliters') },
     
-    { 'test': r"deltav(800s, 5 tonnes, 2 tonnes)", 'expected': (Decimal('7188.594004586946540875658229197143'), 'meters/second') },
     { 'test': r"tank = 17100; thruster = 0.486/s; format((tank / (3 thruster)))", 'expected': '3 hours, 15 minutes, 28.395061728395061728395061728395 seconds' },
     
     { 'test': r"x = 2 T m^2; x", 'expected': (Decimal('2'), 'tesla meters^2') },

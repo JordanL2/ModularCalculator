@@ -75,9 +75,18 @@ class ModularCalculator(NumericalEngine):
     def list_features(self):
         return self.feature_list
 
-    def install_features(self, names, debug=False):
+    def install_features(self, names, debug=False, skipMissing=False):
         if isinstance(names, str):
             names = [names]
+
+        if skipMissing:
+            new_names = []
+            for name in names:
+                if name in self.feature_list:
+                    new_names.append(name)
+                elif debug:
+                    print("!!! Skipping {} as it is not found !!!".format(name))
+            names = new_names
         
         for name in names:
             self.add_feature_to_be_installed(name)

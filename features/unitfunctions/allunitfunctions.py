@@ -22,5 +22,4 @@ class AllUnitFunctionsMetaFeature(MetaFeature):
     def subfeatures():
         return [
             'unitfunctions.generalunitfunctions',
-            'unitfunctions.orbitalmechanicsfunctions',
         ]

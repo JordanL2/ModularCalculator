@@ -31,8 +31,8 @@ class ExampleCustomFeature(Feature):
         # swallowing the 'hello' before our parser gets a chance to parse it. Take a look at the parser_map in
         # features/layout.py.
         calculator.parser_map.insert(calculator.parser_map.index('var'), 'hello')
-        
-        calculator.add_parser('hello', ExampleCustomFeature.parse_hello)
+
+        calculator.add_parser('hello', cls.parse_hello)
     
     def parse_hello(self, expr, i, items, flags):
         next = expr[i:]

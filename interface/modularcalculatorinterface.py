@@ -149,6 +149,14 @@ class ModularCalculatorInterface(StatefulApplication):
         self.calculator = calculator
         self.entry.setCalculator(self.calculator)
 
+    def importFeature(self, filePath):
+        try:
+            print("Importing feature:", filePath)
+            featureIds = self.calculator.import_feature_file(filePath)
+            self.importedFeatures.append(filePath)
+        except Exception as err:
+            return e
+
     def replaceCalculator(self, calculator):
         calculator.number_prec_set(self.calculator.number_prec_get())
         calculator.unit_simplification_set(self.calculator.unit_simplification_get())
@@ -170,6 +178,7 @@ class ModularCalculatorInterface(StatefulApplication):
 
     def restoreAllState(self):
         try:
+            self.importedFeatures = self.fetchStateArray("importedFeatures")
             self.restoreCalculatorState()
 
             self.restoreGeometry(self.fetchState("mainWindowGeometry"))
@@ -189,11 +198,22 @@ class ModularCalculatorInterface(StatefulApplication):
             print(traceback.format_exc())
 
     def restoreCalculatorState(self):
+        foundImportedFeatures = []
+        for featureFile in self.importedFeatures:
+            print("Importing feature", featureFile)
+            try:
+                self.calculator.import_feature_file(featureFile)
+                foundImportedFeatures.append(featureFile)
+            except Exception as err:
+                print("!!! Couldn't import {} - {} !!!".format(featureFile, err))
+        self.importedFeatures = foundImportedFeatures
+
         features = self.fetchStateArray("calculatorFeatures")
         if features is not None and len(features) > 0:
-            self.calculator.install_features(features)
+            self.calculator.install_features(features, True, True)
         else:
             self.calculator.load_preset('Computing')
+
         self.setPrecision(self.fetchStateNumber("precision", 30))
         self.setUnitSimplification(self.fetchStateBoolean("simplifyUnits", True))
         unitSystems = self.fetchStateArray("unitSystemsPreference")
@@ -201,9 +221,14 @@ class ModularCalculatorInterface(StatefulApplication):
             self.calculator.unit_normaliser.systems_preference = unitSystems
         self.setNumberFormatFunction(self.fetchStateText("numericalAnswerFormat"))
 
+        #feature_ids = self.calculator.import_feature_file('/home/jordan/AppData/ModularCalculator/orbitalmechanicsfunctions.py')
+        #self.importFeature('/home/jordan/AppData/ModularCalculator/orbitalmechanicsfunctions.py')
+        #self.calculator.install_features(['unitfunctions.orbitalmechanicsfunctions'])
+
     def storeAllState(self):
+        self.storeStateArray("importedFeatures", list(set(self.importedFeatures)))
         self.storeCalculatorState()
-        
+
         self.storeState("mainWindowGeometry", self.saveGeometry())
         self.storeState("mainWindowState", self.saveState())
         self.storeState("splitterSizes", self.splitter.saveState())
