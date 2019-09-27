@@ -43,11 +43,14 @@ class FeatureConfigDialog(QDialog):
 
                 item = QListWidgetItem(featureTitle, self.featureList)
                 item.setCheckState(featureInstalled * 2)
+                item.setFlags(Qt.ItemIsEnabled)
                 self.featureItems[featureId] = item
 
             spacerItem = QListWidgetItem('', self.featureList)
             spacerItem.setFlags(Qt.NoItemFlags)
         layout.addWidget(self.featureList)
+        self.featureList.itemClicked.connect(self.itemClicked)
+        self.featureList.itemChanged.connect(self.itemChanged)
 
         button = QPushButton("OK", self)
         button.clicked.connect(self.ok)
@@ -69,3 +72,12 @@ class FeatureConfigDialog(QDialog):
 
     def sizeHint(self):
         return QSize(super().sizeHint() * 4)
+
+    def itemClicked(self, item):
+        if item.checkState() == 2:
+            item.setCheckState(0)
+        else:
+            item.setCheckState(2)
+
+    def itemChanged(self, item):
+        print(item.text(), 'changed')
