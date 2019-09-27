@@ -4,8 +4,9 @@ from modularcalculator.modularcalculator import *
 
 #from PyQt5.QtCore import Qt, QStringListModel, QSize
 #from PyQt5.QtWidgets import QListWidget, QWidgetAction, QSpinBox, QLabel, QHBoxLayout, QVBoxLayout, QWidget, QListView, QDialog, QAbstractItemView, QPushButton, QCalendarWidget, QTimeEdit, QComboBox
-from PyQt5.QtCore import QSize
+from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtWidgets import QDialog, QVBoxLayout, QPushButton, QListWidget, QListWidgetItem
+from PyQt5.QtGui import QFontDatabase
 
 
 class FeatureConfigDialog(QDialog):
@@ -30,6 +31,11 @@ class FeatureConfigDialog(QDialog):
         self.featureList = QListWidget(self)
         for featureCategory, features in featuresByCategory.items():
             categoryItem = QListWidgetItem(featureCategory, self.featureList)
+            categoryFont = QFontDatabase.systemFont(QFontDatabase.TitleFont)
+            categoryFont.setBold(True)
+            categoryItem.setFont(categoryFont)
+            categoryItem.setFlags(Qt.NoItemFlags)
+
             for feature in sorted(features, key=lambda f : f.title()):
                 featureId = feature.id()
                 featureTitle = feature.title()
@@ -38,6 +44,9 @@ class FeatureConfigDialog(QDialog):
                 item = QListWidgetItem(featureTitle, self.featureList)
                 item.setCheckState(featureInstalled * 2)
                 self.featureItems[featureId] = item
+
+            spacerItem = QListWidgetItem('', self.featureList)
+            spacerItem.setFlags(Qt.NoItemFlags)
         layout.addWidget(self.featureList)
 
         button = QPushButton("OK", self)
