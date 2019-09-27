@@ -24,7 +24,7 @@ class StringFunctionsFeature(Feature):
         return 'Functions to manipulate strings'
 
     def dependencies():
-        return ['strings.strings']
+        return ['strings.strings','structure.functions']
 
     @classmethod
     def install(cls, calculator):

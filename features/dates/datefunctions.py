@@ -30,7 +30,7 @@ class DateFunctionsFeature(Feature):
         return 'Functions to create and manipulate dates'
 
     def dependencies():
-        return ['dates.dates']
+        return ['dates.dates','structure.functions']
 
     @classmethod
     def install(cls, calculator):

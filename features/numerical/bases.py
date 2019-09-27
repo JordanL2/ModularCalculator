@@ -20,7 +20,7 @@ class BasesFeature(Feature):
         return 'Base feature for non-decimal bases. Adds dec function to turn any number into a decimal'
 
     def dependencies():
-        return ['numerical.decimalnumbers']
+        return ['numerical.decimalnumbers','structure.functions']
 
     @classmethod
     def install(cls, calculator):

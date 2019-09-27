@@ -141,12 +141,20 @@ class ModularCalculatorInterface(StatefulApplication):
         QToolTip.showText(QCursor.pos(), "Ctrl+Enter", self)
 
     def initCalculator(self):
-        calculator = ModularCalculator('Computing')
+        calculator = ModularCalculator()
         self.setCalculator(calculator)
 
     def setCalculator(self, calculator):
         self.calculator = calculator
         self.entry.setCalculator(self.calculator)
+
+    def replaceCalculator(self, calculator):
+        calculator.number_prec_set(self.calculator.number_prec_get())
+        calculator.unit_simplification_set(self.calculator.unit_simplification_get())
+        calculator.unit_normaliser.systems_preference = self.calculator.unit_normaliser.systems_preference
+        if self.calculator.number_auto_func is not None:
+            calculator.number_auto_func_set(calculator.funcs[self.calculator.number_auto_func.func])
+        self.setCalculator(calculator)
 
     def setNumberFormatFunction(self, func=None):
         if func is None or func == False or func == '':
@@ -161,6 +169,8 @@ class ModularCalculatorInterface(StatefulApplication):
 
     def restoreAllState(self):
         try:
+            self.restoreCalculatorState()
+
             self.restoreGeometry(self.fetchState("mainWindowGeometry"))
             self.restoreState(self.fetchState("mainWindowState"))
             self.splitter.restoreState(self.fetchState("splitterSizes"))
@@ -173,13 +183,16 @@ class ModularCalculatorInterface(StatefulApplication):
             self.setAutoExecute(self.fetchStateBoolean("viewSyntaxParsingAutoExecutes", True))
 
             self.setShortUnits(self.fetchStateBoolean("viewShortUnits", False))
-
-            self.restoreCalculatorState()
         except Exception as e:
             print("Exception when trying to restore state")
             print(e)
 
     def restoreCalculatorState(self):
+        features = self.fetchStateArray("calculatorFeatures")
+        if features is not None and len(features) > 0:
+            self.calculator.install_features(features)
+        else:
+            self.calculator.load_preset('Computing')
         self.setPrecision(self.fetchStateNumber("precision", 30))
         self.setUnitSimplification(self.fetchStateBoolean("simplifyUnits", True))
         unitSystems = self.fetchStateArray("unitSystemsPreference")
@@ -204,6 +217,7 @@ class ModularCalculatorInterface(StatefulApplication):
         self.storeCalculatorState()
 
     def storeCalculatorState(self):
+        self.storeStateArray("calculatorFeatures", self.calculator.installed_features)
         self.storeStateNumber("precision", self.precisionSpinBox.spinbox.value())
         self.storeStateBoolean("simplifyUnits", self.optionsSimplifyUnits.isChecked())
         self.storeStateArray("unitSystemsPreference", self.calculator.unit_normaliser.systems_preference)

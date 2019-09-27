@@ -24,7 +24,7 @@ class BooleanFunctionsFeature(Feature):
         return 'and, or, counttrue'
 
     def dependencies():
-        return ['boolean.booleans']
+        return ['boolean.booleans','structure.functions']
 
     @classmethod
     def install(cls, calculator):
