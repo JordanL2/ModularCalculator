@@ -186,7 +186,6 @@ class ModularCalculatorInterface(StatefulApplication):
             self.setShortUnits(self.fetchStateBoolean("viewShortUnits", False))
         except Exception as e:
             print("Exception when trying to restore state")
-            print(e)
             print(traceback.format_exc())
 
     def restoreCalculatorState(self):
