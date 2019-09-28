@@ -53,8 +53,9 @@ class ConfigureFeatureDialog(QDialog):
         self.fieldEditBoxes = {}
         for i, fieldAndValue in enumerate(self.featureOptions.items()):
             fieldName = fieldAndValue[0]
-            fieldValue = fieldAndValue[1]
-            lineEdit = QLineEdit(fieldValue, self)
+            fieldValue = fieldAndValue[1].encode('unicode_escape')
+            fieldValueEncoded = ''.join([chr(c) for c in fieldValue])
+            lineEdit = QLineEdit(fieldValueEncoded, self)
             self.fieldEditBoxes[fieldName] = lineEdit
             grid.addWidget(QLabel(fieldName), i, 0, 1, 1)
             grid.addWidget(lineEdit, i, 1, 1, 1)
@@ -71,6 +72,6 @@ class ConfigureFeatureDialog(QDialog):
     def ok(self):
         for field, lineEdit in self.fieldEditBoxes.items():
             value = lineEdit.text()
-            self.featureOptions[field] = value
+            self.featureOptions[field] = value.encode('utf-8').decode('unicode_escape')
         self.parent.parent.entry.refresh()
         self.close()
