@@ -3,6 +3,7 @@
 from modularcalculator.modularcalculator import *
 from modularcalculator.interface.display import *
 from modularcalculator.interface.featureconfig import *
+from modularcalculator.interface.featureoptions import *
 from modularcalculator.interface.guitools import *
 from modularcalculator.interface.guiwidgets import *
 from modularcalculator.interface.statefulapplication import *
@@ -69,18 +70,18 @@ class ModularCalculatorInterface(StatefulApplication):
         self.fileSave.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_S))
         self.fileMenu.addAction(self.fileSave)
         
-        fileSaveAs = QAction('Save as...', self)
+        fileSaveAs = QAction('Save As...', self)
         fileSaveAs.triggered.connect(self.saveAs)
         fileSaveAs.setShortcut(QKeySequence(Qt.CTRL + Qt.SHIFT + Qt.Key_S))
         self.fileMenu.addAction(fileSaveAs)
 
         viewMenu = menubar.addMenu('View')
         
-        self.viewShortUnits = QAction('Units in short form', self, checkable=True)
+        self.viewShortUnits = QAction('Units in Short Form', self, checkable=True)
         self.viewShortUnits.triggered.connect(self.setShortUnits)
         viewMenu.addAction(self.viewShortUnits)
         
-        self.viewSyntaxParsingAutoExecutes = QAction('Syntax parsing performs evaluation', self, checkable=True)
+        self.viewSyntaxParsingAutoExecutes = QAction('Syntax Parsing Performs Evaluation', self, checkable=True)
         self.viewSyntaxParsingAutoExecutes.triggered.connect(self.setAutoExecute)
         viewMenu.addAction(self.viewSyntaxParsingAutoExecutes)
 
@@ -90,7 +91,7 @@ class ModularCalculatorInterface(StatefulApplication):
         insertConstant.triggered.connect(self.insertConstant)
         actionMenu.addAction(insertConstant)
         
-        insertDate = QAction('Date && time', self)
+        insertDate = QAction('Date && Time', self)
         insertDate.triggered.connect(self.insertDate)
         actionMenu.addAction(insertDate)
         
@@ -106,7 +107,7 @@ class ModularCalculatorInterface(StatefulApplication):
         insertFunction.triggered.connect(self.insertFunction)
         actionMenu.addAction(insertFunction)
         
-        insertUserDefinedFunction = QAction('User-defined function', self)
+        insertUserDefinedFunction = QAction('User-Defined Function', self)
         insertUserDefinedFunction.triggered.connect(self.insertUserDefinedFunction)
         actionMenu.addAction(insertUserDefinedFunction)
 
@@ -116,15 +117,15 @@ class ModularCalculatorInterface(StatefulApplication):
         self.precisionSpinBox.spinbox.valueChanged.connect(self.setPrecision)
         optionsMenu.addAction(self.precisionSpinBox)
 
-        self.optionsSimplifyUnits = QAction('Simplify units', self, checkable=True)
+        self.optionsSimplifyUnits = QAction('Simplify Units', self, checkable=True)
         self.optionsSimplifyUnits.triggered.connect(self.setUnitSimplification)
         optionsMenu.addAction(self.optionsSimplifyUnits)
 
-        self.optionsUnitSystemPreference = QAction('Unit system preference', self)
+        self.optionsUnitSystemPreference = QAction('Unit System Preference', self)
         self.optionsUnitSystemPreference.triggered.connect(self.setUnitSystemPreference)
         optionsMenu.addAction(self.optionsUnitSystemPreference)
 
-        self.optionsNumericalAnswerFormat = QAction('Numerical result format', self)
+        self.optionsNumericalAnswerFormat = QAction('Numerical Result Format', self)
         self.optionsNumericalAnswerFormat.triggered.connect(self.setNumericalAnswerFormat)
         optionsMenu.addAction(self.optionsNumericalAnswerFormat)
 
@@ -133,9 +134,13 @@ class ModularCalculatorInterface(StatefulApplication):
         self.optionsResetNumericalAnswerFormat.setVisible(False)
         optionsMenu.addAction(self.optionsResetNumericalAnswerFormat)
 
-        self.optionsFeatureConfig = QAction('Configure features', self)
+        self.optionsFeatureConfig = QAction('Install/Remove Features', self)
         self.optionsFeatureConfig.triggered.connect(self.openFeatureConfig)
         optionsMenu.addAction(self.optionsFeatureConfig)
+
+        self.optionsFeatureOptions = QAction('Feature Options', self)
+        self.optionsFeatureOptions.triggered.connect(self.openFeatureOptions)
+        optionsMenu.addAction(self.optionsFeatureOptions)
 
         self.executeAction = QAction('Execute', self)
         self.executeAction.triggered.connect(self.calc)
@@ -179,7 +184,7 @@ class ModularCalculatorInterface(StatefulApplication):
             self.calculator.number_auto_func_set(self.calculator.funcs[func])
             self.optionsNumericalAnswerFormat.setVisible(False)
             self.optionsResetNumericalAnswerFormat.setVisible(True)
-            self.optionsResetNumericalAnswerFormat.setText("Reset numerical result format ({})".format(func))
+            self.optionsResetNumericalAnswerFormat.setText("Reset Numerical Result Format ({})".format(func))
 
     def restoreAllState(self):
         try:
@@ -462,6 +467,9 @@ class ModularCalculatorInterface(StatefulApplication):
             errorMessage.exec()
             print(traceback.format_exc())
         self.entry.refresh()
+
+    def openFeatureOptions(self):
+        FeatureOptionsDialog(self)
 
 
 if __name__ == '__main__':

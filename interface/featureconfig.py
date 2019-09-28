@@ -74,7 +74,7 @@ class FeatureConfigDialog(QDialog):
         grid.addWidget(splitter, 0, 0, 6, 1)
         self.setLayout(grid)
 
-        self.setWindowTitle('Feature Configuration')
+        self.setWindowTitle('Install/Remove Features')
         self.setVisible(True)
 
     def refreshFeatureList(self):

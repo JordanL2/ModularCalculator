@@ -34,15 +34,16 @@ class TerminatorFeature(Feature):
 
     def parse_terminator(self, expr, i, items, flags):
         next = expr[i:]
-        if next[0] == self.feature_options['structure.terminator']['Symbol']:
-            return [TerminatorItem()], 1, {'end': True}
+        symbol = self.feature_options['structure.terminator']['Symbol']
+        if next[0] == symbol:
+            return [TerminatorItem(symbol)], 1, {'end': True}
         return None, None, None
 
 
 class TerminatorItem(NonFunctionalItem):
 
-	def __init__(self):
-		super().__init__(';')
+	def __init__(self, text):
+		super().__init__(text)
 
 	def desc(self):
 		return 'terminator'
