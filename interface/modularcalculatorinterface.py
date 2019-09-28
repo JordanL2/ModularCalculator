@@ -234,8 +234,10 @@ class ModularCalculatorInterface(StatefulApplication):
         self.setNumberFormatFunction(self.fetchStateText("numericalAnswerFormat"))
 
         featureOptions = self.fetchStateMap("calculatorFeatureOptions")
-        for field, value in featureOptions.items():
-            self.calculator.feature_options[field] = value
+        for featureId, featuresOptions in featureOptions.items():
+            for field, value in featuresOptions.items():
+                if field in self.calculator.feature_list[featureId].default_options():
+                    self.calculator.feature_options[featureId][field] = value
 
     def storeAllState(self):
         self.storeStateArray("importedFeatures", list(set(self.importedFeatures)))

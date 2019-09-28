@@ -29,7 +29,7 @@ class ExternalFunctionsFeature(Feature):
 
     def default_options():
         return {
-            'symbol' : '@'
+            'Symbol' : '@'
         }
 
     @classmethod
@@ -39,7 +39,7 @@ class ExternalFunctionsFeature(Feature):
         calculator.feature_options['structure.externalfunctions'] = cls.default_options()
 
     def parse_ext_function(self, expr, i, items, flags):
-        symbol = self.feature_options['structure.externalfunctions']['symbol']
+        symbol = self.feature_options['structure.externalfunctions']['Symbol']
         ext_func_invoke_regex = re.compile(re.escape(symbol) + r'([a-zA-Z_]+)\(')
         
         next = expr[i:]
