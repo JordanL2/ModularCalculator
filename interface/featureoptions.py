@@ -55,20 +55,22 @@ class ConfigureFeatureDialog(QDialog):
             fieldName = fieldAndValue[0]
             fieldValue = self.encode(fieldAndValue[1])
             lineEdit = QLineEdit(fieldValue, self)
+            lineEdit.setMinimumWidth(500)
             self.fieldEditBoxes[fieldName] = lineEdit
             grid.addWidget(QLabel(fieldName), i, 0, 1, 1)
-            grid.addWidget(lineEdit, i, 1, 1, 1)
+            grid.addWidget(QLabel(   ), i, 1, 1, 1)
+            grid.addWidget(lineEdit, i, 2, 1, 1)
             maxI = i
         maxI += 1
 
         button = QPushButton("Reset", self)
         button.clicked.connect(self.reset)
-        grid.addWidget(button, maxI, 0, 1, 2)
+        grid.addWidget(button, maxI, 0, 1, 3)
         maxI += 1
 
         button = QPushButton("OK", self)
         button.clicked.connect(self.ok)
-        grid.addWidget(button, maxI, 0, 1, 2)
+        grid.addWidget(button, maxI, 0, 1, 3)
 
         self.setLayout(grid)
         self.setMinimumWidth(600)
