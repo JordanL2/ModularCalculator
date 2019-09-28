@@ -173,6 +173,8 @@ class ModularCalculatorInterface(StatefulApplication):
         calculator.unit_normaliser.systems_preference = self.calculator.unit_normaliser.systems_preference
         if self.calculator.number_auto_func is not None:
             calculator.number_auto_func_set(calculator.funcs[self.calculator.number_auto_func.func])
+        for featureId, featureOptions in self.calculator.feature_options.items():
+            calculator.feature_options[featureId] = featureOptions
         self.setCalculator(calculator)
 
     def setNumberFormatFunction(self, func=None):
