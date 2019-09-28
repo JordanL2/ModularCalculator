@@ -40,7 +40,7 @@ class ExternalFunctionsFeature(Feature):
 
     def parse_ext_function(self, expr, i, items, flags):
         symbol = self.feature_options['structure.externalfunctions']['symbol']
-        ext_func_invoke_regex = re.compile(symbol + r'([a-zA-Z_]+)\(')
+        ext_func_invoke_regex = re.compile(re.escape(symbol) + r'([a-zA-Z_]+)\(')
         
         next = expr[i:]
         ext_func_match = ext_func_invoke_regex.match(next)

@@ -86,7 +86,7 @@ These examples are available in examples/basic_integration.py. See examples/adva
 
 ## Graphical Interface
 * Functionality:
-	* Dialog that allows editing of feature options
+	* Feature options restored on start
 	* Option to switch between ; and new-lines for statement terminators
 	* Tabs
 
