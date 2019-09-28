@@ -32,6 +32,7 @@ class FeatureConfigDialog(QDialog):
 
         self.featureList = QListWidget(self)
         self.refreshFeatureList()
+        self.featureList.setMinimumWidth(self.featureList.sizeHintForColumn(0))
         layout.addWidget(self.featureList)
         self.featureList.itemClicked.connect(self.itemClicked)
         self.featureList.itemChanged.connect(self.itemChanged)
@@ -96,9 +97,13 @@ class FeatureConfigDialog(QDialog):
         self.close()
 
     def sizeHint(self):
-        return QSize(super().sizeHint() * 4)
+        size = super().sizeHint()
+        size.setHeight(size.height() * 4)
+        return size
 
     def itemClicked(self, item):
+        if item.data(Qt.UserRole) is None:
+            return
         if item.checkState() == Qt.Checked:
             item.setCheckState(Qt.Unchecked)
         else:
