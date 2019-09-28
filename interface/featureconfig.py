@@ -4,7 +4,7 @@ from modularcalculator.modularcalculator import *
 
 from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import QFontDatabase
-from PyQt5.QtWidgets import QDialog, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QListWidget, QListWidgetItem, QComboBox, QFileDialog
+from PyQt5.QtWidgets import QDialog, QWidget, QHBoxLayout, QPushButton, QListWidget, QListWidgetItem, QComboBox, QFileDialog, QSplitter, QGridLayout
 
 
 class FeatureConfigDialog(QDialog):
@@ -18,7 +18,8 @@ class FeatureConfigDialog(QDialog):
         self.calculator = self.buildCalculator(self.importedFeatures, [])
         self.selectedFeatures = parent.calculator.installed_features
 
-        layout = QVBoxLayout()
+        splitter = QSplitter()
+        splitter.setOrientation(Qt.Vertical)
 
         self.presetList = QComboBox(self)
         self.presetList.addItem('- Presets -')
@@ -26,14 +27,16 @@ class FeatureConfigDialog(QDialog):
         self.presetList.addItem('Select None')
         self.presetList.addItems(self.calculator.preset_list.keys())
         self.presetList.currentTextChanged.connect(self.selectPreset)
-        layout.addWidget(self.presetList)
+        splitter.addWidget(self.presetList)
+        splitter.setStretchFactor(0, 0)
 
         self.featureList = QListWidget(self)
         self.refreshFeatureList()
         self.featureList.setMinimumWidth(self.featureList.sizeHintForColumn(0))
-        layout.addWidget(self.featureList)
         self.featureList.itemClicked.connect(self.itemClicked)
         self.featureList.itemChanged.connect(self.itemChanged)
+        splitter.addWidget(self.featureList)
+        splitter.setStretchFactor(1, 1)
 
         importedFileButtonsLayout = QHBoxLayout()
         addFileButton = QPushButton("Add", self)
@@ -44,17 +47,25 @@ class FeatureConfigDialog(QDialog):
         importedFileButtonsLayout.addWidget(removeFileButton)
         importedFiles = QWidget()
         importedFiles.setLayout(importedFileButtonsLayout)
-        layout.addWidget(importedFiles)
+        splitter.addWidget(importedFiles)
+        splitter.setStretchFactor(2, 0)
 
         self.importedFileList = QListWidget(self)
         self.refreshImportedFiles()
-        layout.addWidget(self.importedFileList)
+        splitter.addWidget(self.importedFileList)
+        splitter.setStretchFactor(3, 0)
 
         okButton = QPushButton("OK", self)
         okButton.clicked.connect(self.ok)
-        layout.addWidget(okButton)
+        splitter.addWidget(okButton)
+        splitter.setStretchFactor(4, 0)
 
-        self.setLayout(layout)
+        for i in range(0, splitter.count()):
+            splitter.handle(i).setEnabled(False)
+        grid = QGridLayout()
+        grid.addWidget(splitter, 0, 0, 5, 1)
+        self.setLayout(grid)
+
         self.setWindowTitle('Feature Configuration')
         self.setVisible(True)
 
@@ -105,7 +116,7 @@ class FeatureConfigDialog(QDialog):
         calculator.enable_units()
         for importedFeature in importedFeatures:
             calculator.import_feature_file(importedFeature)
-        calculator.install_features(features, True)
+        calculator.install_features(features, False)
         return calculator
 
     def ok(self):
@@ -139,7 +150,6 @@ class FeatureConfigDialog(QDialog):
     def itemChanged(self, item):
         feature = self.getItemsFeature(item)
         featureId = feature.id()
-        print(feature.title(), 'changed')
         if item.checkState() == Qt.Checked:
             if issubclass(feature, MetaFeature):
                 for subfeatureId in feature.subfeatures():

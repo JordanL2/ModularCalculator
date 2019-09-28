@@ -157,7 +157,6 @@ class ModularCalculatorInterface(StatefulApplication):
 
     def importFeature(self, filePath):
         try:
-            print("Importing feature:", filePath)
             featureIds = self.calculator.import_feature_file(filePath)
             self.importedFeatures.append(filePath)
         except Exception as err:
@@ -206,7 +205,6 @@ class ModularCalculatorInterface(StatefulApplication):
     def restoreCalculatorState(self):
         foundImportedFeatures = []
         for featureFile in self.importedFeatures:
-            print("Importing feature", featureFile) #TODO Remove debug
             try:
                 self.calculator.import_feature_file(featureFile)
                 foundImportedFeatures.append(featureFile)
@@ -216,7 +214,7 @@ class ModularCalculatorInterface(StatefulApplication):
 
         features = self.fetchStateArray("calculatorFeatures")
         if features is not None and len(features) > 0:
-            self.calculator.install_features(features, True, True) #TODO disable debug
+            self.calculator.install_features(features, False, True)
         else:
             self.calculator.load_preset('Computing')
 
