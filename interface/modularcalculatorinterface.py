@@ -148,6 +148,7 @@ class ModularCalculatorInterface(StatefulApplication):
 
     def initCalculator(self):
         calculator = ModularCalculator()
+        calculator.enable_units()
         self.setCalculator(calculator)
 
     def setCalculator(self, calculator):
@@ -439,7 +440,8 @@ class ModularCalculatorInterface(StatefulApplication):
         SortableListDialog(self, 
             'Unit System Preference', 
             'Order unit systems by preference, most prefered at top', 
-            [self.calculator.unit_normaliser.systems[s].name for s in self.calculator.unit_normaliser.systems_preference], 
+            [self.calculator.unit_normaliser.systems[s].name for s in self.calculator.unit_normaliser.systems_preference if s in self.calculator.unit_normaliser.systems]
+            + [self.calculator.unit_normaliser.systems[s].name for s in self.calculator.unit_normaliser.systems if s not in self.calculator.unit_normaliser.systems_preference], 
             self.updateUnitSystemPreference)
 
     def updateUnitSystemPreference(self, systemNames):
