@@ -230,6 +230,10 @@ class ModularCalculatorInterface(StatefulApplication):
             self.calculator.unit_normaliser.systems_preference = unitSystems
         self.setNumberFormatFunction(self.fetchStateText("numericalAnswerFormat"))
 
+        featureOptions = self.fetchStateMap("calculatorFeatureOptions")
+        for field, value in featureOptions.items():
+            self.calculator.feature_options[field] = value
+
     def storeAllState(self):
         self.storeStateArray("importedFeatures", list(set(self.importedFeatures)))
         self.storeCalculatorState()
@@ -252,10 +256,13 @@ class ModularCalculatorInterface(StatefulApplication):
         self.storeStateNumber("precision", self.precisionSpinBox.spinbox.value())
         self.storeStateBoolean("simplifyUnits", self.optionsSimplifyUnits.isChecked())
         self.storeStateArray("unitSystemsPreference", self.calculator.unit_normaliser.systems_preference)
+
         if self.calculator.number_auto_func is not None:
             self.storeStateText("numericalAnswerFormat", self.calculator.number_auto_func.func)
         else:
             self.storeStateText("numericalAnswerFormat", None)
+
+        self.storeStateMap("calculatorFeatureOptions", self.calculator.feature_options)
 
     def calc(self):
         question = self.entry.getContents().rstrip()
