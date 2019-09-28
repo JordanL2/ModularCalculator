@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 
+from modularcalculator.interface.guitools import *
+
 from PyQt5.QtCore import Qt, QStringListModel, QSize
 from PyQt5.QtWidgets import QListWidget, QWidgetAction, QSpinBox, QLabel, QHBoxLayout, QVBoxLayout, QWidget, QListView, QDialog, QAbstractItemView, QPushButton, QCalendarWidget, QTimeEdit, QComboBox
 
@@ -33,7 +35,7 @@ class SelectionDialog(QDialog):
         self.close()
 
     def sizeHint(self):
-        return QSize(super().sizeHint() * 2)
+        return screenRelativeSize(0.3, 0.5)
 
 
 class CategorisedSelectionDialog(QDialog):
@@ -95,7 +97,7 @@ class CategorisedSelectionDialog(QDialog):
             self.close()
 
     def sizeHint(self):
-        return QSize(super().sizeHint() * 2)
+        return screenRelativeSize(0.3, 0.5)
 
 
 class SortableListModel(QStringListModel):

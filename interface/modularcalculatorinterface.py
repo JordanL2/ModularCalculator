@@ -485,6 +485,6 @@ class ModularCalculatorInterface(StatefulApplication):
 
 
 if __name__ == '__main__':
-	app = QApplication(sys.argv)
-	calc = ModularCalculatorInterface()
-	sys.exit(app.exec_())
+    app = QApplication(sys.argv)
+    calc = ModularCalculatorInterface()
+    sys.exit(app.exec_())

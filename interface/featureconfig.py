@@ -1,10 +1,11 @@
 #!/usr/bin/python3
 
 from modularcalculator.modularcalculator import *
+from modularcalculator.interface.guitools import *
 
 from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import QFontDatabase
-from PyQt5.QtWidgets import QDialog, QWidget, QHBoxLayout, QPushButton, QListWidget, QListWidgetItem, QComboBox, QFileDialog, QSplitter, QGridLayout, QLabel
+from PyQt5.QtWidgets import  QDialog, QWidget, QHBoxLayout, QPushButton, QListWidget, QListWidgetItem, QComboBox, QFileDialog, QSplitter, QGridLayout, QLabel
 
 
 class FeatureConfigDialog(QDialog):
@@ -136,11 +137,6 @@ class FeatureConfigDialog(QDialog):
         self.parent.commitFeatureConfig(calculator, self.importedFeatures)
         self.close()
 
-    def sizeHint(self):
-        size = super().sizeHint()
-        size.setHeight(size.height() * 2)
-        return size
-
     def itemClicked(self, item):
         if item.data(Qt.UserRole) is None:
             return
@@ -216,3 +212,6 @@ class FeatureConfigDialog(QDialog):
                 self.selectedFeatures.append(featureId)
         self.calculator = self.buildCalculator(self.importedFeatures, [])
         self.refreshFeatureList()
+
+    def sizeHint(self):
+        return screenRelativeSize(0.4, 0.6)

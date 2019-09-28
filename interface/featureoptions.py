@@ -2,6 +2,7 @@
 
 from modularcalculator.modularcalculator import *
 from modularcalculator.interface.guiwidgets import ExpandedListWidget
+from modularcalculator.interface.guitools import *
 
 from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import QFontDatabase
@@ -27,14 +28,19 @@ class FeatureOptionsDialog(QDialog):
         layout.addWidget(self.featureList)
 
         self.setLayout(layout)
-        self.setFixedWidth(600)
-        self.setFixedHeight(self.sizeHint().height())
         self.setWindowTitle('Feature Options')
         self.setVisible(True)
 
     def openFeature(self, item):
         featureId = item.data(Qt.UserRole)
         ConfigureFeatureDialog(self, featureId)
+
+    def sizeHint(self):
+        size = super().sizeHint()
+        relSize = screenRelativeSize(0.2, 0.8)
+        if size.height() < relSize.height():
+            relSize.setHeight(size.height())
+        return size
 
 
 class ConfigureFeatureDialog(QDialog):
@@ -55,7 +61,6 @@ class ConfigureFeatureDialog(QDialog):
             fieldName = fieldAndValue[0]
             fieldValue = self.encode(fieldAndValue[1])
             lineEdit = QLineEdit(fieldValue, self)
-            lineEdit.setMinimumWidth(500)
             self.fieldEditBoxes[fieldName] = lineEdit
             grid.addWidget(QLabel(fieldName), i, 0, 1, 1)
             grid.addWidget(QLabel(   ), i, 1, 1, 1)
@@ -73,7 +78,6 @@ class ConfigureFeatureDialog(QDialog):
         grid.addWidget(button, maxI, 0, 1, 3)
 
         self.setLayout(grid)
-        self.setMinimumWidth(600)
         self.setFixedHeight(self.sizeHint().height())
         self.setWindowTitle("{} Options".format(self.feature.title()))
         self.setVisible(True)
@@ -96,3 +100,8 @@ class ConfigureFeatureDialog(QDialog):
             self.featureOptions[field] = self.decode(value)
         self.parent.parent.entry.refresh()
         self.close()
+
+    def sizeHint(self):
+        size = super().sizeHint()
+        size.setWidth(QApplication.desktop().screenGeometry().width() * 0.3)
+        return size
