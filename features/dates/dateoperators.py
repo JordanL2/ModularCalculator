@@ -20,7 +20,7 @@ class DateOperatorsFeature(Feature):
         return 'Operators to easily add/subtract time periods to dates'
 
     def dependencies():
-        return ['dates.dates']
+        return ['dates.dates','structure.operators']
 
     @classmethod
     def install(cls, calculator):

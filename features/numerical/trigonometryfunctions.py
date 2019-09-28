@@ -18,10 +18,10 @@ class TrigonometryFunctionsFeature(Feature):
         return 'Numerical'
 
     def title():
-        return 'Numerical Functions'
+        return 'Trigonometry Functions'
 
     def desc():
-        return 'Trigonometry functions'
+        return 'Sine, cosine etc functions'
 
     def dependencies():
         return ['structure.functions']

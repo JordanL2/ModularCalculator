@@ -18,10 +18,10 @@ class StatisticalFunctionsFeature(Feature):
         return 'Numerical'
 
     def title():
-        return 'Numerical Functions'
+        return 'Statistical Functions'
 
     def desc():
-        return 'Statistical functions'
+        return 'Sum, mean, median, standard deviation etc'
 
     def dependencies():
         return ['structure.functions']
