@@ -56,7 +56,7 @@ class FeatureConfigDialog(QDialog):
             for feature in sorted(features, key=lambda f : f.title()):
                 featureId = feature.id()
                 featureTitle = feature.title()
-                featureInstalled = featureId in self.selectedFeatures
+                featureInstalled = featureId in self.selectedFeatures and not issubclass(feature, MetaFeature)
 
                 item = QListWidgetItem(featureTitle, self.featureList)
                 item.setCheckState(featureInstalled * 2)
@@ -77,7 +77,7 @@ class FeatureConfigDialog(QDialog):
     def ok(self):
         featuresToInstall = []
         for featureId, item in self.featureItems.items():
-            if item.checkState() == 2:
+            if item.checkState() == Qt.Checked:
                 featuresToInstall.append(featureId)
         calculator = self.buildCalculator(self.importedFeatures, featuresToInstall)
         self.parent.commitFeatureConfig(calculator, self.importedFeatures)
@@ -87,10 +87,10 @@ class FeatureConfigDialog(QDialog):
         return QSize(super().sizeHint() * 4)
 
     def itemClicked(self, item):
-        if item.checkState() == 2:
-            item.setCheckState(0)
+        if item.checkState() == Qt.Checked:
+            item.setCheckState(Qt.Unchecked)
         else:
-            item.setCheckState(2)
+            item.setCheckState(Qt.Checked)
 
     def getItemsFeature(self, item):
         return self.calculator.feature_list[item.data(Qt.UserRole)]
@@ -99,14 +99,22 @@ class FeatureConfigDialog(QDialog):
         feature = self.getItemsFeature(item)
         featureId = feature.id()
         print(feature.title(), 'changed')
-        if item.checkState() == 2:
-            # if a meta feature, enable all children, then disable this item
-            # ensure all dependencies are checked
-            pass
+        if item.checkState() == Qt.Checked:
+            if issubclass(feature, MetaFeature):
+                for subfeatureId in feature.subfeatures():
+                    subFeatureItem = self.featureItems[subfeatureId]
+                    if subFeatureItem.checkState() == Qt.Unchecked:
+                        subFeatureItem.setCheckState(Qt.Checked)
+                item.setCheckState(Qt.Unchecked)
+            else:
+                for dependencyFeatureId in feature.dependencies():
+                    dependencyFeatureItem = self.featureItems[dependencyFeatureId]
+                    if dependencyFeatureItem.checkState() == Qt.Unchecked:
+                        dependencyFeatureItem.setCheckState(Qt.Checked)
         else:
             for checkFeatureId, checkFeature in self.calculator.feature_list.items():
                 if featureId in checkFeature.dependencies():
                     checkFeatureItem = self.featureItems[checkFeatureId]
-                    if checkFeatureItem.checkState() == 2:
+                    if checkFeatureItem.checkState() == Qt.Checked:
                         checkFeatureItem.setCheckState(0)
                 
