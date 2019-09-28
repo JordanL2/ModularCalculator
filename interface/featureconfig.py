@@ -4,7 +4,7 @@ from modularcalculator.modularcalculator import *
 
 from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import QFontDatabase
-from PyQt5.QtWidgets import QDialog, QWidget, QHBoxLayout, QPushButton, QListWidget, QListWidgetItem, QComboBox, QFileDialog, QSplitter, QGridLayout
+from PyQt5.QtWidgets import QDialog, QWidget, QHBoxLayout, QPushButton, QListWidget, QListWidgetItem, QComboBox, QFileDialog, QSplitter, QGridLayout, QLabel
 
 
 class FeatureConfigDialog(QDialog):
@@ -38,6 +38,14 @@ class FeatureConfigDialog(QDialog):
         splitter.addWidget(self.featureList)
         splitter.setStretchFactor(1, 1)
 
+        importedFileLabel = QLabel("External Feature Files")
+        importedFileLabelFont = QFontDatabase.systemFont(QFontDatabase.TitleFont)
+        importedFileLabelFont.setBold(True)
+        importedFileLabel.setFont(importedFileLabelFont)
+        importedFileLabel.setAlignment(Qt.AlignHCenter)
+        splitter.addWidget(importedFileLabel)
+        splitter.setStretchFactor(2, 0)
+
         importedFileButtonsLayout = QHBoxLayout()
         addFileButton = QPushButton("Add", self)
         addFileButton.clicked.connect(self.addFile)
@@ -48,22 +56,22 @@ class FeatureConfigDialog(QDialog):
         importedFiles = QWidget()
         importedFiles.setLayout(importedFileButtonsLayout)
         splitter.addWidget(importedFiles)
-        splitter.setStretchFactor(2, 0)
+        splitter.setStretchFactor(3, 0)
 
         self.importedFileList = QListWidget(self)
         self.refreshImportedFiles()
         splitter.addWidget(self.importedFileList)
-        splitter.setStretchFactor(3, 0)
+        splitter.setStretchFactor(4, 0)
 
         okButton = QPushButton("OK", self)
         okButton.clicked.connect(self.ok)
         splitter.addWidget(okButton)
-        splitter.setStretchFactor(4, 0)
+        splitter.setStretchFactor(5, 0)
 
         for i in range(0, splitter.count()):
             splitter.handle(i).setEnabled(False)
         grid = QGridLayout()
-        grid.addWidget(splitter, 0, 0, 5, 1)
+        grid.addWidget(splitter, 0, 0, 6, 1)
         self.setLayout(grid)
 
         self.setWindowTitle('Feature Configuration')
