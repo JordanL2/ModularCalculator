@@ -11,6 +11,6 @@ def htmlSafe(text):
 
 def screenRelativeSize(width, height):
     size = QSize()
-    size.setWidth(QApplication.desktop().screenGeometry().width() * 0.4)
-    size.setHeight(QApplication.desktop().screenGeometry().height() * 0.6)
+    size.setWidth(QApplication.desktop().screenGeometry().width() * width)
+    size.setHeight(QApplication.desktop().screenGeometry().height() * height)
     return size

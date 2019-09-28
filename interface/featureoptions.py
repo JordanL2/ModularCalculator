@@ -18,6 +18,8 @@ class FeatureOptionsDialog(QDialog):
 
         layout = QVBoxLayout()
 
+        layout.addWidget(QLabel('Click a feature below to edit its available options.'))
+
         self.featureList = ExpandedListWidget(self, True, True)
         features = [f for f in self.parent.calculator.feature_list.values() if f.id() in self.parent.calculator.feature_options and f.id() in self.parent.calculator.installed_features]
         for feature in sorted(features, key=lambda f : f.title()):
