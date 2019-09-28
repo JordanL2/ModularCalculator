@@ -188,3 +188,20 @@ class DatePicker(QDialog):
     def ok(self):
         self.okFunction(self.datePicker.selectedDate(), self.timePicker.time())
         self.close()
+
+
+class ExpandedListWidget(QListWidget):
+
+    def __init__(self, parent, maxWidth, maxHeight):
+        super().__init__(parent)
+
+        self.maxWidth = maxWidth
+        self.maxHeight = maxHeight
+
+    def sizeHint(self):
+        size = super().sizeHint()
+        if self.maxWidth:
+            size.setWidth(self.sizeHintForColumn(0) + 10)
+        if self.maxHeight:
+            size.setHeight(self.sizeHintForRow(0) * self.count() + 10)
+        return size

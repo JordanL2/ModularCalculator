@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from modularcalculator.modularcalculator import *
+from modularcalculator.interface.guiwidgets import ExpandedListWidget
 
 from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import QFontDatabase
@@ -16,7 +17,7 @@ class FeatureOptionsDialog(QDialog):
 
         layout = QVBoxLayout()
 
-        self.featureList = QListWidget(self)
+        self.featureList = ExpandedListWidget(self, True, True)
         features = [f for f in self.parent.calculator.feature_list.values() if f.id() in self.parent.calculator.feature_options and f.id() in self.parent.calculator.installed_features]
         for feature in sorted(features, key=lambda f : f.title()):
             item = QListWidgetItem(feature.title(), self.featureList)
@@ -26,11 +27,10 @@ class FeatureOptionsDialog(QDialog):
         layout.addWidget(self.featureList)
 
         self.setLayout(layout)
+        self.setFixedWidth(600)
+        self.setFixedHeight(self.sizeHint().height())
         self.setWindowTitle('Feature Options')
         self.setVisible(True)
-
-    def sizeHint(self):
-        return QSize(super().sizeHint() * 2)
 
     def openFeature(self, item):
         featureId = item.data(Qt.UserRole)
@@ -71,6 +71,8 @@ class ConfigureFeatureDialog(QDialog):
         grid.addWidget(button, maxI, 0, 1, 2)
 
         self.setLayout(grid)
+        self.setMinimumWidth(600)
+        self.setFixedHeight(self.sizeHint().height())
         self.setWindowTitle("{} Options".format(self.feature.title()))
         self.setVisible(True)
 
