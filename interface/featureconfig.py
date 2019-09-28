@@ -5,7 +5,7 @@ from modularcalculator.modularcalculator import *
 #from PyQt5.QtCore import Qt, QStringListModel, QSize
 #from PyQt5.QtWidgets import QListWidget, QWidgetAction, QSpinBox, QLabel, QHBoxLayout, QVBoxLayout, QWidget, QListView, QDialog, QAbstractItemView, QPushButton, QCalendarWidget, QTimeEdit, QComboBox
 from PyQt5.QtCore import Qt, QSize
-from PyQt5.QtWidgets import QDialog, QVBoxLayout, QPushButton, QListWidget, QListWidgetItem
+from PyQt5.QtWidgets import QDialog, QVBoxLayout, QPushButton, QListWidget, QListWidgetItem, QComboBox
 from PyQt5.QtGui import QFontDatabase
 
 
@@ -21,6 +21,14 @@ class FeatureConfigDialog(QDialog):
         self.selectedFeatures = parent.calculator.installed_features
 
         layout = QVBoxLayout()
+
+        self.presetList = QComboBox(self)
+        self.presetList.addItem('- Presets -')
+        self.presetList.addItem('Select All')
+        self.presetList.addItem('Select None')
+        self.presetList.addItems(self.calculator.preset_list.keys())
+        self.presetList.currentTextChanged.connect(self.selectPreset)
+        layout.addWidget(self.presetList)
 
         self.featureList = QListWidget(self)
         self.refreshFeatureList()
@@ -121,3 +129,21 @@ class FeatureConfigDialog(QDialog):
                     if checkFeatureItem.checkState() == Qt.Checked:
                         checkFeatureItem.setCheckState(0)
                 
+    def selectPreset(self, text):
+        if text == 'Select All':
+            for item in self.featureItems.values():
+                if item.checkState() == Qt.Unchecked:
+                    item.setCheckState(Qt.Checked)
+        elif text == 'Select None':
+            for item in self.featureItems.values():
+                if item.checkState() == Qt.Checked:
+                    item.setCheckState(Qt.Unchecked)
+        elif text in self.calculator.preset_list:
+            for item in self.featureItems.values():
+                if item.checkState() == Qt.Checked:
+                    item.setCheckState(Qt.Unchecked)
+            for featureId in self.calculator.preset_list[text]:
+                item = self.featureItems[featureId]
+                if item.checkState() == Qt.Unchecked:
+                    item.setCheckState(Qt.Checked)
+        self.presetList.setCurrentIndex(0)
