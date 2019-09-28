@@ -29,7 +29,9 @@ class DecimalNumbersFeature(Feature):
         calculator.add_parser('number', DecimalNumbersFeature.parse_number)
         calculator.add_number_caster('decimal', DecimalNumbersFeature.number_decimal)
 
-    num_regex = re.compile(r'(\-?\d+(\.\d+)?)')
+    num_pattern = r'(\-?\d+(\.\d+)?)'
+    num_regex = re.compile(num_pattern)
+    num_is_regex = re.compile('^' + num_pattern + '$')
 
     def parse_number(self, expr, i, items, flags):
         next = expr[i:]
@@ -44,4 +46,6 @@ class DecimalNumbersFeature(Feature):
     def number_decimal(self, val):
         if isinstance(val, Decimal):
             return val
+        if isinstance(val, str) and DecimalNumbersFeature.num_is_regex.match(val):
+            return Decimal(val)
         return None
