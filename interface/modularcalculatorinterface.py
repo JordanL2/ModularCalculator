@@ -453,8 +453,14 @@ class ModularCalculatorInterface(StatefulApplication):
         FeatureConfigDialog(self)
 
     def commitFeatureConfig(self, calculator, importedFeatures):
-        self.replaceCalculator(calculator)
-        self.importedFeatures = importedFeatures
+        try:
+            self.replaceCalculator(calculator)
+            self.importedFeatures = importedFeatures
+        except Exception:
+            errorMessage = QMessageBox(self)
+            errorMessage.setText("Could not instantiate calculator with selected features")
+            errorMessage.exec()
+            print(traceback.format_exc())
         self.entry.refresh()
 
 

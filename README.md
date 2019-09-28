@@ -86,7 +86,7 @@ These examples are available in examples/basic_integration.py. See examples/adva
 
 ## Graphical Interface
 * Functionality:
-	* Ability to select features calculator has, screen to customise calculator, if calculator fails to init display error message
+	* Feature config screen allows adding and removing external features
 	* Dialog that allows editing of feature options
 	* Option to switch between ; and new-lines for statement terminators
 	* Tabs
@@ -116,4 +116,4 @@ These examples are available in examples/basic_integration.py. See examples/adva
 # Bugs
 
 * Unit normalisation: "1 joule / 1 m^3" gets simplified to "1 pascal" - Even Google has this issue
-* GUI calculator can't work without units feature installed
+* Unit system preference should be hidden from menu when unit systems feature disabled?

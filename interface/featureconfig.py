@@ -80,6 +80,7 @@ class FeatureConfigDialog(QDialog):
 
     def buildCalculator(self, importedFeatures, features):
         calculator = ModularCalculator()
+        calculator.enable_units()
         for importedFeature in importedFeatures:
             calculator.import_feature_file(importedFeature)
         calculator.install_features(features, True)
