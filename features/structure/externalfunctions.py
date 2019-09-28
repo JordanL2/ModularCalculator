@@ -25,7 +25,7 @@ class ExternalFunctionsFeature(Feature):
         return 'Enables functions defined by the user'
 
     def dependencies():
-        return ['state.assignment', 'structure.functions']
+        return ['state.assignment', 'structure.functions', 'strings.strings']
 
     def default_options():
         return {

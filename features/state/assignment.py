@@ -23,7 +23,7 @@ class AssignmentFeature(Feature):
         return 'Eg: x=1'
 
     def dependencies():
-        return []
+        return ['structure.operators']
 
     @classmethod
     def install(cls, calculator):

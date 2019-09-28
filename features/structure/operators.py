@@ -9,7 +9,7 @@ import re
 class OperatorsFeature(Feature):
 
     def id():
-        return "structure.operators"
+        return 'structure.operators'
 
     def category():
         return "Structure"

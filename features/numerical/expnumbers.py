@@ -24,7 +24,7 @@ class ExpNumbersFeature(Feature):
         return 'Eg: 10e6'
 
     def dependencies():
-        return ['structure.functions']
+        return ['numerical.decimalnumbers','structure.functions']
 
     @classmethod
     def install(cls, calculator):
