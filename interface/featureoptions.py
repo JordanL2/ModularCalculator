@@ -85,12 +85,14 @@ class ConfigureFeatureDialog(QDialog):
         self.setVisible(True)
 
     def encode(self, value):
-        value = value.encode('unicode_escape')
-        value = ''.join([chr(c) for c in value])
+        value = value.replace("\n", r'\n')
+        value = value.replace("\t", r'\t')
         return value
 
     def decode(self, value):
-        return value.encode('utf-8').decode('unicode_escape')
+        value = value.replace(r'\n', "\n")
+        value = value.replace(r'\t', "\t")
+        return value
 
     def reset(self):
         for field, value in self.calculator.feature_list[self.feature.id()].default_options().items():
