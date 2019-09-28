@@ -10,9 +10,12 @@ from decimal import *
 from datetime import *
 
 
-datestr = 'Date Format Human Readable - Date'
-datetimestr = 'Date Format Human Readable - Date and time'
-datetimehiresstr = 'Date Format Human Readable - Date and time (incl. microseconds)'
+date_format = 'Human Readable Date Format'
+date_padding = 'Human Readable Date Padding'
+datetime_format = 'Human Readable Date + Time Format'
+datetime_padding = 'Human Readable Date + Time Padding'
+datetimehires_format = 'Human Readable Date + Hi Res Time Format'
+datetimehires_padding = 'Human Readable Date + Hi Res Time Padding'
 
 
 class DateFunctionsFeature(Feature):
@@ -102,9 +105,12 @@ class DateFunctionsFeature(Feature):
             0, 
             0)
 
-        calculator.feature_options['dates.dates'][datestr] =          {'Format': '%A, %d-%b-%Y', 'Padding': ''}
-        calculator.feature_options['dates.dates'][datetimestr] =      {'Format': '%A, %d-%b-%Y at %H:%M:%S', 'Padding': ''}
-        calculator.feature_options['dates.dates'][datetimehiresstr] = {'Format': '%A, %d-%b-%Y at %H:%M:%S.%f', 'Padding': ''}
+        calculator.feature_options['dates.dates'][date_format] = '%A, %d-%b-%Y'
+        calculator.feature_options['dates.dates'][date_padding] = ''
+        calculator.feature_options['dates.dates'][datetime_format] = '%A, %d-%b-%Y at %H:%M:%S'
+        calculator.feature_options['dates.dates'][datetime_padding] = ''
+        calculator.feature_options['dates.dates'][datetimehires_format] = '%A, %d-%b-%Y at %H:%M:%S.%f'
+        calculator.feature_options['dates.dates'][datetimehires_padding] = ''
 
     def func_datecreate(self, vals, units, refs, flags):
         return OperationResult(DatesFeature.date_to_string(self, datetime(*vals)))
@@ -113,15 +119,15 @@ class DateFunctionsFeature(Feature):
         dt = DatesFeature.string_to_date(self, vals[0])
         if dt.hour == 0 and dt.minute == 0 and dt.second == 0 and dt.microsecond == 0:
             return OperationResult(format(
-                dt.strftime(self.feature_options['dates.dates'][datestr]['Format']), 
-                self.feature_options['dates.dates'][datestr]['Padding']))
+                dt.strftime(self.feature_options['dates.dates'][date_format]), 
+                self.feature_options['dates.dates'][date_padding]))
         if dt.microsecond == 0:
             return OperationResult(format(
-                dt.strftime(self.feature_options['dates.dates'][datetimestr]['Format']), 
-                self.feature_options['dates.dates'][datetimestr]['Padding']))
+                dt.strftime(self.feature_options['dates.dates'][datetime_format]), 
+                self.feature_options['dates.dates'][datetime_padding]))
         return OperationResult(format(
-            dt.strftime(self.feature_options['dates.dates'][datetimehiresstr]['Format']), 
-            self.feature_options['dates.dates'][datetimehiresstr]['Padding']))
+            dt.strftime(self.feature_options['dates.dates'][datetimehires_format]), 
+            self.feature_options['dates.dates'][datetimehires_padding]))
 
     def func_dateadd(self, vals, units, refs, flags):
         dt = DatesFeature.string_to_date(self, vals[0])
