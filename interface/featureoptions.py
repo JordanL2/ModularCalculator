@@ -53,25 +53,42 @@ class ConfigureFeatureDialog(QDialog):
         self.fieldEditBoxes = {}
         for i, fieldAndValue in enumerate(self.featureOptions.items()):
             fieldName = fieldAndValue[0]
-            fieldValue = fieldAndValue[1].encode('unicode_escape')
-            fieldValueEncoded = ''.join([chr(c) for c in fieldValue])
-            lineEdit = QLineEdit(fieldValueEncoded, self)
+            fieldValue = self.encode(fieldAndValue[1])
+            lineEdit = QLineEdit(fieldValue, self)
             self.fieldEditBoxes[fieldName] = lineEdit
             grid.addWidget(QLabel(fieldName), i, 0, 1, 1)
             grid.addWidget(lineEdit, i, 1, 1, 1)
             maxI = i
+        maxI += 1
+
+        button = QPushButton("Reset", self)
+        button.clicked.connect(self.reset)
+        grid.addWidget(button, maxI, 0, 1, 2)
+        maxI += 1
 
         button = QPushButton("OK", self)
         button.clicked.connect(self.ok)
-        grid.addWidget(button, maxI + 1, 0, 1, 2)
+        grid.addWidget(button, maxI, 0, 1, 2)
 
         self.setLayout(grid)
         self.setWindowTitle("{} Options".format(self.feature.title()))
         self.setVisible(True)
 
+    def encode(self, value):
+        value = value.encode('unicode_escape')
+        value = ''.join([chr(c) for c in value])
+        return value
+
+    def decode(self, value):
+        return value.encode('utf-8').decode('unicode_escape')
+
+    def reset(self):
+        for field, value in self.calculator.feature_list[self.feature.id()].default_options().items():
+            self.fieldEditBoxes[field].setText(self.encode(value))
+
     def ok(self):
         for field, lineEdit in self.fieldEditBoxes.items():
             value = lineEdit.text()
-            self.featureOptions[field] = value.encode('utf-8').decode('unicode_escape')
+            self.featureOptions[field] = self.decode(value)
         self.parent.parent.entry.refresh()
         self.close()
