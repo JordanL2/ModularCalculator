@@ -55,10 +55,13 @@ class FeatureConfigDialog(QDialog):
 
             for feature in sorted(features, key=lambda f : f.title()):
                 featureId = feature.id()
-                featureTitle = feature.title()
+                if feature.desc() != '':
+                    featureText = "{} - {}".format(feature.title(), feature.desc())
+                else:
+                    featureText = feature.title()
                 featureInstalled = featureId in self.selectedFeatures and not issubclass(feature, MetaFeature)
 
-                item = QListWidgetItem(featureTitle, self.featureList)
+                item = QListWidgetItem(featureText, self.featureList)
                 item.setCheckState(featureInstalled * 2)
                 item.setFlags(Qt.ItemIsEnabled)
                 item.setData(Qt.UserRole, featureId)

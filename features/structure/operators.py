@@ -18,7 +18,7 @@ class OperatorsFeature(Feature):
         return "Operators"
 
     def desc():
-        return "Override this method"
+        return "Enables operators"
 
     def dependencies():
         return []
