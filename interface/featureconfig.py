@@ -2,11 +2,9 @@
 
 from modularcalculator.modularcalculator import *
 
-#from PyQt5.QtCore import Qt, QStringListModel, QSize
-#from PyQt5.QtWidgets import QListWidget, QWidgetAction, QSpinBox, QLabel, QHBoxLayout, QVBoxLayout, QWidget, QListView, QDialog, QAbstractItemView, QPushButton, QCalendarWidget, QTimeEdit, QComboBox
 from PyQt5.QtCore import Qt, QSize
-from PyQt5.QtWidgets import QDialog, QVBoxLayout, QPushButton, QListWidget, QListWidgetItem, QComboBox
 from PyQt5.QtGui import QFontDatabase
+from PyQt5.QtWidgets import QDialog, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QListWidget, QListWidgetItem, QComboBox, QFileDialog
 
 
 class FeatureConfigDialog(QDialog):
@@ -37,15 +35,32 @@ class FeatureConfigDialog(QDialog):
         self.featureList.itemClicked.connect(self.itemClicked)
         self.featureList.itemChanged.connect(self.itemChanged)
 
-        button = QPushButton("OK", self)
-        button.clicked.connect(self.ok)
-        layout.addWidget(button)
+        importedFileButtonsLayout = QHBoxLayout()
+        addFileButton = QPushButton("Add", self)
+        addFileButton.clicked.connect(self.addFile)
+        importedFileButtonsLayout.addWidget(addFileButton)
+        removeFileButton = QPushButton("Remove", self)
+        removeFileButton.clicked.connect(self.removeFile)
+        importedFileButtonsLayout.addWidget(removeFileButton)
+        importedFiles = QWidget()
+        importedFiles.setLayout(importedFileButtonsLayout)
+        layout.addWidget(importedFiles)
+
+        self.importedFileList = QListWidget(self)
+        self.refreshImportedFiles()
+        layout.addWidget(self.importedFileList)
+
+        okButton = QPushButton("OK", self)
+        okButton.clicked.connect(self.ok)
+        layout.addWidget(okButton)
 
         self.setLayout(layout)
         self.setWindowTitle('Feature Configuration')
         self.setVisible(True)
 
     def refreshFeatureList(self):
+        self.featureList.blockSignals(True)
+
         featuresByCategory = {}
         for featureId, feature in self.calculator.feature_list.items():
             featureCategory = feature.category()
@@ -79,6 +94,12 @@ class FeatureConfigDialog(QDialog):
             spacerItem = QListWidgetItem('', self.featureList)
             spacerItem.setFlags(Qt.NoItemFlags)
 
+        self.featureList.blockSignals(False)
+
+    def refreshImportedFiles(self):
+        self.importedFileList.clear()
+        self.importedFileList.addItems(self.importedFeatures)
+
     def buildCalculator(self, importedFeatures, features):
         calculator = ModularCalculator()
         calculator.enable_units()
@@ -98,7 +119,7 @@ class FeatureConfigDialog(QDialog):
 
     def sizeHint(self):
         size = super().sizeHint()
-        size.setHeight(size.height() * 4)
+        size.setHeight(size.height() * 2)
         return size
 
     def itemClicked(self, item):
@@ -110,7 +131,10 @@ class FeatureConfigDialog(QDialog):
             item.setCheckState(Qt.Checked)
 
     def getItemsFeature(self, item):
-        return self.calculator.feature_list[item.data(Qt.UserRole)]
+        featureId = item.data(Qt.UserRole)
+        if featureId is not None:
+            return self.calculator.feature_list[featureId]
+        return None
 
     def itemChanged(self, item):
         feature = self.getItemsFeature(item)
@@ -153,3 +177,24 @@ class FeatureConfigDialog(QDialog):
                 if item.checkState() == Qt.Unchecked:
                     item.setCheckState(Qt.Checked)
         self.presetList.setCurrentIndex(0)
+
+    def addFile(self):
+        filePath, _ = QFileDialog.getOpenFileName(self, "Select Feature File", "", "All Files (*)")
+        if filePath:
+            self.importedFeatures.append(filePath)
+            self.refreshImportedFiles()
+            self.refreshAvailableFeatures()
+
+    def removeFile(self):
+        for selectedItem in self.importedFileList.selectedItems():
+            self.importedFeatures.remove(selectedItem.text())
+        self.refreshImportedFiles()
+        self.refreshAvailableFeatures()
+
+    def refreshAvailableFeatures(self):
+        self.selectedFeatures = []
+        for featureId, item in self.featureItems.items():
+            if item.checkState() == Qt.Checked:
+                self.selectedFeatures.append(featureId)
+        self.calculator = self.buildCalculator(self.importedFeatures, [])
+        self.refreshFeatureList()
