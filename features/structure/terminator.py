@@ -21,13 +21,16 @@ class TerminatorFeature(Feature):
     def dependencies():
         return []
 
+    def default_options():
+        return {
+            'Symbol': ';'
+        }
+
     @classmethod
     def install(cls, calculator):
         calculator.add_parser('terminator', TerminatorFeature.parse_terminator)
 
-        calculator.feature_options['structure.terminator'] = {
-            'Symbol': ';'
-        }
+        calculator.feature_options['structure.terminator'] = cls.default_options()
 
     def parse_terminator(self, expr, i, items, flags):
         next = expr[i:]

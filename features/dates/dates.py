@@ -30,12 +30,8 @@ class DatesFeature(Feature):
     def dependencies():
         return ['strings.strings']
 
-    @classmethod
-    def install(cls, calculator):
-        calculator.validators['date'] = DatesFeature.validate_date
-
-
-        calculator.feature_options['dates.dates'] = {
+    def default_options():
+        return {
             date_format: '%Y-%m-%d',
             date_padding: '0>10',
             datetime_format: '%Y-%m-%dT%H:%M:%S',
@@ -43,6 +39,12 @@ class DatesFeature(Feature):
             datetimehires_format: '%Y-%m-%dT%H:%M:%S.%f',
             datetimehires_padding: '0>26',
         }
+
+    @classmethod
+    def install(cls, calculator):
+        calculator.validators['date'] = DatesFeature.validate_date
+
+        calculator.feature_options['dates.dates'] = cls.default_options()
 
     def string_to_date(self, val):
         try:

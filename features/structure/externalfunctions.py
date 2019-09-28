@@ -27,13 +27,16 @@ class ExternalFunctionsFeature(Feature):
     def dependencies():
         return ['state.assignment', 'structure.functions']
 
+    def default_options():
+        return {
+            'symbol' : '@'
+        }
+
     @classmethod
     def install(cls, calculator):
         calculator.add_parser('ext_function', ExternalFunctionsFeature.parse_ext_function)
 
-        calculator.feature_options['structure.externalfunctions'] = {
-            'symbol' : '@'
-        }
+        calculator.feature_options['structure.externalfunctions'] = cls.default_options()
 
     def parse_ext_function(self, expr, i, items, flags):
         symbol = self.feature_options['structure.externalfunctions']['symbol']

@@ -23,6 +23,12 @@ class StringsFeature(Feature):
     def dependencies():
         return []
 
+    def default_options():
+        return {
+            'Symbol': '\'',
+            'Escape Char': '\\'
+        }
+
     @classmethod
     def install(cls, calculator):
         calculator.add_parser('string', StringsFeature.parse_string)
@@ -48,10 +54,7 @@ class StringsFeature(Feature):
 
         calculator.add_number_caster('string', StringsFeature.number_string)
         
-        calculator.feature_options['strings.strings'] = {
-            'Symbol': '\'',
-            'Escape Char': '\\'
-        }
+        calculator.feature_options['strings.strings'] = cls.default_options()
 
     def parse_string(self, expr, i, items, flags):
         symbol = self.feature_options['strings.strings']['Symbol']

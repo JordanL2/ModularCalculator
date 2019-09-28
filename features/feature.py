@@ -45,6 +45,9 @@ class Feature:
     def after():
         return []
 
+    def default_options():
+        return None
+
     @classmethod
     def install(cls, calculator):
         raise Exception("Override this method")

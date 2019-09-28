@@ -21,13 +21,16 @@ class CommentsFeature(Feature):
     def dependencies():
         return []
 
+    def default_options():
+        return {
+            'Symbol': '#'
+        }
+
     @classmethod
     def install(cls, calculator):
         calculator.add_parser('comment', CommentsFeature.parse_comment)
         
-        calculator.feature_options['nonfunctional.comments'] = {
-            'Symbol': '#'
-        }
+        calculator.feature_options['nonfunctional.comments'] = cls.default_options()
 
     def parse_comment(self, expr, i, items, flags):
         next = expr[i:]
