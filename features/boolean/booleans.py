@@ -175,9 +175,9 @@ class BooleansFeature(Feature):
     def number_bool(self, val):
         if isinstance(val, bool):
             if val:
-                return Decimal(1)
+                return (Decimal(1), False)
             else:
-                return Decimal(0)
+                return (Decimal(0), False)
         return None
 
     def validate_boolean(self, value, unit, ref):

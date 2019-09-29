@@ -47,5 +47,5 @@ class DecimalNumbersFeature(Feature):
         if isinstance(val, Decimal):
             return (val, False)
         if isinstance(val, str) and DecimalNumbersFeature.num_is_regex.match(val):
-            return Decimal(val)
+            return (Decimal(val), False)
         return None
