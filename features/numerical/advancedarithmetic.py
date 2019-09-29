@@ -44,7 +44,7 @@ class AdvancedArithmeticFeature(Feature):
             'number'))
 
     def op_number_modulus(self, vals, units, refs, flags):
-        return OperationResult(self.number(vals[0]) % self.number(vals[1]))
+        return OperationResult(vals[0] % vals[1])
 
     def op_number_integer_divide(self, vals, units, refs, flags):
-        return OperationResult(Decimal(math.floor(self.number(vals[0]) / self.number(vals[1]))))
+        return OperationResult(Decimal(math.floor(vals[0] / vals[1])))

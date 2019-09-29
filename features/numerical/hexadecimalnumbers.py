@@ -53,9 +53,9 @@ class HexadecimalNumbersFeature(Feature):
         return None, None, None
 
     def func_hex(self, vals, units, refs, flags):
-        return OperationResult(BasesFeature.number_add_prefix(self, BasesFeature.dec_to_base(self, self.number(vals[0]), 16), HexadecimalNumbersFeature.hex_prefix))
+        return OperationResult(BasesFeature.number_add_prefix(self, BasesFeature.dec_to_base(self, vals[0], 16), HexadecimalNumbersFeature.hex_prefix))
 
     def number_hex(self, val):
         if isinstance(val, str) and HexadecimalNumbersFeature.hex_regex.fullmatch(val):
-            return BasesFeature.base_to_dec(self, BasesFeature.number_remove_prefix(self, val, HexadecimalNumbersFeature.hex_prefix), 16)
+            return (BasesFeature.base_to_dec(self, BasesFeature.number_remove_prefix(self, val, HexadecimalNumbersFeature.hex_prefix), 16))
         return None

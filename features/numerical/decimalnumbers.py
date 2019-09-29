@@ -40,12 +40,12 @@ class DecimalNumbersFeature(Feature):
             num_match = DecimalNumbersFeature.num_regex.match(next)
             if (num_match):
                 num = num_match.group(1)
-                return [LiteralItem(num, self.number(Decimal(num)))], len(num), None
+                return [LiteralItem(num, self.number(Decimal(num))[0])], len(num), None
         return None, None, None
 
     def number_decimal(self, val):
         if isinstance(val, Decimal):
-            return val
+            return (val, False)
         if isinstance(val, str) and DecimalNumbersFeature.num_is_regex.match(val):
             return Decimal(val)
         return None

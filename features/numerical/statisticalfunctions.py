@@ -94,22 +94,22 @@ class StatisticalFunctionsFeature(Feature):
 
 
     def func_sum(self, vals, units, refs, flags):
-        return OperationResult(Decimal(sum(self.numbers(vals))))
+        return OperationResult(Decimal(sum(vals)))
 
     def func_min(self, vals, units, refs, flags):
-        return OperationResult(Decimal(min(self.numbers(vals))))
+        return OperationResult(Decimal(min(vals)))
 
     def func_max(self, vals, units, refs, flags):
-        return OperationResult(Decimal(max(self.numbers(vals))))
+        return OperationResult(Decimal(max(vals)))
 
     def func_mean(self, vals, units, refs, flags):
-        return OperationResult(Decimal(statistics.mean(self.numbers(vals))))
+        return OperationResult(Decimal(statistics.mean(vals)))
 
     def func_median(self, vals, units, refs, flags):
-        return OperationResult(Decimal(statistics.median(self.numbers(vals))))
+        return OperationResult(Decimal(statistics.median(vals)))
 
     def func_mode(self, vals, units, refs, flags):
-        return OperationResult(Decimal(statistics.mode(self.numbers(vals))))
+        return OperationResult(Decimal(statistics.mode(vals)))
 
     def func_stdev(self, vals, units, refs, flags):
-        return OperationResult(Decimal(statistics.stdev(self.numbers(vals))))
+        return OperationResult(Decimal(statistics.stdev(vals)))

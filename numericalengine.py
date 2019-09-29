@@ -72,15 +72,21 @@ class NumericalEngine(Engine):
         for caster in self.number_casters:
             ret_val = caster['ref'](self, val)
             if ret_val is not None:
-                return self.clean_number(ret_val)
+                num = self.clean_number(ret_val[0])
+                return num, ret_val[1]
         raise CalculatorException("Can't cast to number: {0}".format(str(val)))
 
-    def numbers(self, vals):
-        return [self.number(val) for val in vals]
+    def restore_number_type(self, num, num_type):
+        if num_type is None:
+            return num
+        func = num_type[0]
+        func_inputs = num_type[1] + [num] + num_type[2]
+        res = func(func_inputs, [None] * len(func_inputs), [None] * len(func_inputs), {})
+        return res.value
 
     def finalize_number(self, val):
         if isinstance(val.value, Decimal):
-            val.value = self.number(val.value)
+            val.value = self.number(val.value)[0]
             val.value = self.round_number(val.value)
             if self.number_auto_func is not None:
                 val.value = self.number_auto_func.call(self, [OperandResult(val.value, None, None)], {}).value

@@ -54,14 +54,14 @@ class ExpNumbersFeature(Feature):
                 num = Decimal(numexp[0:numexp.lower().find('e')])
                 exp = Decimal(numexp[numexp.lower().find('e') + 1:])
                 num *= (10 ** exp)
-                return [LiteralItem(numexp, self.number(num))], len(numexp), None
+                return [LiteralItem(numexp, num)], len(numexp), None
         return None, None, None
 
     def func_scientific(self, vals, units, refs, flags):
-        num = self.number(vals[0])
+        num = vals[0]
         places = ''
         if len(vals) == 2:
-            places = '.' + str(self.number(vals[1]))
+            places = '.' + str(vals[1])
         scientificformat = '{0:' + places + 'E}'
         formattednumber = scientificformat.format(num)
         formattednumber = formattednumber.replace('+', '')

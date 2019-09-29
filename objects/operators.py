@@ -64,6 +64,7 @@ class Operation:
         refs = [i.ref for i in inputs]
 
         self.validate(calculator, values, units, refs)
+        values, num_type = self.convert_numbers(calculator, values)
 
         result_value, result_unit, result_ref = None, None, None
         if calculator.unit_normaliser is not None and self.units_normalise:
@@ -72,6 +73,8 @@ class Operation:
         try:
             result = self.ref(calculator, values, units, refs, flags.copy())
             result_value = result.value
+            if calculator.validate_number(result_value) and num_type is not None and num_type != False:
+                result_value = calculator.restore_number_type(result_value, num_type)
             if result.unit_override:
                 result_unit = result.unit
             if result.ref_override:
@@ -111,6 +114,26 @@ class Operation:
                     if not calculator.unit_normaliser.check_unit_dimensions(units[i], dimensions):
                         dimension_string = str.join(' ', ["{0}^{1}".format(dimensions[ii], str(dimensions[ii + 1])) for ii in range(0, len(dimensions), 2)])
                         raise CalculatorException("{0} parameter {1} must have unit dimensions: {2}".format(self.name, i + 1, dimension_string))
+
+    def convert_numbers(self, calculator, values):
+        new_values = values.copy()
+        num_type = None
+
+        for restriction in self.value_restrictions:
+            fromparam = restriction['fromparam']
+            toparam = len(values)
+            if 'toparam' in restriction and restriction['toparam'] is not None:
+                toparam = restriction['toparam'] + 1
+            objtypes = restriction['objtypes']
+            if len(objtypes) == 1 and objtypes[0] == 'number':
+                for i in range(fromparam, toparam):
+                    if i < len(values):
+                        num, num_type_res = calculator.number(values[i])
+                        new_values[i] = num
+                        if num_type is None:
+                            num_type = num_type_res
+
+        return new_values, num_type
 
 
 class OperatorDefinition(Operation):

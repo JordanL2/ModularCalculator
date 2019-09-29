@@ -101,42 +101,45 @@ class NumericalFunctionsFeature(Feature):
 
 
     def func_abs(self, vals, units, refs, flags):
-        res =  OperationResult(Decimal(abs(self.number(vals[0]))))
+        res =  OperationResult(Decimal(abs(vals[0])))
         res.set_unit(units[0])
         return res
 
     def func_floor(self, vals, units, refs, flags):
-        res =  OperationResult(Decimal(math.floor(self.number(vals[0]))))
+        res =  OperationResult(Decimal(math.floor(vals[0])))
         res.set_unit(units[0])
         return res
 
     def func_ceil(self, vals, units, refs, flags):
-        res =  OperationResult(Decimal(math.ceil(self.number(vals[0]))))
+        res =  OperationResult(Decimal(math.ceil(vals[0])))
         res.set_unit(units[0])
         return res
 
     def func_round(self, vals, units, refs, flags):
         if len(vals) == 1:
-            res = OperationResult(Decimal(round(self.number(vals[0]))))
+            res = OperationResult(Decimal(round(vals[0])))
         else:
-            res = OperationResult(Decimal(round(self.number(vals[0]), int(vals[1]))))
+            res = OperationResult(Decimal(round(vals[0], int(vals[1]))))
         res.set_unit(units[0])
         return res
 
     def func_fact(self, vals, units, refs, flags):
-        res =  OperationResult(Decimal(math.factorial(self.number(vals[0]))))
+        res =  OperationResult(Decimal(math.factorial(vals[0])))
         res.set_unit(units[0])
         return res
 
     def func_exp(self, vals, units, refs, flags):
-        res =  OperationResult(Decimal(math.exp(self.number(vals[0]))))
+        res =  OperationResult(Decimal(math.exp(vals[0])))
         res.set_unit(units[0])
         return res
 
     def func_log(self, vals, units, refs, flags):
+        num = vals[0]
         if len(vals) == 1:
-            res = OperationResult(Decimal(math.log(self.number(vals[0]))))
+            res = OperationResult(Decimal(math.log(num)))
         else:
-            res = OperationResult(Decimal(math.log(self.number(vals[0]), int(vals[1]))))
+            base = int(vals[1])
+            result = Decimal(math.log(num, base))
+            res = OperationResult(result)
         res.set_unit(units[0])
         return res

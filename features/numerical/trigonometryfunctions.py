@@ -139,37 +139,37 @@ class TrigonometryFunctionsFeature(Feature):
 
 
     def func_sin(self, vals, units, refs, flags):
-        return OperationResult(Decimal(math.sin(self.number(vals[0]))))
+        return OperationResult(Decimal(math.sin(vals[0])))
 
     def func_cos(self, vals, units, refs, flags):
-        return OperationResult(Decimal(math.cos(self.number(vals[0]))))
+        return OperationResult(Decimal(math.cos(vals[0])))
 
     def func_tan(self, vals, units, refs, flags):
-        return OperationResult(Decimal(math.tan(self.number(vals[0]))))
+        return OperationResult(Decimal(math.tan(vals[0])))
 
     def func_asin(self, vals, units, refs, flags):
-        return OperationResult(Decimal(math.asin(self.number(vals[0]))))
+        return OperationResult(Decimal(math.asin(vals[0])))
 
     def func_acos(self, vals, units, refs, flags):
-        return OperationResult(Decimal(math.acos(self.number(vals[0]))))
+        return OperationResult(Decimal(math.acos(vals[0])))
 
     def func_atan(self, vals, units, refs, flags):
-        return OperationResult(Decimal(math.atan(self.number(vals[0]))))
+        return OperationResult(Decimal(math.atan(vals[0])))
 
     def func_sinh(self, vals, units, refs, flags):
-        return OperationResult(Decimal(math.sinh(self.number(vals[0]))))
+        return OperationResult(Decimal(math.sinh(vals[0])))
 
     def func_cosh(self, vals, units, refs, flags):
-        return OperationResult(Decimal(math.cosh(self.number(vals[0]))))
+        return OperationResult(Decimal(math.cosh(vals[0])))
 
     def func_tanh(self, vals, units, refs, flags):
-        return OperationResult(Decimal(math.tanh(self.number(vals[0]))))
+        return OperationResult(Decimal(math.tanh(vals[0])))
 
     def func_asinh(self, vals, units, refs, flags):
-        return OperationResult(Decimal(math.asinh(self.number(vals[0]))))
+        return OperationResult(Decimal(math.asinh(vals[0])))
 
     def func_acosh(self, vals, units, refs, flags):
-        return OperationResult(Decimal(math.acosh(self.number(vals[0]))))
+        return OperationResult(Decimal(math.acosh(vals[0])))
 
     def func_atanh(self, vals, units, refs, flags):
-        return OperationResult(Decimal(math.atanh(self.number(vals[0]))))
+        return OperationResult(Decimal(math.atanh(vals[0])))

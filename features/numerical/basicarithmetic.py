@@ -84,11 +84,11 @@ class BasicArithmeticFeature(Feature):
         calculator.divide_op = '/'
 
     def op_number_power(self, vals, units, refs, flags):
-        power = self.number(vals[1])
+        power = vals[1]
         if isinstance(vals[0], UnitPowerList):
             unit = vals[0].power(power)
             return OperationResult(unit)
-        res = OperationResult(self.number(vals[0]) ** power)
+        res = OperationResult(vals[0] ** power)
         if units[1] is not None:
             raise CalculatorException("Power operand must be simple number")
         if units[0] is not None:
@@ -104,7 +104,7 @@ class BasicArithmeticFeature(Feature):
             if isinstance(vals[i], UnitPowerList):
                 units[i] = vals[i]
                 vals[i] = Decimal('1')
-        res = OperationResult(self.number(vals[0]) * self.number(vals[1]))
+        res = OperationResult(vals[0] * vals[1])
         if units[0] is not None and units[1] is not None:
             unit = UnitPowerList.new([units[0], 1, units[1], 1])
             res.set_unit(unit)
@@ -123,7 +123,7 @@ class BasicArithmeticFeature(Feature):
             if isinstance(vals[i], UnitPowerList):
                 units[i] = vals[i]
                 vals[i] = Decimal('1')
-        res = OperationResult(self.number(vals[0]) / self.number(vals[1]))
+        res = OperationResult(vals[0] / vals[1])
         if units[0] is not None and units[1] is not None:
             unit = UnitPowerList.new([units[0], 1, units[1], -1])
             res.set_unit(unit)
@@ -136,7 +136,7 @@ class BasicArithmeticFeature(Feature):
         return res
 
     def op_number_add(self, vals, units, refs, flags):
-        return OperationResult(self.number(vals[0]) + self.number(vals[1]))
+        return OperationResult(vals[0] + vals[1])
 
     def op_number_subtract(self, vals, units, refs, flags):
-        return OperationResult(self.number(vals[0]) - self.number(vals[1]))
+        return OperationResult(vals[0] - vals[1])

@@ -102,7 +102,7 @@ class UnitsFeature(Feature):
         return None, None, None
 
     def op_unit_conversion(self, vals, units, refs, flags):
-        num = self.number(vals[0])
+        num = vals[0]
         if vals[1] is not None and not isinstance(vals[1], UnitPowerList) and vals[1] != Decimal('1'):
             raise CalculatorException("Second operand must be just a unit")
         fromunit = units[0]
