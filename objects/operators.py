@@ -122,12 +122,12 @@ class Operation:
         num_type = None
 
         for restriction in self.value_restrictions:
-            fromparam = restriction['fromparam']
-            toparam = len(values)
-            if 'toparam' in restriction and restriction['toparam'] is not None:
-                toparam = restriction['toparam'] + 1
             objtypes = restriction['objtypes']
             if len(objtypes) == 1 and objtypes[0] == 'number':
+                fromparam = restriction['fromparam']
+                toparam = len(values)
+                if 'toparam' in restriction and restriction['toparam'] is not None:
+                    toparam = restriction['toparam'] + 1
                 for i in range(fromparam, toparam):
                     if i < len(values):
                         num, num_type_res = calculator.number(values[i])
