@@ -49,11 +49,7 @@ class OctalNumbersFeature(Feature):
             oct_match = OctalNumbersFeature.oct_regex.match(next)
             if oct_match:
                 octnum = oct_match.group(1)
-                try:
-                    decnum = self.number(octnum)
-                    return [LiteralItem(octnum, decnum)], len(octnum), None
-                except CalculatorException as err:
-                    raise ParsingException(err.message, [], next)
+                return [LiteralItem(octnum, octnum)], len(octnum), None
         return None, None, None
 
     def func_oct(self, vals, units, refs, flags):

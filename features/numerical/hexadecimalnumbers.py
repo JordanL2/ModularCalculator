@@ -49,11 +49,7 @@ class HexadecimalNumbersFeature(Feature):
             hex_match = HexadecimalNumbersFeature.hex_regex.match(next)
             if hex_match:
                 hexnum = hex_match.group(1)
-                try:
-                    decnum = self.number(hexnum)
-                    return [LiteralItem(hexnum, decnum)], len(hexnum), None
-                except CalculatorException as err:
-                    raise ParsingException(err.message, [], next)
+                return [LiteralItem(hexnum, hexnum)], len(hexnum), None
         return None, None, None
 
     def func_hex(self, vals, units, refs, flags):

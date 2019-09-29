@@ -49,11 +49,7 @@ class BinaryNumbersFeature(Feature):
             bin_match = BinaryNumbersFeature.bin_regex.match(next)
             if bin_match:
                 binnum = bin_match.group(1)
-                try:
-                    decnum = self.number(binnum)
-                    return [LiteralItem(binnum, decnum)], len(binnum), None
-                except CalculatorException as err:
-                    raise ParsingException(err.message, [], next)
+                return [LiteralItem(binnum, binnum)], len(binnum), None
         return None, None, None
 
     def func_bin(self, vals, units, refs, flags):
