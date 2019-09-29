@@ -78,7 +78,7 @@ class NumericalEngine(Engine):
 
     def finalize_number(self, val):
         if isinstance(val.value, Decimal):
-            val.value = self.number(val.value)[0]
+            val.value = self.clean_number(val.value)
             val.value = self.round_number(val.value)
         return val
 
