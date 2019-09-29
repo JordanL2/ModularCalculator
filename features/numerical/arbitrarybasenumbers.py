@@ -60,6 +60,5 @@ class ArbitraryBaseFeature(Feature):
             if base[1].lower() == 'z':
                 base = base[0]
             base = int(base)
-            return (BasesFeature.base_to_dec(self, BasesFeature.number_remove_prefix(self, val, "0{0}z".format(base)), base), (BasesFeature.func_base, [], [base]))
-            #return (BasesFeature.base_to_dec(self, BasesFeature.number_remove_prefix(self, val, HexadecimalNumbersFeature.hex_prefix), 16))
+            return (BasesFeature.base_to_dec(self, BasesFeature.number_remove_prefix(self, val, "0{0}z".format(base)), base), (ArbitraryBaseFeature.func_base, [], [base]))
         return None

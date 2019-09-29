@@ -66,8 +66,6 @@ class Operation:
 
         self.validate(calculator, values, units, refs)
 
-        #num_type = None
-        #if self.auto_convert_numbers:
         values, num_type = self.convert_numbers(calculator, values)
 
         result_value, result_unit, result_ref = None, None, None

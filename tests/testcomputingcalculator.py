@@ -63,7 +63,7 @@ tests = [
     { 'test': r"0xf.88", 'expected': '0xf.88' },
     { 'test': r"dec(0xff)", 'expected': Decimal('255') },
     { 'test': r"dec(0xf.88)", 'expected': Decimal('15.53125') },
-    { 'test': r"0xff + 0XFF", 'expected': Decimal('510') },
+    { 'test': r"0xff + 0XFF", 'expected': '0x1FE' },
     { 'test': r"hex(15.125)", 'expected': '0xF.2' },
     { 'test': r"hex(-15.125)", 'expected': '-0xF.2' },
 
@@ -210,7 +210,6 @@ tests = [
 
 #    { 'test': r"", 'expected': '' },
 ]
-#tests = [{ 'test': r"'abc' *$ '3'", 'expected': Decimal('2') },]
 
 tester = TestRunner(CalculatorException)
 tester.test(c.calculate, tests)

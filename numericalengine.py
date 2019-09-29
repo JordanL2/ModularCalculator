@@ -70,7 +70,6 @@ class NumericalEngine(Engine):
 
     def number(self, val):
         for caster in self.number_casters:
-            #print(caster['name'])
             ret_val = caster['ref'](self, val)
             if ret_val is not None:
                 num = self.clean_number(ret_val[0])
@@ -96,7 +95,6 @@ class NumericalEngine(Engine):
         return val
 
     def validate_number(self, value, unit=None, ref=None):
-        #self.number(value)
         try:
             self.number(value)
             return True
