@@ -49,7 +49,6 @@ class StringsFeature(Feature):
             1, 
             1, 
             ['string', 'number'])
-        string_mult.auto_convert_numerical_result = False
         calculator.add_op(string_mult)
         
         calculator.validators['string'] = StringsFeature.validate_string
