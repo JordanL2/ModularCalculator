@@ -21,8 +21,6 @@ class NumericalEngine(Engine):
         self.finalizers.append({'ref': NumericalEngine.finalize_number})
         self.validators['number'] = NumericalEngine.validate_number
 
-        self.number_auto_func = None
-
     def number_size_set(self, size):
         self.number_size = size
         self.update_engine_prec()
@@ -39,9 +37,6 @@ class NumericalEngine(Engine):
 
     def update_engine_prec(self):
         getcontext().prec = (self.number_prec + self.number_size + 1)
-
-    def number_auto_func_set(self, ref):
-        self.number_auto_func = ref
     
     def number_to_string(self, num):
         if isinstance(num, Decimal):
@@ -90,8 +85,6 @@ class NumericalEngine(Engine):
         if isinstance(val.value, Decimal):
             val.value = self.number(val.value)[0]
             val.value = self.round_number(val.value)
-            if self.number_auto_func is not None:
-                val.value = self.number_auto_func.call(self, [OperandResult(val.value, None, None)], {}).value
         return val
 
     def validate_number(self, value, unit=None, ref=None):

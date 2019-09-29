@@ -125,15 +125,6 @@ class ModularCalculatorInterface(StatefulApplication):
         self.optionsUnitSystemPreference.triggered.connect(self.setUnitSystemPreference)
         optionsMenu.addAction(self.optionsUnitSystemPreference)
 
-        self.optionsNumericalAnswerFormat = QAction('Numerical Result Format', self)
-        self.optionsNumericalAnswerFormat.triggered.connect(self.setNumericalAnswerFormat)
-        optionsMenu.addAction(self.optionsNumericalAnswerFormat)
-
-        self.optionsResetNumericalAnswerFormat = QAction('', self)
-        self.optionsResetNumericalAnswerFormat.triggered.connect(self.setNumberFormatFunction)
-        self.optionsResetNumericalAnswerFormat.setVisible(False)
-        optionsMenu.addAction(self.optionsResetNumericalAnswerFormat)
-
         self.optionsFeatureConfig = QAction('Install/Remove Features', self)
         self.optionsFeatureConfig.triggered.connect(self.openFeatureConfig)
         optionsMenu.addAction(self.optionsFeatureConfig)
@@ -171,23 +162,10 @@ class ModularCalculatorInterface(StatefulApplication):
         calculator.number_prec_set(self.calculator.number_prec_get())
         calculator.unit_simplification_set(self.calculator.unit_simplification_get())
         calculator.unit_normaliser.systems_preference = self.calculator.unit_normaliser.systems_preference
-        if self.calculator.number_auto_func is not None:
-            calculator.number_auto_func_set(calculator.funcs[self.calculator.number_auto_func.func])
         for featureId, featureOptions in self.calculator.feature_options.items():
             if featureId in calculator.feature_options:
                 calculator.feature_options[featureId] = featureOptions
         self.setCalculator(calculator)
-
-    def setNumberFormatFunction(self, func=None):
-        if func is None or func == False or func == '':
-            self.calculator.number_auto_func_set(None)
-            self.optionsNumericalAnswerFormat.setVisible(True)
-            self.optionsResetNumericalAnswerFormat.setVisible(False)
-        else:
-            self.calculator.number_auto_func_set(self.calculator.funcs[func])
-            self.optionsNumericalAnswerFormat.setVisible(False)
-            self.optionsResetNumericalAnswerFormat.setVisible(True)
-            self.optionsResetNumericalAnswerFormat.setText("Reset Numerical Result Format ({})".format(func))
 
     def restoreAllState(self):
         try:
@@ -231,7 +209,6 @@ class ModularCalculatorInterface(StatefulApplication):
         unitSystems = self.fetchStateArray("unitSystemsPreference")
         if unitSystems is not None and len(unitSystems) > 0:
             self.calculator.unit_normaliser.systems_preference = unitSystems
-        self.setNumberFormatFunction(self.fetchStateText("numericalAnswerFormat"))
 
         featureOptions = self.fetchStateMap("calculatorFeatureOptions")
         for featureId, featuresOptions in featureOptions.items():
@@ -261,11 +238,6 @@ class ModularCalculatorInterface(StatefulApplication):
         self.storeStateNumber("precision", self.precisionSpinBox.spinbox.value())
         self.storeStateBoolean("simplifyUnits", self.optionsSimplifyUnits.isChecked())
         self.storeStateArray("unitSystemsPreference", self.calculator.unit_normaliser.systems_preference)
-
-        if self.calculator.number_auto_func is not None:
-            self.storeStateText("numericalAnswerFormat", self.calculator.number_auto_func.func)
-        else:
-            self.storeStateText("numericalAnswerFormat", None)
 
         self.storeStateMap("calculatorFeatureOptions", self.calculator.feature_options)
 
@@ -461,10 +433,6 @@ class ModularCalculatorInterface(StatefulApplication):
 
     def updateUnitSystemPreference(self, systemNames):
         self.calculator.unit_normaliser.systems_preference = [s for n in systemNames for s in [s for s in self.calculator.unit_normaliser.systems if self.calculator.unit_normaliser.systems[s].name == n]]
-
-    def setNumericalAnswerFormat(self):
-        funcs, descriptions = self.getAllFunctions(lambda f : f.minparams == 1 and len(f.value_restrictions) > 0 and 'number' in f.value_restrictions[0]['objtypes'])
-        CategorisedSelectionDialog(self, 'Select Result Format', 'Select function to format numerical results', funcs, descriptions, self.setNumberFormatFunction)
 
     def openFeatureConfig(self):
         FeatureConfigDialog(self)
