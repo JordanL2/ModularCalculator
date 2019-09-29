@@ -52,8 +52,6 @@ class StringsFeature(Feature):
         
         calculator.validators['string'] = StringsFeature.validate_string
 
-        calculator.add_number_caster('string', StringsFeature.number_string)
-        
         calculator.feature_options['strings.strings'] = cls.default_options()
 
     def parse_string(self, expr, i, items, flags):
@@ -96,8 +94,3 @@ class StringsFeature(Feature):
             return True
         except Exception:
             return False
-
-    def number_string(self, val):
-        if isinstance(val, str):
-            return Decimal(val)
-        return None
