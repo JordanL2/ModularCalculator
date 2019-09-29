@@ -58,11 +58,10 @@ class OctalNumbersFeature(Feature):
 
     def number_oct(self, val):
         if isinstance(val, str) and OctalNumbersFeature.oct_regex.fullmatch(val):
-            return (
-                BasesFeature.base_to_dec(self, BasesFeature.number_remove_prefix(self, val, OctalNumbersFeature.oct_prefix), 8), 
-                NumberType(OctalNumbersFeature.restore_oct)
-                )
-        return None
+            dec_num = BasesFeature.base_to_dec(self, BasesFeature.number_remove_prefix(self, val, OctalNumbersFeature.oct_prefix), 8)
+            return dec_num, NumberType(OctalNumbersFeature.restore_oct)
+
+        return None, None
 
     def restore_oct(self, val, opts):
         return BasesFeature.number_add_prefix(self, BasesFeature.dec_to_base(self, val, 8), OctalNumbersFeature.oct_prefix)

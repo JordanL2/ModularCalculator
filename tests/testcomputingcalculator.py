@@ -119,6 +119,7 @@ tests = [
     { 'test': r"'a' >$ 'b'", 'expected': False },
     { 'test': r"123 < 14", 'expected': False },
     { 'test': r"123 <$ 14", 'expected': True },
+    { 'test': r"true * true", 'expected': Decimal('1') },
 
     { 'test': r"!true", 'expected': False },
     { 'test': r"!false", 'expected': True },

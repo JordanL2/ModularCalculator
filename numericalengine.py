@@ -65,10 +65,10 @@ class NumericalEngine(Engine):
 
     def number(self, val):
         for caster in self.number_casters:
-            ret_val = caster['ref'](self, val)
-            if ret_val is not None:
-                num = self.clean_number(ret_val[0])
-                return num, ret_val[1]
+            num, num_type = caster['ref'](self, val)
+            if num is not None:
+                num = self.clean_number(num)
+                return num, num_type
         raise CalculatorException("Can't cast to number: {0}".format(str(val)))
 
     def restore_number_type(self, num, num_type):
