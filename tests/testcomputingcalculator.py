@@ -41,6 +41,7 @@ tests = [
     { 'test': r"dec(0b10.1)", 'expected': Decimal('2.5') },
     { 'test': r"0b10 + 0b1", 'expected': Decimal('3') },
     { 'test': r"bin(0b10 + 0b1)", 'expected': '0b11' },
+    { 'test': r"0b10 * 0b10", 'expected': '0b100' },
     { 'test': r"bin(0b10 * 0b10)", 'expected': '0b100' },
     { 'test': r"bin(0b10 * -0B10)", 'expected': '-0b100' },
     { 'test': r"dec(bin(0b10 * -0B10))", 'expected': Decimal('-4') },
@@ -209,6 +210,7 @@ tests = [
 
 #    { 'test': r"", 'expected': '' },
 ]
+#tests = [{ 'test': r"0b10 * 0b1", 'expected': Decimal('2') },]
 
 tester = TestRunner(CalculatorException)
 tester.test(c.calculate, tests)

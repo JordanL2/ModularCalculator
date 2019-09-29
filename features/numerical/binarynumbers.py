@@ -57,5 +57,5 @@ class BinaryNumbersFeature(Feature):
 
     def number_bin(self, val):
         if isinstance(val, str) and BinaryNumbersFeature.bin_regex.fullmatch(val):
-            return (BasesFeature.base_to_dec(self, BasesFeature.number_remove_prefix(self, val, BinaryNumbersFeature.bin_prefix), 2))
+            return (BasesFeature.base_to_dec(self, BasesFeature.number_remove_prefix(self, val, BinaryNumbersFeature.bin_prefix), 2), (BinaryNumbersFeature.func_bin, [], []))
         return None

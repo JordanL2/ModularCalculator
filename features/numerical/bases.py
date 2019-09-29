@@ -33,11 +33,12 @@ class BasesFeature(Feature):
             1, 
             1, 
             'number')
+        calculator.funcs['dec'].auto_convert_numbers = False
 
     digits = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
     def func_dec(self, vals, units, refs, flags):
-        return OperationResult(self.number(vals[0]))
+        return OperationResult(vals[0])
 
     def number_remove_prefix(self, val, prefix):
         return val.lower().replace(prefix, '')

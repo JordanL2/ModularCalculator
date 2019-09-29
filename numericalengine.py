@@ -77,11 +77,13 @@ class NumericalEngine(Engine):
         raise CalculatorException("Can't cast to number: {0}".format(str(val)))
 
     def restore_number_type(self, num, num_type):
-        if num_type is None:
+        if num_type is None or num_type == False:
             return num
+        if not isinstance(num, Decimal):
+            num = self.number(num)[0]
         func = num_type[0]
         func_inputs = num_type[1] + [num] + num_type[2]
-        res = func(func_inputs, [None] * len(func_inputs), [None] * len(func_inputs), {})
+        res = func(self, func_inputs, [None] * len(func_inputs), [None] * len(func_inputs), {})
         return res.value
 
     def finalize_number(self, val):

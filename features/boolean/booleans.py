@@ -133,22 +133,22 @@ class BooleansFeature(Feature):
         return OperationResult(not BooleansFeature.boolean(self, vals[0]))
 
     def op_number_equals(self, vals, units, refs, flags):
-        return OperationResult(self.number(vals[0]) == self.number(vals[1]))
+        return OperationResult(vals[0] == vals[1])
 
     def op_number_notequals(self, vals, units, refs, flags):
-        return OperationResult(self.number(vals[0]) != self.number(vals[1]))
+        return OperationResult(vals[0] != vals[1])
 
     def op_number_lessthan(self, vals, units, refs, flags):
-        return OperationResult(self.number(vals[0]) < self.number(vals[1]))
+        return OperationResult(vals[0] < vals[1])
 
     def op_number_morethan(self, vals, units, refs, flags):
-        return OperationResult(self.number(vals[0]) > self.number(vals[1]))
+        return OperationResult(vals[0] > vals[1])
 
     def op_number_lessthanequal(self, vals, units, refs, flags):
-        return OperationResult(self.number(vals[0]) <= self.number(vals[1]))
+        return OperationResult(vals[0] <= vals[1])
 
     def op_number_morethanequal(self, vals, units, refs, flags):
-        return OperationResult(self.number(vals[0]) >= self.number(vals[1]))
+        return OperationResult(vals[0] >= vals[1])
 
     def op_boolean_and(self, vals, units, refs, flags):
         return OperationResult(BooleansFeature.boolean(self, vals[0]) and BooleansFeature.boolean(self, vals[1]))
