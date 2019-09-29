@@ -133,7 +133,13 @@ class BasicArithmeticFeature(Feature):
             if isinstance(vals[i], UnitPowerList):
                 units[i] = vals[i]
                 vals[i] = Decimal('1')
-        res = OperationResult(vals[0] / vals[1])
+
+        num_type = self.number(vals[0])[1]
+        val0 = self.number(vals[0])[0]
+        val1 = self.number(vals[1])[0]
+        restored_number = self.restore_number_type(val0 / val1, num_type)
+        res = OperationResult(restored_number)
+
         if units[0] is not None and units[1] is not None:
             unit = UnitPowerList.new([units[0], 1, units[1], -1])
             res.set_unit(unit)

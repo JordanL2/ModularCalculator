@@ -42,6 +42,7 @@ tests = [
     { 'test': r"0b10 + 0b1", 'expected': '0b11' },
     { 'test': r"bin(0b10 + 0b1)", 'expected': '0b11' },
     { 'test': r"0b10 * 0b10", 'expected': '0b100' },
+    { 'test': r"0b1000 / 0b10", 'expected': '0b100' },
     { 'test': r"bin(0b10 * 0b10)", 'expected': '0b100' },
     { 'test': r"bin(0b10 * -0B10)", 'expected': '-0b100' },
     { 'test': r"dec(bin(0b10 * -0B10))", 'expected': Decimal('-4') },
