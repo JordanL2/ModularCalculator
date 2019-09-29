@@ -13,8 +13,8 @@ response = c.calculate('3 ^ 2')
 # result units, items parsed, time taken etc.
 print(response.results[0].value)
 
-# Empty calculator with features manually installed
+# Initially empty calculator with features manually installed
 c = ModularCalculator()
-c.add_features(['numerical.basicarithmetic', 'numerical.decimalnumbers', 'structure.operators'])
+c.install_features(['numerical.basicarithmetic', 'numerical.decimalnumbers'])
 response = c.calculate('2+3')
 print(response.results[0].value)

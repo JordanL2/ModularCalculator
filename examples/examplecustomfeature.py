@@ -38,7 +38,7 @@ class ExampleCustomFeature(Feature):
         next = expr[i:]
         # If the next 5 characters are 'hello':
         if len(next) >= 5 and next.startswith('hello'):
-        	# Returns one item, with original text = 'hello', value is the number 123. Total parse length is 5. No return flags.
-            return [LiteralItem('hello', self.number(Decimal('123')))], 5, None
+        	# Returns one item, with original text = 'hello', value is the decimal number 123. Total parse length is 5. No return flags.
+            return [LiteralItem('hello', Decimal('123'))], 5, None
         # Otherwise, nothing found by the parser this time
         return None, None, None
