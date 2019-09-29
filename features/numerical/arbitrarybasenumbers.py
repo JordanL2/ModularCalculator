@@ -4,6 +4,7 @@ from modularcalculator.objects.exceptions import *
 from modularcalculator.features.numerical.bases import BasesFeature
 from modularcalculator.features.structure.functions import *
 from modularcalculator.features.feature import Feature
+from modularcalculator.numericalengine import NumberType
 
 import re
 
@@ -62,7 +63,8 @@ class ArbitraryBaseFeature(Feature):
             base = int(base)
             return (
                 BasesFeature.base_to_dec(self, BasesFeature.number_remove_prefix(self, val, "0{0}z".format(base)), base),
-                (ArbitraryBaseFeature.restore_arbbase, {'base': base}))
+                NumberType(ArbitraryBaseFeature.restore_arbbase, {'base': base})
+                )
         return None
 
     def restore_arbbase(self, val, opts):

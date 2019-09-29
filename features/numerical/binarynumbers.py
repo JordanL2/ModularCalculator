@@ -4,6 +4,7 @@ from modularcalculator.objects.exceptions import *
 from modularcalculator.features.numerical.bases import BasesFeature
 from modularcalculator.features.structure.functions import *
 from modularcalculator.features.feature import Feature
+from modularcalculator.numericalengine import NumberType
 
 import re
 
@@ -59,7 +60,8 @@ class BinaryNumbersFeature(Feature):
         if isinstance(val, str) and BinaryNumbersFeature.bin_regex.fullmatch(val):
             return (
                 BasesFeature.base_to_dec(self, BasesFeature.number_remove_prefix(self, val, BinaryNumbersFeature.bin_prefix), 2),
-                (BinaryNumbersFeature.restore_bin, {}))
+                NumberType(BinaryNumbersFeature.restore_bin)
+                )
         return None
 
     def restore_bin(self, val, opts):

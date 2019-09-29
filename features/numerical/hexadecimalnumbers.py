@@ -4,6 +4,7 @@ from modularcalculator.objects.exceptions import *
 from modularcalculator.features.numerical.bases import BasesFeature
 from modularcalculator.features.structure.functions import *
 from modularcalculator.features.feature import Feature
+from modularcalculator.numericalengine import NumberType
 
 import re
 
@@ -59,7 +60,8 @@ class HexadecimalNumbersFeature(Feature):
         if isinstance(val, str) and HexadecimalNumbersFeature.hex_regex.fullmatch(val):
             return (
                 BasesFeature.base_to_dec(self, BasesFeature.number_remove_prefix(self, val, HexadecimalNumbersFeature.hex_prefix), 16), 
-                (HexadecimalNumbersFeature.restore_hex, {}))
+                NumberType(HexadecimalNumbersFeature.restore_hex)
+                )
         return None
 
     def restore_hex(self, val, opts):

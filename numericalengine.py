@@ -76,9 +76,7 @@ class NumericalEngine(Engine):
             return num
         if not isinstance(num, Decimal):
             num = self.number(num)[0]
-        func = num_type[0]
-        res = func(self, num, num_type[1])
-        return res
+        return num_type.restore(self, num)
 
     def finalize_number(self, val):
         if isinstance(val.value, Decimal):
@@ -92,3 +90,13 @@ class NumericalEngine(Engine):
             return True
         except Exception:
             return False
+
+
+class NumberType():
+
+    def __init__(self, func, opts=None):
+        self.func = func
+        self.opts = opts
+
+    def restore(self, calculator, num):
+        return self.func(calculator, num, self.opts)
