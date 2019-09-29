@@ -77,9 +77,8 @@ class NumericalEngine(Engine):
         if not isinstance(num, Decimal):
             num = self.number(num)[0]
         func = num_type[0]
-        func_inputs = num_type[1] + [num] + num_type[2]
-        res = func(self, func_inputs, [None] * len(func_inputs), [None] * len(func_inputs), {})
-        return res.value
+        res = func(self, num, num_type[1])
+        return res
 
     def finalize_number(self, val):
         if isinstance(val.value, Decimal):
