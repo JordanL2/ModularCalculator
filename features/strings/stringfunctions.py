@@ -37,6 +37,7 @@ class StringFunctionsFeature(Feature):
             1, 
             1, 
             'string')
+
         calculator.funcs['lower'] =   FunctionDefinition(
             'String', 
             'lower', 
@@ -46,6 +47,7 @@ class StringFunctionsFeature(Feature):
             1, 
             1, 
             'string')
+
         calculator.funcs['upper'] =   FunctionDefinition(
             'String', 
             'upper', 
@@ -55,6 +57,7 @@ class StringFunctionsFeature(Feature):
             1, 
             1, 
             'string')
+
         calculator.funcs['lstrip'] =  FunctionDefinition(
             'String', 
             'lstrip', 
@@ -64,6 +67,7 @@ class StringFunctionsFeature(Feature):
             2, 
             2, 
             'string')
+
         calculator.funcs['rstrip'] =  FunctionDefinition(
             'String', 
             'rstrip', 
@@ -73,6 +77,7 @@ class StringFunctionsFeature(Feature):
             2, 
             2, 
             'string')
+
         calculator.funcs['strip'] =   FunctionDefinition(
             'String', 
             'strip', 
@@ -82,6 +87,7 @@ class StringFunctionsFeature(Feature):
             2, 
             2, 
             'string')
+
         calculator.funcs['find'] =    FunctionDefinition(
             'String', 
             'find', 
@@ -91,6 +97,7 @@ class StringFunctionsFeature(Feature):
             2, 
             2, 
             'string')
+
         calculator.funcs['replace'] = FunctionDefinition(
             'String', 
             'replace', 
@@ -111,6 +118,7 @@ class StringFunctionsFeature(Feature):
             3)
         calculator.funcs['substr'].add_value_restriction(0, 0, 'string')
         calculator.funcs['substr'].add_value_restriction(1, 2, 'number')
+        calculator.funcs['substr'].auto_convert_numerical_result = False
 
     def func_length(self, vals, units, refs, flags):
         return OperationResult(Decimal(len(StringsFeature.string(self, vals[0]))))

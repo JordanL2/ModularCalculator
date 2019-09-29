@@ -41,14 +41,16 @@ class StringsFeature(Feature):
             1, 
             1, 
             'string'))
-        calculator.add_op(OperatorDefinition(
+        string_mult = OperatorDefinition(
             'String', 
             '*$', 
             'Multiply a string a number of times',
             StringsFeature.op_string_multiply, 
             1, 
             1, 
-            ['string', 'number']))
+            ['string', 'number'])
+        string_mult.auto_convert_numerical_result = False
+        calculator.add_op(string_mult)
         
         calculator.validators['string'] = StringsFeature.validate_string
 

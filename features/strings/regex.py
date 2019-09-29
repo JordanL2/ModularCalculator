@@ -37,6 +37,7 @@ class RegexFeature(Feature):
             1, 
             1, 
             'string'))
+
         calculator.add_op(OperatorDefinition(
             'Regular Expression', 
             '!~', 
@@ -56,7 +57,8 @@ class RegexFeature(Feature):
             3)
         calculator.funcs['regexget'].add_value_restriction(0, 1, 'string')
         calculator.funcs['regexget'].add_value_restriction(2, 2, 'number')
-        
+        calculator.funcs['regexget'].auto_convert_numerical_result = False
+
         calculator.funcs['regexsub'] = FunctionDefinition(
             'Regular Expression', 
             'regexsub', 
@@ -67,6 +69,7 @@ class RegexFeature(Feature):
             4)
         calculator.funcs['regexsub'].add_value_restriction(0, 2, 'string')
         calculator.funcs['regexsub'].add_value_restriction(3, 3, 'number')
+        calculator.funcs['regexsub'].auto_convert_numerical_result = False
 
         calculator.funcs['regexcount'] = FunctionDefinition(
             'Regular Expression', 

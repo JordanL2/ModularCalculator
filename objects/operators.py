@@ -43,7 +43,7 @@ class Operation:
         self.units_normalise = True
 
         self.inputs_can_be_exceptions = False
-        self.auto_convert_numbers = True
+        self.auto_convert_numerical_result = True
 
     def add_value_restriction(self, fromparam, toparam, objtypes):
         if objtypes is not None:
@@ -75,7 +75,7 @@ class Operation:
         try:
             result = self.ref(calculator, values, units, refs, flags.copy())
             result_value = result.value
-            if self.auto_convert_numbers and calculator.validate_number(result_value) and num_type is not None and num_type != False:
+            if self.auto_convert_numerical_result and calculator.validate_number(result_value) and num_type is not None and num_type != False:
                 result_value = calculator.restore_number_type(result_value, num_type)
             if result.unit_override:
                 result_unit = result.unit

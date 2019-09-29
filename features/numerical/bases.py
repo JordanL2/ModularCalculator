@@ -33,7 +33,7 @@ class BasesFeature(Feature):
             1, 
             1, 
             'number')
-        calculator.funcs['dec'].auto_convert_numbers = False
+        calculator.funcs['dec'].auto_convert_numerical_result = False
 
     digits = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
