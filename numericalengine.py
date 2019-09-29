@@ -74,8 +74,6 @@ class NumericalEngine(Engine):
     def restore_number_type(self, num, num_type):
         if num_type is None or num_type == False:
             return num
-        if not isinstance(num, Decimal):
-            num = self.number(num)[0]
         return num_type.restore(self, num)
 
     def finalize_number(self, val):
