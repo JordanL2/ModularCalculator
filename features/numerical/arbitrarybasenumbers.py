@@ -49,7 +49,9 @@ class ArbitraryBaseFeature(Feature):
             arbbase_match = ArbitraryBaseFeature.arbbase_regex.match(next)
             if arbbase_match:
                 arbbasenum = arbbase_match.group(1)
-                return [LiteralItem(arbbasenum, arbbasenum)], len(arbbasenum), None
+                decnum, num_type = ArbitraryBaseFeature.number_arbbase(self, arbbasenum)
+                clean_arbbasenum = ArbitraryBaseFeature.restore_arbbase(self, decnum, num_type.opts)
+                return [LiteralItem(arbbasenum, clean_arbbasenum)], len(arbbasenum), None
         return None, None, None
 
     def func_base(self, vals, units, refs, flags):

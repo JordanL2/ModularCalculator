@@ -50,7 +50,8 @@ class BinaryNumbersFeature(Feature):
             bin_match = BinaryNumbersFeature.bin_regex.match(next)
             if bin_match:
                 binnum = bin_match.group(1)
-                return [LiteralItem(binnum, binnum)], len(binnum), None
+                clean_binnum = BinaryNumbersFeature.restore_bin(self, BinaryNumbersFeature.bin_to_dec(self, binnum))
+                return [LiteralItem(binnum, clean_binnum)], len(binnum), None
         return None, None, None
 
     def func_bin(self, vals, units, refs, flags):
@@ -58,10 +59,13 @@ class BinaryNumbersFeature(Feature):
 
     def number_bin(self, val):
         if isinstance(val, str) and BinaryNumbersFeature.bin_regex.fullmatch(val):
-            dec_num = BasesFeature.base_to_dec(self, BasesFeature.number_remove_prefix(self, val, BinaryNumbersFeature.bin_prefix), 2)
+            dec_num = BinaryNumbersFeature.bin_to_dec(self, val)
             return dec_num, NumberType(BinaryNumbersFeature.restore_bin)
         
         return None, None
 
-    def restore_bin(self, val, opts):
+    def restore_bin(self, val, opts=None):
         return BasesFeature.number_add_prefix(self, BasesFeature.dec_to_base(self, val, 2), BinaryNumbersFeature.bin_prefix)
+
+    def bin_to_dec(self, val):
+        return BasesFeature.base_to_dec(self, BasesFeature.number_remove_prefix(self, val, BinaryNumbersFeature.bin_prefix), 2)
