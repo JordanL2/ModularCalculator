@@ -84,7 +84,7 @@ class BasesFeature(Feature):
 
     def dec_to_base(self, val, base):
         if val == 0:
-            return 0
+            return '0'
         if base == 10:
             return self.number_to_string(val)
         if base < 2 or base > 36:
