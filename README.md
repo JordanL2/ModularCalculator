@@ -59,9 +59,16 @@ These examples are available in examples/basic_integration.py. See examples/adva
 	* Adding years/months to dates issue:
 		* Date function to increment a particular element of the date, eg dateincrement('2017-01-01', 3, 'year') => '2020-01-01' (also: datedecrement)
 		* Alternatively, dateadd checks if the unit is year or month, and number is integer, and increments year/month in that case - too much black magic
+* Feature to execute an arbitrary script as a function, with the parameters as command line arguments and STDOUT being the return value
+	* Works like user defined functions but with ~ symbol to execute as default (or maybe @@)
+* Ability to alter operator symbols as feature options
+* Ability to rename functions as feature options
 
 ## Functions
 * Display operator/function syntax info on parameter validation error
+* Bitwise / binary functions - bitand, bitor, bitxor, bitnot, bitlshift, bitrshift
+	* Or operators: & | xor (or ^^) ~ << >> (rename boolean & and | to && and || - OR rename to and and or)
+	* Or operators: && || ^^ !! << >>
 
 ## Units
 * Pressure
@@ -103,11 +110,11 @@ These examples are available in examples/basic_integration.py. See examples/adva
 	* Icon
 
 ## Other
-* Wiki
 * Comment code
-* Add code license
-* Make flatpak
 * Move to do / bug list to github page
+* Add code license - GPL 2? Or Apache 2?
+* Wiki
+* Make flatpak
 
 
 # Bugs

@@ -157,12 +157,6 @@ tests = [
     { 'test': r"regexsub('123456789', '[A-Z]+', 'defg')", 'expected': '123456789' },
     { 'test': r"regexcount('1abc2def3ghi4', '[a-z]{3}')", 'expected': Decimal(3) },
 
-    { 'test': r"and(true, true, false)", 'expected': False },
-    { 'test': r"and(true, true, true)", 'expected': True },
-    { 'test': r"or(false, true, false)", 'expected': True },
-    { 'test': r"or(false, false, false)", 'expected': False },
-    { 'test': r"counttrue(true, false, true, false, true)", 'expected': Decimal(3) },
-
     { 'test': r"length('ABCabc')", 'expected': Decimal(6) },
     { 'test': r"lower('ABCabc')", 'expected': 'abcabc' },
     { 'test': r"upper('ABCabc')", 'expected': 'ABCABC' },

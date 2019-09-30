@@ -37,7 +37,6 @@ presets['Scientific'] = presets['Advanced'] + [
 ]
 
 presets['Computing'] = presets['Scientific'] + [
-    'boolean.booleanfunctions',
     'boolean.booleans',
     'dates.datefunctions',
     'dates.dateoperators',
