@@ -38,6 +38,7 @@ presets['Scientific'] = presets['Advanced'] + [
 
 presets['Computing'] = presets['Scientific'] + [
     'boolean.booleans',
+    'numerical.bitwiseoperators',
     'dates.datefunctions',
     'dates.dateoperators',
     'dates.dates',

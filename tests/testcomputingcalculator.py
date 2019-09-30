@@ -53,6 +53,7 @@ tests = [
     { 'test': r"dec(bin(0b10 * -0B10))", 'expected': Decimal('-4') },
     { 'test': r"bin(3.5)", 'expected': '0b11.1' },
     { 'test': r"bin(-3.5)", 'expected': '-0b11.1' },
+    { 'test': r"bin(0)", 'expected': '0b0' },
     
     { 'test': r"oct(63)", 'expected': '0o77' },
     { 'test': r"dec(oct(63))", 'expected': Decimal('63') },
@@ -146,6 +147,18 @@ tests = [
     { 'test': r"false ? (1/0) : 2", 'expected': Decimal(2) },
     { 'test': r"false and (1/0)", 'expected': False },
     { 'test': r"true or (1/0)", 'expected': True },
+
+    { 'test': r"0b10101 & 0b110", 'expected': '0b100' },
+    { 'test': r"0b10101 | 0b110", 'expected': '0b10111' },
+    { 'test': r"0b10101 ^^ 0b110", 'expected': '0b10011' },
+    { 'test': r"~0b1011101", 'expected': '0b100010' },
+    { 'test': r"0b10101 << 1", 'expected': '0b101010' },
+    { 'test': r"0b10101 << 2", 'expected': '0b1010100' },
+    { 'test': r"0b10101 << 8", 'expected': '0b1010100000000' },
+    { 'test': r"0b10010 >> 1", 'expected': '0b1001' },
+    { 'test': r"0b10010 >> 3", 'expected': '0b10' },
+    { 'test': r"0b10010 >> 4", 'expected': '0b1' },
+    { 'test': r"0b10010 >> 5", 'expected': '0b0' },
 
     { 'test': r"'ABC' =~ '\\w'", 'expected': True },
     { 'test': r"'ABC' =~ '\\d'", 'expected': False },

@@ -66,9 +66,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 
 ## Functions
 * Display operator/function syntax info on parameter validation error
-* Bitwise operators:
-	* Option 1: & | ^^ ~ << >>
-	* Option 2: && || ^^ !! << >>
 
 ## Units
 * Pressure
