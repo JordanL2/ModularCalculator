@@ -32,13 +32,14 @@ class BooleansFeature(Feature):
       
         calculator.add_op(OperatorDefinition(
             'Boolean', 
-            '!', 
+            'not', 
             'Not',
             BooleansFeature.op_boolean_not, 
             0, 
             1, 
             'boolean'),
         {'rtl': True})
+
         calculator.add_op(OperatorDefinition(
             'Numerical', 
             '<',
@@ -47,6 +48,7 @@ class BooleansFeature(Feature):
             1, 
             1, 
             'number'))
+
         calculator.add_op(OperatorDefinition(
             'Numerical', 
             '>', 
@@ -55,6 +57,7 @@ class BooleansFeature(Feature):
             1, 
             1, 
             'number'))
+
         calculator.add_op(OperatorDefinition(
             'Numerical', 
             '<=', 
@@ -63,6 +66,7 @@ class BooleansFeature(Feature):
             1, 
             1, 
             'number'))
+
         calculator.add_op(OperatorDefinition(
             'Numerical', 
             '>=', 
@@ -71,6 +75,7 @@ class BooleansFeature(Feature):
             1, 
             1, 
             'number'))
+
         calculator.add_op(OperatorDefinition(
             'Numerical', 
             '==', 
@@ -79,6 +84,7 @@ class BooleansFeature(Feature):
             1, 
             1, 
             'number'))
+
         calculator.add_op(OperatorDefinition(
             'Numerical', 
             '!=', 
@@ -87,24 +93,37 @@ class BooleansFeature(Feature):
             1, 
             1, 
             'number'))
+
         calculator.add_op(OperatorDefinition(
             'Boolean', 
-            '&', 
+            'and', 
             'And',
             BooleansFeature.op_boolean_and, 
             1, 
             1, 
             ['boolean', ['boolean', 'exception']]),
         {'inputs_can_be_exceptions': True})
+
         calculator.add_op(OperatorDefinition(
             'Boolean', 
-            '|', 
+            'or', 
             'Or',
             BooleansFeature.op_boolean_or, 
             1, 
             1, 
             ['boolean', ['boolean', 'exception']]), 
         {'inputs_can_be_exceptions': True})
+
+        calculator.add_op(OperatorDefinition(
+            'Boolean', 
+            'xor', 
+            'XOR',
+            BooleansFeature.op_boolean_xor, 
+            1, 
+            1, 
+            ['boolean', ['boolean', 'exception']]), 
+        {'inputs_can_be_exceptions': True})
+
         calculator.add_op(OperatorDefinition(
             'Boolean', 
             '?', 
@@ -155,6 +174,9 @@ class BooleansFeature(Feature):
 
     def op_boolean_or(self, vals, units, refs, flags):
         return OperationResult(BooleansFeature.boolean(self, vals[0]) or BooleansFeature.boolean(self, vals[1]))
+
+    def op_boolean_xor(self, vals, units, refs, flags):
+        return OperationResult(BooleansFeature.boolean(self, vals[0]) != BooleansFeature.boolean(self, vals[1]))
 
     def op_boolean_conditional(self, vals, units, refs, flags):
         if BooleansFeature.boolean(self, vals[0]):

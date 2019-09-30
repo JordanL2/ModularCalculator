@@ -66,9 +66,9 @@ These examples are available in examples/basic_integration.py. See examples/adva
 
 ## Functions
 * Display operator/function syntax info on parameter validation error
-* Bitwise / binary functions - bitand, bitor, bitxor, bitnot, bitlshift, bitrshift
-	* Or operators: & | xor (or ^^) ~ << >> (rename boolean & and | to && and || - OR rename to and and or)
-	* Or operators: && || ^^ !! << >>
+* Bitwise operators:
+	* Option 1: & | ^^ ~ << >>
+	* Option 2: && || ^^ !! << >>
 
 ## Units
 * Pressure
