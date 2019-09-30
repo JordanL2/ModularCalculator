@@ -55,7 +55,7 @@ class ArbitraryBaseFeature(Feature):
         return None, None, None
 
     def func_base(self, vals, units, refs, flags):
-        return OperationResult(BasesFeature.number_add_prefix(self, BasesFeature.dec_to_base(self, vals[0], vals[1]), "0{0}z".format(vals[1])))
+        return OperationResult(ArbitraryBaseFeature.restore_arbbase(self, vals[0], {'base': vals[1]}))
 
     def number_arbbase(self, val):
         if isinstance(val, str) and ArbitraryBaseFeature.arbbase_regex.fullmatch(val):
