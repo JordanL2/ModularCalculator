@@ -27,7 +27,7 @@ class BitwiseOperatorsFeature(Feature):
     @classmethod
     def install(cls, calculator):
         calculator.add_op(OperatorDefinition(
-            'Numerical', 
+            'Bitwise', 
             '&', 
             'Bitwise AND',
             BitwiseOperatorsFeature.op_bitwise_and, 
@@ -36,7 +36,7 @@ class BitwiseOperatorsFeature(Feature):
             'number'))
 
         calculator.add_op(OperatorDefinition(
-            'Numerical', 
+            'Bitwise', 
             '|', 
             'Bitwise OR',
             BitwiseOperatorsFeature.op_bitwise_or, 
@@ -45,7 +45,7 @@ class BitwiseOperatorsFeature(Feature):
             'number'))
 
         calculator.add_op(OperatorDefinition(
-            'Numerical', 
+            'Bitwise', 
             '^^', 
             'Bitwise XOR',
             BitwiseOperatorsFeature.op_bitwise_xor, 
@@ -54,7 +54,7 @@ class BitwiseOperatorsFeature(Feature):
             'number'))
 
         calculator.add_op(OperatorDefinition(
-            'Numerical', 
+            'Bitwise', 
             '~', 
             'Bitwise Negation (1\'s Complement)',
             BitwiseOperatorsFeature.op_bitwise_not, 
@@ -64,7 +64,7 @@ class BitwiseOperatorsFeature(Feature):
         {'rtl': True})
 
         calculator.add_op(OperatorDefinition(
-            'Numerical', 
+            'Bitwise', 
             '<<', 
             'Bitwise Left Shift',
             BitwiseOperatorsFeature.op_bitwise_lshift, 
@@ -73,7 +73,7 @@ class BitwiseOperatorsFeature(Feature):
             'number'))
 
         calculator.add_op(OperatorDefinition(
-            'Numerical', 
+            'Bitwise', 
             '>>', 
             'Bitwise Right Shift',
             BitwiseOperatorsFeature.op_bitwise_rshift, 
