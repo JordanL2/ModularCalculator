@@ -11,7 +11,7 @@ from modularcalculator.interface.textedit import *
 
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QKeySequence, QCursor
-from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QMessageBox, QSplitter, QAction, QFileDialog, QToolTip
+from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QMessageBox, QSplitter, QAction, QFileDialog, QToolTip, QTabBar
 
 import functools
 import os.path
@@ -28,10 +28,16 @@ class ModularCalculatorInterface(StatefulApplication):
         self.initMenu()
         self.initCalculator()
         self.restoreAllState()
+        self.tabbar.currentChanged.connect(self.selectTab)
         self.entry.setFocus()
         self.show()
 
     def initUI(self):
+        self.tabbar = QTabBar(self)
+        self.tabbar.setTabsClosable(True)
+        self.tabs = []
+        self.selectedTab = 0
+
         self.display = CalculatorDisplay(self)
 
         self.entry = CalculatorTextEdit(self)
@@ -44,7 +50,8 @@ class ModularCalculatorInterface(StatefulApplication):
         self.splitter.setStretchFactor(1, 0)
 
         grid = QGridLayout()
-        grid.addWidget(self.splitter, 0, 0, 1, 1)
+        grid.addWidget(self.tabbar, 0, 0, 1, 1)
+        grid.addWidget(self.splitter, 1, 0, 1, 1)
         
         mainWidget = QWidget()
         mainWidget.setLayout(grid)
@@ -55,8 +62,8 @@ class ModularCalculatorInterface(StatefulApplication):
         
         self.fileMenu = menubar.addMenu('File')
         
-        fileNew = QAction('New', self)
-        fileNew.triggered.connect(self.new)
+        fileNew = QAction('New Tab', self)
+        fileNew.triggered.connect(self.addTab)
         fileNew.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_N))
         self.fileMenu.addAction(fileNew)
         
@@ -176,10 +183,13 @@ class ModularCalculatorInterface(StatefulApplication):
             self.restoreState(self.fetchState("mainWindowState"))
             self.splitter.restoreState(self.fetchState("splitterSizes"))
 
-            self.display.restoreState(self.fetchStateMap("displayOutput"))
-            self.entry.restoreState(self.fetchStateText("textContent"))
+            #self.display.restoreState(self.fetchStateMap("displayOutput"))
+            #self.entry.restoreState(self.fetchStateText("textContent"))
             
-            self.setCurrentFile(self.fetchStateText("currentFile"), self.fetchStateBoolean("currentFileModified", False))
+            #self.setCurrentFile(self.fetchStateText("currentFile"), self.fetchStateBoolean("currentFileModified", False))
+            self.currentFile = None
+            self.currentFileModified = False
+            self.addTab()
             
             self.setAutoExecute(self.fetchStateBoolean("viewSyntaxParsingAutoExecutes", True))
 
@@ -224,11 +234,11 @@ class ModularCalculatorInterface(StatefulApplication):
         self.storeState("mainWindowState", self.saveState())
         self.storeState("splitterSizes", self.splitter.saveState())
 
-        self.storeStateMap("displayOutput", self.display.saveState())
-        self.storeStateText("textContent", self.entry.saveState())
+        #self.storeStateMap("displayOutput", self.display.saveState())
+        #self.storeStateText("textContent", self.entry.saveState())
         
-        self.storeStateText("currentFile", self.currentFile)
-        self.storeStateBoolean("currentFileModified", self.currentFileModified)
+        #self.storeStateText("currentFile", self.currentFile)
+        #self.storeStateBoolean("currentFileModified", self.currentFileModified)
         
         self.storeStateBoolean("viewShortUnits", self.viewShortUnits.isChecked())
         self.storeStateBoolean("viewSyntaxParsingAutoExecutes", self.viewSyntaxParsingAutoExecutes.isChecked())
@@ -270,12 +280,31 @@ class ModularCalculatorInterface(StatefulApplication):
             column += 1
         return row, column
 
-    def new(self):
-        if self.checkIfNeedToSave():
-            return
-        self.entry.clearContents()
-        self.display.clear()
-        self.setCurrentFile(None)
+    def addTab(self):
+        self.tabs.append({
+            'entry': {}, 
+            'display': {'rawOutput': []}, 
+            'currentFile': None, 
+            'currentFileModified': False
+        })
+        self.tabbar.addTab('untitled')
+        self.tabbar.setCurrentIndex(len(self.tabs) - 1)
+
+    def storeSelectedTab(self):
+        i = self.selectedTab
+        self.tabs[i]['entry'] = self.entry.saveState()
+        self.tabs[i]['display'] = self.display.saveState()
+        self.tabs[i]['currentFile'] = self.currentFile
+        self.tabs[i]['currentFileModified'] = self.currentFileModified
+
+    def selectTab(self, i):
+        self.storeSelectedTab()
+        self.selectedTab = i
+        self.entry.restoreState(self.tabs[i]['entry'])
+        self.entry.refresh()
+        self.display.restoreState(self.tabs[i]['display'])
+        self.display.refresh()
+        self.setCurrentFile(self.tabs[i]['currentFile'], self.tabs[i]['currentFileModified'])
 
     def open(self):
         if self.checkIfNeedToSave():
@@ -316,10 +345,12 @@ class ModularCalculatorInterface(StatefulApplication):
         self.currentFileModified = modified
         if self.currentFile is None:
             self.setWindowTitle('Modular Calculator')
-        elif self.currentFileModified:
-            self.setWindowTitle("Modular Calculator - {} *".format(self.currentFile))
         else:
-            self.setWindowTitle("Modular Calculator - {}".format(self.currentFile))
+            fileName = self.currentFile
+            if self.currentFileModified:
+                fileName += ' *'
+            self.setWindowTitle("Modular Calculator - {}".format(fileName))
+            self.tabbar.setTabText(self.selectedTab, fileName)
 
     def setUnitSimplification(self, value):
         self.optionsSimplifyUnits.setChecked(value)

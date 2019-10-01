@@ -151,7 +151,12 @@ class CalculatorTextEdit(QTextEdit):
         self.setContents('')
 
     def saveState(self):
-        return self.getContents()
+        return {
+            'text': self.getContents()
+        }
 
-    def restoreState(self, text):
-        self.setPlainText(text)
+    def restoreState(self, state):
+        if 'text' in state:
+            self.setPlainText(state['text'])
+        else:
+            self.setPlainText('')
