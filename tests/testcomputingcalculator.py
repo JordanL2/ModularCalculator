@@ -164,6 +164,7 @@ tests = [
     { 'test': r"0b10101 ^^ 0b110", 'expected': '0b10011' },
     { 'test': r"~0b1011101", 'expected': '0b0100010' },
     { 'test': r"~0b00111100", 'expected': '0b11000011' },
+    { 'test': r"~60", 'expected': Decimal('3') },
     { 'test': r"0b10101 << 1", 'expected': '0b101010' },
     { 'test': r"0b10101 << 2", 'expected': '0b1010100' },
     { 'test': r"0b10101 << 8", 'expected': '0b1010100000000' },
