@@ -43,6 +43,7 @@ class Operation:
         self.units_normalise = True
 
         self.inputs_can_be_exceptions = False
+        self.auto_convert_numerical_inputs = True
         self.auto_convert_numerical_result = True
 
     def add_value_restriction(self, fromparam, toparam, objtypes):
@@ -66,7 +67,9 @@ class Operation:
 
         self.validate(calculator, values, units, refs)
 
-        values, num_type = self.convert_numbers(calculator, values)
+        num_type = None
+        if self.auto_convert_numerical_inputs:
+            values, num_type = self.convert_numbers(calculator, values)
 
         result_value, result_unit, result_ref = None, None, None
         if calculator.unit_normaliser is not None and self.units_normalise:

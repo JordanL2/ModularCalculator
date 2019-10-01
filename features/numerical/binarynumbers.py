@@ -50,7 +50,7 @@ class BinaryNumbersFeature(Feature):
             bin_match = BinaryNumbersFeature.bin_regex.match(next)
             if bin_match:
                 binnum = bin_match.group(1)
-                clean_binnum = BinaryNumbersFeature.restore_bin(self, BinaryNumbersFeature.bin_to_dec(self, binnum))
+                clean_binnum = BinaryNumbersFeature.clean_bin(self, binnum)
                 return [LiteralItem(binnum, clean_binnum)], len(binnum), None
         return None, None, None
 
@@ -60,12 +60,20 @@ class BinaryNumbersFeature(Feature):
     def number_bin(self, val):
         if isinstance(val, str) and BinaryNumbersFeature.bin_regex.fullmatch(val):
             dec_num = BinaryNumbersFeature.bin_to_dec(self, val)
-            return dec_num, NumberType(BinaryNumbersFeature.restore_bin)
+            width = BasesFeature.get_number_width(self, val, BinaryNumbersFeature.bin_prefix)
+            return dec_num, NumberType(BinaryNumbersFeature.restore_bin, {'width': width})
         
         return None, None
 
     def restore_bin(self, val, opts=None):
-        return BasesFeature.number_add_prefix(self, BasesFeature.dec_to_base(self, val, 2), BinaryNumbersFeature.bin_prefix)
+        binnum = BasesFeature.dec_to_base(self, val, 2)
+        if opts is not None and 'width' in opts:
+            binnum = BasesFeature.force_number_width(self, binnum, opts['width'])
+        return BasesFeature.number_add_prefix(self, binnum, BinaryNumbersFeature.bin_prefix)
 
     def bin_to_dec(self, val):
         return BasesFeature.base_to_dec(self, BasesFeature.number_remove_prefix(self, val, BinaryNumbersFeature.bin_prefix), 2)
+
+    def clean_bin(self, val):
+        dec_num, num_type = BinaryNumbersFeature.number_bin(self, val)
+        return num_type.restore(self, dec_num)

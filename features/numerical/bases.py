@@ -49,6 +49,28 @@ class BasesFeature(Feature):
         else:
             return prefix + val
 
+    def split_number(self, val):
+        res = ['', '', '']
+        if val[0] == '-':
+            res[0] = '-'
+            val = val[1:]
+        dot_index = val.find('.')
+        if dot_index > -1:
+            res[2] = val[dot_index:]
+            val = val[0:dot_index]
+        res[1] = val
+        return res
+
+    def get_number_width(self, val, prefix):
+        val = BasesFeature.number_remove_prefix(self, val, prefix)
+        split_num = BasesFeature.split_number(self, val)
+        return len(split_num[1])
+
+    def force_number_width(self, val, width):
+        split_num = BasesFeature.split_number(self, val)
+        split_num[1] = split_num[1].zfill(width)
+        return ''.join(split_num)
+
     def base_to_dec(self, val, base):
         if val == 0:
             return 0
