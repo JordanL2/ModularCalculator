@@ -63,9 +63,12 @@ These examples are available in examples/basic_integration.py. See examples/adva
 	* Works like user defined functions but with ~ symbol to execute as default (or maybe @@)
 * Ability to alter operator symbols as feature options
 * Ability to rename functions as feature options
+* Should bitwise not operator only allow positive integers, and throw error if something else?
+* Should '? :' operator be renamed 'then else'? To be consistent with other boolean operators.
 
 ## Functions
 * Display operator/function syntax info on parameter validation error
+* Function to remove leading zeros on binary numbers
 
 ## Units
 * Pressure
@@ -79,12 +82,11 @@ These examples are available in examples/basic_integration.py. See examples/adva
 	Second of arc
 	Milliradian
 * Solid Angles - minutes and seconds
-* Questions to look into:
-	* Connection between angle and solid angle (solid angle = angle * angle ?)
-	* Can kWh become recognisable? Also all other prefixes, and "mph"
-		* possibly a composite unit type eg "kWh" => ['kilowatt', 'hour']
-		* allows simplification from the element units into the composite unit, eg "1 kW * 3 h" = "3 kWh"
-		* alternatively just add "mph" and "kWh" etc as velocity and energy units, disable simplification to them
+* Connection between angle and solid angle (solid angle = angle * angle ?)
+* Can kWh become recognisable? Also all other prefixes, and "mph"
+	* possibly a composite unit type eg "kWh" => ['kilowatt', 'hour']
+	* allows simplification from the element units into the composite unit, eg "1 kW * 3 h" = "3 kWh"
+	* alternatively just add "mph" and "kWh" etc as velocity and energy units, disable simplification to them
 
 ## Constants
 

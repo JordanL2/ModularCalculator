@@ -5,7 +5,7 @@ from modularcalculator.interface.guitools import *
 
 from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import QFontDatabase
-from PyQt5.QtWidgets import  QDialog, QWidget, QHBoxLayout, QPushButton, QListWidget, QListWidgetItem, QComboBox, QFileDialog, QSplitter, QGridLayout, QLabel
+from PyQt5.QtWidgets import  QDialog, QWidget, QHBoxLayout, QPushButton, QListWidget, QListWidgetItem, QComboBox, QFileDialog, QGridLayout, QLabel
 
 
 class FeatureConfigDialog(QDialog):
@@ -19,8 +19,7 @@ class FeatureConfigDialog(QDialog):
         self.calculator = self.buildCalculator(self.importedFeatures, [])
         self.selectedFeatures = parent.calculator.installed_features
 
-        splitter = QSplitter()
-        splitter.setOrientation(Qt.Vertical)
+        grid = QGridLayout()
 
         self.presetList = QComboBox(self)
         self.presetList.addItem('- Presets -')
@@ -28,51 +27,38 @@ class FeatureConfigDialog(QDialog):
         self.presetList.addItem('Select None')
         self.presetList.addItems(self.calculator.preset_list.keys())
         self.presetList.currentTextChanged.connect(self.selectPreset)
-        splitter.addWidget(self.presetList)
-        splitter.setStretchFactor(0, 0)
+        grid.addWidget(self.presetList, 0, 0, 1, 2)
 
         self.featureList = QListWidget(self)
         self.refreshFeatureList()
         self.featureList.setMinimumWidth(self.featureList.sizeHintForColumn(0))
         self.featureList.itemClicked.connect(self.itemClicked)
         self.featureList.itemChanged.connect(self.itemChanged)
-        splitter.addWidget(self.featureList)
-        splitter.setStretchFactor(1, 1)
+        grid.addWidget(self.featureList, 1, 0, 1, 2)
+        grid.setRowStretch(1, 1)
 
         importedFileLabel = QLabel("External Feature Files")
         importedFileLabelFont = QFontDatabase.systemFont(QFontDatabase.TitleFont)
         importedFileLabelFont.setBold(True)
         importedFileLabel.setFont(importedFileLabelFont)
         importedFileLabel.setAlignment(Qt.AlignHCenter)
-        splitter.addWidget(importedFileLabel)
-        splitter.setStretchFactor(2, 0)
+        grid.addWidget(importedFileLabel, 2, 0, 1, 2)
 
-        importedFileButtonsLayout = QHBoxLayout()
         addFileButton = QPushButton("Add", self)
         addFileButton.clicked.connect(self.addFile)
-        importedFileButtonsLayout.addWidget(addFileButton)
+        grid.addWidget(addFileButton, 3, 0, 1, 1)
         removeFileButton = QPushButton("Remove", self)
         removeFileButton.clicked.connect(self.removeFile)
-        importedFileButtonsLayout.addWidget(removeFileButton)
-        importedFiles = QWidget()
-        importedFiles.setLayout(importedFileButtonsLayout)
-        splitter.addWidget(importedFiles)
-        splitter.setStretchFactor(3, 0)
+        grid.addWidget(removeFileButton, 3, 1, 1, 1)
 
         self.importedFileList = QListWidget(self)
         self.refreshImportedFiles()
-        splitter.addWidget(self.importedFileList)
-        splitter.setStretchFactor(4, 0)
+        grid.addWidget(self.importedFileList, 4, 0, 1, 2)
 
         okButton = QPushButton("OK", self)
         okButton.clicked.connect(self.ok)
-        splitter.addWidget(okButton)
-        splitter.setStretchFactor(5, 0)
+        grid.addWidget(okButton, 5, 0, 1, 2)
 
-        for i in range(0, splitter.count()):
-            splitter.handle(i).setEnabled(False)
-        grid = QGridLayout()
-        grid.addWidget(splitter, 0, 0, 6, 1)
         self.setLayout(grid)
 
         self.setWindowTitle('Install/Remove Features')
