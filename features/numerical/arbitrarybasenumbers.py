@@ -60,6 +60,8 @@ class ArbitraryBaseFeature(Feature):
     def number_arbbase(self, val):
         if isinstance(val, str) and ArbitraryBaseFeature.arbbase_regex.fullmatch(val):
             base = val[1:3]
+            if val[0] == '-':
+                base = val[2:4]
             if base[1].lower() == 'z':
                 base = base[0]
             base = int(base)

@@ -296,7 +296,7 @@ class ModularCalculatorInterface(StatefulApplication):
 
     def getTabName(self, currentFile, currentFileModified):
         if currentFile is None:
-            return 'untitled'
+            return '(untitled)'
         tabName = currentFile
         if currentFileModified:
             tabName += ' *'
