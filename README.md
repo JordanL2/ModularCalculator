@@ -92,7 +92,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 
 ## Graphical Interface
 * Functionality:
-	* Tabs
 
 * Usability / quality of life:
 	* Click previous answer to insert it
