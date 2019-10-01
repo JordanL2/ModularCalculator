@@ -117,4 +117,3 @@ These examples are available in examples/basic_integration.py. See examples/adva
 # Bugs
 
 * Unit normalisation: "1 joule / 1 m^3" gets simplified to "1 pascal" - Even Google has this issue
-* Bitwise negation needs to take original binary number's width when making mask
