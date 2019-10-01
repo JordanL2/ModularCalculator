@@ -190,6 +190,9 @@ class ModularCalculatorInterface(StatefulApplication):
             self.restoreGeometry(self.fetchState("mainWindowGeometry"))
             self.restoreState(self.fetchState("mainWindowState"))
             self.splitter.restoreState(self.fetchState("splitterSizes"))
+            
+            self.setAutoExecute(self.fetchStateBoolean("viewSyntaxParsingAutoExecutes", True), False)
+            self.setShortUnits(self.fetchStateBoolean("viewShortUnits", False), False)
 
             self.tabs = self.fetchStateArray("tabs")
             if len(self.tabs) > 0:
@@ -204,10 +207,7 @@ class ModularCalculatorInterface(StatefulApplication):
                     self.tabbar.setCurrentIndex(self.selectedTab)
             else:
                 self.addTab()
-            
-            self.setAutoExecute(self.fetchStateBoolean("viewSyntaxParsingAutoExecutes", True))
-
-            self.setShortUnits(self.fetchStateBoolean("viewShortUnits", False))
+                self.loadTab(0)
         except Exception as e:
             print("Exception when trying to restore state")
             print(traceback.format_exc())
@@ -428,15 +428,17 @@ class ModularCalculatorInterface(StatefulApplication):
         self.precisionSpinBox.spinbox.setValue(value)
         self.calculator.number_prec_set(value)
 
-    def setShortUnits(self, value):
+    def setShortUnits(self, value, refresh=True):
         self.viewShortUnits.setChecked(value)
         self.display.options['shortunits'] = value
-        self.display.refresh()
+        if refresh:
+            self.display.refresh()
 
-    def setAutoExecute(self, value):
+    def setAutoExecute(self, value, refresh=True):
         self.viewSyntaxParsingAutoExecutes.setChecked(value)
         self.entry.autoExecute = value
-        self.entry.refresh()
+        if refresh:
+            self.entry.refresh()
 
     def insertConstant(self):
         constants = sorted(self.calculator.constants.keys(), key=str)
