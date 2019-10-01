@@ -189,8 +189,6 @@ class ModularCalculatorInterface(StatefulApplication):
             self.restoreState(self.fetchState("mainWindowState"))
             self.splitter.restoreState(self.fetchState("splitterSizes"))
 
-            self.currentFile = None
-            self.currentFileModified = False
             self.tabs = self.fetchStateArray("tabs")
             if len(self.tabs) > 0:
                 print(self.tabs)
@@ -308,7 +306,7 @@ class ModularCalculatorInterface(StatefulApplication):
             'currentFile': None, 
             'currentFileModified': False
         })
-        self.tabbar.addTab('untitled')
+        self.tabbar.addTab(self.getTabName(None, None))
         self.tabbar.setCurrentIndex(len(self.tabs) - 1)
 
     def storeSelectedTab(self):
@@ -316,8 +314,6 @@ class ModularCalculatorInterface(StatefulApplication):
             i = self.selectedTab
             self.tabs[i]['entry'] = self.entry.saveState()
             self.tabs[i]['display'] = self.display.saveState()
-            self.tabs[i]['currentFile'] = self.currentFile
-            self.tabs[i]['currentFileModified'] = self.currentFileModified
 
     def selectTab(self, i):
         self.storeSelectedTab()
@@ -328,10 +324,12 @@ class ModularCalculatorInterface(StatefulApplication):
         self.entry.restoreState(self.tabs[i]['entry'])
         self.display.restoreState(self.tabs[i]['display'])
         self.display.refresh()
-        self.setCurrentFile(self.tabs[i]['currentFile'], self.tabs[i]['currentFileModified'])
+        self.setCurrentFileAndModified(self.tabs[i]['currentFile'], self.tabs[i]['currentFileModified'])
 
     def closeTab(self, i):
-        #TODO check if should save
+        if self.checkIfNeedToSave(i):
+            return
+        
         self.storeSelectedTab()
         self.tabbar.blockSignals(True)
 
@@ -352,6 +350,27 @@ class ModularCalculatorInterface(StatefulApplication):
     def closeCurrentTab(self):
         self.closeTab(self.selectedTab)
 
+
+    def currentFile(self, i=None):
+        if i is None:
+            i = self.selectedTab
+        return self.tabs[i]['currentFile']
+
+    def currentFileModified(self, i=None):
+        if i is None:
+            i = self.selectedTab
+        return self.tabs[i]['currentFileModified']
+
+    def setCurrentFile(self, currentFile, i=None):
+        if i is None:
+            i = self.selectedTab
+        self.tabs[i]['currentFile'] = currentFile
+
+    def setCurrentFileModified(self, currentFileModified, i=None):
+        if i is None:
+            i = self.selectedTab
+        self.tabs[i]['currentFileModified'] = currentFileModified
+
     def open(self):
         if self.checkIfNeedToSave():
             return
@@ -360,43 +379,44 @@ class ModularCalculatorInterface(StatefulApplication):
             fh = open(filePath, 'r')
             text = str.join("", fh.readlines())
             self.entry.setContents(text)
-            self.setCurrentFile(filePath, False)
+            self.setCurrentFileAndModified(filePath, False)
 
-    def save(self):
-        if self.currentFile is None:
-            self.saveAs()
+    def save(self, i=None):
+        if self.currentFile(i) is None:
+            self.saveAs(i)
             return
-        fh = open(self.currentFile, 'w')
+        fh = open(self.currentFile(i), 'w')
         fh.write(self.entry.getContents())
-        self.setCurrentFile(self.currentFile, False)
+        self.setCurrentFileAndModified(self.currentFile(), False, i)
 
     def saveAs(self):
         filePath, _ = QFileDialog.getSaveFileName(self, "Save File", "", "All Files (*)")
         if filePath:
             fh = open(filePath, 'w')
             fh.write(self.entry.getContents())
-            self.setCurrentFile(filePath, False)
+            self.setCurrentFileAndModified(filePath, False)
 
-    def checkIfNeedToSave(self):
-        if self.currentFile is not None and self.currentFileModified:
-            response = QMessageBox.question(self, 'Unsaved File', "Save changes to {} before closing?".format(self.currentFile), QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.Cancel)
+    def checkIfNeedToSave(self, i=None):
+        if self.currentFile(i) is not None and self.currentFileModified(i):
+            response = QMessageBox.question(self, 'Unsaved File', "Save changes to {} before closing?".format(self.currentFile()), QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.Cancel)
             if response == QMessageBox.Yes:
-                self.save()
+                self.save(i)
             elif response == QMessageBox.Cancel:
                 return True
         return False
 
-    def setCurrentFile(self, file, modified=False):
-        self.currentFile = file
-        self.currentFileModified = modified
-        if self.currentFile is None:
-            self.setWindowTitle('Modular Calculator')
-        else:
-            fileName = self.currentFile
-            if self.currentFileModified:
-                fileName += ' *'
-            self.setWindowTitle("Modular Calculator - {}".format(fileName))
-            self.tabbar.setTabText(self.selectedTab, fileName)
+    def setCurrentFileAndModified(self, file, modified=False, i=None):
+        self.setCurrentFile(file, i)
+        self.setCurrentFileModified(modified, i)
+        if i is None or i == self.selectedTab:
+            if self.currentFile() is None:
+                self.setWindowTitle('Modular Calculator')
+            else:
+                fileName = self.currentFile()
+                if self.currentFileModified():
+                    fileName += ' *'
+                self.setWindowTitle("Modular Calculator - {}".format(fileName))
+                self.tabbar.setTabText(self.selectedTab, fileName)
 
     def setUnitSimplification(self, value):
         self.optionsSimplifyUnits.setChecked(value)
