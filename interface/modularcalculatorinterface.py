@@ -155,6 +155,7 @@ class ModularCalculatorInterface(StatefulApplication):
     def showExecuteToolTip(self):
         QToolTip.showText(QCursor.pos(), "Ctrl+Enter", self)
 
+
     def initCalculator(self):
         calculator = ModularCalculator()
         calculator.enable_units()
@@ -180,6 +181,7 @@ class ModularCalculatorInterface(StatefulApplication):
                 calculator.feature_options[featureId] = featureOptions
         self.setCalculator(calculator)
 
+
     def restoreAllState(self):
         try:
             self.importedFeatures = self.fetchStateArray("importedFeatures")
@@ -191,7 +193,6 @@ class ModularCalculatorInterface(StatefulApplication):
 
             self.tabs = self.fetchStateArray("tabs")
             if len(self.tabs) > 0:
-                print(self.tabs)
                 for tab in self.tabs:
                     tabfile = self.getTabName(tab['currentFile'], tab['currentFileModified'])
                     self.tabbar.addTab(tabfile)
@@ -262,6 +263,7 @@ class ModularCalculatorInterface(StatefulApplication):
 
         self.storeStateMap("calculatorFeatureOptions", self.calculator.feature_options)
 
+
     def calc(self):
         question = self.entry.getContents().rstrip()
         try:
@@ -290,6 +292,7 @@ class ModularCalculatorInterface(StatefulApplication):
                 column = 0
             column += 1
         return row, column
+
 
     def getTabName(self, currentFile, currentFileModified):
         if currentFile is None:
@@ -371,11 +374,23 @@ class ModularCalculatorInterface(StatefulApplication):
             i = self.selectedTab
         self.tabs[i]['currentFileModified'] = currentFileModified
 
+    def setCurrentFileAndModified(self, file, modified=False, i=None):
+        self.setCurrentFile(file, i)
+        self.setCurrentFileModified(modified, i)
+        if i is None or i == self.selectedTab:
+            if self.currentFile() is None:
+                self.setWindowTitle('Modular Calculator')
+            else:
+                fileName = self.currentFile()
+                if self.currentFileModified():
+                    fileName += ' *'
+                self.setWindowTitle("Modular Calculator - {}".format(fileName))
+                self.tabbar.setTabText(self.selectedTab, fileName)
+
     def open(self):
-        if self.checkIfNeedToSave():
-            return
         filePath, _ = QFileDialog.getOpenFileName(self, "Open File", "", "All Files (*)")
         if filePath:
+            self.addTab()
             fh = open(filePath, 'r')
             text = str.join("", fh.readlines())
             self.entry.setContents(text)
@@ -405,18 +420,6 @@ class ModularCalculatorInterface(StatefulApplication):
                 return True
         return False
 
-    def setCurrentFileAndModified(self, file, modified=False, i=None):
-        self.setCurrentFile(file, i)
-        self.setCurrentFileModified(modified, i)
-        if i is None or i == self.selectedTab:
-            if self.currentFile() is None:
-                self.setWindowTitle('Modular Calculator')
-            else:
-                fileName = self.currentFile()
-                if self.currentFileModified():
-                    fileName += ' *'
-                self.setWindowTitle("Modular Calculator - {}".format(fileName))
-                self.tabbar.setTabText(self.selectedTab, fileName)
 
     def setUnitSimplification(self, value):
         self.optionsSimplifyUnits.setChecked(value)
