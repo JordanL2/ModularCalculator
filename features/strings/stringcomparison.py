@@ -59,7 +59,7 @@ class StringComparisonFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'String', 
             '==$', 
-            'Equal to, alphabetical',
+            'Equal to, string-wise',
             StringComparisonFeature.op_string_equals, 
             1, 
             1, 
@@ -67,7 +67,7 @@ class StringComparisonFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'String', 
             '!=$', 
-            'Not equal to, alphabetical',
+            'Not equal to, string-wise',
             StringComparisonFeature.op_string_notequals, 
             1, 
             1, 
@@ -108,7 +108,7 @@ class StringComparisonFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'String Case-Insensitive', 
             '==~', 
-            'Equal to, alphabetical, case-insensitive',
+            'Equal to, string-wise, case-insensitive',
             StringComparisonFeature.op_stringcaseless_equals, 
             1, 
             1, 
@@ -116,7 +116,7 @@ class StringComparisonFeature(Feature):
         calculator.add_op(OperatorDefinition(
             'String Case-Insensitive', 
             '!=~', 
-            'Not equal to, alphabetical, case-insensitive',
+            'Not equal to, string-wise, case-insensitive',
             StringComparisonFeature.op_stringcaseless_notequals, 
             1, 
             1, 
