@@ -301,7 +301,6 @@ class ModularCalculatorInterface(StatefulApplication):
         self.storeSelectedTab()
         self.selectedTab = i
         self.entry.restoreState(self.tabs[i]['entry'])
-        self.entry.refresh()
         self.display.restoreState(self.tabs[i]['display'])
         self.display.refresh()
         self.setCurrentFile(self.tabs[i]['currentFile'], self.tabs[i]['currentFileModified'])

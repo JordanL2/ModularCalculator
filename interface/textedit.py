@@ -5,7 +5,7 @@ from modularcalculator.interface.guitools import *
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QTextEdit
-from PyQt5.QtGui import QFontDatabase
+from PyQt5.QtGui import QFontDatabase, QTextCursor
 
 
 class CalculatorTextEdit(QTextEdit):
@@ -130,11 +130,11 @@ class CalculatorTextEdit(QTextEdit):
         self.checkSyntax(True)
 
     def updateHtml(self, html):
-            cursorpos = self.textCursor().position()
-            self.setHtml(self.css + html)
-            cursor = self.textCursor()
-            cursor.setPosition(cursorpos)
-            self.setTextCursor(cursor)
+        cursorpos = self.textCursor().position()
+        self.setHtml(self.css + html)
+        cursor = self.textCursor()
+        cursor.setPosition(cursorpos)
+        self.setTextCursor(cursor)
 
     def insert(self, text):
         self.insertPlainText(text)
@@ -152,7 +152,9 @@ class CalculatorTextEdit(QTextEdit):
 
     def saveState(self):
         return {
-            'text': self.getContents()
+            'text': self.getContents(),
+            'cursorSelectionStart': self.textCursor().selectionStart(),
+            'cursorSelectionEnd': self.textCursor().selectionEnd(),
         }
 
     def restoreState(self, state):
@@ -160,3 +162,11 @@ class CalculatorTextEdit(QTextEdit):
             self.setPlainText(state['text'])
         else:
             self.setPlainText('')
+        self.refresh()
+
+        if 'cursorSelectionStart' in state:
+            cursor = self.textCursor()
+            cursor.setPosition(state['cursorSelectionStart'], QTextCursor.MoveAnchor)
+            if 'cursorSelectionEnd' in state:
+                cursor.setPosition(state['cursorSelectionEnd'], QTextCursor.KeepAnchor)
+            self.setTextCursor(cursor)
