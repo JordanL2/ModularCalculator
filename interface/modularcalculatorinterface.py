@@ -192,7 +192,12 @@ class ModularCalculatorInterface(StatefulApplication):
                 for tab in self.tabs:
                     tabfile = self.getTabName(tab['currentFile'], tab['currentFileModified'])
                     self.tabbar.addTab(tabfile)
-                self.selectTab(0)
+                self.selectedTab = self.fetchStateNumber("selectedTab")
+                if self.selectedTab is None:
+                    self.loadTab(0)
+                else:
+                    self.loadTab(self.selectedTab)
+                    self.tabbar.setCurrentIndex(self.selectedTab)
             else:
                 self.addTab()
             
@@ -241,6 +246,7 @@ class ModularCalculatorInterface(StatefulApplication):
 
         self.storeSelectedTab()
         self.storeStateArray("tabs", self.tabs)
+        self.storeStateNumber("selectedTab", self.selectedTab)
         
         self.storeStateBoolean("viewShortUnits", self.viewShortUnits.isChecked())
         self.storeStateBoolean("viewSyntaxParsingAutoExecutes", self.viewSyntaxParsingAutoExecutes.isChecked())
