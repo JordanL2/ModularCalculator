@@ -396,19 +396,23 @@ class ModularCalculatorInterface(StatefulApplication):
             self.setCurrentFileAndModified(filePath, False)
 
     def save(self, i=None):
+        if i == False:
+            i = None
         if self.currentFile(i) is None:
             self.saveAs(i)
             return
         fh = open(self.currentFile(i), 'w')
-        fh.write(self.entry.getContents())
+        fh.write(self.getEntryContents(i))
         self.setCurrentFileAndModified(self.currentFile(), False, i)
 
-    def saveAs(self):
+    def saveAs(self, i=None):
+        if i == False:
+            i = None
         filePath, _ = QFileDialog.getSaveFileName(self, "Save File", "", "All Files (*)")
         if filePath:
             fh = open(filePath, 'w')
-            fh.write(self.entry.getContents())
-            self.setCurrentFileAndModified(filePath, False)
+            fh.write(self.getEntryContents(i))
+            self.setCurrentFileAndModified(filePath, False, i)
 
     def checkIfNeedToSave(self, i=None):
         if self.currentFile(i) is not None and self.currentFileModified(i):
@@ -418,6 +422,12 @@ class ModularCalculatorInterface(StatefulApplication):
             elif response == QMessageBox.Cancel:
                 return True
         return False
+
+    def getEntryContents(self, i=None):
+        self.storeSelectedTab()
+        if i is None:
+            i = self.selectedTab
+        return self.tabs[i]['entry']['text']
 
 
     def setUnitSimplification(self, value):
