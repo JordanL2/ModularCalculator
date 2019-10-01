@@ -29,6 +29,7 @@ class ModularCalculatorInterface(StatefulApplication):
         self.initCalculator()
         self.restoreAllState()
         self.tabbar.currentChanged.connect(self.selectTab)
+        self.tabbar.tabCloseRequested.connect(self.closeTab)
         self.entry.setFocus()
         self.show()
 
@@ -309,11 +310,34 @@ class ModularCalculatorInterface(StatefulApplication):
 
     def selectTab(self, i):
         self.storeSelectedTab()
+        self.loadTab(i)
+
+    def loadTab(self, i):
         self.selectedTab = i
         self.entry.restoreState(self.tabs[i]['entry'])
         self.display.restoreState(self.tabs[i]['display'])
         self.display.refresh()
         self.setCurrentFile(self.tabs[i]['currentFile'], self.tabs[i]['currentFileModified'])
+
+    def closeTab(self, i):
+        #TODO check if should save
+        self.storeSelectedTab()
+        self.tabbar.blockSignals(True)
+
+        self.tabs.pop(i)
+        print(self.tabs)
+        self.tabbar.removeTab(i)
+        if self.selectedTab >= i:
+            self.selectedTab -= 1
+            if self.selectedTab < 0:
+                self.selectedTab = 0
+            if len(self.tabs) == 0:
+                self.addTab()
+            else:
+                self.loadTab(self.selectedTab)
+
+        self.tabbar.setCurrentIndex(self.selectedTab)
+        self.tabbar.blockSignals(False)
 
     def open(self):
         if self.checkIfNeedToSave():
