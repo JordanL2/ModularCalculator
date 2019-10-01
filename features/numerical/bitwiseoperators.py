@@ -95,14 +95,14 @@ class BitwiseOperatorsFeature(Feature):
         dec_num, num_type = self.number(vals[0])
 
         int_val = int(dec_num)
-        if num_type is not None and num_type != False and 'width' in num_type.opts:
+        if num_type and 'width' in num_type.opts:
             mask_val = 2**num_type.opts['width'] - 1
         else:
             mask_val = 2**math.ceil(math.log(int_val, 2)) - 1
         flipped_val = ~int_val
         masked_flipped_val = flipped_val & mask_val
 
-        if num_type is not None and num_type != False:
+        if num_type:
             return OperationResult(num_type.restore(self, masked_flipped_val))
         return OperationResult(Decimal(masked_flipped_val))
 

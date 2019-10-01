@@ -78,7 +78,7 @@ class Operation:
         try:
             result = self.ref(calculator, values, units, refs, flags.copy())
             result_value = result.value
-            if self.auto_convert_numerical_result and isinstance(result_value, Decimal) and num_type is not None and num_type != False:
+            if self.auto_convert_numerical_result and isinstance(result_value, Decimal) and num_type:
                 result_value = calculator.restore_number_type(result_value, num_type)
             if result.unit_override:
                 result_unit = result.unit

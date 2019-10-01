@@ -72,7 +72,7 @@ class NumericalEngine(Engine):
         raise CalculatorException("Can't cast to number: {0}".format(str(val)))
 
     def restore_number_type(self, num, num_type):
-        if num_type is None or num_type == False:
+        if not num_type:
             return num
         return num_type.restore(self, num)
 
