@@ -68,6 +68,11 @@ class ModularCalculatorInterface(StatefulApplication):
         fileNew.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_N))
         self.fileMenu.addAction(fileNew)
         
+        fileClose = QAction('Close Tab', self)
+        fileClose.triggered.connect(self.closeCurrentTab)
+        fileClose.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_W))
+        self.fileMenu.addAction(fileClose)
+
         fileOpen = QAction('Open', self)
         fileOpen.triggered.connect(self.open)
         fileOpen.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_O))
@@ -339,11 +344,13 @@ class ModularCalculatorInterface(StatefulApplication):
                 self.selectedTab = 0
             if len(self.tabs) == 0:
                 self.addTab()
-            else:
-                self.loadTab(self.selectedTab)
+            self.loadTab(self.selectedTab)
 
         self.tabbar.setCurrentIndex(self.selectedTab)
         self.tabbar.blockSignals(False)
+
+    def closeCurrentTab(self):
+        self.closeTab(self.selectedTab)
 
     def open(self):
         if self.checkIfNeedToSave():
