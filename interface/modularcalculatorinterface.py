@@ -337,7 +337,6 @@ class ModularCalculatorInterface(StatefulApplication):
         self.tabbar.blockSignals(True)
 
         self.tabs.pop(i)
-        print(self.tabs)
         self.tabbar.removeTab(i)
         if self.selectedTab >= i:
             self.selectedTab -= 1
