@@ -155,6 +155,7 @@ class CalculatorTextEdit(QTextEdit):
             'text': self.getContents(),
             'cursorSelectionStart': self.textCursor().selectionStart(),
             'cursorSelectionEnd': self.textCursor().selectionEnd(),
+            'sliderPosition': self.verticalScrollBar().sliderPosition(),
         }
 
     def restoreState(self, state):
@@ -170,3 +171,6 @@ class CalculatorTextEdit(QTextEdit):
             if 'cursorSelectionEnd' in state:
                 cursor.setPosition(state['cursorSelectionEnd'], QTextCursor.KeepAnchor)
             self.setTextCursor(cursor)
+
+        if 'sliderPosition' in state:
+            self.verticalScrollBar().setSliderPosition(state['sliderPosition'])
