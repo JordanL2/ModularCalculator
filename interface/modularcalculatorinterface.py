@@ -11,7 +11,7 @@ from modularcalculator.interface.textedit import *
 
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QKeySequence, QCursor
-from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QMessageBox, QSplitter, QAction, QFileDialog, QToolTip, QTabBar
+from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QMessageBox, QSplitter, QAction, QFileDialog, QToolTip, QTabBar, QShortcut
 
 import functools
 import os.path
@@ -30,6 +30,7 @@ class ModularCalculatorInterface(StatefulApplication):
         self.restoreAllState()
         self.tabbar.currentChanged.connect(self.selectTab)
         self.tabbar.tabCloseRequested.connect(self.closeTab)
+        self.initShortcuts()
         self.entry.setFocus()
         self.show()
 
@@ -154,6 +155,12 @@ class ModularCalculatorInterface(StatefulApplication):
 
     def showExecuteToolTip(self):
         QToolTip.showText(QCursor.pos(), "Ctrl+Enter", self)
+
+    def initShortcuts(self):
+        previousTab = QShortcut(QKeySequence(Qt.CTRL + Qt.Key_PageUp), self)
+        previousTab.activated.connect(self.previousTab)
+        nextTab = QShortcut(QKeySequence(Qt.CTRL + Qt.Key_PageDown), self)
+        nextTab.activated.connect(self.nextTab)
 
 
     def initCalculator(self):
@@ -351,6 +358,22 @@ class ModularCalculatorInterface(StatefulApplication):
 
     def closeCurrentTab(self):
         self.closeTab(self.selectedTab)
+
+    def previousTab(self):
+        i = self.selectedTab
+        if i == 0:
+            i = len(self.tabs)
+        i -= 1
+        self.selectTab(i)
+        self.tabbar.setCurrentIndex(i)
+
+    def nextTab(self):
+        i = self.selectedTab
+        i += 1
+        if i == len(self.tabs):
+            i = 0
+        self.selectTab(i)
+        self.tabbar.setCurrentIndex(i)
 
 
     def currentFile(self, i=None):
