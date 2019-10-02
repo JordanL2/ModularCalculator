@@ -28,8 +28,6 @@ class ModularCalculatorInterface(StatefulApplication):
         self.initMenu()
         self.initCalculator()
         self.restoreAllState()
-        self.tabbar.currentChanged.connect(self.selectTab)
-        self.tabbar.tabCloseRequested.connect(self.closeTab)
         self.initShortcuts()
         self.entry.setFocus()
         self.show()
@@ -201,23 +199,28 @@ class ModularCalculatorInterface(StatefulApplication):
             self.setAutoExecute(self.fetchStateBoolean("viewSyntaxParsingAutoExecutes", True), False)
             self.setShortUnits(self.fetchStateBoolean("viewShortUnits", False), False)
 
-            self.tabs = self.fetchStateArray("tabs")
-            if len(self.tabs) > 0:
-                for tab in self.tabs:
-                    tabfile = self.getTabName(tab['currentFile'], tab['currentFileModified'])
-                    self.tabbar.addTab(tabfile)
-                self.selectedTab = self.fetchStateNumber("selectedTab")
-                if self.selectedTab is None:
-                    self.loadTab(0)
-                else:
-                    self.loadTab(self.selectedTab)
-                    self.tabbar.setCurrentIndex(self.selectedTab)
-            else:
-                self.addTab()
-                self.loadTab(0)
+            self.restoreTabs()
         except Exception as e:
             print("Exception when trying to restore state")
             print(traceback.format_exc())
+
+    def restoreTabs(self):
+        self.tabs = self.fetchStateArray("tabs")
+        if len(self.tabs) > 0:
+            for tab in self.tabs:
+                tabfile = self.getTabName(tab['currentFile'], tab['currentFileModified'])
+                self.tabbar.addTab(tabfile)
+            self.selectedTab = self.fetchStateNumber("selectedTab")
+            if self.selectedTab is None:
+                self.loadTab(0)
+            else:
+                self.loadTab(self.selectedTab)
+                self.tabbar.setCurrentIndex(self.selectedTab)
+        else:
+            self.addTab()
+            self.loadTab(0)
+        self.tabbar.currentChanged.connect(self.selectTab)
+        self.tabbar.tabCloseRequested.connect(self.closeTab)
 
     def restoreCalculatorState(self):
         foundImportedFeatures = []
