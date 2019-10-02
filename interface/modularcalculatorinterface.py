@@ -35,6 +35,7 @@ class ModularCalculatorInterface(StatefulApplication):
     def initUI(self):
         self.tabbar = QTabBar(self)
         self.tabbar.setTabsClosable(True)
+        self.tabbar.setMovable(True)
         self.tabs = []
         self.selectedTab = None
 
@@ -220,6 +221,7 @@ class ModularCalculatorInterface(StatefulApplication):
             self.loadTab(0)
         self.tabbar.currentChanged.connect(self.selectTab)
         self.tabbar.tabCloseRequested.connect(self.closeTab)
+        self.tabbar.tabMoved.connect(self.moveTab)
 
     def restoreCalculatorState(self):
         foundImportedFeatures = []
@@ -376,6 +378,10 @@ class ModularCalculatorInterface(StatefulApplication):
             i = 0
         self.selectTab(i)
 
+    def moveTab(self, toPos, fromPos):
+        movedTab = self.tabs.pop(fromPos)
+        self.tabs.insert(toPos, movedTab)
+        self.selectedTab = toPos
 
     def currentFile(self, i=None):
         if i is None:
