@@ -215,7 +215,6 @@ class ModularCalculatorInterface(StatefulApplication):
                 self.loadTab(0)
             else:
                 self.loadTab(self.selectedTab)
-                self.tabbar.setCurrentIndex(self.selectedTab)
         else:
             self.addTab()
             self.loadTab(0)
@@ -338,6 +337,8 @@ class ModularCalculatorInterface(StatefulApplication):
         self.display.restoreState(self.tabs[i]['display'])
         self.display.refresh()
         self.setCurrentFileAndModified(self.tabs[i]['currentFile'], self.tabs[i]['currentFileModified'])
+        if self.tabbar.currentIndex != i:
+            self.tabbar.setCurrentIndex(i)
 
     def closeTab(self, i):
         if self.checkIfNeedToSave(i):
@@ -356,7 +357,6 @@ class ModularCalculatorInterface(StatefulApplication):
                 self.addTab()
             self.loadTab(self.selectedTab)
 
-        self.tabbar.setCurrentIndex(self.selectedTab)
         self.tabbar.blockSignals(False)
 
     def closeCurrentTab(self):
@@ -368,7 +368,6 @@ class ModularCalculatorInterface(StatefulApplication):
             i = len(self.tabs)
         i -= 1
         self.selectTab(i)
-        self.tabbar.setCurrentIndex(i)
 
     def nextTab(self):
         i = self.selectedTab
@@ -376,7 +375,6 @@ class ModularCalculatorInterface(StatefulApplication):
         if i == len(self.tabs):
             i = 0
         self.selectTab(i)
-        self.tabbar.setCurrentIndex(i)
 
 
     def currentFile(self, i=None):
