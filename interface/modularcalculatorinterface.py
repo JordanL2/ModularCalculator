@@ -4,6 +4,7 @@ from modularcalculator.modularcalculator import *
 from modularcalculator.interface.display import *
 from modularcalculator.interface.featureconfig import *
 from modularcalculator.interface.featureoptions import *
+from modularcalculator.interface.filemanager import *
 from modularcalculator.interface.guitools import *
 from modularcalculator.interface.guiwidgets import *
 from modularcalculator.interface.statefulapplication import *
@@ -24,11 +25,15 @@ class ModularCalculatorInterface(StatefulApplication):
 
     def __init__(self):
         super().__init__()
+
+        self.filemanager = FileManager(self)
+
         self.initUI()
         self.initMenu()
         self.initCalculator()
         self.restoreAllState()
         self.initShortcuts()
+
         self.entry.setFocus()
         self.show()
 
@@ -74,17 +79,17 @@ class ModularCalculatorInterface(StatefulApplication):
         self.fileMenu.addAction(fileClose)
 
         fileOpen = QAction('Open', self)
-        fileOpen.triggered.connect(self.open)
+        fileOpen.triggered.connect(self.filemanager.open)
         fileOpen.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_O))
         self.fileMenu.addAction(fileOpen)
         
         self.fileSave = QAction('Save', self)
-        self.fileSave.triggered.connect(self.save)
+        self.fileSave.triggered.connect(self.filemanager.save)
         self.fileSave.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_S))
         self.fileMenu.addAction(self.fileSave)
         
         fileSaveAs = QAction('Save As...', self)
-        fileSaveAs.triggered.connect(self.saveAs)
+        fileSaveAs.triggered.connect(self.filemanager.saveAs)
         fileSaveAs.setShortcut(QKeySequence(Qt.CTRL + Qt.SHIFT + Qt.Key_S))
         self.fileMenu.addAction(fileSaveAs)
 
@@ -338,12 +343,12 @@ class ModularCalculatorInterface(StatefulApplication):
         self.entry.restoreState(self.tabs[i]['entry'])
         self.display.restoreState(self.tabs[i]['display'])
         self.display.refresh()
-        self.setCurrentFileAndModified(self.tabs[i]['currentFile'], self.tabs[i]['currentFileModified'])
+        self.filemanager.setCurrentFileAndModified(self.tabs[i]['currentFile'], self.tabs[i]['currentFileModified'])
         if self.tabbar.currentIndex != i:
             self.tabbar.setCurrentIndex(i)
 
     def closeTab(self, i):
-        if self.checkIfNeedToSave(i):
+        if self.filemanager.checkIfNeedToSave(i):
             return
         
         self.storeSelectedTab()
@@ -382,82 +387,6 @@ class ModularCalculatorInterface(StatefulApplication):
         movedTab = self.tabs.pop(fromPos)
         self.tabs.insert(toPos, movedTab)
         self.selectedTab = toPos
-
-    def currentFile(self, i=None):
-        if i is None:
-            i = self.selectedTab
-        return self.tabs[i]['currentFile']
-
-    def currentFileModified(self, i=None):
-        if i is None:
-            i = self.selectedTab
-        return self.tabs[i]['currentFileModified']
-
-    def setCurrentFile(self, currentFile, i=None):
-        if i is None:
-            i = self.selectedTab
-        self.tabs[i]['currentFile'] = currentFile
-
-    def setCurrentFileModified(self, currentFileModified, i=None):
-        if i is None:
-            i = self.selectedTab
-        self.tabs[i]['currentFileModified'] = currentFileModified
-
-    def setCurrentFileAndModified(self, file, modified=False, i=None):
-        self.setCurrentFile(file, i)
-        self.setCurrentFileModified(modified, i)
-        if i is None or i == self.selectedTab:
-            if self.currentFile() is None:
-                self.setWindowTitle('Modular Calculator')
-            else:
-                fileName = self.currentFile()
-                if self.currentFileModified():
-                    fileName += ' *'
-                self.setWindowTitle("Modular Calculator - {}".format(fileName))
-                self.tabbar.setTabText(self.selectedTab, fileName)
-
-    def open(self):
-        filePath, _ = QFileDialog.getOpenFileName(self, "Open File", "", "All Files (*)")
-        if filePath:
-            self.addTab()
-            fh = open(filePath, 'r')
-            text = str.join("", fh.readlines())
-            self.entry.setContents(text)
-            self.setCurrentFileAndModified(filePath, False)
-
-    def save(self, i=None):
-        if i == False:
-            i = None
-        if self.currentFile(i) is None:
-            self.saveAs(i)
-            return
-        fh = open(self.currentFile(i), 'w')
-        fh.write(self.getEntryContents(i))
-        self.setCurrentFileAndModified(self.currentFile(), False, i)
-
-    def saveAs(self, i=None):
-        if i == False:
-            i = None
-        filePath, _ = QFileDialog.getSaveFileName(self, "Save File", "", "All Files (*)")
-        if filePath:
-            fh = open(filePath, 'w')
-            fh.write(self.getEntryContents(i))
-            self.setCurrentFileAndModified(filePath, False, i)
-
-    def checkIfNeedToSave(self, i=None):
-        if self.currentFile(i) is not None and self.currentFileModified(i):
-            response = QMessageBox.question(self, 'Unsaved File', "Save changes to {} before closing?".format(self.currentFile()), QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.Cancel)
-            if response == QMessageBox.Yes:
-                self.save(i)
-            elif response == QMessageBox.Cancel:
-                return True
-        return False
-
-    def getEntryContents(self, i=None):
-        self.storeSelectedTab()
-        if i is None:
-            i = self.selectedTab
-        return self.tabs[i]['entry']['text']
 
 
     def setUnitSimplification(self, value):
