@@ -15,13 +15,14 @@ class FeatureOptionsDialog(QDialog):
         super().__init__(parent)
 
         self.parent = parent
+        self.calculatormanager = self.parent.calculatormanager
 
         layout = QVBoxLayout()
 
         layout.addWidget(QLabel('Click a feature below to edit its available options.'))
 
         self.featureList = ExpandedListWidget(self, True, True)
-        features = [f for f in self.parent.calculator.feature_list.values() if f.id() in self.parent.calculator.feature_options and f.id() in self.parent.calculator.installed_features]
+        features = [f for f in self.calculatormanager.calculator.feature_list.values() if f.id() in self.calculatormanager.calculator.feature_options and f.id() in self.calculatormanager.calculator.installed_features]
         for feature in sorted(features, key=lambda f : f.title()):
             item = QListWidgetItem(feature.title(), self.featureList)
             item.setFlags(Qt.ItemIsEnabled)
@@ -51,7 +52,7 @@ class ConfigureFeatureDialog(QDialog):
         super().__init__(parent)
 
         self.parent = parent
-        self.calculator = self.parent.parent.calculator
+        self.calculator = self.parent.calculatormanager.calculator
         self.feature = self.calculator.feature_list[featureId]
         self.featureOptions = self.calculator.feature_options[featureId]
 

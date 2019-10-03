@@ -14,10 +14,11 @@ class FeatureConfigDialog(QDialog):
         super().__init__(parent)
 
         self.parent = parent
+        self.calculatormanager = self.parent.calculatormanager
 
-        self.importedFeatures = parent.importedFeatures
+        self.importedFeatures = self.calculatormanager.importedFeatures
         self.calculator = self.buildCalculator(self.importedFeatures, [])
-        self.selectedFeatures = parent.calculator.installed_features
+        self.selectedFeatures = self.calculatormanager.calculator.installed_features
 
         grid = QGridLayout()
 

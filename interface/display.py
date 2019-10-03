@@ -54,7 +54,7 @@ class CalculatorDisplay(QTextEdit):
             if self.options['shortunits'] and unit.has_symbols():
                 unit = unit.symbol()
             else:
-                unit = unit.get_name(self.interface.calculator.number(answer))
+                unit = unit.get_name(self.interface.calculatormanager.calculator.number(answer))
                 unit = ' ' + unit
         else:
             unit = ''

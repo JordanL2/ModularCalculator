@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from modularcalculator.modularcalculator import *
+from modularcalculator.interface.calculatormanager import *
 from modularcalculator.interface.display import *
 from modularcalculator.interface.featureconfig import *
 from modularcalculator.interface.featureoptions import *
@@ -29,12 +30,13 @@ class ModularCalculatorInterface(StatefulApplication):
 
         self.initUI()
 
+        self.calculatormanager = CalculatorManager(self)
         self.filemanager = FileManager(self)
         self.tabmanager = TabManager(self)
         self.filemanager.tabmanager = self.tabmanager
 
         self.initMenu()
-        self.initCalculator()
+        self.calculatormanager.initCalculator()
         self.restoreAllState()
         self.initShortcuts()
 
@@ -98,11 +100,11 @@ class ModularCalculatorInterface(StatefulApplication):
         viewMenu = menubar.addMenu('View')
         
         self.viewShortUnits = QAction('Units in Short Form', self, checkable=True)
-        self.viewShortUnits.triggered.connect(self.setShortUnits)
+        self.viewShortUnits.triggered.connect(self.calculatormanager.setShortUnits)
         viewMenu.addAction(self.viewShortUnits)
         
         self.viewSyntaxParsingAutoExecutes = QAction('Syntax Parsing Performs Evaluation', self, checkable=True)
-        self.viewSyntaxParsingAutoExecutes.triggered.connect(self.setAutoExecute)
+        self.viewSyntaxParsingAutoExecutes.triggered.connect(self.calculatormanager.setAutoExecute)
         viewMenu.addAction(self.viewSyntaxParsingAutoExecutes)
 
         actionMenu = menubar.addMenu('Insert')
@@ -134,11 +136,11 @@ class ModularCalculatorInterface(StatefulApplication):
         optionsMenu = menubar.addMenu('Options')
         
         self.precisionSpinBox = MenuSpinBox(self, 'Precision', 1, 50)
-        self.precisionSpinBox.spinbox.valueChanged.connect(self.setPrecision)
+        self.precisionSpinBox.spinbox.valueChanged.connect(self.calculatormanager.setPrecision)
         optionsMenu.addAction(self.precisionSpinBox)
 
         self.optionsSimplifyUnits = QAction('Simplify Units', self, checkable=True)
-        self.optionsSimplifyUnits.triggered.connect(self.setUnitSimplification)
+        self.optionsSimplifyUnits.triggered.connect(self.calculatormanager.setUnitSimplification)
         optionsMenu.addAction(self.optionsSimplifyUnits)
 
         self.optionsUnitSystemPreference = QAction('Unit System Preference', self)
@@ -154,7 +156,7 @@ class ModularCalculatorInterface(StatefulApplication):
         optionsMenu.addAction(self.optionsFeatureOptions)
 
         self.executeAction = QAction('Execute', self)
-        self.executeAction.triggered.connect(self.calc)
+        self.executeAction.triggered.connect(self.calculatormanager.calc)
         self.executeAction.hovered.connect(self.showExecuteToolTip)
         menubar.addAction(self.executeAction)
         self.executeAction.setShortcuts([QKeySequence(Qt.CTRL + Qt.Key_Enter), QKeySequence(Qt.CTRL + Qt.Key_Return)])
@@ -169,80 +171,21 @@ class ModularCalculatorInterface(StatefulApplication):
         nextTab.activated.connect(self.tabmanager.nextTab)
 
 
-    def initCalculator(self):
-        calculator = ModularCalculator()
-        calculator.enable_units()
-        self.setCalculator(calculator)
-
-    def setCalculator(self, calculator):
-        self.calculator = calculator
-        self.entry.setCalculator(self.calculator)
-
-    def importFeature(self, filePath):
-        try:
-            featureIds = self.calculator.import_feature_file(filePath)
-            self.importedFeatures.append(filePath)
-        except Exception as err:
-            return e
-
-    def replaceCalculator(self, calculator):
-        calculator.number_prec_set(self.calculator.number_prec_get())
-        calculator.unit_simplification_set(self.calculator.unit_simplification_get())
-        calculator.unit_normaliser.systems_preference = self.calculator.unit_normaliser.systems_preference
-        for featureId, featureOptions in self.calculator.feature_options.items():
-            if featureId in calculator.feature_options:
-                calculator.feature_options[featureId] = featureOptions
-        self.setCalculator(calculator)
-
-
     def restoreAllState(self):
         try:
-            self.importedFeatures = self.fetchStateArray("importedFeatures")
-            self.restoreCalculatorState()
+            self.calculatormanager.restoreCalculatorState()
 
             self.restoreGeometry(self.fetchState("mainWindowGeometry"))
             self.restoreState(self.fetchState("mainWindowState"))
             self.splitter.restoreState(self.fetchState("splitterSizes"))
-            
-            self.setAutoExecute(self.fetchStateBoolean("viewSyntaxParsingAutoExecutes", True), False)
-            self.setShortUnits(self.fetchStateBoolean("viewShortUnits", False), False)
 
             self.tabmanager.restoreTabs()
         except Exception as e:
             print("Exception when trying to restore state")
             print(traceback.format_exc())
 
-    def restoreCalculatorState(self):
-        foundImportedFeatures = []
-        for featureFile in self.importedFeatures:
-            try:
-                self.calculator.import_feature_file(featureFile)
-                foundImportedFeatures.append(featureFile)
-            except Exception as err:
-                print("!!! Couldn't import {} - {} !!!".format(featureFile, err))
-        self.importedFeatures = foundImportedFeatures
-
-        features = self.fetchStateArray("calculatorFeatures")
-        if features is not None and len(features) > 0:
-            self.calculator.install_features(features, False, True)
-        else:
-            self.calculator.load_preset('Computing')
-
-        self.setPrecision(self.fetchStateNumber("precision", 30))
-        self.setUnitSimplification(self.fetchStateBoolean("simplifyUnits", True))
-        unitSystems = self.fetchStateArray("unitSystemsPreference")
-        if unitSystems is not None and len(unitSystems) > 0:
-            self.calculator.unit_normaliser.systems_preference = unitSystems
-
-        featureOptions = self.fetchStateMap("calculatorFeatureOptions")
-        for featureId, featuresOptions in featureOptions.items():
-            for field, value in featuresOptions.items():
-                if field in self.calculator.feature_list[featureId].default_options():
-                    self.calculator.feature_options[featureId][field] = value
-
     def storeAllState(self):
-        self.storeStateArray("importedFeatures", list(set(self.importedFeatures)))
-        self.storeCalculatorState()
+        self.calculatormanager.storeCalculatorState()
 
         self.storeState("mainWindowGeometry", self.saveGeometry())
         self.storeState("mainWindowState", self.saveState())
@@ -251,71 +194,9 @@ class ModularCalculatorInterface(StatefulApplication):
         self.tabmanager.storeSelectedTab()
         self.storeStateArray("tabs", self.tabmanager.tabs)
         self.storeStateNumber("selectedTab", self.tabmanager.selectedTab)
-        
-        self.storeStateBoolean("viewShortUnits", self.viewShortUnits.isChecked())
-        self.storeStateBoolean("viewSyntaxParsingAutoExecutes", self.viewSyntaxParsingAutoExecutes.isChecked())
-
-    def storeCalculatorState(self):
-        self.storeStateArray("calculatorFeatures", self.calculator.installed_features)
-        self.storeStateNumber("precision", self.precisionSpinBox.spinbox.value())
-        self.storeStateBoolean("simplifyUnits", self.optionsSimplifyUnits.isChecked())
-        self.storeStateArray("unitSystemsPreference", self.calculator.unit_normaliser.systems_preference)
-
-        self.storeStateMap("calculatorFeatureOptions", self.calculator.feature_options)
-
-
-    def calc(self):
-        question = self.entry.getContents().rstrip()
-        try:
-            self.calculator.vars = {}
-            response = self.calculator.calculate(question)
-            if len(response.results) > 1:
-                self.display.clear()
-            for i, result in enumerate(response.results):
-                if hasattr(result, 'value'):
-                    result_value = result.value
-                    result_value = self.calculator.number_to_string(result_value)
-                    self.display.addAnswer(result.expression, result_value, result.unit)
-        except CalculatingException as err:
-            i = err.find_pos(question)
-            row, column = self.rowsColumns(question, i)
-            QMessageBox.critical(self, "ERROR", "{0} at row {1}, column {2}".format(err.message, row, column))
-        except CalculatorException as err:
-            QMessageBox.critical(self, "ERROR", "{0}".format(err.message))
-
-    def rowsColumns(self, text, pos):
-        row = 1
-        column = 0
-        for i in range(0, pos):
-            if text[i] == "\n":
-                row += 1
-                column = 0
-            column += 1
-        return row, column
-
-
-    def setUnitSimplification(self, value):
-        self.optionsSimplifyUnits.setChecked(value)
-        self.calculator.unit_simplification_set(value)
-
-    def setPrecision(self, value):
-        self.precisionSpinBox.spinbox.setValue(value)
-        self.calculator.number_prec_set(value)
-
-    def setShortUnits(self, value, refresh=True):
-        self.viewShortUnits.setChecked(value)
-        self.display.options['shortunits'] = value
-        if refresh:
-            self.display.refresh()
-
-    def setAutoExecute(self, value, refresh=True):
-        self.viewSyntaxParsingAutoExecutes.setChecked(value)
-        self.entry.autoExecute = value
-        if refresh:
-            self.entry.refresh()
 
     def insertConstant(self):
-        constants = sorted(self.calculator.constants.keys(), key=str)
+        constants = sorted(self.calculatormanager.calculator.constants.keys(), key=str)
         SelectionDialog(self, 'Insert Constant', 'Select constant to insert', constants, self.selectConstant)
 
     def selectConstant(self, constant):
@@ -330,7 +211,7 @@ class ModularCalculatorInterface(StatefulApplication):
     def getAllFunctions(self, condition=None):
         funcs = {}
         descriptions = {}
-        for func, funcInfo in self.calculator.funcs.items():
+        for func, funcInfo in self.calculatormanager.calculator.funcs.items():
             if condition is None or condition(funcInfo):
                 category = funcInfo.category
                 if category not in funcs:
@@ -344,7 +225,7 @@ class ModularCalculatorInterface(StatefulApplication):
         CategorisedSelectionDialog(self, 'Insert Function', 'Select function to insert', funcs, descriptions, self.selectFunction)
 
     def selectFunction(self, func):
-        funcInfo = self.calculator.funcs[func]
+        funcInfo = self.calculatormanager.calculator.funcs[func]
         self.entry.insert("{}({})".format(func, ', '.join(funcInfo.syntax)))
 
     def insertUserDefinedFunction(self):
@@ -362,7 +243,7 @@ class ModularCalculatorInterface(StatefulApplication):
     def insertOperator(self):
         operators = {}
         descriptions = {}
-        for op, opInfo in self.calculator.ops_list.items():
+        for op, opInfo in self.calculatormanager.calculator.ops_list.items():
             if not opInfo.hidden:
                 category = opInfo.category
                 if category not in operators:
@@ -377,10 +258,10 @@ class ModularCalculatorInterface(StatefulApplication):
     def insertUnit(self):
         units = {}
         descriptions = {}
-        for dimension in self.calculator.unit_normaliser.units:
-            dimensionTitle = self.calculator.unit_normaliser.dimensions[dimension]
+        for dimension in self.calculatormanager.calculator.unit_normaliser.units:
+            dimensionTitle = self.calculatormanager.calculator.unit_normaliser.dimensions[dimension]
             units[dimensionTitle] = []
-            for unit in self.calculator.unit_normaliser.units[dimension]:
+            for unit in self.calculatormanager.calculator.unit_normaliser.units[dimension]:
                 unitName = unit.singular()
                 units[dimensionTitle].append(unitName)
                 altnames = []
@@ -391,7 +272,7 @@ class ModularCalculatorInterface(StatefulApplication):
                 if unit.systems is None or len(unit.systems) == 0:
                     unitsystem = 'No unit system'
                 else:
-                    unitsystem = self.calculator.unit_normaliser.systems[self.calculator.unit_normaliser.get_preferred_system(unit.systems)].name
+                    unitsystem = self.calculatormanager.calculator.unit_normaliser.systems[self.calculatormanager.calculator.unit_normaliser.get_preferred_system(unit.systems)].name
                 descriptions[unitName] = "{}.\nAlternative names: {}".format(unitsystem, altnames)
         CategorisedSelectionDialog(self, 'Insert Unit', 'Select unit to insert', units, descriptions, self.selectUnit)
 
@@ -402,20 +283,20 @@ class ModularCalculatorInterface(StatefulApplication):
         SortableListDialog(self, 
             'Unit System Preference', 
             'Order unit systems by preference, most prefered at top', 
-            [self.calculator.unit_normaliser.systems[s].name for s in self.calculator.unit_normaliser.systems_preference if s in self.calculator.unit_normaliser.systems]
-            + [self.calculator.unit_normaliser.systems[s].name for s in self.calculator.unit_normaliser.systems if s not in self.calculator.unit_normaliser.systems_preference], 
+            [self.calculatormanager.calculator.unit_normaliser.systems[s].name for s in self.calculatormanager.calculator.unit_normaliser.systems_preference if s in self.calculatormanager.calculator.unit_normaliser.systems]
+            + [self.calculatormanager.calculator.unit_normaliser.systems[s].name for s in self.calculatormanager.calculator.unit_normaliser.systems if s not in self.calculatormanager.calculator.unit_normaliser.systems_preference], 
             self.updateUnitSystemPreference)
 
     def updateUnitSystemPreference(self, systemNames):
-        self.calculator.unit_normaliser.systems_preference = [s for n in systemNames for s in [s for s in self.calculator.unit_normaliser.systems if self.calculator.unit_normaliser.systems[s].name == n]]
+        self.calculatormanager.calculator.unit_normaliser.systems_preference = [s for n in systemNames for s in [s for s in self.calculatormanager.calculator.unit_normaliser.systems if self.calculatormanager.calculator.unit_normaliser.systems[s].name == n]]
 
     def openFeatureConfig(self):
         FeatureConfigDialog(self)
 
     def commitFeatureConfig(self, calculator, importedFeatures):
         try:
-            self.replaceCalculator(calculator)
-            self.importedFeatures = importedFeatures
+            self.calculatormanager.replaceCalculator(calculator)
+            self.calculatormanager.importedFeatures = importedFeatures
         except Exception:
             errorMessage = QMessageBox(self)
             errorMessage.setText("Could not instantiate calculator with selected features")
