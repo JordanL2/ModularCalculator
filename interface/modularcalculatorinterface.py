@@ -1,22 +1,19 @@
 #!/usr/bin/python3
 
-from modularcalculator.modularcalculator import *
 from modularcalculator.interface.calculatormanager import *
 from modularcalculator.interface.display import *
 from modularcalculator.interface.featureconfig import *
 from modularcalculator.interface.featureoptions import *
 from modularcalculator.interface.filemanager import *
-from modularcalculator.interface.guitools import *
 from modularcalculator.interface.guiwidgets import *
 from modularcalculator.interface.statefulapplication import *
 from modularcalculator.interface.tabmanager import *
 from modularcalculator.interface.textedit import *
 
-from PyQt5.QtCore import Qt, QTimer
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QKeySequence, QCursor
 from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QSplitter, QAction, QFileDialog, QToolTip, QTabBar, QShortcut
 
-import functools
 import os.path
 import string
 import sys
@@ -36,7 +33,6 @@ class ModularCalculatorInterface(StatefulApplication):
         self.filemanager.tabmanager = self.tabmanager
 
         self.initMenu()
-        self.calculatormanager.initCalculator()
         self.restoreAllState()
         self.initShortcuts()
 

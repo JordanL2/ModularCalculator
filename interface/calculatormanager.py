@@ -12,6 +12,33 @@ class CalculatorManager():
         self.interface = interface
         self.entry = self.interface.entry
         self.display = self.interface.display
+        self.initCalculator()
+
+
+    def initCalculator(self):
+        calculator = ModularCalculator()
+        calculator.enable_units()
+        self.setCalculator(calculator)
+
+    def setCalculator(self, calculator):
+        self.calculator = calculator
+        self.entry.setCalculator(self.calculator)
+
+    def importFeature(self, filePath):
+        try:
+            featureIds = self.calculator.import_feature_file(filePath)
+            self.importedFeatures.append(filePath)
+        except Exception as err:
+            return e
+
+    def replaceCalculator(self, calculator):
+        calculator.number_prec_set(self.calculator.number_prec_get())
+        calculator.unit_simplification_set(self.calculator.unit_simplification_get())
+        calculator.unit_normaliser.systems_preference = self.calculator.unit_normaliser.systems_preference
+        for featureId, featureOptions in self.calculator.feature_options.items():
+            if featureId in calculator.feature_options:
+                calculator.feature_options[featureId] = featureOptions
+        self.setCalculator(calculator)
 
 
     def restoreCalculatorState(self):
@@ -59,32 +86,6 @@ class CalculatorManager():
         
         self.interface.storeStateBoolean("viewShortUnits", self.interface.viewShortUnits.isChecked())
         self.interface.storeStateBoolean("viewSyntaxParsingAutoExecutes", self.interface.viewSyntaxParsingAutoExecutes.isChecked())
-
-
-    def initCalculator(self):
-        calculator = ModularCalculator()
-        calculator.enable_units()
-        self.setCalculator(calculator)
-
-    def setCalculator(self, calculator):
-        self.calculator = calculator
-        self.entry.setCalculator(self.calculator)
-
-    def importFeature(self, filePath):
-        try:
-            featureIds = self.calculator.import_feature_file(filePath)
-            self.importedFeatures.append(filePath)
-        except Exception as err:
-            return e
-
-    def replaceCalculator(self, calculator):
-        calculator.number_prec_set(self.calculator.number_prec_get())
-        calculator.unit_simplification_set(self.calculator.unit_simplification_get())
-        calculator.unit_normaliser.systems_preference = self.calculator.unit_normaliser.systems_preference
-        for featureId, featureOptions in self.calculator.feature_options.items():
-            if featureId in calculator.feature_options:
-                calculator.feature_options[featureId] = featureOptions
-        self.setCalculator(calculator)
 
 
     def calc(self):
