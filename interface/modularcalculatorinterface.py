@@ -8,6 +8,7 @@ from modularcalculator.interface.filemanager import *
 from modularcalculator.interface.guitools import *
 from modularcalculator.interface.guiwidgets import *
 from modularcalculator.interface.statefulapplication import *
+from modularcalculator.interface.tabmanager import *
 from modularcalculator.interface.textedit import *
 
 from PyQt5.QtCore import Qt, QTimer
@@ -26,9 +27,12 @@ class ModularCalculatorInterface(StatefulApplication):
     def __init__(self):
         super().__init__()
 
-        self.filemanager = FileManager(self)
-
         self.initUI()
+
+        self.filemanager = FileManager(self)
+        self.tabmanager = TabManager(self)
+        self.filemanager.tabmanager = self.tabmanager
+
         self.initMenu()
         self.initCalculator()
         self.restoreAllState()
@@ -41,8 +45,6 @@ class ModularCalculatorInterface(StatefulApplication):
         self.tabbar = QTabBar(self)
         self.tabbar.setTabsClosable(True)
         self.tabbar.setMovable(True)
-        self.tabs = []
-        self.selectedTab = None
 
         self.display = CalculatorDisplay(self)
 
@@ -69,12 +71,12 @@ class ModularCalculatorInterface(StatefulApplication):
         self.fileMenu = menubar.addMenu('File')
         
         fileNew = QAction('New Tab', self)
-        fileNew.triggered.connect(self.addTab)
+        fileNew.triggered.connect(self.tabmanager.addTab)
         fileNew.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_N))
         self.fileMenu.addAction(fileNew)
         
         fileClose = QAction('Close Tab', self)
-        fileClose.triggered.connect(self.closeCurrentTab)
+        fileClose.triggered.connect(self.tabmanager.closeCurrentTab)
         fileClose.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_W))
         self.fileMenu.addAction(fileClose)
 
@@ -162,9 +164,9 @@ class ModularCalculatorInterface(StatefulApplication):
 
     def initShortcuts(self):
         previousTab = QShortcut(QKeySequence(Qt.CTRL + Qt.Key_PageUp), self)
-        previousTab.activated.connect(self.previousTab)
+        previousTab.activated.connect(self.tabmanager.previousTab)
         nextTab = QShortcut(QKeySequence(Qt.CTRL + Qt.Key_PageDown), self)
-        nextTab.activated.connect(self.nextTab)
+        nextTab.activated.connect(self.tabmanager.nextTab)
 
 
     def initCalculator(self):
@@ -205,28 +207,10 @@ class ModularCalculatorInterface(StatefulApplication):
             self.setAutoExecute(self.fetchStateBoolean("viewSyntaxParsingAutoExecutes", True), False)
             self.setShortUnits(self.fetchStateBoolean("viewShortUnits", False), False)
 
-            self.restoreTabs()
+            self.tabmanager.restoreTabs()
         except Exception as e:
             print("Exception when trying to restore state")
             print(traceback.format_exc())
-
-    def restoreTabs(self):
-        self.tabs = self.fetchStateArray("tabs")
-        if len(self.tabs) > 0:
-            for tab in self.tabs:
-                tabfile = self.getTabName(tab['currentFile'], tab['currentFileModified'])
-                self.tabbar.addTab(tabfile)
-            self.selectedTab = self.fetchStateNumber("selectedTab")
-            if self.selectedTab is None:
-                self.loadTab(0)
-            else:
-                self.loadTab(self.selectedTab)
-        else:
-            self.addTab()
-            self.loadTab(0)
-        self.tabbar.currentChanged.connect(self.selectTab)
-        self.tabbar.tabCloseRequested.connect(self.closeTab)
-        self.tabbar.tabMoved.connect(self.moveTab)
 
     def restoreCalculatorState(self):
         foundImportedFeatures = []
@@ -264,9 +248,9 @@ class ModularCalculatorInterface(StatefulApplication):
         self.storeState("mainWindowState", self.saveState())
         self.storeState("splitterSizes", self.splitter.saveState())
 
-        self.storeSelectedTab()
-        self.storeStateArray("tabs", self.tabs)
-        self.storeStateNumber("selectedTab", self.selectedTab)
+        self.tabmanager.storeSelectedTab()
+        self.storeStateArray("tabs", self.tabmanager.tabs)
+        self.storeStateNumber("selectedTab", self.tabmanager.selectedTab)
         
         self.storeStateBoolean("viewShortUnits", self.viewShortUnits.isChecked())
         self.storeStateBoolean("viewSyntaxParsingAutoExecutes", self.viewSyntaxParsingAutoExecutes.isChecked())
@@ -308,85 +292,6 @@ class ModularCalculatorInterface(StatefulApplication):
                 column = 0
             column += 1
         return row, column
-
-
-    def getTabName(self, currentFile, currentFileModified):
-        if currentFile is None:
-            return '(untitled)'
-        tabName = currentFile
-        if currentFileModified:
-            tabName += ' *'
-        return tabName
-
-    def addTab(self):
-        self.tabs.append({
-            'entry': {}, 
-            'display': {'rawOutput': []}, 
-            'currentFile': None, 
-            'currentFileModified': False
-        })
-        self.tabbar.addTab(self.getTabName(None, None))
-        self.tabbar.setCurrentIndex(len(self.tabs) - 1)
-
-    def storeSelectedTab(self):
-        if self.selectedTab is not None:
-            i = self.selectedTab
-            self.tabs[i]['entry'] = self.entry.saveState()
-            self.tabs[i]['display'] = self.display.saveState()
-
-    def selectTab(self, i):
-        self.storeSelectedTab()
-        self.loadTab(i)
-
-    def loadTab(self, i):
-        self.selectedTab = i
-        self.entry.restoreState(self.tabs[i]['entry'])
-        self.display.restoreState(self.tabs[i]['display'])
-        self.display.refresh()
-        self.filemanager.setCurrentFileAndModified(self.tabs[i]['currentFile'], self.tabs[i]['currentFileModified'])
-        if self.tabbar.currentIndex != i:
-            self.tabbar.setCurrentIndex(i)
-
-    def closeTab(self, i):
-        if self.filemanager.checkIfNeedToSave(i):
-            return
-        
-        self.storeSelectedTab()
-        self.tabbar.blockSignals(True)
-
-        self.tabs.pop(i)
-        self.tabbar.removeTab(i)
-        if self.selectedTab >= i:
-            self.selectedTab -= 1
-            if self.selectedTab < 0:
-                self.selectedTab = 0
-            if len(self.tabs) == 0:
-                self.addTab()
-            self.loadTab(self.selectedTab)
-
-        self.tabbar.blockSignals(False)
-
-    def closeCurrentTab(self):
-        self.closeTab(self.selectedTab)
-
-    def previousTab(self):
-        i = self.selectedTab
-        if i == 0:
-            i = len(self.tabs)
-        i -= 1
-        self.selectTab(i)
-
-    def nextTab(self):
-        i = self.selectedTab
-        i += 1
-        if i == len(self.tabs):
-            i = 0
-        self.selectTab(i)
-
-    def moveTab(self, toPos, fromPos):
-        movedTab = self.tabs.pop(fromPos)
-        self.tabs.insert(toPos, movedTab)
-        self.selectedTab = toPos
 
 
     def setUnitSimplification(self, value):
