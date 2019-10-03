@@ -14,7 +14,7 @@ from modularcalculator.interface.textedit import *
 
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QKeySequence, QCursor
-from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QMessageBox, QSplitter, QAction, QFileDialog, QToolTip, QTabBar, QShortcut
+from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QSplitter, QAction, QFileDialog, QToolTip, QTabBar, QShortcut
 
 import functools
 import os.path
@@ -144,7 +144,7 @@ class ModularCalculatorInterface(StatefulApplication):
         optionsMenu.addAction(self.optionsSimplifyUnits)
 
         self.optionsUnitSystemPreference = QAction('Unit System Preference', self)
-        self.optionsUnitSystemPreference.triggered.connect(self.setUnitSystemPreference)
+        self.optionsUnitSystemPreference.triggered.connect(self.openUnitSystemPreference)
         optionsMenu.addAction(self.optionsUnitSystemPreference)
 
         self.optionsFeatureConfig = QAction('Install/Remove Features', self)
@@ -279,30 +279,16 @@ class ModularCalculatorInterface(StatefulApplication):
     def selectUnit(self, unit):
         self.entry.insert(unit)
 
-    def setUnitSystemPreference(self):
+    def openUnitSystemPreference(self):
         SortableListDialog(self, 
             'Unit System Preference', 
             'Order unit systems by preference, most prefered at top', 
             [self.calculatormanager.calculator.unit_normaliser.systems[s].name for s in self.calculatormanager.calculator.unit_normaliser.systems_preference if s in self.calculatormanager.calculator.unit_normaliser.systems]
             + [self.calculatormanager.calculator.unit_normaliser.systems[s].name for s in self.calculatormanager.calculator.unit_normaliser.systems if s not in self.calculatormanager.calculator.unit_normaliser.systems_preference], 
-            self.updateUnitSystemPreference)
-
-    def updateUnitSystemPreference(self, systemNames):
-        self.calculatormanager.calculator.unit_normaliser.systems_preference = [s for n in systemNames for s in [s for s in self.calculatormanager.calculator.unit_normaliser.systems if self.calculatormanager.calculator.unit_normaliser.systems[s].name == n]]
+            self.calculatormanager.updateUnitSystemPreference)
 
     def openFeatureConfig(self):
         FeatureConfigDialog(self)
-
-    def commitFeatureConfig(self, calculator, importedFeatures):
-        try:
-            self.calculatormanager.replaceCalculator(calculator)
-            self.calculatormanager.importedFeatures = importedFeatures
-        except Exception:
-            errorMessage = QMessageBox(self)
-            errorMessage.setText("Could not instantiate calculator with selected features")
-            errorMessage.exec()
-            print(traceback.format_exc())
-        self.entry.refresh()
 
     def openFeatureOptions(self):
         FeatureOptionsDialog(self)

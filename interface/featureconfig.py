@@ -121,7 +121,7 @@ class FeatureConfigDialog(QDialog):
             if item.checkState() == Qt.Checked:
                 featuresToInstall.append(featureId)
         calculator = self.buildCalculator(self.importedFeatures, featuresToInstall)
-        self.parent.commitFeatureConfig(calculator, self.importedFeatures)
+        self.calculatormanager.commitFeatureConfig(calculator, self.importedFeatures)
         self.close()
 
     def itemClicked(self, item):
