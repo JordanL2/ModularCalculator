@@ -3,7 +3,7 @@
 from modularcalculator.interface.guitools import *
 
 from PyQt5.QtCore import Qt, QStringListModel, QSize
-from PyQt5.QtWidgets import QListWidget, QWidgetAction, QSpinBox, QLabel, QHBoxLayout, QVBoxLayout, QWidget, QListView, QDialog, QAbstractItemView, QPushButton, QCalendarWidget, QTimeEdit, QComboBox
+from PyQt5.QtWidgets import QListWidget, QWidgetAction, QSpinBox, QLabel, QHBoxLayout, QVBoxLayout, QWidget, QListView, QDialog, QAbstractItemView, QPushButton, QCalendarWidget, QTimeEdit, QComboBox, QTabBar
 
 
 class SelectionDialog(QDialog):
@@ -207,3 +207,17 @@ class ExpandedListWidget(QListWidget):
         if self.maxHeight:
             size.setHeight(self.sizeHintForRow(0) * self.count() + 10)
         return size
+
+
+class MiddleClickCloseableTabBar(QTabBar):
+
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.setTabsClosable(True)
+        self.setMovable(True)
+
+    def mouseReleaseEvent(self, event):
+        if event.button() == Qt.MidButton:
+            self.tabCloseRequested.emit(self.tabAt(event.pos()))
+        else:
+            super().mouseReleaseEvent(event)

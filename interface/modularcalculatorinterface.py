@@ -12,7 +12,7 @@ from modularcalculator.interface.textedit import *
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QKeySequence, QCursor
-from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QSplitter, QAction, QFileDialog, QToolTip, QTabBar, QShortcut
+from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QSplitter, QAction, QFileDialog, QToolTip, QShortcut
 
 import os.path
 import string
@@ -40,9 +40,7 @@ class ModularCalculatorInterface(StatefulApplication):
         self.show()
 
     def initUI(self):
-        self.tabbar = QTabBar(self)
-        self.tabbar.setTabsClosable(True)
-        self.tabbar.setMovable(True)
+        self.tabbar = MiddleClickCloseableTabBar(self)
 
         self.display = CalculatorDisplay(self)
 
