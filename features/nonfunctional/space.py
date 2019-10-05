@@ -27,7 +27,7 @@ class SpaceFeature(Feature):
     def install(cls, calculator):
         calculator.add_parser('space', SpaceFeature.parse_space)
 
-    space_regex = re.compile(r'(\s+)')
+    space_regex = re.compile(r'(\s)')
 
     def parse_space(self, expr, i, items, flags):
         next = expr[i:]

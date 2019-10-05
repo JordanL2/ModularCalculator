@@ -32,6 +32,7 @@ tests = [
     { 'test': r"c", 'expected': Decimal('20') },
 
     { 'test': "1 + 2\n3 + 4", 'expected': Decimal('7') },
+    { 'test': "1\n2", 'expected': Decimal('2') },
     { 'test': "1 \n2", 'expected': Decimal('2') },
     
     { 'test': "x = 0\nx++\nx", 'expected': Decimal('1') },

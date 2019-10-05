@@ -18,7 +18,7 @@ tests = [
     { 'test': r"1 +",                   'expected': { 'message': r"Missing right operands for operator +",          'pos': 2,  'items': ['1',' '] } },
 
     { 'test': r"1 + (2 3)",             'expected': { 'message': r"Could not parse: 3)",                      'pos': 7,  'items': ['1',' ','+',' ','(','2',' '] } },
-    { 'test': r"1 + (2  3)",            'expected': { 'message': r"Could not parse: 3)",                      'pos': 8,  'items': ['1',' ','+',' ','(','2','  '] } },
+    { 'test': r"1 + (2  3)",            'expected': { 'message': r"Could not parse: 3)",                      'pos': 8,  'items': ['1',' ','+',' ','(','2',' ',' '] } },
     
     { 'test': r"min(1, 2, '')",         'expected': { 'message': r"Function min parameter 3 must be of type(s) number",   'pos': 0,  'items': [] } },
     { 'test': r"1 + (min(1, 2, ''))",   'expected': { 'message': r"Function min parameter 3 must be of type(s) number",   'pos': 5,  'items': ['1',' ','+',' ','(',] } },
@@ -28,7 +28,7 @@ tests = [
 
     { 'test': r"1 / 0",                 'expected': { 'message': r"Could not execute operator / with operands: '1', '0' - Could not execute Operator /",     'pos': 2,  'items': ['1',' '] } },
     { 'test': r"2 + (1 / 0) + 3",       'expected': { 'message': r"Could not execute operator / with operands: '1', '0' - Could not execute Operator /",     'pos': 7,  'items': ['2',' ','+',' ','(','1',' '] } },
-    { 'test': "2 + #comment\n(1 / 0) + 3",       'expected': { 'message': r"Could not execute operator / with operands: '1', '0' - Could not execute Operator /",      'pos': 16,  'items': ['2',' ','+',' ','#comment',"\n",'(','1',' '] } },
+    { 'test': "(2 + #comment\n(1 / 0) + 3)",       'expected': { 'message': r"Could not execute operator / with operands: '1', '0' - Could not execute Operator /",      'pos': 17,  'items': ['(','2',' ','+',' ','#comment',"\n",'(','1',' '] } },
     { 'test': r"(2 + (((1 / 0)) + 3))", 'expected': { 'message': r"Could not execute operator / with operands: '1', '0' - Could not execute Operator /",     'pos': 10, 'items': ['(','2',' ','+',' ','(','(','(','1',' '] } },
     { 'test': r"1 + ''",                'expected': { 'message': r"Could not execute operator + with operands: '1', '' - Operator + parameter 2 must be of type(s) number",      'pos': 2,  'items': ['1',' '] } },
 
@@ -48,8 +48,8 @@ tests = [
 
     { 'test': "(1/0) :",  'expected': { 'message': r"Could not execute operator: :",  'pos': 6, 'items': ['(','1',' '] } },
 
-    { 'test': r"f = './examples/does_not_exist'; @f(1, 2)", 'expected': { 'exception': ParsingException, 'message': r"Could not read file './examples/does_not_exist'", 'pos': 33, 'items': ['f',' ','=',' ',"'./examples/does_not_exist'",';',' '] } },
-    { 'test': r"f = './examples/ext_func_addition2.txt'; @f(1, 2)", 'expected': { 'exception': ParsingException, 'message': r"Could not execute function 'f'", 'pos': 41, 'items': ['f',' ','=',' ',"'./examples/ext_func_addition2.txt'",';',' '] } },
+    { 'test': "f = './examples/does_not_exist'\n@f(1, 2)", 'expected': { 'exception': ParsingException, 'message': r"Could not read file './examples/does_not_exist'", 'pos': 32, 'items': ['f',' ','=',' ',"'./examples/does_not_exist'","\n"] } },
+    { 'test': "f = './examples/ext_func_addition2'\n@f(1, 2)", 'expected': { 'exception': ParsingException, 'message': r"Could not execute function 'f'", 'pos': 36, 'items': ['f',' ','=',' ',"'./examples/ext_func_addition2'","\n"] } },
 
     { 'test': "round((+))",  'expected': { 'message': r"Missing left operands for operator +",  'pos': 7, 'items': ['round','(','('] } },
 
