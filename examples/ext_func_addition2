@@ -1,2 +1,2 @@
-f = './examples/ext_func_addition.txt'
+f = './examples/ext_func_addition'
 @f(1, 2) + PARAM3
