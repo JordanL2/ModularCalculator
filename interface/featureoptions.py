@@ -93,21 +93,24 @@ class ConfigureFeatureDialog(QDialog):
 
     def decode(self, value):
         newchars = []
-        skip = False
+        skipNext = False
         for i in range(0, len(value)):
-            if skip:
-                skip = False
+            if skipNext:
+                skipNext = False
                 continue
             c = value[i]
             if c == "\\" and i < len(value) - 1:
-                skip = True
+                skipNext = True
                 cc = value[i + 1]
                 if cc == 'n':
                     newchars.append("\n")
                 elif cc == 't':
                     newchars.append("\t")
                 elif cc == "\\":
-                    newchars.append("\\")
+                    newchars.append(c)
+                else:
+                    newchars.append(c)
+                    newchars.append(cc)
             else:
                 newchars.append(c)
         newvalue = ''.join(newchars)
