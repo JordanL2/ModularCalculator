@@ -86,14 +86,32 @@ class ConfigureFeatureDialog(QDialog):
         self.setVisible(True)
 
     def encode(self, value):
+        value = value.replace("\\", "\\\\")
         value = value.replace("\n", r'\n')
         value = value.replace("\t", r'\t')
         return value
 
     def decode(self, value):
-        value = value.replace(r'\n', "\n")
-        value = value.replace(r'\t', "\t")
-        return value
+        newchars = []
+        skip = False
+        for i in range(0, len(value)):
+            if skip:
+                skip = False
+                continue
+            c = value[i]
+            if c == "\\" and i < len(value) - 1:
+                skip = True
+                cc = value[i + 1]
+                if cc == 'n':
+                    newchars.append("\n")
+                elif cc == 't':
+                    newchars.append("\t")
+                elif cc == "\\":
+                    newchars.append("\\")
+            else:
+                newchars.append(c)
+        newvalue = ''.join(newchars)
+        return newvalue
 
     def reset(self):
         for field, value in self.calculator.feature_list[self.feature.id()].default_options().items():

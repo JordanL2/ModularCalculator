@@ -35,8 +35,8 @@ class TerminatorFeature(Feature):
     def parse_terminator(self, expr, i, items, flags):
         next = expr[i:]
         symbol = self.feature_options['structure.terminator']['Symbol']
-        if next[0] == symbol:
-            return [TerminatorItem(symbol)], 1, {'end': True}
+        if next[0:len(symbol)] == symbol:
+            return [TerminatorItem(symbol)], len(symbol), {'end': True}
         return None, None, None
 
 

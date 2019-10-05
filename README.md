@@ -94,9 +94,9 @@ These examples are available in examples/basic_integration.py. See examples/adva
 * Functionality:
 
 * Usability / quality of life:
-	* Click previous answer to insert it
 	* Improve Light theme, it's too dark and high contrast
 	* Hotkeys for various insert operations, eg Ctrl+F = Insert Function
+	* Click previous answer to insert it
 
 * Stability:
 	* Auto-save state occasionally
