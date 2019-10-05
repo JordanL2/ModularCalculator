@@ -232,7 +232,11 @@ class ModularCalculatorInterface(StatefulApplication):
                 funcname = 'userDefinedFunction'
             if funcname[0] in string.digits:
                 funcname = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'][int(funcname[0])] + funcname[1:]
-            self.entry.insert("{} = '{}';\n".format(funcname, filePath))
+            terminator = self.calculatormanager.calculator.feature_options['structure.terminator']['Symbol']
+            whitespace = ' '
+            if 'nonfunctional.space' not in self.calculatormanager.calculator.installed_features:
+                whitespace = ''
+            self.entry.insert("{}{}={}'{}'{}".format(funcname, whitespace, whitespace, filePath, terminator))
 
     def insertOperator(self):
         operators = {}
