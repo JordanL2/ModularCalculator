@@ -237,9 +237,10 @@ class ModularCalculatorInterface(StatefulApplication):
                     funcname = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'][int(funcname[0])] + funcname[1:]
                 terminator = self.calculatormanager.calculator.feature_options['structure.terminator']['Symbol']
                 whitespace = ' '
+                quote = self.calculatormanager.calculator.feature_options['strings.strings']['Symbol']
                 if 'nonfunctional.space' not in self.calculatormanager.calculator.installed_features:
                     whitespace = ''
-                self.entry.insert("{}{}={}'{}'{}".format(funcname, whitespace, whitespace, filePath, terminator))
+                self.entry.insert("{}{}={}{}{}{}{}".format(funcname, whitespace, whitespace, quote, filePath, quote, terminator))
 
     def insertOperator(self):
         operators = {}

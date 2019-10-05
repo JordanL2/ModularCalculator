@@ -67,6 +67,7 @@ These examples are available in examples/basic_integration.py. See examples/adva
 * Should '? :' operator be renamed 'then else'? To be consistent with other boolean operators.
 * Terminator blocker (eg '\_')
 * Terminator blocked by preceding operator / expectation of a value
+* Should default string quote char be " ?
 
 ## Functions
 * Display operator/function syntax info on parameter validation error
@@ -99,6 +100,8 @@ These examples are available in examples/basic_integration.py. See examples/adva
 	* Improve Light theme, it's too dark and high contrast
 	* Hotkeys for various insert operations, eg Ctrl+F = Insert Function
 	* Click previous answer to insert it
+	* Check if unit, function, constant, date features are installed when you click their Insert
+		* Alternatively, hide these options when features not installed
 
 * Stability:
 	* Auto-save state occasionally
