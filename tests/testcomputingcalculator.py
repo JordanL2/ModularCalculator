@@ -163,6 +163,13 @@ tests = [
     { 'test': r"false and (1/0)", 'expected': False },
     { 'test': r"true or (1/0)", 'expected': True },
 
+    { 'test': "1 +\n2", 'expected': Decimal('3') },
+    { 'test': "1 + 2\n3 + 4", 'expected': Decimal('7') },
+    { 'test': "1 + 2 + \n3 + 4", 'expected': Decimal('10') },
+    { 'test': "true ?\n1\n:\n2", 'expected': Decimal('1') },
+    { 'test': "true ?\n1 + 3\n:\n2", 'expected': Decimal('4') },
+    { 'test': "true ?\n1\n:\n2\n456", 'expected': Decimal('456') },
+
     { 'test': r"0b10101 & 0b110", 'expected': '0b00100' },
     { 'test': r"0b10101 | 0b110", 'expected': '0b10111' },
     { 'test': r"0b10101 ^^ 0b110", 'expected': '0b10011' },
