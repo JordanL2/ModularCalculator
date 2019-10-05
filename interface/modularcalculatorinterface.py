@@ -12,7 +12,7 @@ from modularcalculator.interface.textedit import *
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QKeySequence, QCursor
-from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QSplitter, QAction, QFileDialog, QToolTip, QShortcut
+from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QSplitter, QAction, QFileDialog, QToolTip, QShortcut, QMessageBox
 
 import os.path
 import string
@@ -223,20 +223,23 @@ class ModularCalculatorInterface(StatefulApplication):
         self.entry.insert("{}({})".format(func, ', '.join(funcInfo.syntax)))
 
     def insertUserDefinedFunction(self):
-        filePath, _ = QFileDialog.getOpenFileName(self, "Select user-defined function file", "", "All Files (*)")
-        if filePath:
-            funcname = os.path.basename(filePath)
-            whitelist = set(string.ascii_lowercase + string.ascii_uppercase + string.digits + '_')
-            funcname = ''.join(c for c in funcname if c in whitelist)
-            if funcname == '':
-                funcname = 'userDefinedFunction'
-            if funcname[0] in string.digits:
-                funcname = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'][int(funcname[0])] + funcname[1:]
-            terminator = self.calculatormanager.calculator.feature_options['structure.terminator']['Symbol']
-            whitespace = ' '
-            if 'nonfunctional.space' not in self.calculatormanager.calculator.installed_features:
-                whitespace = ''
-            self.entry.insert("{}{}={}'{}'{}".format(funcname, whitespace, whitespace, filePath, terminator))
+        if 'structure.externalfunctions' not in self.calculatormanager.calculator.installed_features:
+            QMessageBox.critical(self, "ERROR", "User Defined Functions feature not enabled.")
+        else:
+            filePath, _ = QFileDialog.getOpenFileName(self, "Select user-defined function file", "", "All Files (*)")
+            if filePath:
+                funcname = os.path.basename(filePath)
+                whitelist = set(string.ascii_lowercase + string.ascii_uppercase + string.digits + '_')
+                funcname = ''.join(c for c in funcname if c in whitelist)
+                if funcname == '':
+                    funcname = 'userDefinedFunction'
+                if funcname[0] in string.digits:
+                    funcname = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'][int(funcname[0])] + funcname[1:]
+                terminator = self.calculatormanager.calculator.feature_options['structure.terminator']['Symbol']
+                whitespace = ' '
+                if 'nonfunctional.space' not in self.calculatormanager.calculator.installed_features:
+                    whitespace = ''
+                self.entry.insert("{}{}={}'{}'{}".format(funcname, whitespace, whitespace, filePath, terminator))
 
     def insertOperator(self):
         operators = {}
