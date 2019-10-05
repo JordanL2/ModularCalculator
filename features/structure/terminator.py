@@ -43,10 +43,14 @@ class TerminatorFeature(Feature):
         if next[0:len(symbol)] == symbol:
             backup_vars = copy.deepcopy(self.vars)
             try:
-                self.execute(copy.deepcopy(items), {})
-            except Exception as e:
+                self.execute(items.copy(), {})
+                #self.execute(copy.deepcopy(items), {})
+            except ExecutionException as e:
                 if str(e.message).startswith('Missing right operands for operator '):
+                    self.vars = backup_vars
                     return None, None, None
+            except Exception:
+                pass
             finally:
                 self.vars = backup_vars
 

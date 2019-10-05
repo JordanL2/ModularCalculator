@@ -37,6 +37,11 @@ class Item:
     def functional(self):
         return True
 
+    def copy(self, classtype=None):
+        copy = classtype.__new__(classtype or self.__class__)
+        copy.unit = self.unit
+        return copy
+
 
 class OperatorItem(Item):
 
@@ -67,6 +72,11 @@ class OperandItem(Item):
     def result(self, flags):
         return OperandResult(self.value(flags), self.unit, self)
 
+    def copy(self, classtype=None):
+        copy = super().copy(classtype or self.__class__)
+        copy.unit = self.unit
+        return copy
+
 
 class LiteralItem(OperandItem):
 
@@ -80,6 +90,11 @@ class LiteralItem(OperandItem):
     def value(self, flags):
         return self.val
 
+    def copy(self, classtype=None):
+        copy = super().copy(classtype or self.__class__)
+        copy.val = self.val
+        return copy
+
 
 class RecursiveOperandItem(OperandItem):
 
@@ -87,6 +102,12 @@ class RecursiveOperandItem(OperandItem):
         super().__init__(text)
         self.items = items
         self.calculator = calculator
+
+    def copy(self, classtype=None):
+        copy = super().copy(classtype or self.__class__)
+        copy.items = self.items.copy()
+        copy.calculator = self.calculator
+        return copy
 
 
 class NonFunctionalItem(Item):
@@ -99,6 +120,10 @@ class NonFunctionalItem(Item):
 
     def value(self, flags):
         raise Exception("value() called on non-functional item")
+
+    def copy(self, classtype=None):
+        copy = super().copy(classtype or self.__class__)
+        return copy
 
 
 class OperandResult:

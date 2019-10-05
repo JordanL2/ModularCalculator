@@ -254,6 +254,32 @@ tests = [
     { 'test': "f = './examples/ext_func_addition'\n@f(5 - 4, 2)", 'expected': Decimal('3') },
     { 'test': "x=1 \nf = './examples/ext_func_addition'\n@f(5 - 4, 2) \nx", 'expected': Decimal('1') },
 
+    { 'test': """#PARAM1 ||= 2^128
+#PARAM1 = 0.0546
+PARAM1 = 4
+
+str = PARAM1
+dec = find(str, '.')
+decfound = dec > -1 ? true : false
+
+str = decfound ?
+    replace(str, '.', '')
+    : str
+leadingspaces = (str =~ '^(0+)') ?
+    length(regexget(str, '^(0+)'))
+    : 0
+dec = leadingspaces > 1 ?
+    (dec - (leadingspaces - 1))
+    : dec
+str = decfound ? 
+    substr(str, 0, 0) +$ '.' +$ substr(str, 1)
+    : str
+dec = decfound ?
+    dec - 1
+    : length(str) - 2
+
+str +$ '*10^' +$ dec""", 'expected': '4*10^-1' },
+
 #    { 'test': r"", 'expected': '' },
 ]
 

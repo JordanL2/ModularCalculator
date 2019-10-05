@@ -108,25 +108,33 @@ class FunctionItem(RecursiveOperandItem):
                 itemsi += len(arg) + 1
                 inputs.append(argresult)
             except ExecutionException as err:
-                self.items = self.items[0:itemsi]
-                self.items.extend(err.items)
+                copy = self.copy()
+                copy.items = self.items[0:itemsi]
+                copy.items.extend(err.items)
                 err.items = self.items
-                self.text = err.truncate(self.text)
-                self.truncated = True
-                raise ExecutionException(err.message, [self], err.next, True)
+                copy.text = err.truncate(self.text)
+                copy.truncated = True
+                raise ExecutionException(err.message, [copy], err.next, True)
             if not func.inputs_can_be_exceptions and isinstance(argresult.value, Exception):
                 err = argresult.value
                 itemsi = old_itemsi
-                self.items = self.items[0:itemsi]
-                self.items.extend(err.items)
+                copy = self.copy()
+                copy.items = self.items[0:itemsi]
+                copy.items.extend(err.items)
                 err.items = self.items
-                self.text = err.truncate(self.text)
-                self.truncated = True
-                raise ExecutionException(err.message, [self], err.next, True)
+                copy.text = err.truncate(self.text)
+                copy.truncated = True
+                raise ExecutionException(err.message, [copy], err.next, True)
         return func.call(self.calculator, inputs, flags)
 
     def result(self, flags):
         return self.value(flags)
+
+    def copy(self, classtype=None):
+        copy = super().copy(classtype or self.__class__)
+        copy.name = self.name
+        copy.args = self.args.copy()
+        return copy
 
 
 class FunctionNameItem(NonFunctionalItem):

@@ -67,17 +67,20 @@ class InnerExpressionItem(RecursiveOperandItem):
             val = self.calculator.execute(self.items, flags.copy())
             if isinstance(val.value, Exception):
                 raise val.value
-            self.unit = val.unit
-            self.ref = val.ref
-            return val.value
+            return OperandResult(val.value, val.unit, val.ref)
         except ExecutionException as err:
-            self.items = err.items
-            self.text = err.truncate(self.text)
-            self.truncated = True
-            raise ExecutionException(err.message, [self], err.next, True)
+            copy = self.copy()
+            copy.items = err.items
+            copy.text = err.truncate(self.text)
+            copy.truncated = True
+            raise ExecutionException(err.message, [copy], err.next, True)
 
     def result(self, flags):
-        return OperandResult(self.value(flags), self.unit, self.ref)
+        return self.value(flags)
+
+    def copy(self, classtype=None):
+        copy = super().copy(classtype or self.__class__)
+        return copy
 
 
 class InnerExpressionStartItem(NonFunctionalItem):
