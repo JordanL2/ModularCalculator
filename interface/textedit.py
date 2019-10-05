@@ -131,10 +131,12 @@ class CalculatorTextEdit(QTextEdit):
 
     def updateHtml(self, html):
         cursorpos = self.textCursor().position()
+        sliderpos = self.verticalScrollBar().sliderPosition()
         self.setHtml(self.css + html)
         cursor = self.textCursor()
         cursor.setPosition(cursorpos)
         self.setTextCursor(cursor)
+        self.verticalScrollBar().setSliderPosition(sliderpos)
 
     def insert(self, text):
         self.insertPlainText(text)
