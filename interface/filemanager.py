@@ -56,6 +56,10 @@ class FileManager():
     def open(self):
         filePath, _ = QFileDialog.getOpenFileName(self.interface, "Open File", "", "All Files (*)")
         if filePath:
+            for i in range(0, len(self.tabmanager.tabs)):
+                if self.currentFile(i) == filePath:
+                    self.tabmanager.selectTab(i)
+                    return
             self.tabmanager.addTab()
             fh = open(filePath, 'r')
             text = str.join("", fh.readlines())
