@@ -236,8 +236,8 @@ class ModularCalculatorInterface(StatefulApplication):
                 if funcname[0] in string.digits:
                     funcname = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'][int(funcname[0])] + funcname[1:]
                 terminator = self.calculatormanager.calculator.feature_options['structure.terminator']['Symbol']
-                whitespace = ' '
                 quote = self.calculatormanager.calculator.feature_options['strings.strings']['Symbol']
+                whitespace = ' '
                 if 'nonfunctional.space' not in self.calculatormanager.calculator.installed_features:
                     whitespace = ''
                 self.entry.insert("{}{}={}{}{}{}{}".format(funcname, whitespace, whitespace, quote, filePath, quote, terminator))
