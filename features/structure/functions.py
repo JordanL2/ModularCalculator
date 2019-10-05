@@ -47,7 +47,7 @@ class FunctionsFeature(Feature):
                 func_items = [FunctionNameItem(func), FunctionStartItem()]
                 while 'end_func' not in return_flags and i < len(next):
                     try:
-                        inner_items, length, return_flags = self.parse(next[i:], {'func': func})
+                        inner_items, length, return_flags = self.parse(next[i:], {'func': func, 'ignore_terminators': True})
                         i += length + 1
                         if len(inner_items) > 0:
                             args.append(inner_items)

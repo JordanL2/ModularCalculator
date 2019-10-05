@@ -23,7 +23,7 @@ class TerminatorFeature(Feature):
 
     def default_options():
         return {
-            'Symbol': ';'
+            'Symbol': "\n"
         }
 
     @classmethod
@@ -33,6 +33,8 @@ class TerminatorFeature(Feature):
         calculator.feature_options['structure.terminator'] = cls.default_options()
 
     def parse_terminator(self, expr, i, items, flags):
+        if 'ignore_terminators' in flags and flags['ignore_terminators']:
+            return None, None, None
         next = expr[i:]
         symbol = self.feature_options['structure.terminator']['Symbol']
         if next[0:len(symbol)] == symbol:

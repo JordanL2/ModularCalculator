@@ -202,9 +202,9 @@ tests = [
 
     { 'test': r"1 pint to ml", 'expected': (Decimal('473.176473'), 'milliliters') },
     
-    { 'test': r"tank = 17100; thruster = 0.486/s; format((tank / (3 thruster)))", 'expected': '3 hours, 15 minutes, 28.395061728395061728395061728395 seconds' },
+    { 'test': "tank = 17100\nthruster = 0.486/s\nformat((tank / (3 thruster)))", 'expected': '3 hours, 15 minutes, 28.395061728395061728395061728395 seconds' },
     
-    { 'test': r"x = 2 T m^2; x", 'expected': (Decimal('2'), 'tesla meters^2') },
+    { 'test': "x = 2 T m^2\nx", 'expected': (Decimal('2'), 'tesla meters^2') },
     #{ 'test': r"1m/s + 2", 'expected': (Decimal('3'), 'meters') }, # This should throw error
         
     { 'test': r"format(1 hour + 23 minutes + 45 seconds)", 'expected': '1 hour, 23 minutes, 45 seconds' },
@@ -233,7 +233,7 @@ tests = [
     
     { 'test': r"round(2.567s, 2)", 'expected': (Decimal('2.57'), 'seconds') },
     
-    { 'test': r"x = 1; reset(); x", 'expected': None },
+    { 'test': "x = 1\nreset()\nx", 'expected': None },
 
 #    { 'test': r"", 'expected': Decimal('') },
 ]

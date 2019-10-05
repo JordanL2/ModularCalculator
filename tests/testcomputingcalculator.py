@@ -148,7 +148,7 @@ tests = [
     { 'test': r"not(not true)", 'expected': True },
     { 'test': r"not not true", 'expected': True },
     { 'test': r"not(true == false)", 'expected': True },
-    { 'test': "\n(1 + 3)\n/ 2\n", 'expected': Decimal(2) },
+    { 'test': "\n((1 + 3)\n/ 2)\n", 'expected': Decimal(2) },
 
     { 'test': r"True ? 1 : 2", 'expected': Decimal(1) },
     { 'test': r"False ? 1 : 2", 'expected': Decimal(2) },
@@ -157,8 +157,8 @@ tests = [
     { 'test': r"3 > 2 ? (2 > 3 ? 3 : 4) : 2", 'expected': Decimal(4) },
     { 'test': r"true ? not(true or false) : true", 'expected': False },
     { 'test': r"true ? 1 + 2 : true", 'expected': Decimal(3) },
-    { 'test': r"a = 1; b = 2; true ? a : b = 3; a - b", 'expected': Decimal(1) },
-    { 'test': r"a = 1; b = 2; false ? a : b = 3; a - b", 'expected': Decimal(-2) },
+    { 'test': "a = 1\nb = 2\ntrue ? a : b = 3\na - b", 'expected': Decimal(1) },
+    { 'test': "a = 1\nb = 2\nfalse ? a : b = 3\na - b", 'expected': Decimal(-2) },
     { 'test': r"false ? (1/0) : 2", 'expected': Decimal(2) },
     { 'test': r"false and (1/0)", 'expected': False },
     { 'test': r"true or (1/0)", 'expected': True },
@@ -212,12 +212,12 @@ tests = [
     { 'test': r"substr('123456', 4, 4)", 'expected': '5' },
     { 'test': r"substr('123456', 0b100, 0b100)", 'expected': '5' },
 
-    { 'test': "123 +#comment\n456", 'expected': Decimal(579) },
+    { 'test': "123 + (#comment\n456)", 'expected': Decimal(579) },
     { 'test': "123 + 456#comment", 'expected': Decimal(579) },
 
     { 'test': r"false ? 1m : 2cm", 'expected': (Decimal('2'), 'centimeters') },
 
-    { 'test': r"orbitheight = 36000km;earthmass = 5.97237e24kg;earthradius = 6378.1km;gm = G earthmass;orbitradius = earthradius + orbitheight;time = 2 pi (orbitradius^3 / gm)^0.5;time to hours",
+    { 'test': "orbitheight = 36000km\nearthmass = 5.97237e24kg\nearthradius = 6378.1km\ngm = G earthmass\norbitradius = earthradius + orbitheight\ntime = 2 pi (orbitradius^3 / gm)^0.5\ntime to hours",
         'expected': (Decimal('24.116847271747239529834702110187'), 'hours') },
     { 'test': r"gm = G * 5.97237e24kg", 'expected': (Decimal('398600751696000'), 'meters^3/second^2') },
 
@@ -244,8 +244,8 @@ tests = [
     { 'test': "'2012-01-02T11:45:56' +% 5 seconds", 'expected': '2012-01-02T11:46:01' },
     { 'test': "'2012-01-02T11:45:56' -% 5 seconds", 'expected': '2012-01-02T11:45:51' },
 
-    { 'test': "f = './examples/ext_func_addition.txt'; @f(5 - 4, 2)", 'expected': Decimal('3') },
-    { 'test': "x=1 ; f = './examples/ext_func_addition.txt'; @f(5 - 4, 2) ; x", 'expected': Decimal('1') },
+    { 'test': "f = './examples/ext_func_addition.txt'\n@f(5 - 4, 2)", 'expected': Decimal('3') },
+    { 'test': "x=1 \nf = './examples/ext_func_addition.txt'\n@f(5 - 4, 2) \nx", 'expected': Decimal('1') },
 
 #    { 'test': r"", 'expected': '' },
 ]

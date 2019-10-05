@@ -31,6 +31,7 @@ class InnerExpressionsFeature(Feature):
         next = expr[i:]
         if next.startswith('('):
             flags['inner_expr'] = True
+            flags['ignore_terminators'] = True
             inner_items, length, return_flags = None, None, None
             try:
                 inner_items, length, return_flags = self.parse(next[1:], flags)
