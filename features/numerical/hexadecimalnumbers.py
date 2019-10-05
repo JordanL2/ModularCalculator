@@ -45,7 +45,7 @@ class HexadecimalNumbersFeature(Feature):
 
     def parse_hex(self, expr, i, items, flags):
         next = expr[i:]
-        prev = previous_functional_item(items, len(items))
+        prev = previous_functional_item(items)
         if prev is None or prev.isop():
             hex_match = HexadecimalNumbersFeature.hex_regex.match(next)
             if hex_match:

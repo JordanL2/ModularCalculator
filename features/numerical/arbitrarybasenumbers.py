@@ -44,7 +44,7 @@ class ArbitraryBaseFeature(Feature):
 
     def parse_arbbase(self, expr, i, items, flags):
         next = expr[i:]
-        prev = previous_functional_item(items, len(items))
+        prev = previous_functional_item(items)
         if prev is None or prev.isop():
             arbbase_match = ArbitraryBaseFeature.arbbase_regex.match(next)
             if arbbase_match:

@@ -5,7 +5,9 @@ from modularcalculator.objects.exceptions import *
 from decimal import *
 
 
-def previous_functional_item(items, i):
+def previous_functional_item(items, i=None):
+    if i is None:
+        i = len(items)
     i -= 1
     while i >= 0 and not items[i].functional():
         i -= 1

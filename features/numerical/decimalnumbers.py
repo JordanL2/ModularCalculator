@@ -35,7 +35,7 @@ class DecimalNumbersFeature(Feature):
 
     def parse_number(self, expr, i, items, flags):
         next = expr[i:]
-        prev = previous_functional_item(items, len(items))
+        prev = previous_functional_item(items)
         if prev is None or prev.isop():
             num_match = DecimalNumbersFeature.num_regex.match(next)
             if (num_match):

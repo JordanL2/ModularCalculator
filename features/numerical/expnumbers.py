@@ -46,7 +46,7 @@ class ExpNumbersFeature(Feature):
 
     def parse_numberexp(self, expr, i, items, flags):
         next = expr[i:]
-        prev = previous_functional_item(items, len(items))
+        prev = previous_functional_item(items)
         if prev is None or prev.isop():
             numexp_match = ExpNumbersFeature.numexp_regex.match(next)
             if (numexp_match):

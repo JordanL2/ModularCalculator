@@ -45,7 +45,7 @@ class OctalNumbersFeature(Feature):
 
     def parse_oct(self, expr, i, items, flags):
         next = expr[i:]
-        prev = previous_functional_item(items, len(items))
+        prev = previous_functional_item(items)
         if prev is None or prev.isop():
             oct_match = OctalNumbersFeature.oct_regex.match(next)
             if oct_match:

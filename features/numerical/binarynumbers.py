@@ -45,7 +45,7 @@ class BinaryNumbersFeature(Feature):
 
     def parse_bin(self, expr, i, items, flags):
         next = expr[i:]
-        prev = previous_functional_item(items, len(items))
+        prev = previous_functional_item(items)
         if prev is None or prev.isop():
             bin_match = BinaryNumbersFeature.bin_regex.match(next)
             if bin_match:
