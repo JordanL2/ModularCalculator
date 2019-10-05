@@ -64,9 +64,12 @@ class TestRunner:
             maxtime = max(timings[stage].values())
             maxexpr = [expr for expr, t in timings[stage].items() if t == maxtime][0]
             maxtime = self.format_timing(maxtime)
-            print("Stage: {0:9} Average Time: {1:12} Longest Time: {2:12} Longest Expression: {3}".format(stage, avgtime, maxtime, maxexpr))
+            print("Stage: {0:9} Average Time: {1:12} Longest Time: {2:12} Longest Expression: {3}".format(stage, avgtime, maxtime, self.format_test(maxexpr)))
         print("Total:           Average Time: {0:12}".format(self.format_timing(total_avgtime)))
         print()
 
     def format_timing(self, timing):
         return "{0} ms".format(round(timing * 1000, 3))
+
+    def format_test(self, test):
+        return test.replace("\n", "\\n")

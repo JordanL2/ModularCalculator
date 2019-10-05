@@ -3,6 +3,8 @@
 from modularcalculator.objects.items import *
 from modularcalculator.features.feature import Feature
 
+import copy
+
 
 class TerminatorFeature(Feature):
 
@@ -39,16 +41,14 @@ class TerminatorFeature(Feature):
         next = expr[i:]
         symbol = self.feature_options['structure.terminator']['Symbol']
         if next[0:len(symbol)] == symbol:
-            func_items = functional_items(items)
-            for n in range(0, 3):
-                if len(func_items) - n > 0:
-                    prev = func_items[len(func_items) - n - 1]
-                    if prev is not None and prev.isop():
-                        op = prev.op
-                        if op in self.ops_list:
-                            op_info = self.ops_list[op]
-                            if len(op_info.rinputs) > n:
-                                return None, None, None
+            backup_vars = copy.deepcopy(self.vars)
+            try:
+                self.execute(copy.deepcopy(items), {})
+            except Exception as e:
+                if str(e.message).startswith('Missing right operands for operator '):
+                    return None, None, None
+            finally:
+                self.vars = backup_vars
 
             return [TerminatorItem(symbol)], len(symbol), {'end': True}
 
