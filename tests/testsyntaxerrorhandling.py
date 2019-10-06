@@ -32,12 +32,12 @@ tests = [
     { 'test': r"(2 + (((1 / 0)) + 3))", 'expected': { 'message': r"Could not execute operator / with operands: '1', '0' - Could not execute Operator /",     'pos': 10, 'items': ['(','2',' ','+',' ','(','(','(','1',' '] } },
     { 'test': r"1 + ''",                'expected': { 'message': r"Could not execute operator + with operands: '1', '' - Operator + parameter 2 must be of type(s) number",      'pos': 2,  'items': ['1',' '] } },
 
-    { 'test': r"true ? 1 : 2 3",        'expected': { 'message': r"Could not parse: 3",                       'pos': 13, 'items': ['true',' ','?',' ','1',' ',':',' ','2',' '] } },
-    { 'test': r"true ? 1 2 : 3",        'expected': { 'message': r"Could not parse: 2 : 3",                   'pos': 9,  'items': ['true',' ','?',' ','1',' '] } },
-    { 'test': r"false ? 1 : (+)",        'expected': { 'message': r"Missing left operands for operator +",          'pos': 13, 'items': ['false',' ','?',' ','1',' ',':',' ','('] } },
-    { 'test': r"false ? 1 : ( +)",       'expected': { 'message': r"Missing left operands for operator +",          'pos': 14, 'items': ['false',' ','?',' ','1',' ',':',' ','(',' '] } },
-    { 'test': r"true ? 1 : 2 : 3",      'expected': { 'message': r"Could not execute operator: :",   'pos': 13,  'items': ['true',' ','?',' ','1',' ',':',' ','2',' '] } },
-    { 'test': r"true : false ? 1 : 2",  'expected': { 'message': r"Could not execute operator: :",    'pos': 5, 'items': ['true',' '] } },
+    { 'test': r"true then 1 else 2 3",        'expected': { 'message': r"Could not parse: 3",                       'pos': 19, 'items': ['true',' ','then',' ','1',' ','else',' ','2',' '] } },
+    { 'test': r"true then 1 2 else 3",        'expected': { 'message': r"Could not parse: 2 else 3",                   'pos': 12,  'items': ['true',' ','then',' ','1',' '] } },
+    { 'test': r"false then 1 else (+)",        'expected': { 'message': r"Missing left operands for operator +",          'pos': 19, 'items': ['false',' ','then',' ','1',' ','else',' ','('] } },
+    { 'test': r"false then 1 else ( +)",       'expected': { 'message': r"Missing left operands for operator +",          'pos': 20, 'items': ['false',' ','then',' ','1',' ','else',' ','(',' '] } },
+    { 'test': r"true then 1 else 2 else 3",      'expected': { 'message': r"Could not execute operator: else",   'pos': 19,  'items': ['true',' ','then',' ','1',' ','else',' ','2',' '] } },
+    { 'test': r"true else false then 1 else 2",  'expected': { 'message': r"Could not execute operator: else",    'pos': 5, 'items': ['true',' '] } },
     
     { 'test': r"(1 hectare to 2)^0.5",  'expected': { 'message': r"Could not execute operator to with operands: '1 hectares^1', '2' - Operator to parameter 2 must be of type(s) unit",  'pos': 11, 'items': ['(','1',' ','hectare',' '] } },
     { 'test': r"(1 hectare to 2) ^ 0.5",  'expected': { 'message': r"Could not execute operator to with operands: '1 hectares^1', '2' - Operator to parameter 2 must be of type(s) unit",  'pos': 11, 'items': ['(','1',' ','hectare',' '] } },
@@ -46,7 +46,7 @@ tests = [
     
     { 'test': "dateadd('2017-01-01', 3)",  'expected': { 'message': r"Function dateadd parameter 2 must have unit dimensions: time^1",  'pos': 0, 'items': [] } },
 
-    { 'test': "(1/0) :",  'expected': { 'message': r"Could not execute operator: :",  'pos': 6, 'items': ['(','1',' '] } },
+    { 'test': "(1/0) else",  'expected': { 'message': r"Could not execute operator: else",  'pos': 6, 'items': ['(','1',' '] } },
 
     { 'test': "f = './examples/does_not_exist'\n@f(1, 2)", 'expected': { 'exception': ParsingException, 'message': r"Could not read file './examples/does_not_exist'", 'pos': 32, 'items': ['f',' ','=',' ',"'./examples/does_not_exist'","\n"] } },
     { 'test': "f = './examples/ext_func_addition2'\n@f(1, 2)", 'expected': { 'exception': ParsingException, 'message': r"Could not execute function 'f'", 'pos': 36, 'items': ['f',' ','=',' ',"'./examples/ext_func_addition2'","\n"] } },

@@ -64,7 +64,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 * Ability to alter operator symbols as feature options
 * Ability to rename functions as feature options
 * Should bitwise not operator only allow positive integers, and throw error if something else?
-* Should '? :' operator be renamed 'then else'? To be consistent with other boolean operators.
 * Should default string quote char be " ?
 
 ## Functions

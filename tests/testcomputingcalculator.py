@@ -150,25 +150,25 @@ tests = [
     { 'test': r"not(true == false)", 'expected': True },
     { 'test': "\n((1 + 3)\n/ 2)\n", 'expected': Decimal(2) },
 
-    { 'test': r"True ? 1 : 2", 'expected': Decimal(1) },
-    { 'test': r"False ? 1 : 2", 'expected': Decimal(2) },
-    { 'test': r"True ? (False ? 3 : 4) : 2", 'expected': Decimal(4) },
-    { 'test': r"(3 > 2) ? ((2 > 3) ? 3 : 4) : 2", 'expected': Decimal(4) },
-    { 'test': r"3 > 2 ? (2 > 3 ? 3 : 4) : 2", 'expected': Decimal(4) },
-    { 'test': r"true ? not(true or false) : true", 'expected': False },
-    { 'test': r"true ? 1 + 2 : true", 'expected': Decimal(3) },
-    { 'test': "a = 1\nb = 2\ntrue ? a : b = 3\na - b", 'expected': Decimal(1) },
-    { 'test': "a = 1\nb = 2\nfalse ? a : b = 3\na - b", 'expected': Decimal(-2) },
-    { 'test': r"false ? (1/0) : 2", 'expected': Decimal(2) },
+    { 'test': r"True then 1 else 2", 'expected': Decimal(1) },
+    { 'test': r"False then 1 else 2", 'expected': Decimal(2) },
+    { 'test': r"True then (False then 3 else 4) else 2", 'expected': Decimal(4) },
+    { 'test': r"(3 > 2) then ((2 > 3) then 3 else 4) else 2", 'expected': Decimal(4) },
+    { 'test': r"3 > 2 then (2 > 3 then 3 else 4) else 2", 'expected': Decimal(4) },
+    { 'test': r"true then not(true or false) else true", 'expected': False },
+    { 'test': r"true then 1 + 2 else true", 'expected': Decimal(3) },
+    { 'test': "a = 1\nb = 2\ntrue then a else b = 3\na - b", 'expected': Decimal(1) },
+    { 'test': "a = 1\nb = 2\nfalse then a else b = 3\na - b", 'expected': Decimal(-2) },
+    { 'test': r"false then (1/0) else 2", 'expected': Decimal(2) },
     { 'test': r"false and (1/0)", 'expected': False },
     { 'test': r"true or (1/0)", 'expected': True },
 
     { 'test': "1 +\n2", 'expected': Decimal('3') },
     { 'test': "1 + 2\n3 + 4", 'expected': Decimal('7') },
     { 'test': "1 + 2 + \n3 + 4", 'expected': Decimal('10') },
-    { 'test': "true ?\n1\n:\n2", 'expected': Decimal('1') },
-    { 'test': "true ?\n1 + 3\n:\n2", 'expected': Decimal('4') },
-    { 'test': "true ?\n1\n:\n2\n456", 'expected': Decimal('456') },
+    { 'test': "true then\n1\nelse\n2", 'expected': Decimal('1') },
+    { 'test': "true then\n1 + 3\nelse\n2", 'expected': Decimal('4') },
+    { 'test': "true then\n1\nelse\n2\n456", 'expected': Decimal('456') },
 
     { 'test': r"0b10101 & 0b110", 'expected': '0b00100' },
     { 'test': r"0b10101 | 0b110", 'expected': '0b10111' },
@@ -222,7 +222,7 @@ tests = [
     { 'test': "123 + (#comment\n456)", 'expected': Decimal(579) },
     { 'test': "123 + 456#comment", 'expected': Decimal(579) },
 
-    { 'test': r"false ? 1m : 2cm", 'expected': (Decimal('2'), 'centimeters') },
+    { 'test': r"false then 1m else 2cm", 'expected': (Decimal('2'), 'centimeters') },
 
     { 'test': "orbitheight = 36000km\nearthmass = 5.97237e24kg\nearthradius = 6378.1km\ngm = G earthmass\norbitradius = earthradius + orbitheight\ntime = 2 pi (orbitradius^3 / gm)^0.5\ntime to hours",
         'expected': (Decimal('24.116847271747239529834702110187'), 'hours') },
@@ -260,23 +260,23 @@ PARAM1 = 4
 
 str = PARAM1
 dec = find(str, '.')
-decfound = dec > -1 ? true : false
+decfound = dec > -1 then true else false
 
-str = decfound ?
+str = decfound then
     replace(str, '.', '')
-    : str
-leadingspaces = (str =~ '^(0+)') ?
+    else str
+leadingspaces = (str =~ '^(0+)') then
     length(regexget(str, '^(0+)'))
-    : 0
-dec = leadingspaces > 1 ?
+    else 0
+dec = leadingspaces > 1 then
     (dec - (leadingspaces - 1))
-    : dec
-str = decfound ? 
+    else dec
+str = decfound then 
     substr(str, 0, 0) +$ '.' +$ substr(str, 1)
-    : str
-dec = decfound ?
+    else str
+dec = decfound then
     dec - 1
-    : length(str) - 2
+    else length(str) - 2
 
 str +$ '*10^' +$ dec""", 'expected': '4*10^-1' },
 

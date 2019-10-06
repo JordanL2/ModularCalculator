@@ -126,11 +126,11 @@ class BooleansFeature(Feature):
 
         calculator.add_op(OperatorDefinition(
             'Boolean', 
-            '?', 
+            'then', 
             'Ternary - If A is true, then B, else C',
             BooleansFeature.op_boolean_conditional, 
             1, 
-            [1, ':', 1], 
+            [1, 'else', 1], 
             ['boolean', None, None]), 
         {'units_normalise': False, 'inputs_can_be_exceptions': True})
 
