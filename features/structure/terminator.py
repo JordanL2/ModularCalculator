@@ -41,13 +41,15 @@ class TerminatorFeature(Feature):
         next = expr[i:]
         symbol = self.feature_options['structure.terminator']['Symbol']
         if next[0:len(symbol)] == symbol:
-            backup_vars = self.vars.copy()
             func_items = copy_items(functional_items(items))
             func_item_text = ''.join(ii.text for ii in func_items)
             if func_item_text == self.last_failed_terminator:
                 return None, None, None
+
+            backup_vars = self.vars.copy()
+
             try:
-                self.execute(func_items, {})
+                self.execute(func_items, {'fake_execution': True})
             except ExecutionException as e:
                 if str(e.message).startswith('Missing right operands for operator '):
                     self.vars = backup_vars

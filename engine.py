@@ -173,6 +173,10 @@ class Engine:
 
     def execute_operand(self, item, previous_items, flags):
         if isinstance(item, OperandItem):
+            if 'fake_execution' in flags:
+                if self.is_unit(item):
+                    return OperandResult(UnitPowerList(), None, None)
+                return OperandResult(None, None, None)
             try:
                 item = item.result(flags)
             except ExecutionException as err:
@@ -212,15 +216,19 @@ class Engine:
                     raise ExecutionException("Invalid input for operator {0} - '{1}'".format(sym, str(this_item)), previous_items, sym)
                 inputs.append(this_item)
 
-        try:
-            op_result = op.call(self, inputs, flags)
+        if 'fake_execution' in flags:
+            op_result = inputs[0]
             op_result._INDEX = item_index
-        except CalculatorException as err:
-            values = str.join(', ', ["'" + str(op_input) + "'" for op_input in inputs])
-            itemtext = None
-            if item is not None:
-                itemtext = item.text
-            raise ExecutionException("Could not execute operator {0} with operands: {1} - {2}".format(sym, values, err.message), previous_items, itemtext)
+        else:
+            try:
+                op_result = op.call(self, inputs, flags)
+                op_result._INDEX = item_index
+            except CalculatorException as err:
+                values = str.join(', ', ["'" + str(op_input) + "'" for op_input in inputs])
+                itemtext = None
+                if item is not None:
+                    itemtext = item.text
+                raise ExecutionException("Could not execute operator {0} with operands: {1} - {2}".format(sym, values, err.message), previous_items, itemtext)
 
         return items[0:input_start] + [op_result] + items[input_end:]
 
