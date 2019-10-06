@@ -12,13 +12,13 @@ from decimal import *
 class GeneralUnitFunctionsFeature(Feature):
 
     def id():
-        return 'unitfunctions.generalunitfunctions'
+        return 'units.unitfunctions'
 
     def category():
-        return 'Unit Functions'
+        return 'Units'
 
     def title():
-        return 'General Unit Functions'
+        return 'Unit Functions'
 
     def desc():
         return ''

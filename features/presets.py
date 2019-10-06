@@ -28,11 +28,11 @@ presets['Scientific'] = presets['Advanced'] + [
     'state.constants',
     'structure.functions',
     'unitdefinitions.allunitdefinitions',
-    'unitfunctions.allunitfunctions',
     'units.advancedunitprefixes',
     'units.basicunitprefixes',
     'units.systems',
     'units.unitconstants',
+    'units.unitfunctions',
     'units.units',
 ]
 
