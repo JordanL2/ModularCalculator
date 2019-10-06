@@ -3,8 +3,6 @@
 from modularcalculator.objects.items import *
 from modularcalculator.features.feature import Feature
 
-import copy
-
 
 class TerminatorFeature(Feature):
 
@@ -41,7 +39,7 @@ class TerminatorFeature(Feature):
         next = expr[i:]
         symbol = self.feature_options['structure.terminator']['Symbol']
         if next[0:len(symbol)] == symbol:
-            backup_vars = copy.deepcopy(self.vars)
+            backup_vars = self.vars.copy()
             try:
                 self.execute(copy_items(items), {})
             except ExecutionException as e:
