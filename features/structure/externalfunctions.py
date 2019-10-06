@@ -132,6 +132,12 @@ class ExternalFunctionItem(RecursiveOperandItem):
     def result(self, flags):
         return self.value(flags)
 
+    def copy(self, classtype=None):
+        copy = super().copy(classtype or self.__class__)
+        copy.name = self.name
+        copy.args = self.args.copy()
+        return copy
+
 
 class ExternalFunctionNameItem(NonFunctionalItem):
 
@@ -140,3 +146,7 @@ class ExternalFunctionNameItem(NonFunctionalItem):
 
     def desc(self):
         return 'ext_function_name'
+
+    def copy(self, classtype=None):
+        copy = super().copy(classtype or self.__class__)
+        return copy

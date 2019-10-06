@@ -108,23 +108,21 @@ class FunctionItem(RecursiveOperandItem):
                 itemsi += len(arg) + 1
                 inputs.append(argresult)
             except ExecutionException as err:
-                copy = self.copy()
-                copy.items = self.items[0:itemsi]
-                copy.items.extend(err.items)
+                self.items = self.items[0:itemsi]
+                self.items.extend(err.items)
                 err.items = self.items
-                copy.text = err.truncate(self.text)
-                copy.truncated = True
-                raise ExecutionException(err.message, [copy], err.next, True)
+                self.text = err.truncate(self.text)
+                self.truncated = True
+                raise ExecutionException(err.message, [self], err.next, True)
             if not func.inputs_can_be_exceptions and isinstance(argresult.value, Exception):
                 err = argresult.value
                 itemsi = old_itemsi
-                copy = self.copy()
-                copy.items = self.items[0:itemsi]
-                copy.items.extend(err.items)
+                self.items = self.items[0:itemsi]
+                self.items.extend(err.items)
                 err.items = self.items
-                copy.text = err.truncate(self.text)
-                copy.truncated = True
-                raise ExecutionException(err.message, [copy], err.next, True)
+                self.text = err.truncate(self.text)
+                self.truncated = True
+                raise ExecutionException(err.message, [self], err.next, True)
         return func.call(self.calculator, inputs, flags)
 
     def result(self, flags):
@@ -145,6 +143,10 @@ class FunctionNameItem(NonFunctionalItem):
     def desc(self):
         return 'function_name'
 
+    def copy(self, classtype=None):
+        copy = super().copy(classtype or self.__class__)
+        return copy
+
 
 class FunctionStartItem(NonFunctionalItem):
 
@@ -153,6 +155,10 @@ class FunctionStartItem(NonFunctionalItem):
 
     def desc(self):
         return 'function_start'
+
+    def copy(self, classtype=None):
+        copy = super().copy(classtype or self.__class__)
+        return copy
 
 
 class FunctionParamItem(NonFunctionalItem):
@@ -163,6 +169,10 @@ class FunctionParamItem(NonFunctionalItem):
     def desc(self):
         return 'function_param'
 
+    def copy(self, classtype=None):
+        copy = super().copy(classtype or self.__class__)
+        return copy
+
 
 class FunctionEndItem(NonFunctionalItem):
 
@@ -171,3 +181,7 @@ class FunctionEndItem(NonFunctionalItem):
 
     def desc(self):
         return 'function_end'
+
+    def copy(self, classtype=None):
+        copy = super().copy(classtype or self.__class__)
+        return copy

@@ -40,5 +40,9 @@ class SpaceFeature(Feature):
 
 class SpaceItem(NonFunctionalItem):
 
-	def desc(self):
-		return 'space'
+    def desc(self):
+        return 'space'
+
+    def copy(self, classtype=None):
+        copy = super().copy(classtype or self.__class__)
+        return copy

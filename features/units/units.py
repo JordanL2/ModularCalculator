@@ -147,3 +147,8 @@ class UnitItem(OperandItem):
 
     def result(self, flags):
         return OperandResult(self.value(flags), None, self)
+
+    def copy(self, classtype=None):
+        copy = super().copy(classtype or self.__class__)
+        copy.unit = self.unit.copy()
+        return copy

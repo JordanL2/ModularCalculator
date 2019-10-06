@@ -62,3 +62,10 @@ class ConstantItem(OperandItem):
 
     def result(self, flags):
         return self.value(flags)
+
+    def copy(self, classtype=None):
+        copy = super().copy(classtype or self.__class__)
+        copy.constant = self.constant
+        copy.val = self.val
+        copy.unit = self.unit
+        return copy

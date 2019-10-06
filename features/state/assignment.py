@@ -112,3 +112,9 @@ class VariableItem(OperandItem):
 
     def result(self, flags):
         return self.value(flags)
+
+    def copy(self, classtype=None):
+        copy = super().copy(classtype or self.__class__)
+        copy.var = self.var
+        copy.calculator = self.calculator
+        return copy

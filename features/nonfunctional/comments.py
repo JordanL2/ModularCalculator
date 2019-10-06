@@ -44,5 +44,9 @@ class CommentsFeature(Feature):
 
 class CommentItem(NonFunctionalItem):
 
-	def desc(self):
-		return 'comment'
+    def desc(self):
+        return 'comment'
+
+    def copy(self, classtype=None):
+        copy = super().copy(classtype or self.__class__)
+        return copy

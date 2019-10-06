@@ -64,6 +64,10 @@ class UnitSystemItem(OperandItem):
     def result(self, flags):
         return OperandResult(self.value(flags), None, self)
 
+    def copy(self, classtype=None):
+        copy = super().copy(classtype or self.__class__)
+        return copy
+
 
 class UnitSystemGregorian:
 

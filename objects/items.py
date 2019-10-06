@@ -18,6 +18,9 @@ def previous_functional_item(items, i=None):
 def functional_items(items):
     return [i for i in items if i.functional()]
 
+def copy_items(items):
+    return [i.copy() for i in items]
+
 
 class Item:
     
@@ -38,8 +41,9 @@ class Item:
         return True
 
     def copy(self, classtype=None):
-        copy = classtype.__new__(classtype or self.__class__)
-        copy.unit = self.unit
+        copy = (classtype or self.__class__).__new__(classtype or self.__class__)
+        copy.text = self.text
+        copy.truncated = self.truncated
         return copy
 
 
@@ -54,6 +58,11 @@ class OperatorItem(Item):
 
     def desc(self):
         return 'op'
+
+    def copy(self, classtype=None):
+        copy = super().copy(classtype or self.__class__)
+        copy.op = self.op
+        return copy
 
 
 class OperandItem(Item):
