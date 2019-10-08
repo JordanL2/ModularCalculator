@@ -9,16 +9,16 @@ class CalculatorException(Exception):
 
 class CalculatingException(CalculatorException):
 
-    def __init__(self, message, items, next, truncated=False):
+    def __init__(self, message, statements, next, truncated=False):
         self.message = message
-        self.items = items
+        self.statements = statements
         self.next = next
         self.truncated = truncated
 
     def find_pos(self, text):
         i = 0
         prev_item = None
-        for items in self.items:
+        for items in (self.statements or [self.items]):
             for item in items:
                 ii = text.find(item.text, i)
                 if ii == -1:
@@ -49,5 +49,10 @@ class ParsingException(CalculatingException):
 
 
 class ExecutionException(CalculatingException):
-
-    pass
+  
+    def __init__(self, message, items, next, truncated=False):
+        self.message = message
+        self.items = items
+        self.next = next
+        self.truncated = truncated
+        self.statements = None

@@ -106,7 +106,7 @@ class CalculatorTextEdit(QTextEdit):
                 statements = [r.items for r in response.results]
                 i = len(expr)
             except CalculatingException as err:
-                statements = err.items
+                statements = err.statements
                 i = err.find_pos(expr)
             except CalculatorException as err:
                 statements = [[]]

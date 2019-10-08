@@ -65,8 +65,8 @@ class ExternalFunctionsFeature(Feature):
                     else:
                         func_items.append(FunctionParamItem())
                 except ParsingException as err:
-                    newitems = func_items + err.items
-                    err.items = newitems
+                    newitems = func_items + err.statements
+                    err.statements = newitems
                     raise ParsingException(err.message, [FunctionItem(err.truncate(next), newitems, self, ext_func_name, [])], err.next)
             if 'end_func' not in return_flags:
                 raise ParsingException('Function missing close symbol', [], next)

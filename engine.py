@@ -64,14 +64,14 @@ class Engine:
                 else:
                     result = response.add_result(''.join([item.text for item in items]), items)
 
-            except CalculatingException as err:
-                err.items = statements[0:i] + [err.items.copy()]
+            except ExecutionException as err:
+                err.statements = statements[0:i] + [err.items.copy()]
                 raise err
 
         return response
 
     def parse(self, expr, flags):
-        items = [[]]
+        statements = [[]]
         i = 0
         lasti = 0
         start_time = time.perf_counter()
@@ -83,46 +83,46 @@ class Engine:
             for parser in self.parsers:
                 items_found, length, return_flags = None, None, None
                 try:
-                    items_found, length, return_flags = parser['ref'](self, expr, i, items[-1], flags.copy())
+                    items_found, length, return_flags = parser['ref'](self, expr, i, statements[-1], flags.copy())
                 except ParsingException as err:
-                    items[-1].extend(err.items)
-                    raise ParsingException(err.message, items, err.next)
+                    statements[-1].extend(err.statements)
+                    raise ParsingException(err.message, statements, err.next)
                 
 
                 if items_found is not None or (length is not None and length > 0):
                     if items_found is not None:
-                        items[-1].extend(items_found)
+                        statements[-1].extend(items_found)
                     if length is not None:
                         i += length
                     if return_flags is not None and 'end_statement' in return_flags:
-                        return_flags = self.update_times(start_time, items, times, return_flags)
+                        return_flags = self.update_times(start_time, statements, times, return_flags)
                         start_time = time.perf_counter()
-                        items.append([])
+                        statements.append([])
                     if return_flags is not None and 'end' in return_flags:
-                        return_flags = self.update_times(start_time, items, times, return_flags)
-                        return items, i, return_flags
+                        return_flags = self.update_times(start_time, statements, times, return_flags)
+                        return statements, i, return_flags
                     break
 
                 if return_flags is not None and 'end_statement' in return_flags:
-                    return_flags = self.update_times(start_time, items, times, return_flags)
+                    return_flags = self.update_times(start_time, statements, times, return_flags)
                     start_time = time.perf_counter()
-                    items.append([])
+                    statements.append([])
                 if return_flags is not None and 'end' in return_flags:
-                    return_flags = self.update_times(start_time, items, times, return_flags)
-                    return items, i, return_flags
+                    return_flags = self.update_times(start_time, statements, times, return_flags)
+                    return statements, i, return_flags
 
             if i == lasti:
-                raise ParsingException("Could not parse: {0}".format(next), items, next)
+                raise ParsingException("Could not parse: {0}".format(next), statements, next)
             lasti = i
 
-        self.update_times(start_time, items, times, {})
+        self.update_times(start_time, statements, times, {})
 
-        return items, i, {'times': times}
+        return statements, i, {'times': times}
 
-    def update_times(self, start_time, items, times, return_flags):
-        if len(times) <= len(items):
+    def update_times(self, start_time, statements, times, return_flags):
+        if len(times) <= len(statements):
             times.append(0)
-        times[len(items) - 1] = time.perf_counter() - start_time
+        times[len(statements) - 1] = time.perf_counter() - start_time
         if return_flags is None:
             return_flags = {}
         return_flags['times'] = times

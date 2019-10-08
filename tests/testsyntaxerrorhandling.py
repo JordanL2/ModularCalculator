@@ -72,7 +72,7 @@ for num, test in enumerate(tests):
             if i != expected['pos']:
                 failed.append({'num': num, 'test': expr, 'stage': 'Exception position', 'expected': expected['pos'], 'actual': i})
                 continue
-            items = hl.highlight_statements(err.items)
+            items = hl.highlight_statements(err.statements)
             count = 0
             for item in items:
                 if item[0] != 'default':
