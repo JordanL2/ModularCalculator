@@ -88,10 +88,10 @@ for num, test in enumerate(tests):
                 if count != len(expected['items']):
                     failed.append({'num': num, 'test': expr, 'stage': 'Exception items', 'expected': expected['items'], 'actual': items})
         except Exception as err:
-            print("Failed on test", num + 1)
+            print("Failed on test {} |{}|".format(num + 1, expr))
             raise err
     except Exception as err:
-        print("Failed on test", num + 1)
+        print("Failed on test {} |{}|".format(num + 1, expr))
         raise err
     else:
         failed.append({'num': num, 'test': expr, 'stage': 'Exception type', 'expected': 'Exception', 'actual': 'No exception'})

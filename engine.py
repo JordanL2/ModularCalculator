@@ -50,14 +50,14 @@ class Engine:
         #result = response.add_result(expr, items)
         #result.set_timing('parse', time.perf_counter() - starttime)
 
-        for items in statements:
+        for i, items in enumerate(statements):
             try:
                 if len(functional_items(items)) > 0:
                     starttime = time.perf_counter()
                     answer = self.execute(items, flags)
                     if isinstance(answer.value, Exception):
                         raise answer.value
-                    result = response.add_result(''.join([i.text for i in items]), items)
+                    result = response.add_result(''.join([item.text for item in items]), items)
                     result.set_timing('parse', 0) #TODO
                     result.set_timing('exec', time.perf_counter() - starttime)
                     starttime = time.perf_counter()
@@ -67,7 +67,7 @@ class Engine:
                 response.add_items(items)
                 #i += length
             except CalculatingException as err:
-                err.items = response.items + err.items
+                err.items = items[0:i] + [err.items]
                 raise err
 
         return response
@@ -84,7 +84,8 @@ class Engine:
                 try:
                     items_found, length, return_flags = parser['ref'](self, expr, i, items[-1], flags.copy())
                 except ParsingException as err:
-                    raise ParsingException(err.message, items[-1] + err.items, err.next)
+                    items[-1].extend(err.items)
+                    raise ParsingException(err.message, items, err.next)
                 if items_found is not None or (length is not None and length > 0):
                     if items_found is not None:
                         items[-1].extend(items_found)
@@ -102,7 +103,7 @@ class Engine:
                     return items, i, return_flags
 
             if i == lasti:
-                raise ParsingException("Could not parse: {0}".format(next), items[-1], next)
+                raise ParsingException("Could not parse: {0}".format(next), items, next)
             lasti = i
 
         return items, i, {}

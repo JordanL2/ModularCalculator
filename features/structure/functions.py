@@ -58,8 +58,9 @@ class FunctionsFeature(Feature):
                         else:
                             func_items.append(FunctionParamItem())
                     except ParsingException as err:
-                        newitems = func_items + err.items
-                        err.items = newitems
+                        newitems = func_items.copy()
+                        newitems.extend(err.items[0])
+                        err.items = [newitems]
                         raise ParsingException(err.message, [FunctionItem(err.truncate(next), newitems, self, func, [])], err.next)
                 if 'end_func' not in return_flags:
                     raise ParsingException('Function missing close symbol', [], next)
@@ -111,19 +112,19 @@ class FunctionItem(RecursiveOperandItem):
             except ExecutionException as err:
                 self.items = self.items[0:itemsi]
                 self.items.extend(err.items)
-                err.items = self.items
+                err.items = [self.items]
                 self.text = err.truncate(self.text)
                 self.truncated = True
-                raise ExecutionException(err.message, [self], err.next, True)
+                raise ExecutionException(err.message, [[self]], err.next, True)
             if not func.inputs_can_be_exceptions and isinstance(argresult.value, Exception):
                 err = argresult.value
                 itemsi = old_itemsi
                 self.items = self.items[0:itemsi]
                 self.items.extend(err.items)
-                err.items = self.items
+                err.items = [self.items]
                 self.text = err.truncate(self.text)
                 self.truncated = True
-                raise ExecutionException(err.message, [self], err.next, True)
+                raise ExecutionException(err.message, [[self]], err.next, True)
         return func.call(self.calculator, inputs, flags)
 
     def result(self, flags):
