@@ -23,7 +23,7 @@ class SyntaxHighlighter:
             if i != ii:
                 if prev_item is None or not prev_item.truncated:
                     print("Error in", text, "- Unexpected characters at", i, "- (" + text[i:ii] + ")")
-                    for item2 in self.items:
+                    for item2 in items:
                         print("Item:", "|" + item2.text + "|")
                     print("End of items.\n")
                 highlight.append((self.defaulttype, text[i:ii]))
