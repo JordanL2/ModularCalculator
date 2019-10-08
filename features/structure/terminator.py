@@ -60,7 +60,7 @@ class TerminatorFeature(Feature):
             finally:
                 self.vars = backup_vars
 
-            return [TerminatorItem(symbol)], len(symbol), {'end': True}
+            return [TerminatorItem(symbol)], len(symbol), {'end_statement': True}
 
         return None, None, None
 

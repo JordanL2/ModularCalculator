@@ -90,12 +90,16 @@ class Engine:
                         items[-1].extend(items_found)
                     if length is not None:
                         i += length
-                    if return_flags is not None and 'end' in return_flags:
+                    if return_flags is not None and 'end_statement' in return_flags:
                         items.append([])
+                    if return_flags is not None and 'end' in return_flags:
+                        return items, i, return_flags
                     break
 
-                if return_flags is not None and 'end' in return_flags:
+                if return_flags is not None and 'end_statement' in return_flags:
                     items.append([])
+                if return_flags is not None and 'end' in return_flags:
+                    return items, i, return_flags
 
             if i == lasti:
                 raise ParsingException("Could not parse: {0}".format(next), items[-1], next)

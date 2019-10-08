@@ -34,7 +34,8 @@ class InnerExpressionsFeature(Feature):
             flags['ignore_terminators'] = True
             inner_items, length, return_flags = None, None, None
             try:
-                inner_items, length, return_flags = self.parse(next[1:], flags)[0]
+                inner_items, length, return_flags = self.parse(next[1:], flags)
+                inner_items = inner_items[0]
             except ParsingException as err:
                 print(err)
                 err.items.insert(0, InnerExpressionStartItem())
