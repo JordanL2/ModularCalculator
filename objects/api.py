@@ -12,9 +12,6 @@ class CalculatorResponse:
         self.results.append(result)
         return result
 
-    def add_items(self, items):
-    	self.items.extend(items)
-
 
 class CalculatorResult:
 

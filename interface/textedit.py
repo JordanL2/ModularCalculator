@@ -99,12 +99,11 @@ class CalculatorTextEdit(QTextEdit):
     def checkSyntax(self, force=False):
         if self.calculator is not None and (self.oldText is None or self.oldText != self.toHtml() or force):
             expr = self.getContents()
-            items = []
-            i = 0
+            
             self.calculator.vars = {}
             try:
-                result = self.calculator.calculate(expr, {'parse_only': not self.autoExecute})
-                items = result.items
+                response = self.calculator.calculate(expr, {'parse_only': not self.autoExecute})
+                items = [r.items for r in response.results]
                 i = len(expr)
             except CalculatingException as err:
                 items = err.items
@@ -112,6 +111,7 @@ class CalculatorTextEdit(QTextEdit):
             except CalculatorException as err:
                 items = []
                 i = 0
+
             newhtml = self.css
             highlightItems = self.highlighter.highlight(expr[0:i], items)
             for item in highlightItems:
@@ -121,6 +121,7 @@ class CalculatorTextEdit(QTextEdit):
             if i < len(expr):
                 newhtml += "<span class='{0}'>{1}</span>".format('error', htmlSafe(expr[i:]))
             self.updateHtml(newhtml)
+            
             if not self.interface.filemanager.currentFileModified() and not force:
                 self.interface.filemanager.setCurrentFileAndModified(self.interface.filemanager.currentFile(), True)
         self.oldText = self.toHtml()
