@@ -96,6 +96,7 @@ class Engine:
                         i += length
                     if return_flags is not None and 'end_statement' in return_flags:
                         return_flags = self.update_times(start_time, items, times, return_flags)
+                        start_time = time.perf_counter()
                         items.append([])
                     if return_flags is not None and 'end' in return_flags:
                         return_flags = self.update_times(start_time, items, times, return_flags)
@@ -104,6 +105,7 @@ class Engine:
 
                 if return_flags is not None and 'end_statement' in return_flags:
                     return_flags = self.update_times(start_time, items, times, return_flags)
+                    start_time = time.perf_counter()
                     items.append([])
                 if return_flags is not None and 'end' in return_flags:
                     return_flags = self.update_times(start_time, items, times, return_flags)
