@@ -58,7 +58,7 @@ class Engine:
                     if isinstance(answer.value, Exception):
                         raise answer.value
                     result = response.add_result(''.join([item.text for item in items]), items)
-                    result.set_timing('parse', 0) #TODO
+                    result.set_timing('parse', return_flags['times'][i]) #TODO
                     result.set_timing('exec', time.perf_counter() - starttime)
                     starttime = time.perf_counter()
                     final = self.finalize(answer)
@@ -77,6 +77,9 @@ class Engine:
         items = [[]]
         i = 0
         lasti = 0
+        starttime = time.perf_counter()
+        times = []
+
         while(i < len(expr)):
             next = expr[i:]
 
@@ -87,6 +90,14 @@ class Engine:
                 except ParsingException as err:
                     items[-1].extend(err.items)
                     raise ParsingException(err.message, items, err.next)
+                
+                if len(times) <= len(items):
+                    times.append(0)
+                times[len(items) - 1] = time.perf_counter() - starttime
+                if return_flags is None:
+                    return_flags = {}
+                return_flags['times'] = times
+
                 if items_found is not None or (length is not None and length > 0):
                     if items_found is not None:
                         items[-1].extend(items_found)
@@ -107,7 +118,7 @@ class Engine:
                 raise ParsingException("Could not parse: {0}".format(next), items, next)
             lasti = i
 
-        return items, i, {}
+        return items, i, {'times': times}
 
     def execute(self, items, flags):
         original_items = items
