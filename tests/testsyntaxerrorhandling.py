@@ -73,8 +73,10 @@ for num, test in enumerate(tests):
                 failed.append({'num': num, 'test': expr, 'stage': 'Exception position', 'expected': expected['pos'], 'actual': i})
                 continue
             items = []
+            highlightItems = []
             for erritems in err.items:
-                items.extend(hl.highlight(err.truncate(expr), erritems))
+                statementtext = ''.join([item.text for item in erritems])
+                items.extend(hl.highlight(statementtext, erritems))
             count = 0
             for item in items:
                 if item[0] != 'default':
