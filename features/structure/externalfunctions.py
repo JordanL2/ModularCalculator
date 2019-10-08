@@ -54,6 +54,7 @@ class ExternalFunctionsFeature(Feature):
             while 'end_func' not in return_flags and i < len(next):
                 try:
                     inner_items, length, return_flags = self.parse(next[i:], {'func': ext_func_name})
+                    inner_items = inner_items[0]
                     i += length + 1
                     if len(inner_items) > 0:
                         args.append(inner_items)
