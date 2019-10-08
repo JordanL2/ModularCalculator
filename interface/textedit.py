@@ -103,17 +103,20 @@ class CalculatorTextEdit(QTextEdit):
             self.calculator.vars = {}
             try:
                 response = self.calculator.calculate(expr, {'parse_only': not self.autoExecute})
-                items = [r.items for r in response.results]
+                statements = [r.items for r in response.results]
                 i = len(expr)
             except CalculatingException as err:
-                items = err.items
+                statements = err.items
                 i = err.find_pos(expr)
             except CalculatorException as err:
-                items = []
+                statements = [[]]
                 i = 0
 
             newhtml = self.css
-            highlightItems = self.highlighter.highlight(expr[0:i], items)
+            highlightItems = []
+            for items in statements:
+                statementtext = ''.join([item.text for item in items])
+                highlightItems.extend(self.highlighter.highlight(statementtext, items))
             for item in highlightItems:
                 style = item[0]
                 text = item[1]

@@ -1,8 +1,6 @@
 orbitheight = 35862.9695km # Height of satellite above the ground
 earthmass = 5.97237e24kg
 earthradius = 6378.137km
-
 orbit_function = './examples/orbit_period'
-
 period = @orbit_function(orbitheight, earthmass, earthradius)
 format(round(period, 3))
