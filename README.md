@@ -52,6 +52,9 @@ These examples are available in examples/basic_integration.py. See examples/adva
 # To Do
 
 ## Engine
+* Parsing returns multiple statements in one list of items
+	* Should items be separated into statements?
+	* Then each statement's worth of items executed individually
 
 ## Features
 * Dates:
@@ -60,11 +63,10 @@ These examples are available in examples/basic_integration.py. See examples/adva
 		* Date function to increment a particular element of the date, eg dateincrement('2017-01-01', 3, 'year') => '2020-01-01' (also: datedecrement)
 		* Alternatively, dateadd checks if the unit is year or month, and number is integer, and increments year/month in that case - too much black magic
 * Feature to execute an arbitrary script as a function, with the parameters as command line arguments and STDOUT being the return value
-	* Works like user defined functions but with ~ symbol to execute as default (or maybe @@)
+	* Works like user defined functions but with @@ symbol to execute as default
 * Ability to alter operator symbols as feature options
 * Ability to rename functions as feature options
 * Should bitwise not operator only allow positive integers, and throw error if something else?
-* Should default string quote char be " ?
 
 ## Functions
 * Display operator/function syntax info on parameter validation error

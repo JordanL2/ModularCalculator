@@ -44,34 +44,36 @@ class Engine:
         if flags is None:
             flags = {}
         response = CalculatorResponse()
-        i = 0
-        while (i < len(expr)):
-            this_expr = expr[i:]
+
+        #starttime = time.perf_counter()
+        statements, length, return_flags = self.parse(expr, flags)
+        #result = response.add_result(expr, items)
+        #result.set_timing('parse', time.perf_counter() - starttime)
+
+        for items in statements:
             try:
-                starttime = time.perf_counter()
-                items, length, return_flags = self.parse(this_expr, flags)
-                question = expr[i : i + length]
-                result = response.add_result(question, items)
-                result.set_timing('parse', time.perf_counter() - starttime)
-                if len(functional_items(items)) > 0 and not ('parse_only' in flags and flags['parse_only']):
+                if len(functional_items(items)) > 0:
                     starttime = time.perf_counter()
                     answer = self.execute(items, flags)
                     if isinstance(answer.value, Exception):
                         raise answer.value
+                    result = response.add_result(''.join([i.text for i in items]), items)
+                    result.set_timing('parse', 0) #TODO
                     result.set_timing('exec', time.perf_counter() - starttime)
                     starttime = time.perf_counter()
                     final = self.finalize(answer)
                     result.set_timing('finalize', time.perf_counter() - starttime)
                     result.set_answer(final.value, final.unit)
                 response.add_items(items)
-                i += length
+                #i += length
             except CalculatingException as err:
                 err.items = response.items + err.items
                 raise err
+
         return response
 
     def parse(self, expr, flags):
-        items = []
+        items = [[]]
         i = 0
         lasti = 0
         while(i < len(expr)):
@@ -80,23 +82,23 @@ class Engine:
             for parser in self.parsers:
                 items_found, length, return_flags = None, None, None
                 try:
-                    items_found, length, return_flags = parser['ref'](self, expr, i, items, flags.copy())
+                    items_found, length, return_flags = parser['ref'](self, expr, i, items[-1], flags.copy())
                 except ParsingException as err:
-                    raise ParsingException(err.message, items + err.items, err.next)
+                    raise ParsingException(err.message, items[-1] + err.items, err.next)
                 if items_found is not None or (length is not None and length > 0):
                     if items_found is not None:
-                        items.extend(items_found)
+                        items[-1].extend(items_found)
                     if length is not None:
                         i += length
                     if return_flags is not None and 'end' in return_flags:
-                        return items, i, return_flags
+                        items.append([])
                     break
 
                 if return_flags is not None and 'end' in return_flags:
-                    return items, i, return_flags
+                    items.append([])
 
             if i == lasti:
-                raise ParsingException("Could not parse: {0}".format(next), items, next)
+                raise ParsingException("Could not parse: {0}".format(next), items[-1], next)
             lasti = i
 
         return items, i, {}
