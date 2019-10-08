@@ -113,10 +113,7 @@ class CalculatorTextEdit(QTextEdit):
                 i = 0
 
             newhtml = self.css
-            highlightItems = []
-            for items in statements:
-                statementtext = ''.join([item.text for item in items])
-                highlightItems.extend(self.highlighter.highlight(statementtext, items))
+            highlightItems = self.highlighter.highlight_statements(statements)
             for item in highlightItems:
                 style = item[0]
                 text = item[1]

@@ -10,6 +10,13 @@ class SyntaxHighlighter:
     
     defaulttype = 'default'
 
+    def highlight_statements(self, statements):
+        highlightItems = []
+        for items in statements:
+            statementtext = ''.join([item.text for item in items])
+            highlightItems.extend(self.highlight(statementtext, items))
+        return highlightItems
+
     def highlight(self, text, items):
         highlight = []
 
