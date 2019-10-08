@@ -73,8 +73,9 @@ class InnerExpressionItem(RecursiveOperandItem):
             self.items = err.items
             err.items = [err.items.copy()]
             self.text = err.truncate(self.text)
+            err.items = err.items = [0]
             self.truncated = True
-            raise ExecutionException(err.message, [[self]], err.next, True)
+            raise ExecutionException(err.message, [self], err.next, True)
 
     def result(self, flags):
         return self.value(flags)

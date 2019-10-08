@@ -114,8 +114,9 @@ class FunctionItem(RecursiveOperandItem):
                 self.items.extend(err.items)
                 err.items = [self.items]
                 self.text = err.truncate(self.text)
+                err.items = err.items[0]
                 self.truncated = True
-                raise ExecutionException(err.message, [[self]], err.next, True)
+                raise ExecutionException(err.message, [self], err.next, True)
             if not func.inputs_can_be_exceptions and isinstance(argresult.value, Exception):
                 err = argresult.value
                 itemsi = old_itemsi
@@ -123,8 +124,9 @@ class FunctionItem(RecursiveOperandItem):
                 self.items.extend(err.items)
                 err.items = [self.items]
                 self.text = err.truncate(self.text)
+                err.items = err.items[0]
                 self.truncated = True
-                raise ExecutionException(err.message, [[self]], err.next, True)
+                raise ExecutionException(err.message, [self], err.next, True)
         return func.call(self.calculator, inputs, flags)
 
     def result(self, flags):

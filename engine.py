@@ -67,7 +67,7 @@ class Engine:
                 response.add_items(items)
                 #i += length
             except CalculatingException as err:
-                err.items = items[0:i] + [err.items]
+                err.items = statements[0:i] + [err.items.copy()]
                 raise err
 
         return response
