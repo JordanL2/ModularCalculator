@@ -45,10 +45,7 @@ class Engine:
             flags = {}
         response = CalculatorResponse()
 
-        #starttime = time.perf_counter()
         statements, length, return_flags = self.parse(expr, flags)
-        #result = response.add_result(expr, items)
-        #result.set_timing('parse', time.perf_counter() - starttime)
 
         for i, items in enumerate(statements):
             try:
@@ -77,7 +74,7 @@ class Engine:
         items = [[]]
         i = 0
         lasti = 0
-        starttime = time.perf_counter()
+        start_time = time.perf_counter()
         times = []
 
         while(i < len(expr)):
@@ -91,12 +88,6 @@ class Engine:
                     items[-1].extend(err.items)
                     raise ParsingException(err.message, items, err.next)
                 
-                if len(times) <= len(items):
-                    times.append(0)
-                times[len(items) - 1] = time.perf_counter() - starttime
-                if return_flags is None:
-                    return_flags = {}
-                return_flags['times'] = times
 
                 if items_found is not None or (length is not None and length > 0):
                     if items_found is not None:
@@ -104,21 +95,36 @@ class Engine:
                     if length is not None:
                         i += length
                     if return_flags is not None and 'end_statement' in return_flags:
+                        return_flags = self.update_times(start_time, items, times, return_flags)
                         items.append([])
                     if return_flags is not None and 'end' in return_flags:
+                        return_flags = self.update_times(start_time, items, times, return_flags)
                         return items, i, return_flags
                     break
 
                 if return_flags is not None and 'end_statement' in return_flags:
+                    return_flags = self.update_times(start_time, items, times, return_flags)
                     items.append([])
                 if return_flags is not None and 'end' in return_flags:
+                    return_flags = self.update_times(start_time, items, times, return_flags)
                     return items, i, return_flags
 
             if i == lasti:
                 raise ParsingException("Could not parse: {0}".format(next), items, next)
             lasti = i
 
+        self.update_times(start_time, items, times, {})
+
         return items, i, {'times': times}
+
+    def update_times(self, start_time, items, times, return_flags):
+        if len(times) <= len(items):
+            times.append(0)
+        times[len(items) - 1] = time.perf_counter() - start_time
+        if return_flags is None:
+            return_flags = {}
+        return_flags['times'] = times
+        return return_flags
 
     def execute(self, items, flags):
         original_items = items
