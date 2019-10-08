@@ -93,10 +93,10 @@ class CalculatorManager():
         try:
             self.calculator.vars = {}
             response = self.calculator.calculate(question)
-            if len(response.results) > 1:
+            if len([r for r in response.results if r.has_result()]) > 1:
                 self.display.clear()
             for i, result in enumerate(response.results):
-                if hasattr(result, 'value'):
+                if result.has_result():
                     result_value = result.value
                     result_value = self.calculator.number_to_string(result_value)
                     self.display.addAnswer(result.expression, result_value, result.unit)

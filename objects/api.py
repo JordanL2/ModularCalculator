@@ -1,6 +1,10 @@
 #!/usr/bin/python3
 
 
+def get_last_result(results):
+    return [r for r in results if r.has_result()][-1]
+
+
 class CalculatorResponse:
 
     def __init__(self):
@@ -26,3 +30,6 @@ class CalculatorResult:
 
     def set_timing(self, stage, time):
         self.timings[stage] = time
+
+    def has_result(self):
+        return hasattr(self, 'value')

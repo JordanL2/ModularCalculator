@@ -20,8 +20,9 @@ class TestRunner:
             try:
                 response = call(question)
                 #TODO this logic shouldn't be in here, pass in an answer resolution method
-                value = response.results[-1].value
-                unit = response.results[-1].unit
+                last_result = [r for r in response.results if r.has_result()][-1]
+                value = last_result.value
+                unit = last_result.unit
                 if unit is None:
                     actual = value
                 else:

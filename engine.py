@@ -64,6 +64,8 @@ class Engine:
                     final = self.finalize(answer)
                     result.set_timing('finalize', time.perf_counter() - starttime)
                     result.set_answer(final.value, final.unit)
+                else:
+                    result = response.add_result(''.join([item.text for item in items]), items)
 
             except CalculatingException as err:
                 err.items = statements[0:i] + [err.items.copy()]

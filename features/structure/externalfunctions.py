@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+from modularcalculator.objects.api import *
 from modularcalculator.objects.exceptions import *
 from modularcalculator.objects.items import *
 from modularcalculator.objects.operators import *
@@ -124,7 +125,7 @@ class ExternalFunctionItem(RecursiveOperandItem):
         except Exception as err:
             self.calculator.vars = backup_vars
             raise err
-        final_result = result.results[-1]
+        final_result = get_last_result(result.results)
 
         self.calculator.vars = backup_vars
 
