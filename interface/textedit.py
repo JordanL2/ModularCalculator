@@ -105,14 +105,11 @@ class CalculatorTextEdit(QTextEdit):
         if self.calculator is not None and (force or self.oldText is None or self.oldText != self.toHtml()):
             expr = self.getContents()
 
-            enableCache = True
-            start_time = time.perf_counter()
-
             new_response = CalculatorResponse()
             i = 0
             ii = None
             error_statements = []
-            if self.cached_response is not None and enableCache:
+            if self.cached_response is not None:
                 for result in self.cached_response.results:
                     if expr[i:].startswith(result.expression):
                         new_response.results.append(result)
@@ -152,8 +149,6 @@ class CalculatorTextEdit(QTextEdit):
             if ii < len(expr):
                 newhtml += "<span class='{0}'>{1}</span>".format('error', htmlSafe(expr[ii:]))
             self.updateHtml(newhtml)
-
-            print("Time taken: {0} ms".format(round((time.perf_counter() - start_time) * 1000, 3)))
 
             if not self.interface.filemanager.currentFileModified() and not force:
                 self.interface.filemanager.setCurrentFileAndModified(self.interface.filemanager.currentFile(), True)
