@@ -51,7 +51,7 @@ class Engine:
                 statements, length, return_flags = self.parse(expr, flags)
 
                 for i, items in enumerate(statements):
-                    result = response.add_result(items_text(items), items)
+                    result = CalculatorResult(items_text(items), items)
                     result.set_timing('parse', return_flags['times'][i])
 
                     if len(functional_items(items)) > 0 and ('parse_only' not in flags or not flags['parse_only']):
@@ -68,8 +68,9 @@ class Engine:
                             result.set_answer(final.value, final.unit)
 
                         except ExecuteException as err:
-                            del response.results[-1]
                             raise ExecutionException(err.message, statements[0:i] + [err.items], err.next, err.truncated)
+
+                    response.add_result(result)
 
                     if 'include_state' in flags and flags['include_state']:
                         result.set_state(self.vars.copy())

@@ -11,10 +11,8 @@ class CalculatorResponse:
         self.results = []
         self.items = []
 
-    def add_result(self, expression, items):
-        result = CalculatorResult(expression, items)
+    def add_result(self, result):
         self.results.append(result)
-        return result
 
 
 class CalculatorResult:
