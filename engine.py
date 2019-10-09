@@ -43,28 +43,29 @@ class Engine:
     def calculate(self, expr, flags=None):
         if flags is None:
             flags = {}
-        response = CalculatorResponse()
 
         statements, length, return_flags = self.parse(expr, flags)
+
+        response = CalculatorResponse()
 
         for i, items in enumerate(statements):
             result = response.add_result(items_text(items), items)
             result.set_timing('parse', return_flags['times'][i])
-            try:
-                if len(functional_items(items)) > 0 and ('parse_only' not in flags or not flags['parse_only']):
-                    starttime = time.perf_counter()
+            if len(functional_items(items)) > 0 and ('parse_only' not in flags or not flags['parse_only']):
+                try:
+                    start_time = time.perf_counter()
                     answer = self.execute(items, flags)
                     if isinstance(answer.value, Exception):
                         raise answer.value
-                    result.set_timing('exec', time.perf_counter() - starttime)
+                    result.set_timing('exec', time.perf_counter() - start_time)
 
-                    starttime = time.perf_counter()
+                    start_time = time.perf_counter()
                     final = self.finalize(answer)
-                    result.set_timing('finalize', time.perf_counter() - starttime)
+                    result.set_timing('finalize', time.perf_counter() - start_time)
                     result.set_answer(final.value, final.unit)
 
-            except ExecuteException as err:
-                raise ExecutionException(err.message, statements[0:i] + [err.items], err.next, err.truncated)
+                except ExecuteException as err:
+                    raise ExecutionException(err.message, statements[0:i] + [err.items], err.next, err.truncated)
 
         return response
 
