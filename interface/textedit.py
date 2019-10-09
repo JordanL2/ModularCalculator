@@ -111,6 +111,7 @@ class CalculatorTextEdit(QTextEdit):
             new_response = CalculatorResponse()
             i = 0
             ii = None
+            error_statements = []
             if self.cached_response is not None and enableCache:
                 for result in self.cached_response.results:
                     if expr[i:].startswith(result.expression):
@@ -118,6 +119,9 @@ class CalculatorTextEdit(QTextEdit):
                         i += len(result.expression)
                     else:
                         break
+                if len(new_response.results) > 0:
+                    i -= len(new_response.results[-1].expression)
+                    del new_response.results[-1]
 
             try:
                 if len(new_response.results) > 0:
@@ -125,17 +129,26 @@ class CalculatorTextEdit(QTextEdit):
                 else:
                     self.calculator.vars = {}
                 response = self.calculator.calculate(expr[i:], {'parse_only': not self.autoExecute, 'include_state': True})
+                print("new response 1", new_response.results)
                 new_response.results.extend(response.results)
+                print("new response 2", new_response.results)
                 ii = len(expr)
                 self.cached_response = new_response
             except CalculatingException as err:
+                if isinstance(err, ExecutionException):
+                    del err.response.results[-1]
                 new_response.results.extend(err.response.results)
+                print("error results", [r.expression for r in err.response.results])
+                error_statements = err.statements[len(err.response.results):]
                 ii = err.find_pos(expr)
+                print("error found at", ii)
+                print("error statements", error_statements)
             except CalculatorException as err:
-                statements = [[]]
-                ii = 0
+                ii = i
 
             statements = [r.items for r in new_response.results]
+            statements.extend(error_statements)
+            print("statements", statements)
 
             newhtml = self.css
             highlightItems = self.highlighter.highlight_statements(statements)
