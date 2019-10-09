@@ -105,7 +105,7 @@ class CalculatorTextEdit(QTextEdit):
         if self.calculator is not None and (force or self.oldText is None or self.oldText != self.toHtml()):
             expr = self.getContents()
 
-            enableCache = False
+            enableCache = True
             start_time = time.perf_counter()
 
             new_response = CalculatorResponse()
@@ -119,9 +119,12 @@ class CalculatorTextEdit(QTextEdit):
                     else:
                         break
 
-            self.calculator.vars = {}
             try:
-                response = self.calculator.calculate(expr[i:], {'parse_only': not self.autoExecute})
+                if len(new_response.results) > 0:
+                    self.calculator.vars = new_response.results[-1].state.copy()
+                else:
+                    self.calculator.vars = {}
+                response = self.calculator.calculate(expr[i:], {'parse_only': not self.autoExecute, 'include_state': True})
                 new_response.results.extend(response.results)
                 ii = len(expr)
                 self.cached_response = new_response

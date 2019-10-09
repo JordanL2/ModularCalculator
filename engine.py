@@ -66,11 +66,12 @@ class Engine:
                         result.set_timing('finalize', time.perf_counter() - start_time)
                         result.set_answer(final.value, final.unit)
 
-                        if 'include_state' in flags and flags['include_state']:
-                            result.set_state(self.vars.copy())
-
                     except ExecuteException as err:
                         raise ExecutionException(err.message, statements[0:i] + [err.items], err.next, err.truncated)
+
+                if 'include_state' in flags and flags['include_state']:
+                    result.set_state(self.vars.copy())
+
         except CalculatingException as err:
             err.set_response(response)
             raise err
