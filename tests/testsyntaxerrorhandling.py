@@ -72,18 +72,19 @@ for num, test in enumerate(tests):
             if i != expected['pos']:
                 failed.append({'num': num, 'test': expr, 'stage': 'Exception position', 'expected': expected['pos'], 'actual': i})
                 continue
-            items = hl.highlight_statements(err.statements)
+            statements = hl.highlight_statements(err.statements)
             count = 0
-            for item in items:
-                if item[0] != 'default':
-                    count += 1
-                    if count > len(expected['items']):
-                        failed.append({'num': num, 'test': expr, 'stage': 'Exception items', 'expected': expected['items'], 'actual': items})
-                        break
-                    expecteditem = expected['items'][count - 1]
-                    if item[1] != expecteditem:
-                        failed.append({'num': num, 'test': expr, 'stage': 'Exception items', 'expected': expected['items'], 'actual': items})
-                        break
+            for items in statements:
+                for item in items:
+                    if item[0] != 'default':
+                        count += 1
+                        if count > len(expected['items']):
+                            failed.append({'num': num, 'test': expr, 'stage': 'Exception items', 'expected': expected['items'], 'actual': items})
+                            break
+                        expecteditem = expected['items'][count - 1]
+                        if item[1] != expecteditem:
+                            failed.append({'num': num, 'test': expr, 'stage': 'Exception items', 'expected': expected['items'], 'actual': items})
+                            break
             else:
                 if count != len(expected['items']):
                     failed.append({'num': num, 'test': expr, 'stage': 'Exception items', 'expected': expected['items'], 'actual': items})

@@ -14,7 +14,7 @@ class SyntaxHighlighter:
         highlightItems = []
         for items in statements:
             statementtext = items_text(items)
-            highlightItems.extend(self.highlight(statementtext, items))
+            highlightItems.append(self.highlight(statementtext, items))
         return highlightItems
 
     def highlight(self, text, items):

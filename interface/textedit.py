@@ -143,11 +143,12 @@ class CalculatorTextEdit(QTextEdit):
             statements = [r.items for r in new_response.results] + error_statements
 
             newhtml = self.css
-            highlightItems = self.highlighter.highlight_statements(statements)
-            for item in highlightItems:
-                style = item[0]
-                text = item[1]
-                newhtml += "<span class='{0}'>{1}</span>".format(style, htmlSafe(text))
+            highlightStatements = self.highlighter.highlight_statements(statements)
+            for highlightItems in highlightStatements:
+                for item in highlightItems:
+                    style = item[0]
+                    text = item[1]
+                    newhtml += "<span class='{0}'>{1}</span>".format(style, htmlSafe(text))
             if ii < len(expr):
                 newhtml += "<span class='{0}'>{1}</span>".format('error', htmlSafe(expr[ii:]))
             self.updateHtml(newhtml)
