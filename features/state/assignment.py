@@ -70,7 +70,7 @@ class AssignmentFeature(Feature):
             res.set_unit(units[1])
             return res
         else:
-            raise ExecutionException("Expecting variable, received".format(refs[0].desc()))
+            raise ExecuteException("Expecting variable, received".format(refs[0].desc()), [], None)
 
     def op_var_set_if_empty(self, vals, units, refs, flags):
         if isinstance(refs[0], VariableItem):
@@ -81,7 +81,7 @@ class AssignmentFeature(Feature):
             res.set_unit(units[1])
             return res
         else:
-            raise ExecutionException("Expecting variable, received".format(refs[0].desc()))
+            raise ExecuteException("Expecting variable, received".format(refs[0].desc()), [], None)
 
     def validate_variable(self, value, unit, ref):
         try:

@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from modularcalculator.objects.items import *
+from modularcalculator.objects.exceptions import *
 from modularcalculator.features.feature import Feature
 
 
@@ -50,7 +51,7 @@ class TerminatorFeature(Feature):
 
             try:
                 self.execute(copy_items(func_items), {'fake_execution': True})
-            except ExecutionException as e:
+            except ExecuteException as e:
                 if str(e.message).startswith('Missing right operands for operator '):
                     self.vars = backup_vars
                     self.last_failed_terminator = func_item_text

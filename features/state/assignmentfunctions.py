@@ -54,4 +54,4 @@ class AssignmentFunctionsFeature(Feature):
             del self.vars[varname]
             return OperationResult(None)
         else:
-            raise ExecutionException("Expecting variable, received".format(refs[0].desc()))
+            raise ExecuteException("Expecting variable, received".format(refs[0].desc()), [], None)

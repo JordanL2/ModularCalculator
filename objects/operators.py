@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from modularcalculator.objects.items import *
+from modularcalculator.objects.exceptions import *
 
 
 class OperationResult:

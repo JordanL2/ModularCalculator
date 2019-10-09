@@ -61,9 +61,9 @@ class FunctionsFeature(Feature):
                         newitems = func_items.copy()
                         newitems.extend(err.statements[0])
                         err.statements = [newitems]
-                        raise ParsingException(err.message, [FunctionItem(err.truncate(next), newitems, self, func, [])], err.next)
+                        raise ParseException(err.message, [FunctionItem(err.truncate(next), newitems, self, func, [])], err.next)
                 if 'end_func' not in return_flags:
-                    raise ParsingException('Function missing close symbol', [], next)
+                    raise ParseException('Function missing close symbol', [], next)
                 return [FunctionItem(next[0:i], func_items, self, func, args)], i, None
         return None, None, None
 
@@ -109,13 +109,13 @@ class FunctionItem(RecursiveOperandItem):
                 argresult = self.calculator.execute(arg, flags)
                 itemsi += len(arg) + 1
                 inputs.append(argresult)
-            except ExecutionException as err:
+            except ExecuteException as err:
                 self.items = self.items[0:itemsi]
                 self.items.extend(err.items)
                 err.items = self.items
                 self.text = err.truncate(self.text)
                 self.truncated = True
-                raise ExecutionException(err.message, [self], err.next, True)
+                raise ExecuteException(err.message, [self], err.next, True)
             if not func.inputs_can_be_exceptions and isinstance(argresult.value, Exception):
                 err = argresult.value
                 itemsi = old_itemsi
@@ -124,7 +124,7 @@ class FunctionItem(RecursiveOperandItem):
                 err.items = self.items
                 self.text = err.truncate(self.text)
                 self.truncated = True
-                raise ExecutionException(err.message, [self], err.next, True)
+                raise ExecuteException(err.message, [self], err.next, True)
         return func.call(self.calculator, inputs, flags)
 
     def result(self, flags):

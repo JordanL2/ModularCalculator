@@ -64,9 +64,8 @@ class Engine:
                 else:
                     result = response.add_result(''.join([item.text for item in items]), items)
 
-            except ExecutionException as err:
-                err.statements = statements[0:i] + [err.items.copy()]
-                raise err
+            except ExecuteException as err:
+                raise ExecutionException(err.message, statements[0:i] + [err.items], err.next, err.truncated)
 
         return response
 
@@ -84,8 +83,8 @@ class Engine:
                 items_found, length, return_flags = None, None, None
                 try:
                     items_found, length, return_flags = parser['ref'](self, expr, i, statements[-1], flags.copy())
-                except ParsingException as err:
-                    statements[-1].extend(err.statements)
+                except ParseException as err:
+                    statements[-1].extend(err.items)
                     raise ParsingException(err.message, statements, err.next)
                 
 
@@ -133,7 +132,7 @@ class Engine:
         items = functional_items(items)
         try:
             if len(items) == 0:
-                raise ExecutionException("Empty expression", [], None)
+                raise ExecuteException("Empty expression", [], None)
 
             for i, item in enumerate(items):
                 items[i] = self.execute_operand(items[i], original_items[0:i], flags)
@@ -181,15 +180,15 @@ class Engine:
                 ops = [i for i in items if isinstance(i, OperatorItem)]
                 if len(ops) > 0:
                     item_index = ops[0]._INDEX
-                    raise ExecutionException("Could not execute operator: {0}".format(ops[0].text), original_items[0:item_index], None)
-                raise ExecutionException("Not one item left: {0}".format([str(item) for item in items]), original_items[0:item_index], None)
+                    raise ExecuteException("Could not execute operator: {0}".format(ops[0].text), original_items[0:item_index], None)
+                raise ExecuteException("Not one item left: {0}".format([str(item) for item in items]), original_items[0:item_index], None)
             if not isinstance(items[0], OperandResult):
-                raise ExecutionException("Not a value: \"{0}\"".format(str(items[0])), original_items[0:items[0]._INDEX], None)
+                raise ExecuteException("Not a value: \"{0}\"".format(str(items[0])), original_items[0:items[0]._INDEX], None)
             
             if isinstance(items[0].value, Exception):
                 items[0].value = self.restore_non_functional_items(items[0].value, original_items)
             return items[0]
-        except CalculatingException as err:
+        except CalculateException as err:
             raise self.restore_non_functional_items(err, original_items)
 
     def is_unit(self, item):
@@ -206,11 +205,11 @@ class Engine:
                 return OperandResult(None, None, None)
             try:
                 item = item.result(flags)
-            except ExecutionException as err:
+            except ExecuteException as err:
                 err.items = previous_items + err.items
                 return OperandResult(err, None, None)
             except CalculatorException as err:
-                return OperandResult(ExecutionException(err.message, previous_items, item.text), None, None)
+                return OperandResult(ExecuteException(err.message, previous_items, item.text), None, None)
         return item
 
     def execute_operator(self, sym, items, i, opwidth, original_items, flags):
@@ -225,10 +224,10 @@ class Engine:
 
         input_start = min(i - len(linputs), i)
         if input_start < 0:
-            raise ExecutionException("Missing left operands for operator {0}".format(sym), previous_items, sym)
+            raise ExecuteException("Missing left operands for operator {0}".format(sym), previous_items, sym)
         input_end = i + len(rinputs) + opwidth
         if input_end > len(items):
-            raise ExecutionException("Missing right operands for operator {0}".format(sym), previous_items, sym)
+            raise ExecuteException("Missing right operands for operator {0}".format(sym), previous_items, sym)
         actual_items = [items[index] for index in list(range(input_start, i)) + list(range(i + opwidth, input_end))]
         expected_items = linputs + rinputs
 
@@ -237,10 +236,10 @@ class Engine:
             expected_item = expected_items[index]
             if isinstance(expected_item, str):
                 if str(this_item) != expected_item:
-                    raise ExecutionException("Invalid symbol '{0}' for operator {1}".format(str(this_item), sym), original_items[0:this_item._INDEX], str(this_item))
+                    raise ExecuteException("Invalid symbol '{0}' for operator {1}".format(str(this_item), sym), original_items[0:this_item._INDEX], str(this_item))
             else:
                 if not isinstance(this_item, OperandResult):
-                    raise ExecutionException("Invalid input for operator {0} - '{1}'".format(sym, str(this_item)), previous_items, sym)
+                    raise ExecuteException("Invalid input for operator {0} - '{1}'".format(sym, str(this_item)), previous_items, sym)
                 inputs.append(this_item)
 
         if 'fake_execution' in flags:
@@ -255,7 +254,7 @@ class Engine:
                 itemtext = None
                 if item is not None:
                     itemtext = item.text
-                raise ExecutionException("Could not execute operator {0} with operands: {1} - {2}".format(sym, values, err.message), previous_items, itemtext)
+                raise ExecuteException("Could not execute operator {0} with operands: {1} - {2}".format(sym, values, err.message), previous_items, itemtext)
 
         return items[0:input_start] + [op_result] + items[input_end:]
 

@@ -38,10 +38,10 @@ class InnerExpressionsFeature(Feature):
                 inner_items = inner_items[0]
             except ParsingException as err:
                 err.statements[-1].insert(0, InnerExpressionStartItem())
-                raise ParsingException(err.message, [InnerExpressionItem(err.truncate(next), err.statements[0], self)], err.next, True)
+                raise ParseException(err.message, [InnerExpressionItem(err.truncate(next), err.statements[0], self)], err.next, True)
             inner_items.insert(0, InnerExpressionStartItem())
             if 'end_inner_expr' not in return_flags:
-                raise ParsingException('Inner expression missing close symbol', [], next)
+                raise ParseException('Inner expression missing close symbol', [], next)
             return [InnerExpressionItem(next[0:length + 2], inner_items, self)], length + 2, None
         return None, None, None
 
@@ -51,7 +51,7 @@ class InnerExpressionsFeature(Feature):
         if next.startswith(')'):
             if (inner):
                 return [InnerExpressionEndItem()], None, {'end': True, 'end_inner_expr': True}
-            raise ParsingException('Unexpected inner expression close symbol found', [], next)
+            raise ParseException('Unexpected inner expression close symbol found', [], next)
         return None, None, None
 
 
@@ -69,11 +69,11 @@ class InnerExpressionItem(RecursiveOperandItem):
             if isinstance(val.value, Exception):
                 raise val.value
             return OperandResult(val.value, val.unit, val.ref)
-        except ExecutionException as err:
+        except ExecuteException as err:
             self.items = err.items
             self.text = err.truncate(self.text)
             self.truncated = True
-            raise ExecutionException(err.message, [self], err.next, True)
+            raise ExecuteException(err.message, [self], err.next, True)
 
     def result(self, flags):
         return self.value(flags)

@@ -145,4 +145,4 @@ class AssignmentOperatorsFeature(Feature):
             res.set_unit(units[1])
             return res
         else:
-            raise ExecutionException("Expecting variable, received".format(refs[0].desc()))
+            raise ExecuteException("Expecting variable, received".format(refs[0].desc()), [], None)

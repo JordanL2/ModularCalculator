@@ -62,7 +62,7 @@ class StringsFeature(Feature):
         if (next[0] == symbol):
             i = 1
             if i >= len(next):
-                raise ParsingException("Missing end {0}".format(symbol), [], next)
+                raise ParseException("Missing end {0}".format(symbol), [], next)
             string = ''
             escape = False
             while next[i] != symbol or escape:
@@ -74,7 +74,7 @@ class StringsFeature(Feature):
                     string += next[i]
                 i += 1
                 if i >= len(next):
-                    raise ParsingException("Missing end {0}".format(symbol), [], next)
+                    raise ParseException("Missing end {0}".format(symbol), [], next)
             return [LiteralItem(next[0:i + 1], string)], i + 1, None
         return None, None, None
 

@@ -64,12 +64,12 @@ class ExternalFunctionsFeature(Feature):
                         func_items.append(FunctionEndItem())
                     else:
                         func_items.append(FunctionParamItem())
-                except ParsingException as err:
+                except ParseException as err:
                     newitems = func_items + err.statements
                     err.statements = newitems
-                    raise ParsingException(err.message, [FunctionItem(err.truncate(next), newitems, self, ext_func_name, [])], err.next)
+                    raise ParseException(err.message, [FunctionItem(err.truncate(next), newitems, self, ext_func_name, [])], err.next)
             if 'end_func' not in return_flags:
-                raise ParsingException('Function missing close symbol', [], next)
+                raise ParseException('Function missing close symbol', [], next)
             return [ExternalFunctionItem(next[0:i], func_items, self, ext_func_name, args)], i, None
         return None, None, None
 
@@ -86,7 +86,7 @@ class ExternalFunctionItem(RecursiveOperandItem):
 
     def value(self, flags):
         if self.name not in self.calculator.vars:
-            raise ExecutionException("Variable {} not found".format(self.name), [self], '', True)
+            raise ExecuteException("Variable {} not found".format(self.name), [self], '', True)
         path = self.calculator.vars[self.name][0]
         path = os.path.expanduser(path)
         
@@ -97,19 +97,19 @@ class ExternalFunctionItem(RecursiveOperandItem):
                 argresult = self.calculator.execute(arg, flags)
                 itemsi += len(arg) + 1
                 inputs.append(argresult)
-            except ExecutionException as err:
+            except ExecuteException as err:
                 self.items = self.items[0:itemsi]
                 self.items.extend(err.items)
                 err.items = self.items
                 self.text = err.truncate(self.text)
                 self.truncated = True
-                raise ExecutionException(err.message, [self], err.next, True)
+                raise ExecuteException(err.message, [self], err.next, True)
 
         try:
             fh = open(path, 'r')
             func_content = str.join("", fh.readlines())
         except:
-            raise ExecutionException("Could not read file '{}'".format(path), [], None)
+            raise ExecuteException("Could not read file '{}'".format(path), [], None)
 
         backup_vars = self.calculator.vars
 
@@ -121,7 +121,7 @@ class ExternalFunctionItem(RecursiveOperandItem):
             result = self.calculator.calculate(func_content)
         except ExecutionException as err:
             self.calculator.vars = backup_vars
-            raise ExecutionException("Could not execute function '{}'".format(self.name), [], None)
+            raise ExecuteException("Could not execute function '{}'".format(self.name), [], None)
         except Exception as err:
             self.calculator.vars = backup_vars
             raise err
