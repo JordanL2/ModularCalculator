@@ -52,9 +52,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 # To Do
 
 ## Engine
-* Parsing returns multiple statements in one list of items
-	* Should items be separated into statements?
-	* Then each statement's worth of items executed individually
 
 ## Features
 * Dates:

@@ -4,6 +4,30 @@
 from modularcalculator.objects.items import *
 
 
+def find_pos(self, text, statements):
+    i = 0
+    prev_item = None
+    for items in statements:
+        for item in items:
+            ii = text.find(item.text, i)
+            if ii == -1:
+                raise Exception("Could not find item |{}| in text |{}| after position {}".format(item.text, text, i))
+            if ii != i:
+                if prev_item is None or not prev_item.truncated:
+                    print("Error in", "|" + text + "|", "- Unexpected characters at", i, "- |" + text[i:ii] + "|")
+                    for item2 in items:
+                        print("Item:", "|" + item2.text + "|")
+                    print("End of items.\n")
+            i = ii + len(item.text)
+            prev_item = item
+    if self.next is not None:
+        ii = text.find(self.next, i)
+        if ii == -1:
+            raise Exception("Could not find '{0}' in '{1}' after character {2}".format(self.next, text, i))
+        i = ii
+    return i
+
+
 class CalculatorException(Exception):
 
     def __init__(self, message):
@@ -23,27 +47,7 @@ class CalculatingException(CalculatorException):
         self.truncated = truncated
 
     def find_pos(self, text):
-        i = 0
-        prev_item = None
-        for items in self.statements:
-            for item in items:
-                ii = text.find(item.text, i)
-                if ii == -1:
-                    raise Exception("Could not find item |{}| in text |{}| after position {}".format(item.text, text, i))
-                if ii != i:
-                    if prev_item is None or not prev_item.truncated:
-                        print("Error in", "|" + text + "|", "- Unexpected characters at", i, "- |" + text[i:ii] + "|")
-                        for item2 in items:
-                            print("Item:", "|" + item2.text + "|")
-                        print("End of items.\n")
-                i = ii + len(item.text)
-                prev_item = item
-        if self.next is not None:
-            ii = text.find(self.next, i)
-            if ii == -1:
-                raise Exception("Could not find '{0}' in '{1}' after character {2}".format(self.next, text, i))
-            i = ii
-        return i
+        return find_pos(self, text, self.statements)
 
     def truncate(self, text):
         i = self.find_pos(text)
@@ -73,26 +77,7 @@ class CalculateException(CalculatorException):
         self.truncated = truncated
 
     def find_pos(self, text):
-        i = 0
-        prev_item = None
-        for item in self.items:
-            ii = text.find(item.text, i)
-            if ii == -1:
-                raise Exception("Could not find item |{}| in text |{}| after position {}".format(item.text, text, i))
-            if ii != i:
-                if prev_item is None or not prev_item.truncated:
-                    print("Error in", "|" + text + "|", "- Unexpected characters at", i, "- |" + text[i:ii] + "|")
-                    for item2 in self.items:
-                        print("Item:", "|" + item2.text + "|")
-                    print("End of items.\n")
-            i = ii + len(item.text)
-            prev_item = item
-        if self.next is not None:
-            ii = text.find(self.next, i)
-            if ii == -1:
-                raise Exception("Could not find '{0}' in '{1}' after character {2}".format(self.next, text, i))
-            i = ii
-        return i
+        return find_pos(self, text, [self.items])
 
     def truncate(self, text):
         i = self.find_pos(text)
