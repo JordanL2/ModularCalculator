@@ -129,26 +129,25 @@ class CalculatorTextEdit(QTextEdit):
                 else:
                     self.calculator.vars = {}
                 response = self.calculator.calculate(expr[i:], {'parse_only': not self.autoExecute, 'include_state': True})
-                print("new response 1", new_response.results)
+                #print("new response 1", new_response.results)
                 new_response.results.extend(response.results)
-                print("new response 2", new_response.results)
+                #print("new response 2", new_response.results)
                 ii = len(expr)
                 self.cached_response = new_response
             except CalculatingException as err:
-                if isinstance(err, ExecutionException):
-                    del err.response.results[-1]
                 new_response.results.extend(err.response.results)
-                print("error results", [r.expression for r in err.response.results])
+                #print("error results", [r.expression for r in err.response.results])
                 error_statements = err.statements[len(err.response.results):]
+                err.statements = [r.items for r in new_response.results] + error_statements
                 ii = err.find_pos(expr)
-                print("error found at", ii)
-                print("error statements", error_statements)
+                #print("error found at", ii)
+                #print("error statements", error_statements)
             except CalculatorException as err:
                 ii = i
 
             statements = [r.items for r in new_response.results]
             statements.extend(error_statements)
-            print("statements", statements)
+            #print("statements", statements)
 
             newhtml = self.css
             highlightItems = self.highlighter.highlight_statements(statements)

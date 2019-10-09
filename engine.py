@@ -68,6 +68,7 @@ class Engine:
                             result.set_answer(final.value, final.unit)
 
                         except ExecuteException as err:
+                            del response.results[-1]
                             raise ExecutionException(err.message, statements[0:i] + [err.items], err.next, err.truncated)
 
                     if 'include_state' in flags and flags['include_state']:
