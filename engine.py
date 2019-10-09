@@ -127,6 +127,7 @@ class Engine:
         return return_flags
 
     def execute(self, items, flags):
+        items = copy_items(items)
         original_items = items
         items = functional_items(items)
         try:

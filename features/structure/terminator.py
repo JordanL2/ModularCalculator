@@ -50,7 +50,7 @@ class TerminatorFeature(Feature):
             backup_vars = self.vars.copy()
 
             try:
-                self.execute(copy_items(func_items), {'fake_execution': True})
+                self.execute(func_items, {'fake_execution': True})
             except ExecuteException as e:
                 if str(e.message).startswith('Missing right operands for operator '):
                     self.vars = backup_vars
