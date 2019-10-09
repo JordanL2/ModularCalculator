@@ -13,7 +13,7 @@ class SyntaxHighlighter:
     def highlight_statements(self, statements):
         highlightItems = []
         for items in statements:
-            statementtext = ''.join([item.text for item in items])
+            statementtext = items_text(items)
             highlightItems.extend(self.highlight(statementtext, items))
         return highlightItems
 

@@ -43,7 +43,7 @@ class TerminatorFeature(Feature):
         symbol = self.feature_options['structure.terminator']['Symbol']
         if next[0:len(symbol)] == symbol:
             func_items = functional_items(items)
-            func_item_text = ''.join(ii.text for ii in func_items)
+            func_item_text = items_text(func_items)
             if func_item_text == self.last_failed_terminator:
                 return None, None, None
 

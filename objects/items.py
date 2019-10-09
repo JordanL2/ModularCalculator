@@ -21,6 +21,9 @@ def functional_items(items):
 def copy_items(items):
     return [i.copy() for i in items]
 
+def items_text(items):
+    return ''.join([item.text for item in items])
+
 
 class Item:
     

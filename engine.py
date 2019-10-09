@@ -48,7 +48,7 @@ class Engine:
         statements, length, return_flags = self.parse(expr, flags)
 
         for i, items in enumerate(statements):
-            result = response.add_result(''.join([item.text for item in items]), items)
+            result = response.add_result(items_text(items), items)
             result.set_timing('parse', return_flags['times'][i])
             try:
                 if len(functional_items(items)) > 0 and ('parse_only' not in flags or not flags['parse_only']):
