@@ -1,11 +1,14 @@
 #!/usr/bin/python3
 
+from modularcalculator.objects.api import *
 from modularcalculator.services.syntaxhighlighter import *
 from modularcalculator.interface.guitools import *
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QTextEdit
 from PyQt5.QtGui import QFontDatabase, QTextCursor
+
+import time
 
 
 class CalculatorTextEdit(QTextEdit):
@@ -27,6 +30,8 @@ class CalculatorTextEdit(QTextEdit):
         self.oldText = None
 
         self.autoExecute = True
+
+        self.cached_response = None
 
     def setCalculator(self, calculator):
         self.calculator = calculator
@@ -99,18 +104,35 @@ class CalculatorTextEdit(QTextEdit):
     def checkSyntax(self, force=False):
         if self.calculator is not None and (force or self.oldText is None or self.oldText != self.toHtml()):
             expr = self.getContents()
-            
+
+            enableCache = False
+            start_time = time.perf_counter()
+
+            new_response = CalculatorResponse()
+            i = 0
+            ii = None
+            if self.cached_response is not None and enableCache:
+                for result in self.cached_response.results:
+                    if expr[i:].startswith(result.expression):
+                        new_response.results.append(result)
+                        i += len(result.expression)
+                    else:
+                        break
+
             self.calculator.vars = {}
             try:
-                response = self.calculator.calculate(expr, {'parse_only': not self.autoExecute})
-                statements = [r.items for r in response.results]
-                i = len(expr)
+                response = self.calculator.calculate(expr[i:], {'parse_only': not self.autoExecute})
+                new_response.results.extend(response.results)
+                ii = len(expr)
+                self.cached_response = new_response
             except CalculatingException as err:
-                statements = err.statements
-                i = err.find_pos(expr)
+                new_response.results.extend(err.response.results)
+                ii = err.find_pos(expr)
             except CalculatorException as err:
                 statements = [[]]
-                i = 0
+                ii = 0
+
+            statements = [r.items for r in new_response.results]
 
             newhtml = self.css
             highlightItems = self.highlighter.highlight_statements(statements)
@@ -118,10 +140,12 @@ class CalculatorTextEdit(QTextEdit):
                 style = item[0]
                 text = item[1]
                 newhtml += "<span class='{0}'>{1}</span>".format(style, htmlSafe(text))
-            if i < len(expr):
-                newhtml += "<span class='{0}'>{1}</span>".format('error', htmlSafe(expr[i:]))
+            if ii < len(expr):
+                newhtml += "<span class='{0}'>{1}</span>".format('error', htmlSafe(expr[ii:]))
             self.updateHtml(newhtml)
-            
+
+            print("Time taken: {0} ms".format(round((time.perf_counter() - start_time) * 1000, 3)))
+
             if not self.interface.filemanager.currentFileModified() and not force:
                 self.interface.filemanager.setCurrentFileAndModified(self.interface.filemanager.currentFile(), True)
         self.oldText = self.toHtml()

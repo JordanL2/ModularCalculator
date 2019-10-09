@@ -44,32 +44,36 @@ class Engine:
         if flags is None:
             flags = {}
 
-        statements, length, return_flags = self.parse(expr, flags)
-
         response = CalculatorResponse()
 
-        for i, items in enumerate(statements):
-            result = response.add_result(items_text(items), items)
-            result.set_timing('parse', return_flags['times'][i])
+        try:
+            statements, length, return_flags = self.parse(expr, flags)
 
-            if len(functional_items(items)) > 0 and ('parse_only' not in flags or not flags['parse_only']):
-                try:
-                    start_time = time.perf_counter()
-                    answer = self.execute(items, flags)
-                    if isinstance(answer.value, Exception):
-                        raise answer.value
-                    result.set_timing('exec', time.perf_counter() - start_time)
+            for i, items in enumerate(statements):
+                result = response.add_result(items_text(items), items)
+                result.set_timing('parse', return_flags['times'][i])
 
-                    start_time = time.perf_counter()
-                    final = self.finalize(answer)
-                    result.set_timing('finalize', time.perf_counter() - start_time)
-                    result.set_answer(final.value, final.unit)
+                if len(functional_items(items)) > 0 and ('parse_only' not in flags or not flags['parse_only']):
+                    try:
+                        start_time = time.perf_counter()
+                        answer = self.execute(items, flags)
+                        if isinstance(answer.value, Exception):
+                            raise answer.value
+                        result.set_timing('exec', time.perf_counter() - start_time)
 
-                    if 'include_state' in flags and flags['include_state']:
-                        result.set_state(self.vars.copy())
+                        start_time = time.perf_counter()
+                        final = self.finalize(answer)
+                        result.set_timing('finalize', time.perf_counter() - start_time)
+                        result.set_answer(final.value, final.unit)
 
-                except ExecuteException as err:
-                    raise ExecutionException(err.message, statements[0:i] + [err.items], err.next, err.truncated)
+                        if 'include_state' in flags and flags['include_state']:
+                            result.set_state(self.vars.copy())
+
+                    except ExecuteException as err:
+                        raise ExecutionException(err.message, statements[0:i] + [err.items], err.next, err.truncated)
+        except CalculatingException as err:
+            err.set_response(response)
+            raise err
 
         return response
 

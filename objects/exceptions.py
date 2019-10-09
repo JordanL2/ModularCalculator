@@ -52,7 +52,13 @@ class CalculatingException(CalculatorException):
     def truncate(self, text):
         i = self.find_pos(text)
         return text[0:i]
+
+    def set_response(self, response):
+        self.response = response
     
+    def has_response(self):
+        return hasattr(self, 'response')
+
 
 class ParsingException(CalculatingException):
 
