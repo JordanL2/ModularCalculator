@@ -97,7 +97,7 @@ class CalculatorTextEdit(QTextEdit):
         self.checkSyntax()
 
     def checkSyntax(self, force=False):
-        if self.calculator is not None and (self.oldText is None or self.oldText != self.toHtml() or force):
+        if self.calculator is not None and (force or self.oldText is None or self.oldText != self.toHtml()):
             expr = self.getContents()
             
             self.calculator.vars = {}

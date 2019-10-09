@@ -48,21 +48,20 @@ class Engine:
         statements, length, return_flags = self.parse(expr, flags)
 
         for i, items in enumerate(statements):
+            result = response.add_result(''.join([item.text for item in items]), items)
+            result.set_timing('parse', return_flags['times'][i])
             try:
-                if len(functional_items(items)) > 0:
+                if len(functional_items(items)) > 0 and ('parse_only' not in flags or not flags['parse_only']):
                     starttime = time.perf_counter()
                     answer = self.execute(items, flags)
                     if isinstance(answer.value, Exception):
                         raise answer.value
-                    result = response.add_result(''.join([item.text for item in items]), items)
-                    result.set_timing('parse', return_flags['times'][i]) #TODO
                     result.set_timing('exec', time.perf_counter() - starttime)
+
                     starttime = time.perf_counter()
                     final = self.finalize(answer)
                     result.set_timing('finalize', time.perf_counter() - starttime)
                     result.set_answer(final.value, final.unit)
-                else:
-                    result = response.add_result(''.join([item.text for item in items]), items)
 
             except ExecuteException as err:
                 raise ExecutionException(err.message, statements[0:i] + [err.items], err.next, err.truncated)
