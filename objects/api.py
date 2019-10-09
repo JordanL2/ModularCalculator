@@ -31,5 +31,11 @@ class CalculatorResult:
     def set_timing(self, stage, time):
         self.timings[stage] = time
 
+    def set_state(self, state):
+        self.state = state
+
     def has_result(self):
         return hasattr(self, 'value')
+
+    def has_state(self):
+        return hasattr(self, 'state')

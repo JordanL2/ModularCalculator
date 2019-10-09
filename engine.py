@@ -51,6 +51,7 @@ class Engine:
         for i, items in enumerate(statements):
             result = response.add_result(items_text(items), items)
             result.set_timing('parse', return_flags['times'][i])
+
             if len(functional_items(items)) > 0 and ('parse_only' not in flags or not flags['parse_only']):
                 try:
                     start_time = time.perf_counter()
@@ -63,6 +64,9 @@ class Engine:
                     final = self.finalize(answer)
                     result.set_timing('finalize', time.perf_counter() - start_time)
                     result.set_answer(final.value, final.unit)
+
+                    if 'include_state' in flags and flags['include_state']:
+                        result.set_state(self.vars.copy())
 
                 except ExecuteException as err:
                     raise ExecutionException(err.message, statements[0:i] + [err.items], err.next, err.truncated)
