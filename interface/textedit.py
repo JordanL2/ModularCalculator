@@ -6,7 +6,7 @@ from modularcalculator.interface.guitools import *
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QTextEdit
-from PyQt5.QtGui import QFontDatabase, QTextCursor
+from PyQt5.QtGui import QFontDatabase, QTextCursor, QTextCharFormat, QGuiApplication, QTextFormat
 
 import time
 
@@ -144,20 +144,62 @@ class CalculatorTextEdit(QTextEdit):
 
             newhtml = self.css
             highlightStatements = self.highlighter.highlight_statements(statements)
-            for highlightItems in highlightStatements:
+            alternate = True
+            p = 0
+            highlightPositions = []
+            for s, highlightItems in enumerate(highlightStatements):
+                functional = len(functional_items(statements[s])) > 0
+                if functional:
+                    alternate = not alternate
+                p0 = p
                 for item in highlightItems:
                     style = item[0]
                     text = item[1]
                     newhtml += "<span class='{0}'>{1}</span>".format(style, htmlSafe(text))
+                    p += len(text)
+                if functional and alternate:
+                    highlightPositions.append((p0, p))
             if ii < len(expr):
                 newhtml += "<span class='{0}'>{1}</span>".format('error', htmlSafe(expr[ii:]))
             self.updateHtml(newhtml)
+
+            extraSelections = []
+            for pos in highlightPositions:
+                selection = QTextEdit.ExtraSelection()
+
+                p0 = pos[0]
+                p = pos[1]
+                
+                selection.cursor = QTextCursor(self.document())
+                #selection.cursor.clearSelection()
+                print("Adding selection {} - {}".format(p0, p))
+                selection.cursor.setPosition(p0)
+                selection.cursor.setPosition(p, QTextCursor.KeepAnchor)
+                print("A Adding cursor = {} - {}".format(selection.cursor.anchor(), selection.cursor.position()))
+                
+                #selection.format = QTextCharFormat()
+                background = QGuiApplication.palette().alternateBase().color()
+                #background = Qt.red
+                selection.format.setBackground(background)
+                selection.format.setProperty(QTextFormat.FullWidthSelection, True)
+
+                #selection.cursor.mergeCharFormat(selection.format);
+                
+                extraSelections.append(selection)
+            self.setExtraSelections(extraSelections)
+            # for e in self.extraSelections():
+            #     cursor = e.cursor
+            #     print("B selection = {} - {}".format(cursor.position(), cursor.anchor()))
 
             print("Time taken: {0} ms".format(round((time.perf_counter() - start_time) * 1000, 3)))
 
             if not self.interface.filemanager.currentFileModified() and not force:
                 self.interface.filemanager.setCurrentFileAndModified(self.interface.filemanager.currentFile(), True)
         self.oldText = self.toHtml()
+        print("selections:", len(self.extraSelections()))
+        print("current pos:", self.textCursor().position())
+        print("current anc:", self.textCursor().anchor())
+        #self.setTextCursor(self.extraSelections()[0].cursor)
 
     def refresh(self):
         self.initStyling()
@@ -171,6 +213,7 @@ class CalculatorTextEdit(QTextEdit):
         cursor.setPosition(cursorpos)
         self.setTextCursor(cursor)
         self.verticalScrollBar().setSliderPosition(sliderpos)
+        #self.setExtraSelections(extraSelections)
 
     def insert(self, text):
         self.insertPlainText(text)
