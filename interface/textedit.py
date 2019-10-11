@@ -21,8 +21,8 @@ class SpanParser(HTMLParser):
         self.ignore_br = False
 
     def handle_starttag(self, tag, attrs):
-        #print("tag:", tag)
-        #print(attrs)
+        print("tag:", tag)
+        print(attrs)
         self.tags.append(tag)
         if tag == 'br' and not self.ignore_br:
             self.text += "\n"
@@ -31,27 +31,27 @@ class SpanParser(HTMLParser):
                 if '-qt-paragraph-type:empty' in a[1]:
                     self.ignore_br = True
             if self.seen_p:
-                #print("inserting NL due to <p>")
+                print("inserting NL due to <p>")
                 self.text += "\n"
             self.seen_p = False
-        #print("TEXT: |{}|".format(self.text))
+        print("TEXT: |{}|".format(self.text))
 
     def handle_endtag(self, tag):
         if self.tags[-1] == tag:
             del self.tags[-1]
         else:
-            #print("error:", tag, "wasn't last in", self.tags)
+            print("error:", tag, "wasn't last in", self.tags)
             pass
         if tag == 'p':
             self.seen_p = True
             self.ignore_br = False
-        #print("TEXT: |{}|".format(self.text))
+        print("TEXT: |{}|".format(self.text))
 
     def handle_data(self, data):
         if self.currentTag() in ['p', 'span']:
-            #print("found data |{}| in tag {}".format(data, self.currentTag()))
+            print("found data |{}| in tag {}".format(data, self.currentTag()))
             self.text += data
-        #print("TEXT: |{}|".format(self.text))
+        print("TEXT: |{}|".format(self.text))
 
     def currentTag(self):
         if len(self.tags) == 0:
@@ -194,12 +194,16 @@ class CalculatorTextEdit(QTextEdit):
             highlightStatements = self.highlighter.highlight_statements(statements)
             for s, highlightItems in enumerate(highlightStatements):
                 functional = len(functional_items(statements[s])) > 0
-                #if functional:
-                #    newhtml += "<table><tr><td>"
+                #tag = ''
+                if functional:
+                    newhtml += "<img src=\"{}\" alt = \"\"/>".format('/home/jordan/image.png')
+                    #tag = ' style="margin-top:10px"'
+                    #newhtml += "<table cellspacing=\"0\"><tr><td>"
+                    #newhtml += '<hr/>'
                 for item in highlightItems:
                     style = item[0]
                     text = item[1]
-                    newhtml += "<span class='{0}'>{1}</span>".format(style, htmlSafe(text))
+                    newhtml += "<span class='{}'>{}</span>".format(style, htmlSafe(text))
                 #if functional:
                 #    newhtml += "</td></tr></table>"
             if ii < len(expr):
@@ -232,12 +236,12 @@ class CalculatorTextEdit(QTextEdit):
     def getContents(self):
         #return self.toPlainText()
         html = self.toHtml()
-        #print("")
-        #print("--------------------")
-        #print(self.toPlainText())
-        #print("--------------------")
-        #print(html)
-        #print("--------------------")
+        print("")
+        print("--------------------")
+        print(self.toPlainText())
+        print("--------------------")
+        print(html)
+        print("--------------------")
         parser = SpanParser()
         parser.feed(html)
         return parser.text
