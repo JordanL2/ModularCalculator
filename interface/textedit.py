@@ -9,6 +9,49 @@ from PyQt5.QtWidgets import QTextEdit
 from PyQt5.QtGui import QFontDatabase, QTextCursor
 
 import time
+from html.parser import HTMLParser
+
+
+class SpanParser(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.text = ''
+        self.tags = []
+        self.seen_p = False
+        self.seen_non_br = False
+
+    def handle_starttag(self, tag, attrs):
+        print("tag:", tag)
+        print(attrs)
+        self.tags.append(tag)
+        if tag == 'br':
+            self.text += "\n"
+        if tag == 'p':
+            for a in attrs:
+                if '-qt-paragraph-type:empty' in a[1]:
+                    self.seen_non_br = False
+            if self.seen_p and self.seen_non_br:
+                self.text += "\n"
+            self.seen_p = False
+
+    def handle_endtag(self, tag):
+        if self.tags[-1] == tag:
+            del self.tags[-1]
+        else:
+            print("error:", tag, "wasn't last in", self.tags)
+        if tag == 'p':
+            self.seen_p = True
+
+    def handle_data(self, data):
+        if self.currentTag() in ['p', 'span']:
+            print("found data |{}| in tag {}".format(data, self.currentTag()))
+            self.text += data
+            self.seen_non_br = True
+
+    def currentTag(self):
+        if len(self.tags) == 0:
+            return None
+        return self.tags[-1]
 
 
 class CalculatorTextEdit(QTextEdit):
@@ -144,11 +187,16 @@ class CalculatorTextEdit(QTextEdit):
 
             newhtml = self.css
             highlightStatements = self.highlighter.highlight_statements(statements)
-            for highlightItems in highlightStatements:
+            for s, highlightItems in enumerate(highlightStatements):
+                functional = len(functional_items(statements[s])) > 0
+                #if functional:
+                #    newhtml += "<table><tr><td>"
                 for item in highlightItems:
                     style = item[0]
                     text = item[1]
                     newhtml += "<span class='{0}'>{1}</span>".format(style, htmlSafe(text))
+                #if functional:
+                #    newhtml += "</td></tr></table>"
             if ii < len(expr):
                 newhtml += "<span class='{0}'>{1}</span>".format('error', htmlSafe(expr[ii:]))
             self.updateHtml(newhtml)
@@ -177,7 +225,12 @@ class CalculatorTextEdit(QTextEdit):
         self.checkSyntax()
 
     def getContents(self):
-        return self.toPlainText()
+        #return self.toPlainText()
+        html = self.toHtml()
+        print(html)
+        parser = SpanParser()
+        parser.feed(html)
+        return parser.text
 
     def setContents(self, text):
         self.setPlainText(text)
