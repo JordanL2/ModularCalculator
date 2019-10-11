@@ -143,12 +143,14 @@ class CalculatorTextEdit(QTextEdit):
             newhtml = self.css
             highlightStatements = self.highlighter.highlight_statements(statements)
             alternate = True
+            foundFunctional = False
             p = 0
             highlightPositions = []
             for s, highlightItems in enumerate(highlightStatements):
                 functional = len(functional_items(statements[s])) > 0
                 if functional:
                     alternate = not alternate
+                    foundFunctional = True
                 p0 = p
 
                 for item in highlightItems:
@@ -157,7 +159,7 @@ class CalculatorTextEdit(QTextEdit):
                     newhtml += "<span class='{0}'>{1}</span>".format(style, htmlSafe(text))
                     p += len(text)
 
-                if functional and alternate:
+                if alternate and foundFunctional:
                     highlightPositions.append((p0, p))
 
             if ii < len(expr):
