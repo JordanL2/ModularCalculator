@@ -18,35 +18,40 @@ class SpanParser(HTMLParser):
         self.text = ''
         self.tags = []
         self.seen_p = False
-        self.seen_non_br = False
+        self.ignore_br = False
 
     def handle_starttag(self, tag, attrs):
-        print("tag:", tag)
-        print(attrs)
+        #print("tag:", tag)
+        #print(attrs)
         self.tags.append(tag)
-        if tag == 'br':
+        if tag == 'br' and not self.ignore_br:
             self.text += "\n"
         if tag == 'p':
             for a in attrs:
                 if '-qt-paragraph-type:empty' in a[1]:
-                    self.seen_non_br = False
-            if self.seen_p and self.seen_non_br:
+                    self.ignore_br = True
+            if self.seen_p:
+                #print("inserting NL due to <p>")
                 self.text += "\n"
             self.seen_p = False
+        #print("TEXT: |{}|".format(self.text))
 
     def handle_endtag(self, tag):
         if self.tags[-1] == tag:
             del self.tags[-1]
         else:
-            print("error:", tag, "wasn't last in", self.tags)
+            #print("error:", tag, "wasn't last in", self.tags)
+            pass
         if tag == 'p':
             self.seen_p = True
+            self.ignore_br = False
+        #print("TEXT: |{}|".format(self.text))
 
     def handle_data(self, data):
         if self.currentTag() in ['p', 'span']:
-            print("found data |{}| in tag {}".format(data, self.currentTag()))
+            #print("found data |{}| in tag {}".format(data, self.currentTag()))
             self.text += data
-            self.seen_non_br = True
+        #print("TEXT: |{}|".format(self.text))
 
     def currentTag(self):
         if len(self.tags) == 0:
@@ -227,7 +232,12 @@ class CalculatorTextEdit(QTextEdit):
     def getContents(self):
         #return self.toPlainText()
         html = self.toHtml()
-        print(html)
+        #print("")
+        #print("--------------------")
+        #print(self.toPlainText())
+        #print("--------------------")
+        #print(html)
+        #print("--------------------")
         parser = SpanParser()
         parser.feed(html)
         return parser.text
