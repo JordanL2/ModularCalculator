@@ -51,21 +51,26 @@ class CalculatorDisplay(QWidget):
         else:
             unit = ''
 
+        margin = 10
+
         questionWidget = QLabel(questionDiv)
         questionFont = QFontDatabase.systemFont(QFontDatabase.FixedFont)
         questionFont.setPointSize(10)
         questionWidget.setFont(questionFont)
         questionWidget.setBackgroundRole(self.colours[n % len(self.colours)])
         questionWidget.setAutoFillBackground(True)
+        questionWidget.setMargin(margin)
         #questionWidget.setFixedHeight(questionWidget.height())
 
         answerWidget = QLabel(str(answer) + unit)
         answerFont = QFontDatabase.systemFont(QFontDatabase.FixedFont)
         answerFont.setPointSize(14)
+        answerFont.setBold(True)
         answerWidget.setFont(answerFont)
-        #answerWidget.setFixedHeight(answerWidget.height())
         answerWidget.setBackgroundRole(self.colours[n % len(self.colours)])
         answerWidget.setAutoFillBackground(True)
+        answerWidget.setMargin(margin)
+        #answerWidget.setFixedHeight(answerWidget.height())
 
         return (questionWidget, answerWidget)
 
