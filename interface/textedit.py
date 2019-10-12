@@ -139,31 +139,7 @@ class CalculatorTextEdit(QTextEdit):
             self.cached_response = new_response
 
             statements = [r.items for r in new_response.results] + error_statements
-
-            newhtml = self.css
-            highlightStatements = self.highlighter.highlight_statements(statements)
-            alternate = True
-            foundFunctional = False
-            p = 0
-            highlightPositions = []
-            for s, highlightItems in enumerate(highlightStatements):
-                functional = len(functional_items(statements[s])) > 0
-                if functional:
-                    alternate = not alternate
-                    foundFunctional = True
-                p0 = p
-
-                for item in highlightItems:
-                    style = item[0]
-                    text = item[1]
-                    newhtml += "<span class='{0}'>{1}</span>".format(style, htmlSafe(text))
-                    p += len(text)
-
-                if alternate and foundFunctional:
-                    highlightPositions.append((p0, p))
-
-            if ii < len(expr):
-                newhtml += "<span class='{0}'>{1}</span>".format('error', htmlSafe(expr[ii:]))
+            newhtml, highlightPositions = self.makeHtml(expr, ii, statements)
             self.updateHtml(newhtml)
 
             extraSelections = []
@@ -184,6 +160,55 @@ class CalculatorTextEdit(QTextEdit):
             if not self.interface.filemanager.currentFileModified() and not force:
                 self.interface.filemanager.setCurrentFileAndModified(self.interface.filemanager.currentFile(), True)
         self.oldText = self.toHtml()
+
+    def makeHtml(self, expr, ii, statements):
+        splitStatements = []
+        for items in statements:
+            funcItems = [i for i, item in enumerate(items) if item.functional() and not item.text.strip() == '']
+            if len(funcItems) == 0:
+                splitStatements.append(items)
+            else:
+                firstFunctionalItem = min(funcItems)
+                if firstFunctionalItem > 0:
+                    splitStatements.append(items[0:firstFunctionalItem])
+                    splitStatements.append(items[firstFunctionalItem:])
+
+        compactedStatements = []
+        foundFunctional = False
+        for items in splitStatements:
+            functional = len(functional_items(items)) > 0
+            isEmpty = len([i for i in items if i.text.strip() != '']) == 0
+            if not isEmpty and foundFunctional:
+                foundFunctional = False
+                compactedStatements.append([])
+            if len(compactedStatements) == 0:
+                compactedStatements.append([])
+            compactedStatements[-1].extend(items)
+            if functional:
+                foundFunctional = True
+
+        newhtml = self.css
+        highlightStatements = self.highlighter.highlight_statements(compactedStatements)
+        alternate = True
+        p = 0
+        highlightPositions = []
+        for highlightItems in highlightStatements:
+            alternate = not alternate
+            p0 = p
+
+            for item in highlightItems:
+                style = item[0]
+                text = item[1]
+                newhtml += "<span class='{0}'>{1}</span>".format(style, htmlSafe(text))
+                p += len(text)
+
+            if alternate:
+                highlightPositions.append((p0, p))
+
+        if ii < len(expr):
+            newhtml += "<span class='{0}'>{1}</span>".format('error', htmlSafe(expr[ii:]))
+
+        return newhtml, highlightPositions
 
     def refresh(self):
         self.initStyling()
