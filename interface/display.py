@@ -3,7 +3,7 @@
 from modularcalculator.interface.guitools import *
 from modularcalculator.objects.units import *
 
-from PyQt5.QtGui import QFontDatabase, QGuiApplication
+from PyQt5.QtGui import QFontDatabase, QPalette
 from PyQt5.QtWidgets import QTextEdit, QWidget, QGridLayout, QLabel, QVBoxLayout
 
 
@@ -12,15 +12,17 @@ class CalculatorDisplay(QWidget):
     def __init__(self, interface):
         super().__init__()
         self.layout = QGridLayout()
+        self.layout.setSpacing(0)
+        self.setLayout(self.layout)
+
         self.interface = interface
         self.options = {}
         self.defaultStyling()
         self.initOutput()
-        self.setLayout(self.layout)
 
     def defaultStyling(self):
-        qpalette = QGuiApplication.palette()
-        self.colours = [ qpalette.base().color().name(), qpalette.alternateBase().color().name() ]
+        #qpalette = QGuiApplication.palette()
+        self.colours = [ QPalette.Base, QPalette.AlternateBase ]
 
     def initOutput(self):
         self.output = []
@@ -49,26 +51,21 @@ class CalculatorDisplay(QWidget):
         else:
             unit = ''
 
-        #layout = QGridLayout()
-
         questionWidget = QLabel(questionDiv)
-        #questionWidget.setReadOnly(True)
         questionFont = QFontDatabase.systemFont(QFontDatabase.FixedFont)
         questionFont.setPointSize(10)
         questionWidget.setFont(questionFont)
-        #questionWidget.setHtml(questionDiv)
-        #layout.addWidget(questionWidget, 0, 0, 1, 1)
+        questionWidget.setBackgroundRole(self.colours[n % len(self.colours)])
+        questionWidget.setAutoFillBackground(True)
+        #questionWidget.setFixedHeight(questionWidget.height())
 
         answerWidget = QLabel(str(answer) + unit)
         answerFont = QFontDatabase.systemFont(QFontDatabase.FixedFont)
         answerFont.setPointSize(14)
         answerWidget.setFont(answerFont)
-        #layout.addWidget(answerWidget, 0, 1, 1, 1)
-        
-        #widget = QWidget()
-        #widget.setLayout(layout)
-
-        #return widget
+        #answerWidget.setFixedHeight(answerWidget.height())
+        answerWidget.setBackgroundRole(self.colours[n % len(self.colours)])
+        answerWidget.setAutoFillBackground(True)
 
         return (questionWidget, answerWidget)
 
@@ -84,8 +81,8 @@ class CalculatorDisplay(QWidget):
             self.layout.addWidget(widget[0], n, 0, 1, 1)
             self.layout.addWidget(widget[1], n, 1, 1, 1)
 
-        #self.setLayout(layout)
-        #self.setHtml(self.css + str.join('', self.output))
+        #self.resize(self.minimumSize())
+
         #self.verticalScrollBar().setValue(self.verticalScrollBar().maximum())
 
     def clearLayout(self, layout):
@@ -99,10 +96,7 @@ class CalculatorDisplay(QWidget):
             if item.layout() is not None:
                 childLayout = item.layout()
                 self.clearLayout(childLayout)
-            #item.deleteLater()
-            #item.
-            #del item
-            #layout.removeItem(item)
+            del item
 
     def clear(self):
         self.initOutput()
