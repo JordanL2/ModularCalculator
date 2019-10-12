@@ -149,6 +149,15 @@ class ModularCalculatorInterface(StatefulApplication):
         self.optionsFeatureOptions.triggered.connect(self.openFeatureOptions)
         optionsMenu.addAction(self.optionsFeatureOptions)
 
+        self.executeAction = QAction('Execute', self)
+        self.executeAction.triggered.connect(self.calculatormanager.calc)
+        self.executeAction.hovered.connect(self.showExecuteToolTip)
+        menubar.addAction(self.executeAction)
+        self.executeAction.setShortcuts([QKeySequence(Qt.CTRL + Qt.Key_Enter), QKeySequence(Qt.CTRL + Qt.Key_Return)])
+
+    def showExecuteToolTip(self):
+        QToolTip.showText(QCursor.pos(), "Ctrl+Enter", self)
+
     def initShortcuts(self):
         previousTab = QShortcut(QKeySequence(Qt.CTRL + Qt.Key_PageUp), self)
         previousTab.activated.connect(self.tabmanager.previousTab)
