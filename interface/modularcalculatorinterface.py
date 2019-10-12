@@ -47,11 +47,10 @@ class ModularCalculatorInterface(StatefulApplication):
         self.entry = CalculatorTextEdit(self)
 
         self.splitter = QSplitter()
-        self.splitter.setOrientation(Qt.Vertical)
-        self.splitter.addWidget(self.display)
-        self.splitter.addWidget(self.entry)
-        self.splitter.setStretchFactor(0, 1)
-        self.splitter.setStretchFactor(1, 0)
+        self.splitter.setOrientation(Qt.Horizontal)
+
+        self.splitter.addWidget(self.makeSection(self.entry, 'Input'))
+        self.splitter.addWidget(self.makeSection(self.display, 'Output'))
 
         grid = QGridLayout()
         grid.addWidget(self.tabbar, 0, 0, 1, 1)
@@ -60,6 +59,18 @@ class ModularCalculatorInterface(StatefulApplication):
         mainWidget = QWidget()
         mainWidget.setLayout(grid)
         self.setCentralWidget(mainWidget)
+
+    def makeSection(self, widget, labelText):
+        layout = QGridLayout()
+        label = QLabel(labelText)
+        font = QFontDatabase.systemFont(QFontDatabase.TitleFont)
+        font.setBold(True)
+        label.setFont(font)
+        layout.addWidget(label, 0, 0, 1, 1)
+        layout.addWidget(widget, 1, 0, 1, 1)
+        widget = QWidget()
+        widget.setLayout(layout)
+        return widget
 
     def initMenu(self):
         menubar = self.menuBar()
