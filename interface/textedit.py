@@ -171,7 +171,7 @@ class CalculatorTextEdit(QTextEdit):
                 firstFunctionalItem = min(funcItems)
                 if firstFunctionalItem > 0:
                     splitStatements.append(items[0:firstFunctionalItem])
-                    splitStatements.append(items[firstFunctionalItem:])
+                splitStatements.append(items[firstFunctionalItem:])
 
         compactedStatements = []
         foundFunctional = False
