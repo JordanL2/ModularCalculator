@@ -5,6 +5,7 @@ from modularcalculator.objects.units import *
 
 from PyQt5.QtGui import QFontDatabase, QPalette
 from PyQt5.QtWidgets import QTextEdit, QWidget, QGridLayout, QLabel, QVBoxLayout
+from PyQt5.QtCore import QTimer
 
 
 class CalculatorDisplay(QWidget):
@@ -21,8 +22,8 @@ class CalculatorDisplay(QWidget):
         self.initOutput()
 
     def defaultStyling(self):
-        #qpalette = QGuiApplication.palette()
         self.colours = [ QPalette.Base, QPalette.AlternateBase ]
+        self.margin = 10
 
     def initOutput(self):
         self.output = []
@@ -51,16 +52,13 @@ class CalculatorDisplay(QWidget):
         else:
             unit = ''
 
-        margin = 10
-
         questionWidget = QLabel(questionDiv)
         questionFont = QFontDatabase.systemFont(QFontDatabase.FixedFont)
         questionFont.setPointSize(10)
         questionWidget.setFont(questionFont)
         questionWidget.setBackgroundRole(self.colours[n % len(self.colours)])
         questionWidget.setAutoFillBackground(True)
-        questionWidget.setMargin(margin)
-        #questionWidget.setFixedHeight(questionWidget.height())
+        questionWidget.setMargin(self.margin)
 
         answerWidget = QLabel(str(answer) + unit)
         answerFont = QFontDatabase.systemFont(QFontDatabase.FixedFont)
@@ -69,10 +67,12 @@ class CalculatorDisplay(QWidget):
         answerWidget.setFont(answerFont)
         answerWidget.setBackgroundRole(self.colours[n % len(self.colours)])
         answerWidget.setAutoFillBackground(True)
-        answerWidget.setMargin(margin)
-        #answerWidget.setFixedHeight(answerWidget.height())
+        answerWidget.setMargin(self.margin)
 
         return (questionWidget, answerWidget)
+
+    def countLines(self, text):
+        return text.count("\n") + 1
 
     def questionHtml(self, expr):
         statements, _, _ = self.interface.calculatormanager.calculator.parse(expr, {})
@@ -86,9 +86,7 @@ class CalculatorDisplay(QWidget):
             self.layout.addWidget(widget[0], n, 0, 1, 1)
             self.layout.addWidget(widget[1], n, 1, 1, 1)
 
-        #self.resize(self.minimumSize())
-
-        #self.verticalScrollBar().setValue(self.verticalScrollBar().maximum())
+        QTimer.singleShot(1, self.scrollToBottom)
 
     def clearLayout(self, layout):
         while True:
@@ -102,6 +100,10 @@ class CalculatorDisplay(QWidget):
                 childLayout = item.layout()
                 self.clearLayout(childLayout)
             del item
+
+    def scrollToBottom(self):
+        scrollbar = self.interface.displayScroll.verticalScrollBar()
+        scrollbar.setValue(scrollbar.maximum())
 
     def clear(self):
         self.initOutput()
