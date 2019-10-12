@@ -104,6 +104,8 @@ class CalculatorTextEdit(QTextEdit):
     def checkSyntax(self, force=False):
         if self.calculator is not None and (force or self.oldText is None or self.oldText != self.toHtml()):
             expr = self.getContents()
+            if len(expr) > 0 and expr[-1] != "\n":
+                expr += "\n"
 
             new_response = CalculatorResponse()
             i = 0
