@@ -107,41 +107,42 @@ class CalculatorTextEdit(QTextEdit):
             if len(expr) > 0 and expr[-1] != "\n":
                 expr += "\n"
 
-            new_response = CalculatorResponse()
+            newResponse = CalculatorResponse()
             i = 0
             ii = None
             error_statements = []
             if self.cached_response is not None:
                 for result in self.cached_response.results:
                     if expr[i:].startswith(result.expression):
-                        new_response.results.append(result)
+                        newResponse.results.append(result)
                         i += len(result.expression)
                     else:
                         break
-                if len(new_response.results) > 0 and len(new_response.results) == len(self.cached_response.results):
-                    i -= len(new_response.results[-1].expression)
-                    del new_response.results[-1]
+                if len(newResponse.results) > 0 and len(newResponse.results) == len(self.cached_response.results):
+                    i -= len(newResponse.results[-1].expression)
+                    del newResponse.results[-1]
 
             try:
-                if len(new_response.results) > 0:
-                    self.calculator.vars = new_response.results[-1].state.copy()
+                if len(newResponse.results) > 0:
+                    self.calculator.vars = newResponse.results[-1].state.copy()
                 else:
                     self.calculator.vars = {}
                 response = self.calculator.calculate(expr[i:], {'parse_only': not self.autoExecute, 'include_state': True})
-                new_response.results.extend(response.results)
+                newResponse.results.extend(response.results)
                 ii = len(expr)
             except CalculatingException as err:
-                new_response.results.extend(err.response.results)
+                newResponse.results.extend(err.response.results)
                 error_statements = err.statements[len(err.response.results):]
-                err.statements = [r.items for r in new_response.results] + error_statements
+                err.statements = [r.items for r in newResponse.results] + error_statements
                 ii = err.find_pos(expr)
             except CalculatorException as err:
                 ii = i
 
-            self.cached_response = new_response
+            self.cached_response = newResponse
 
-            statements = [r.items for r in new_response.results] + error_statements
-            newhtml, highlightPositions = self.makeHtml(expr, ii, statements)
+            statements = [r.items for r in newResponse.results] + error_statements
+            errorExpr = expr[ii:]
+            newhtml, highlightPositions = self.makeHtml(statements, errorExpr)
             self.updateHtml(newhtml)
 
             extraSelections = []
@@ -161,9 +162,10 @@ class CalculatorTextEdit(QTextEdit):
 
             if not self.interface.filemanager.currentFileModified() and not force:
                 self.interface.filemanager.setCurrentFileAndModified(self.interface.filemanager.currentFile(), True)
+
         self.oldText = self.toHtml()
 
-    def makeHtml(self, expr, ii, statements):
+    def makeHtml(self, statements, errorExpr):
         splitStatements = []
         for items in statements:
             funcItems = [i for i, item in enumerate(items) if item.functional() and not item.text.strip() == '']
@@ -207,8 +209,8 @@ class CalculatorTextEdit(QTextEdit):
             if alternate:
                 highlightPositions.append((p0, p))
 
-        if ii < len(expr):
-            newhtml += "<span class='{0}'>{1}</span>".format('error', htmlSafe(expr[ii:]))
+        if errorExpr != '':
+            newhtml += "<span class='{0}'>{1}</span>".format('error', htmlSafe(errorExpr))
 
         return newhtml, highlightPositions
 

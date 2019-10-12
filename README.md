@@ -98,7 +98,7 @@ These examples are available in examples/basic_integration.py. See examples/adva
 	* Click previous answer to insert it
 	* Check if unit, function, constant, date features are installed when you click their Insert
 		* Alternatively, hide these options when features not installed
-	* Always have a new line at the end? Maybe this means Enter could execute, Ctrl/Shift + Enter for new line - this fixes the alternate line issue
+	* Enter to execute, Ctrl/Shift + Enter for new line?
 
 * Stability:
 	* Auto-save state occasionally
