@@ -44,7 +44,7 @@ class CalculatorDisplay(QTextEdit):
 
     def renderAnswer(self, question, answer, unit, n):
         question = question.strip()
-        question = question.rstrip(';')
+        questionHtml = self.questionHtml(question)
         if isinstance(answer, UnitPowerList):
             if self.options['shortunits']:
                 answer = answer.symbol()
@@ -58,7 +58,12 @@ class CalculatorDisplay(QTextEdit):
                 unit = ' ' + unit
         else:
             unit = ''
-        return self.answerHtml.format(n % len(self.colours), htmlSafe(question), htmlSafe(answer), htmlSafe(unit))
+        return self.answerHtml.format(n % len(self.colours), questionHtml, htmlSafe(answer), htmlSafe(unit))
+
+    def questionHtml(self, expr):
+        statements, _, _ = self.interface.calculatormanager.calculator.parse(expr, {})
+        html, _ = self.interface.entry.makeHtml(statements, '')
+        return html
 
     def updateOutput(self):
         self.setHtml(self.css + str.join('', self.output))
