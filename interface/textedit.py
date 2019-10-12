@@ -93,6 +93,11 @@ class CalculatorTextEdit(QTextEdit):
         if e.key() == Qt.Key_Tab:
             spaces = 4 - (self.textCursor().columnNumber() % 4)
             self.insert(' ' * spaces)
+        elif e.key() in (Qt.Key_Enter, Qt.Key_Return):
+            if e.modifiers() & Qt.ShiftModifier:
+                self.insert("\n")
+            else:
+                self.interface.calculatormanager.calc()
         else:
             super().keyPressEvent(e)
         self.checkSyntax()
