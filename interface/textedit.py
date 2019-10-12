@@ -111,7 +111,7 @@ class CalculatorTextEdit(QTextEdit):
             i = 0
             ii = None
             error_statements = []
-            if self.cached_response is not None:
+            if self.cached_response is not None and not force:
                 for result in self.cached_response.results:
                     if expr[i:].startswith(result.expression):
                         newResponse.results.append(result)
