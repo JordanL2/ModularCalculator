@@ -172,10 +172,11 @@ class CalculatorTextEdit(QTextEdit):
             if len(funcItems) == 0:
                 splitStatements.append(items)
             else:
-                firstFunctionalItem = min(funcItems)
-                if firstFunctionalItem > 0:
-                    splitStatements.append(items[0:firstFunctionalItem])
-                splitStatements.append(items[firstFunctionalItem:])
+                nonEmptyItems = [i for i, item in enumerate(items) if not item.text.strip() == '']
+                firstNonEmptyItem = min(nonEmptyItems)
+                if firstNonEmptyItem > 0:
+                    splitStatements.append(items[0:firstNonEmptyItem])
+                splitStatements.append(items[firstNonEmptyItem:])
 
         compactedStatements = []
         foundFunctional = False
