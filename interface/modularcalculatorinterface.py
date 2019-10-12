@@ -106,14 +106,19 @@ class ModularCalculatorInterface(StatefulApplication):
         self.fileMenu.addAction(fileSaveAs)
 
         viewMenu = menubar.addMenu('View')
-        
+
         self.viewShortUnits = QAction('Units in Short Form', self, checkable=True)
         self.viewShortUnits.triggered.connect(self.calculatormanager.setShortUnits)
         viewMenu.addAction(self.viewShortUnits)
-        
+
         self.viewSyntaxParsingAutoExecutes = QAction('Syntax Parsing Performs Evaluation', self, checkable=True)
         self.viewSyntaxParsingAutoExecutes.triggered.connect(self.calculatormanager.setAutoExecute)
         viewMenu.addAction(self.viewSyntaxParsingAutoExecutes)
+
+        self.viewClearOutput = QAction('Clear Output', self)
+        self.viewClearOutput.triggered.connect(self.display.clear)
+        self.viewClearOutput.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_L))
+        viewMenu.addAction(self.viewClearOutput)
 
         actionMenu = menubar.addMenu('Insert')
         
