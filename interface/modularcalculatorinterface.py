@@ -12,7 +12,7 @@ from modularcalculator.interface.textedit import *
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QKeySequence, QCursor, QPalette
-from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QSplitter, QAction, QFileDialog, QToolTip, QShortcut, QMessageBox, QScrollArea
+from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QSplitter, QAction, QFileDialog, QToolTip, QShortcut, QMessageBox, QScrollArea, QSizePolicy
 
 import os.path
 import string
@@ -46,6 +46,7 @@ class ModularCalculatorInterface(StatefulApplication):
         self.displayScroll = QScrollArea()
         self.displayScroll.setWidgetResizable(True)
         self.displayScroll.setWidget(self.display)
+        self.displayScroll.widget().setSizePolicy(QSizePolicy(QSizePolicy.Ignored, QSizePolicy.Maximum))
 
         self.entry = CalculatorTextEdit(self)
 
