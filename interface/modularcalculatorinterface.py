@@ -11,8 +11,8 @@ from modularcalculator.interface.tabmanager import *
 from modularcalculator.interface.textedit import *
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QKeySequence, QCursor
-from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QSplitter, QAction, QFileDialog, QToolTip, QShortcut, QMessageBox
+from PyQt5.QtGui import QKeySequence, QCursor, QPalette
+from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QSplitter, QAction, QFileDialog, QToolTip, QShortcut, QMessageBox, QScrollArea
 
 import os.path
 import string
@@ -43,6 +43,10 @@ class ModularCalculatorInterface(StatefulApplication):
         self.tabbar = MiddleClickCloseableTabBar(self)
 
         self.display = CalculatorDisplay(self)
+        self.displayScroll = QScrollArea()
+        #self.displayScroll.setBackgroundRole(QPalette.Dark)
+        self.displayScroll.setWidgetResizable(True)
+        self.displayScroll.setWidget(self.display)
 
         self.entry = CalculatorTextEdit(self)
 
@@ -50,7 +54,7 @@ class ModularCalculatorInterface(StatefulApplication):
         self.splitter.setOrientation(Qt.Horizontal)
 
         self.splitter.addWidget(self.makeSection(self.entry, 'Input'))
-        self.splitter.addWidget(self.makeSection(self.display, 'Output'))
+        self.splitter.addWidget(self.makeSection(self.displayScroll, 'Output'))
 
         grid = QGridLayout()
         grid.addWidget(self.tabbar, 0, 0, 1, 1)

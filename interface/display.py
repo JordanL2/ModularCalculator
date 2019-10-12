@@ -11,28 +11,16 @@ class CalculatorDisplay(QWidget):
 
     def __init__(self, interface):
         super().__init__()
-        self.layout = QVBoxLayout()
+        self.layout = QGridLayout()
         self.interface = interface
         self.options = {}
-        #self.setReadOnly(True)
         self.defaultStyling()
-        #self.initStyling()
         self.initOutput()
         self.setLayout(self.layout)
 
     def defaultStyling(self):
-        #self.setFont(QFontDatabase.systemFont(QFontDatabase.FixedFont))
         qpalette = QGuiApplication.palette()
         self.colours = [ qpalette.base().color().name(), qpalette.alternateBase().color().name() ]
-        #self.cssHead = "span.question { font-size: 10pt; } span.answer { font-weight: bold; font-size: 14pt; }"
-        #self.cssRow = "div.row{0} {{ background-color: {1} }}"
-        #self.answerHtml = "<div class='row{0}'><span class='question'>{1}<br/></span><span class='answer'>{2}{3}</span></div>"
-
-    # def initStyling(self):
-    #     self.css = '<style>' + self.cssHead
-    #     for i, colour in enumerate(self.colours):
-    #         self.css += self.cssRow.format(i, colour)
-    #     self.css += '</style>'
 
     def initOutput(self):
         self.output = []
@@ -40,13 +28,13 @@ class CalculatorDisplay(QWidget):
 
     def addAnswer(self, question, answer, unit):
         self.rawOutput.append(((question, answer, unit)))
-        #answerline = self.renderAnswer(question, answer, unit, len(self.output))
-        #self.output.append(answerline)
         self.refresh()
 
     def renderAnswer(self, question, answer, unit, n):
         question = question.strip()
         questionHtml = self.questionHtml(question)
+        questionDiv = "<div background-color: \"{}\">{}</div>".format(self.colours[n % len(self.colours)], questionHtml)
+
         if isinstance(answer, UnitPowerList):
             if self.options['shortunits']:
                 answer = answer.symbol()
@@ -60,29 +48,29 @@ class CalculatorDisplay(QWidget):
                 unit = ' ' + unit
         else:
             unit = ''
-        #return self.answerHtml.format(n % len(self.colours), questionHtml, htmlSafe(answer), htmlSafe(unit))
-        questionDiv = "<div background-color: \"{}\">{}</div>".format(self.colours[n % len(self.colours)], questionHtml)
 
-        layout = QGridLayout()
+        #layout = QGridLayout()
 
-        questionWidget = QTextEdit()
-        questionWidget.setReadOnly(True)
+        questionWidget = QLabel(questionDiv)
+        #questionWidget.setReadOnly(True)
         questionFont = QFontDatabase.systemFont(QFontDatabase.FixedFont)
         questionFont.setPointSize(10)
         questionWidget.setFont(questionFont)
-        questionWidget.setHtml(questionDiv)
-        layout.addWidget(questionWidget, 0, 0, 1, 1)
+        #questionWidget.setHtml(questionDiv)
+        #layout.addWidget(questionWidget, 0, 0, 1, 1)
 
-        answerWidget = QLabel(str(answer))
+        answerWidget = QLabel(str(answer) + unit)
         answerFont = QFontDatabase.systemFont(QFontDatabase.FixedFont)
         answerFont.setPointSize(14)
         answerWidget.setFont(answerFont)
-        layout.addWidget(answerWidget, 1, 0, 1, 1)
+        #layout.addWidget(answerWidget, 0, 1, 1, 1)
         
-        widget = QWidget()
-        widget.setLayout(layout)
+        #widget = QWidget()
+        #widget.setLayout(layout)
 
-        return widget
+        #return widget
+
+        return (questionWidget, answerWidget)
 
     def questionHtml(self, expr):
         statements, _, _ = self.interface.calculatormanager.calculator.parse(expr, {})
@@ -92,8 +80,9 @@ class CalculatorDisplay(QWidget):
     def updateOutput(self):
         self.clearLayout(self.layout)
 
-        for widget in self.output:
-            self.layout.addWidget(widget)
+        for n, widget in enumerate(self.output):
+            self.layout.addWidget(widget[0], n, 0, 1, 1)
+            self.layout.addWidget(widget[1], n, 1, 1, 1)
 
         #self.setLayout(layout)
         #self.setHtml(self.css + str.join('', self.output))
