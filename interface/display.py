@@ -71,22 +71,20 @@ class CalculatorDisplay(QWidget):
 
         return (questionWidget, answerWidget)
 
-    def countLines(self, text):
-        return text.count("\n") + 1
-
     def questionHtml(self, expr):
         statements, _, _ = self.interface.calculatormanager.calculator.parse(expr, {})
         html, _ = self.interface.entry.makeHtml(statements, '')
         return html
 
-    def updateOutput(self):
+    def refresh(self):
+        self.output = [self.renderAnswer(r[0], r[1], r[2], n) for n, r in enumerate(self.rawOutput)]
         self.clearLayout(self.layout)
 
         for n, widget in enumerate(self.output):
             self.layout.addWidget(widget[0], n, 0, 1, 1)
             self.layout.addWidget(widget[1], n, 1, 1, 1)
 
-        QTimer.singleShot(1, self.scrollToBottom)
+        self.scrollToBottom()
 
     def clearLayout(self, layout):
         while True:
@@ -102,22 +100,21 @@ class CalculatorDisplay(QWidget):
             del item
 
     def scrollToBottom(self):
+        QTimer.singleShot(100, self.doScrollToBottom)
+
+    def doScrollToBottom(self):
         scrollbar = self.interface.displayScroll.verticalScrollBar()
         scrollbar.setValue(scrollbar.maximum())
 
     def clear(self):
         self.initOutput()
-        self.updateOutput()
+        self.refresh()
 
     def restoreState(self, state):
         if isinstance(state, dict):
             if 'rawOutput' in state.keys():
                 self.rawOutput = state['rawOutput']
-        self.updateOutput()
+        self.refresh()
 
     def saveState(self):
         return {'rawOutput': self.rawOutput}
-
-    def refresh(self):
-        self.output = [self.renderAnswer(r[0], r[1], r[2], n) for n, r in enumerate(self.rawOutput)]
-        self.updateOutput()
