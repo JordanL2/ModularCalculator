@@ -66,7 +66,6 @@ class FileManager():
             fh = open(filePath, 'r')
             text = str.join("", fh.readlines())
             self.interface.entry.setContents(text)
-            self.interface.entry.setOriginal()
             self.setCurrentFileAndModified(filePath, False)
 
     def save(self, i=None):
