@@ -46,7 +46,7 @@ class ModularCalculatorInterface(StatefulApplication):
 
         self.display = CalculatorDisplay(self)
         self.displayScroll = QScrollArea()
-        self.displayScroll.setBackgroundRole(QPalette.Base)
+        self.displayScroll.setBackgroundRole(self.display.colours[0])
         self.displayScroll.setWidgetResizable(True)
         self.displayScroll.setWidget(self.display)
         self.displayScroll.widget().setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Maximum)
