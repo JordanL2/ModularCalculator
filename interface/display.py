@@ -26,17 +26,15 @@ class CalculatorDisplay(QWidget):
         self.margin = 10
 
     def initOutput(self):
-        self.output = []
         self.rawOutput = []
 
     def addAnswer(self, question, answer, unit):
-        self.rawOutput.append(((question, answer, unit)))
+        self.rawOutput.append((question, answer, unit))
         self.refresh()
 
     def renderAnswer(self, question, answer, unit, n):
         question = question.strip()
         questionHtml = self.questionHtml(question)
-        questionDiv = "<div background-color: \"{}\">{}</div>".format(self.colours[n % len(self.colours)], questionHtml)
 
         if isinstance(answer, UnitPowerList):
             if self.options['shortunits']:
@@ -52,7 +50,7 @@ class CalculatorDisplay(QWidget):
         else:
             unit = ''
 
-        questionWidget = QLabel(questionDiv)
+        questionWidget = QLabel(questionHtml)
         questionFont = QFontDatabase.systemFont(QFontDatabase.FixedFont)
         questionFont.setPointSize(10)
         questionWidget.setFont(questionFont)
@@ -77,12 +75,12 @@ class CalculatorDisplay(QWidget):
         return html
 
     def refresh(self):
-        self.output = [self.renderAnswer(r[0], r[1], r[2], n) for n, r in enumerate(self.rawOutput)]
         self.clearLayout(self.layout)
 
-        for n, widget in enumerate(self.output):
-            self.layout.addWidget(widget[0], n, 0, 1, 1)
-            self.layout.addWidget(widget[1], n, 1, 1, 1)
+        output = [self.renderAnswer(r[0], r[1], r[2], n) for n, r in enumerate(self.rawOutput)]
+        for n, outputRow in enumerate(output):
+            self.layout.addWidget(outputRow[0], n, 0, 1, 1)
+            self.layout.addWidget(outputRow[1], n, 1, 1, 1)
 
         self.scrollToBottom()
 
