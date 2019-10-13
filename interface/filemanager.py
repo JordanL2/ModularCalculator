@@ -43,6 +43,8 @@ class FileManager():
     def setCurrentFileAndModified(self, file, modified=False, i=None):
         self.setCurrentFile(file, i)
         self.setCurrentFileModified(modified, i)
+        if not modified:
+            self.tabmanager.setOriginal(i)
         if i is None or i == self.selectedTab():
             if self.currentFile() is None:
                 self.setWindowTitle('Modular Calculator')
@@ -64,6 +66,7 @@ class FileManager():
             fh = open(filePath, 'r')
             text = str.join("", fh.readlines())
             self.interface.entry.setContents(text)
+            self.interface.entry.setOriginal()
             self.setCurrentFileAndModified(filePath, False)
 
     def save(self, i=None):

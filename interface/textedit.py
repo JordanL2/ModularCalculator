@@ -160,8 +160,7 @@ class CalculatorTextEdit(QTextEdit):
                 extraSelections.append(selection)
             self.setExtraSelections(extraSelections)
 
-            if not self.interface.filemanager.currentFileModified() and not force:
-                self.interface.filemanager.setCurrentFileAndModified(self.interface.filemanager.currentFile(), True)
+            self.interface.filemanager.setCurrentFileAndModified(self.interface.filemanager.currentFile(), self.isModified())
 
         self.oldText = self.toHtml()
 
@@ -242,9 +241,18 @@ class CalculatorTextEdit(QTextEdit):
     def clearContents(self):
         self.setContents('')
 
+    def setOriginal(self, original=None):
+        if original is None:
+            original = self.getContents()
+        self.original = original
+
+    def isModified(self):
+        return self.getContents() != self.original
+
     def saveState(self):
         return {
             'text': self.getContents(),
+            'original': self.original,
             'cursorSelectionStart': self.textCursor().selectionStart(),
             'cursorSelectionEnd': self.textCursor().selectionEnd(),
             'sliderPosition': self.verticalScrollBar().sliderPosition(),
@@ -255,6 +263,10 @@ class CalculatorTextEdit(QTextEdit):
             self.setPlainText(state['text'])
         else:
             self.setPlainText('')
+        if 'original' in state:
+            self.setOriginal(state['original'])
+        else:
+            self.setOriginal()
         self.refresh()
 
         if 'cursorSelectionStart' in state:

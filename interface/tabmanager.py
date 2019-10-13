@@ -109,3 +109,11 @@ class TabManager():
         movedTab = self.tabs.pop(fromPos)
         self.tabs.insert(toPos, movedTab)
         self.selectedTab = toPos
+
+    def setOriginal(self, i=None):
+        if i is None:
+            i = self.selectedTab
+        if 'original' in self.tabs[i]['entry'] and 'text' in self.tabs[i]['entry']:
+            self.tabs[i]['entry']['original'] = self.tabs[i]['entry']['text']
+        if i == self.selectedTab:
+            self.entry.setOriginal()
