@@ -97,6 +97,7 @@ These examples are available in examples/basic_integration.py. See examples/adva
 	* Hotkeys for various insert operations, eg Ctrl+F = Insert Function
 	* Check if unit, function, constant, date features are installed when you click their Insert
 		* Alternatively, hide these options when features not installed
+	* File only marked modified if current text is different to text when loaded
 
 * Stability:
 	* Auto-save state occasionally
@@ -118,3 +119,4 @@ These examples are available in examples/basic_integration.py. See examples/adva
 # Bugs
 
 * Unit normalisation: "1 joule / 1 m^3" gets simplified to "1 pascal" - Even Google has this issue
+* Scroll to bottom - improve approach that a timer with arbitrary delay

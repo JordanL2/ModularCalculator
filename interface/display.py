@@ -45,6 +45,7 @@ class CalculatorDisplay(QWidget):
             self.layout.addWidget(questionWidget, n, 0, 1, 1)
             self.layout.addWidget(answerWidget, n, 1, 1, 1)
 
+        self.layout.update()
         self.scrollToBottom()
 
     def clearLayout(self, layout):
@@ -58,7 +59,6 @@ class CalculatorDisplay(QWidget):
             if item.layout() is not None:
                 childLayout = item.layout()
                 self.clearLayout(childLayout)
-            del item
 
     def renderAnswer(self, question, answer, unit, n):
         question = question.strip()
