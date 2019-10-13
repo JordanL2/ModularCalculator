@@ -42,6 +42,8 @@ class ModularCalculatorInterface(StatefulApplication):
     def initUI(self):
         self.tabbar = MiddleClickCloseableTabBar(self)
 
+        self.entry = CalculatorTextEdit(self)
+
         self.display = CalculatorDisplay(self)
         self.displayScroll = QScrollArea()
         self.displayScroll.setBackgroundRole(QPalette.Base)
@@ -51,11 +53,8 @@ class ModularCalculatorInterface(StatefulApplication):
         scrollBar = self.displayScroll.verticalScrollBar()
         scrollBar.rangeChanged.connect(lambda: scrollBar.setValue(scrollBar.maximum()))
 
-        self.entry = CalculatorTextEdit(self)
-
         self.splitter = QSplitter()
         self.splitter.setOrientation(Qt.Horizontal)
-
         self.splitter.addWidget(self.makeSection(self.entry, 'Input'))
         self.splitter.addWidget(self.makeSection(self.displayScroll, 'Output'))
 
