@@ -48,6 +48,8 @@ class ModularCalculatorInterface(StatefulApplication):
         self.displayScroll.setWidgetResizable(True)
         self.displayScroll.setWidget(self.display)
         self.displayScroll.widget().setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Maximum)
+        scrollBar = self.displayScroll.verticalScrollBar()
+        scrollBar.rangeChanged.connect(lambda: scrollBar.setValue(scrollBar.maximum()))
 
         self.entry = CalculatorTextEdit(self)
 

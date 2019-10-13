@@ -46,8 +46,6 @@ class CalculatorDisplay(QWidget):
             self.layout.addWidget(answerWidget, n, 1, 1, 1)
 
         self.layout.update()
-        QCoreApplication.processEvents()
-        self.scrollToBottom()
 
     def clearLayout(self, layout):
         while True:
@@ -107,13 +105,6 @@ class CalculatorDisplay(QWidget):
 
     def insertAnswer(self, widget, e):
         self.interface.entry.insert(widget.text())
-
-    def scrollToBottom(self):
-        QTimer.singleShot(0, self.doScrollToBottom)
-
-    def doScrollToBottom(self):
-        scrollbar = self.interface.displayScroll.verticalScrollBar()
-        scrollbar.setValue(scrollbar.maximum())
 
     def restoreState(self, state):
         if isinstance(state, dict):
