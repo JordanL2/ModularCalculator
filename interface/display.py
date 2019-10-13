@@ -28,9 +28,36 @@ class CalculatorDisplay(QWidget):
     def initOutput(self):
         self.rawOutput = []
 
+    def clear(self):
+        self.initOutput()
+        self.refresh()
+
     def addAnswer(self, question, answer, unit):
         self.rawOutput.append((question, answer, unit))
         self.refresh()
+
+    def refresh(self):
+        self.clearLayout(self.layout)
+
+        for n, outputRow in enumerate(self.rawOutput):
+            questionWidget, answerWidget = self.renderAnswer(outputRow[0], outputRow[1], outputRow[2], n)
+            self.layout.addWidget(questionWidget, n, 0, 1, 1)
+            self.layout.addWidget(answerWidget, n, 1, 1, 1)
+
+        self.scrollToBottom()
+
+    def clearLayout(self, layout):
+        while True:
+            item = layout.takeAt(0)
+            if item is None:
+                break
+            if item.widget() is not None:
+                widget = item.widget()
+                widget.deleteLater()
+            if item.layout() is not None:
+                childLayout = item.layout()
+                self.clearLayout(childLayout)
+            del item
 
     def renderAnswer(self, question, answer, unit, n):
         question = question.strip()
@@ -67,35 +94,12 @@ class CalculatorDisplay(QWidget):
         answerWidget.setAutoFillBackground(True)
         answerWidget.setMargin(self.margin)
 
-        return (questionWidget, answerWidget)
+        return questionWidget, answerWidget
 
     def questionHtml(self, expr):
         statements, _, _ = self.interface.calculatormanager.calculator.parse(expr, {})
         html, _ = self.interface.entry.makeHtml(statements, '')
         return html
-
-    def refresh(self):
-        self.clearLayout(self.layout)
-
-        output = [self.renderAnswer(r[0], r[1], r[2], n) for n, r in enumerate(self.rawOutput)]
-        for n, outputRow in enumerate(output):
-            self.layout.addWidget(outputRow[0], n, 0, 1, 1)
-            self.layout.addWidget(outputRow[1], n, 1, 1, 1)
-
-        self.scrollToBottom()
-
-    def clearLayout(self, layout):
-        while True:
-            item = layout.takeAt(0)
-            if item is None:
-                break
-            if item.widget() is not None:
-                widget = item.widget()
-                widget.deleteLater()
-            if item.layout() is not None:
-                childLayout = item.layout()
-                self.clearLayout(childLayout)
-            del item
 
     def scrollToBottom(self):
         QTimer.singleShot(100, self.doScrollToBottom)
@@ -103,10 +107,6 @@ class CalculatorDisplay(QWidget):
     def doScrollToBottom(self):
         scrollbar = self.interface.displayScroll.verticalScrollBar()
         scrollbar.setValue(scrollbar.maximum())
-
-    def clear(self):
-        self.initOutput()
-        self.refresh()
 
     def restoreState(self, state):
         if isinstance(state, dict):
