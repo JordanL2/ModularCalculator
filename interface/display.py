@@ -4,7 +4,7 @@ from modularcalculator.interface.guitools import *
 from modularcalculator.interface.guiwidgets import *
 from modularcalculator.objects.units import *
 
-from PyQt5.QtCore import Qt, QTimer
+from PyQt5.QtCore import Qt, QTimer, QCoreApplication
 from PyQt5.QtGui import QFontDatabase, QPalette
 from PyQt5.QtWidgets import QTextEdit, QWidget, QGridLayout, QLabel, QVBoxLayout
 
@@ -46,6 +46,7 @@ class CalculatorDisplay(QWidget):
             self.layout.addWidget(answerWidget, n, 1, 1, 1)
 
         self.layout.update()
+        QCoreApplication.processEvents()
         self.scrollToBottom()
 
     def clearLayout(self, layout):
@@ -108,7 +109,7 @@ class CalculatorDisplay(QWidget):
         self.interface.entry.insert(widget.text())
 
     def scrollToBottom(self):
-        QTimer.singleShot(100, self.doScrollToBottom)
+        QTimer.singleShot(0, self.doScrollToBottom)
 
     def doScrollToBottom(self):
         scrollbar = self.interface.displayScroll.verticalScrollBar()
