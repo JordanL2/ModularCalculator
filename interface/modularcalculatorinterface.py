@@ -47,7 +47,7 @@ class ModularCalculatorInterface(StatefulApplication):
         self.displayScroll.setBackgroundRole(QPalette.Base)
         self.displayScroll.setWidgetResizable(True)
         self.displayScroll.setWidget(self.display)
-        self.displayScroll.widget().setSizePolicy(QSizePolicy(QSizePolicy.Ignored, QSizePolicy.Maximum))
+        self.displayScroll.widget().setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Maximum)
 
         self.entry = CalculatorTextEdit(self)
 
@@ -68,6 +68,7 @@ class ModularCalculatorInterface(StatefulApplication):
     def makeSection(self, widget, labelText):
         layout = QGridLayout()
         label = QLabel(labelText)
+        label.setAlignment(Qt.AlignHCenter)
         font = QFontDatabase.systemFont(QFontDatabase.TitleFont)
         font.setBold(True)
         label.setFont(font)
