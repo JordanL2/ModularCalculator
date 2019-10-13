@@ -221,3 +221,14 @@ class MiddleClickCloseableTabBar(QTabBar):
             self.tabCloseRequested.emit(self.tabAt(event.pos()))
         else:
             super().mouseReleaseEvent(event)
+
+
+class DoubleClickableLabel(QLabel):
+
+    def __init__(self, parent, text, doubleClickFunction):
+        self.parent = parent
+        super().__init__(text)
+        self.doubleClickFunction = doubleClickFunction
+
+    def mouseDoubleClickEvent(self, e):
+        self.doubleClickFunction(self.parent, self, e)

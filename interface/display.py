@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from modularcalculator.interface.guitools import *
+from modularcalculator.interface.guiwidgets import *
 from modularcalculator.objects.units import *
 
 from PyQt5.QtCore import Qt, QTimer
@@ -86,7 +87,7 @@ class CalculatorDisplay(QWidget):
         questionWidget.setMargin(self.margin)
         questionWidget.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.TextSelectableByKeyboard)
 
-        answerWidget = QLabel(str(answer) + unit)
+        answerWidget = DoubleClickableLabel(self, str(answer) + unit, CalculatorDisplay.doubleClickAnswer)
         answerFont = QFontDatabase.systemFont(QFontDatabase.FixedFont)
         answerFont.setPointSize(14)
         answerFont.setBold(True)
@@ -102,6 +103,9 @@ class CalculatorDisplay(QWidget):
         statements, _, _ = self.interface.calculatormanager.calculator.parse(expr, {})
         html, _ = self.interface.entry.makeHtml(statements, '')
         return html
+
+    def doubleClickAnswer(self, widget, e):
+        self.interface.entry.insert(widget.text())
 
     def scrollToBottom(self):
         QTimer.singleShot(100, self.doScrollToBottom)
