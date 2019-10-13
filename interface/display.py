@@ -87,7 +87,7 @@ class CalculatorDisplay(QWidget):
         questionWidget.setMargin(self.margin)
         questionWidget.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.TextSelectableByKeyboard)
 
-        answerWidget = MiddleClickableLabel(self, str(answer) + unit, CalculatorDisplay.doubleClickAnswer)
+        answerWidget = MiddleClickableLabel(self, str(answer) + unit, CalculatorDisplay.insertAnswer)
         answerFont = QFontDatabase.systemFont(QFontDatabase.FixedFont)
         answerFont.setPointSize(14)
         answerFont.setBold(True)
@@ -104,7 +104,7 @@ class CalculatorDisplay(QWidget):
         html, _ = self.interface.entry.makeHtml(statements, '')
         return html
 
-    def doubleClickAnswer(self, widget, e):
+    def insertAnswer(self, widget, e):
         self.interface.entry.insert(widget.text())
 
     def scrollToBottom(self):
