@@ -3,9 +3,9 @@
 from modularcalculator.interface.guitools import *
 from modularcalculator.objects.units import *
 
+from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QFontDatabase, QPalette
 from PyQt5.QtWidgets import QTextEdit, QWidget, QGridLayout, QLabel, QVBoxLayout
-from PyQt5.QtCore import QTimer
 
 
 class CalculatorDisplay(QWidget):
@@ -84,6 +84,7 @@ class CalculatorDisplay(QWidget):
         questionWidget.setBackgroundRole(self.colours[n % len(self.colours)])
         questionWidget.setAutoFillBackground(True)
         questionWidget.setMargin(self.margin)
+        questionWidget.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.TextSelectableByKeyboard)
 
         answerWidget = QLabel(str(answer) + unit)
         answerFont = QFontDatabase.systemFont(QFontDatabase.FixedFont)
@@ -93,6 +94,7 @@ class CalculatorDisplay(QWidget):
         answerWidget.setBackgroundRole(self.colours[n % len(self.colours)])
         answerWidget.setAutoFillBackground(True)
         answerWidget.setMargin(self.margin)
+        answerWidget.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.TextSelectableByKeyboard)
 
         return questionWidget, answerWidget
 
