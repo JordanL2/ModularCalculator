@@ -95,7 +95,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 * Usability / quality of life:
 	* Improve Light theme, it's too dark and high contrast
 	* Hotkeys for various insert operations, eg Ctrl+F = Insert Function
-	* Click previous answer to insert it
 	* Check if unit, function, constant, date features are installed when you click their Insert
 		* Alternatively, hide these options when features not installed
 

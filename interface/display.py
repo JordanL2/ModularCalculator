@@ -87,7 +87,7 @@ class CalculatorDisplay(QWidget):
         questionWidget.setMargin(self.margin)
         questionWidget.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.TextSelectableByKeyboard)
 
-        answerWidget = DoubleClickableLabel(self, str(answer) + unit, CalculatorDisplay.doubleClickAnswer)
+        answerWidget = MiddleClickableLabel(self, str(answer) + unit, CalculatorDisplay.doubleClickAnswer)
         answerFont = QFontDatabase.systemFont(QFontDatabase.FixedFont)
         answerFont.setPointSize(14)
         answerFont.setBold(True)
