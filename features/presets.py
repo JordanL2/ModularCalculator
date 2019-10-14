@@ -19,6 +19,7 @@ presets['Advanced'] = presets['Basic'] + [
 ]
 
 presets['Scientific'] = presets['Advanced'] + [
+    'numerical.decimalfunction',
     'numerical.expnumbers',
     'numerical.numericalconstants',
     'numerical.numericalfunctions',

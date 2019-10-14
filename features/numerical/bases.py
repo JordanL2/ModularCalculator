@@ -17,28 +17,16 @@ class BasesFeature(Feature):
         return 'Bases'
 
     def desc():
-        return 'Base feature for non-decimal bases. Adds dec function to turn any number into a decimal'
+        return 'Base feature for non-decimal bases'
 
     def dependencies():
-        return ['numerical.decimalnumbers','structure.functions']
+        return ['structure.functions']
 
     @classmethod
     def install(cls, calculator):
-        calculator.funcs['dec'] = FunctionDefinition(
-            'Bases', 
-            'dec', 
-            'Convert a number from any base to base-10',
-            ['number'],
-            BasesFeature.func_dec, 
-            1, 
-            1, 
-            'number')
-        calculator.funcs['dec'].auto_convert_numerical_result = False
+        pass
 
     digits = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-
-    def func_dec(self, vals, units, refs, flags):
-        return OperationResult(vals[0])
 
     def number_remove_prefix(self, val, prefix):
         return val.lower().replace(prefix, '')

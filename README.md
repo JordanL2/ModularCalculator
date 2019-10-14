@@ -64,6 +64,7 @@ These examples are available in examples/basic_integration.py. See examples/adva
 * Ability to alter operator symbols as feature options
 * Ability to rename functions as feature options
 * Should bitwise not operator only allow positive integers, and throw error if something else?
+* Exp numbers - should they retain their type? and use dec() function to explicitly remove it? - dec isn't in scientific calculator, should be own feature
 
 ## Functions
 * Display operator/function syntax info on parameter validation error

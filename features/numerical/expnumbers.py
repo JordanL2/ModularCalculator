@@ -52,17 +52,25 @@ class ExpNumbersFeature(Feature):
             numexp_match = ExpNumbersFeature.numexp_regex.match(next)
             if (numexp_match):
                 numexp = numexp_match.group(1)
-                num = Decimal(numexp[0:numexp.lower().find('e')])
-                exp = Decimal(numexp[numexp.lower().find('e') + 1:])
-                num *= (10 ** exp)
-                return [LiteralItem(numexp, num)], len(numexp), None
+                return [LiteralItem(numexp, numexp)], len(numexp), None
         return None, None, None
 
     def func_scientific(self, vals, units, refs, flags):
-        num = vals[0]
-        places = ''
+        places = None
         if len(vals) == 2:
-            places = '.' + str(vals[1])
+            places = vals[1]
+
+        formattednumber = ExpNumbersFeature.dec_to_exp(self, vals[0], places)
+
+        res = OperationResult(formattednumber)
+        res.set_unit(units[0])
+        return res
+
+    def dec_to_exp(self, num, places=None):
+        if places is None:
+            places = ''
+        else:
+            places = '.' + str(places)
         scientificformat = '{0:' + places + 'E}'
 
         formattednumber = scientificformat.format(num)
@@ -72,9 +80,7 @@ class ExpNumbersFeature(Feature):
             parts[0] = parts[0].rstrip('0')
         formattednumber = "{}E{}".format(parts[0].rstrip('0'), parts[1])
 
-        res = OperationResult(formattednumber)
-        res.set_unit(units[0])
-        return res
+        return formattednumber
 
     def number_exp(self, val):
         if isinstance(val, str) and ExpNumbersFeature.numexp_regex.fullmatch(val):
@@ -83,6 +89,9 @@ class ExpNumbersFeature(Feature):
             num = Decimal(numexp[0:numexp.lower().find('e')])
             exp = Decimal(numexp[numexp.lower().find('e') + 1:])
             num *= (10 ** exp)
-            return num, False
+            return num, False#NumberType(ExpNumbersFeature.restore_exp)
         
         return None, None
+
+    def restore_exp(self, val, opts=None):
+        return ExpNumbersFeature.dec_to_exp(self, val)
