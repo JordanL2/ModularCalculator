@@ -51,6 +51,7 @@ number_caster_map = [
     'binary',
     'hexadecimal',
     'octal',
+    'exp',
     'boolean',
     'string',
 ]

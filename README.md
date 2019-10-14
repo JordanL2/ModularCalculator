@@ -97,6 +97,7 @@ These examples are available in examples/basic_integration.py. See examples/adva
 	* Hotkeys for various insert operations, eg Ctrl+F = Insert Function
 	* Check if unit, function, constant, date features are installed when you click their Insert
 		* Alternatively, hide these options when features not installed
+	* Should unit in answer be coloured same as the syntax highlight colour for units?
 
 * Stability:
 	* Auto-save state occasionally
@@ -110,7 +111,7 @@ These examples are available in examples/basic_integration.py. See examples/adva
 ## Other
 * Comment code
 * Move to do / bug list to github page
-* Add code license - GPL 2? Or Apache 2?
+* Add code license - GPL 2 or LGPL 2
 * Wiki
 * Make flatpak
 

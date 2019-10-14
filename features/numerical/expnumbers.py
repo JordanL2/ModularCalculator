@@ -41,6 +41,7 @@ class ExpNumbersFeature(Feature):
             'number')
         calculator.funcs['scientific'].units_normalise = False
 
+        calculator.add_number_caster('exp', ExpNumbersFeature.number_exp)
 
     numexp_regex = re.compile(r'(\-?\d+(\.\d+)?e\-?\d+)', re.IGNORECASE)
 
@@ -63,8 +64,25 @@ class ExpNumbersFeature(Feature):
         if len(vals) == 2:
             places = '.' + str(vals[1])
         scientificformat = '{0:' + places + 'E}'
+
         formattednumber = scientificformat.format(num)
         formattednumber = formattednumber.replace('+', '')
+        parts = formattednumber.split('E')
+        if '.' in parts[0]:
+            parts[0] = parts[0].rstrip('0')
+        formattednumber = "{}E{}".format(parts[0].rstrip('0'), parts[1])
+
         res = OperationResult(formattednumber)
         res.set_unit(units[0])
         return res
+
+    def number_exp(self, val):
+        if isinstance(val, str) and ExpNumbersFeature.numexp_regex.fullmatch(val):
+            numexp_match = ExpNumbersFeature.numexp_regex.match(val)
+            numexp = numexp_match.group(1)
+            num = Decimal(numexp[0:numexp.lower().find('e')])
+            exp = Decimal(numexp[numexp.lower().find('e') + 1:])
+            num *= (10 ** exp)
+            return num, False
+        
+        return None, None

@@ -64,6 +64,8 @@ tests = [
     { 'test': r"5.97237e24kg", 'expected': (Decimal('5972370000000000000000000'), 'kilograms') },
 
     { 'test': r"scientific(123.456789)", 'expected': '1.23456789E2' },
+    { 'test': r"scientific(123.45678900000)", 'expected': '1.23456789E2' },
+    { 'test': r"scientific(12345678900000)", 'expected': '1.23456789E13' },
     { 'test': r"scientific(123.456789, 3)", 'expected': '1.235E2' },
     { 'test': r"scientific(123.456789, 5)", 'expected': '1.23457E2' },
     { 'test': r"scientific(0.000123456789, 5)", 'expected': '1.23457E-4' },
