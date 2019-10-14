@@ -4,6 +4,7 @@ from modularcalculator.objects.items import *
 from modularcalculator.objects.exceptions import *
 from modularcalculator.features.feature import Feature
 from modularcalculator.features.structure.functions import *
+from modularcalculator.numericalengine import NumberType
 
 import re
 from decimal import *
@@ -89,7 +90,7 @@ class ExpNumbersFeature(Feature):
             num = Decimal(numexp[0:numexp.lower().find('e')])
             exp = Decimal(numexp[numexp.lower().find('e') + 1:])
             num *= (10 ** exp)
-            return num, False#NumberType(ExpNumbersFeature.restore_exp)
+            return num, NumberType(ExpNumbersFeature.restore_exp)
         
         return None, None
 
