@@ -90,9 +90,18 @@ class CalculatorManager():
 
     def calc(self):
         question = self.entry.getContents().rstrip()
+        response = None
         try:
             self.calculator.vars = {}
             response = self.calculator.calculate(question)
+        except CalculatingException as err:
+            i = err.find_pos(question)
+            row, column = self.rowsColumns(question, i)
+            response = err.response
+            QMessageBox.critical(self.interface, "ERROR", "{0} at line {1}, character {2}".format(err.message, row, column))
+        except CalculatorException as err:
+            QMessageBox.critical(self.interface, "ERROR", "{0}".format(err.message))
+        if response is not None:
             if len([r for r in response.results if r.has_result()]) > 1:
                 self.display.clear()
             for i, result in enumerate(response.results):
@@ -100,12 +109,6 @@ class CalculatorManager():
                     result_value = result.value
                     result_value = self.calculator.number_to_string(result_value)
                     self.display.addAnswer(result.expression, result_value, result.unit)
-        except CalculatingException as err:
-            i = err.find_pos(question)
-            row, column = self.rowsColumns(question, i)
-            QMessageBox.critical(self.interface, "ERROR", "{0} at row {1}, column {2}".format(err.message, row, column))
-        except CalculatorException as err:
-            QMessageBox.critical(self.interface, "ERROR", "{0}".format(err.message))
 
     def rowsColumns(self, text, pos):
         row = 1
