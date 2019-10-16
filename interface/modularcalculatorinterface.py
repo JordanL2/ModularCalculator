@@ -60,21 +60,22 @@ class ModularCalculatorInterface(StatefulApplication):
         self.splitter.addWidget(self.makeSection(self.entry, 'Input'))
         self.splitter.addWidget(self.makeSection(self.displayScroll, 'Output'))
 
-        grid = QGridLayout()
-        grid.addWidget(self.tabbar, 0, 0, 1, 1)
-        grid.addWidget(self.splitter, 1, 0, 1, 1)
+        layout = QGridLayout()
+        layout.setSpacing(0)
+        layout.addWidget(self.tabbar, 0, 0, 1, 1)
+        layout.addWidget(self.splitter, 1, 0, 1, 1)
         
         mainWidget = QWidget()
-        mainWidget.setLayout(grid)
+        mainWidget.setLayout(layout)
         self.setCentralWidget(mainWidget)
 
     def makeSection(self, widget, labelText):
-        layout = QGridLayout()
         label = QLabel(labelText)
         label.setAlignment(Qt.AlignHCenter)
         font = QFontDatabase.systemFont(QFontDatabase.TitleFont)
         font.setBold(True)
         label.setFont(font)
+        layout = QGridLayout()
         layout.addWidget(label, 0, 0, 1, 1)
         layout.addWidget(widget, 1, 0, 1, 1)
         widget = QWidget()
