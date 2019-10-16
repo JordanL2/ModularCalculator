@@ -11,7 +11,7 @@ from modularcalculator.interface.tabmanager import *
 from modularcalculator.interface.textedit import *
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QKeySequence, QCursor, QPalette
+from PyQt5.QtGui import QKeySequence, QCursor, QPalette, QIcon
 from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QSplitter, QAction, QFileDialog, QToolTip, QShortcut, QMessageBox, QScrollArea, QSizePolicy
 
 import os.path
@@ -24,6 +24,8 @@ class ModularCalculatorInterface(StatefulApplication):
 
     def __init__(self):
         super().__init__()
+
+        self.setWindowIcon(QIcon('modcalc.png'))
 
         self.initUI()
 

@@ -106,7 +106,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 	* When editing input, check if its possible to reuse later statements from cached result
 
 * Aesthetics and polish:
-	* Icon
 
 ## Other
 * Comment code
