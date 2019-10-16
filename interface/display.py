@@ -36,8 +36,8 @@ class CalculatorDisplay(QWidget):
     def addAnswer(self, question, answer, unit):
         self.rawOutput.append(CalculatorDisplayAnswer(question, answer, unit))
 
-    def addError(self, err):
-        pass
+    def addError(self, err, i, question):
+        self.rawOutput.append(CalculatorDisplayError(err, i, question))
 
     def refresh(self):
         self.clearLayout(self.layout)
@@ -62,25 +62,33 @@ class CalculatorDisplay(QWidget):
                 self.clearLayout(childLayout)
 
     def renderAnswer(self, row, n):
-        question = row.question.strip()
-        questionHtml = self.questionHtml(question)
+        if isinstance(row, CalculatorDisplayAnswer):
+            question = row.question.strip()
+            questionHtml = self.questionHtml(question)
 
-        answer = row.answer
-        unit = row.unit
-        if isinstance(answer, UnitPowerList):
-            if self.options['shortunits']:
-                answer = answer.symbol()
+            answer = row.answer
+            unit = row.unit
+            if isinstance(answer, UnitPowerList):
+                if self.options['shortunits']:
+                    answer = answer.symbol()
+                else:
+                    answer = answer.singular()
+            if unit is not None:
+                if self.options['shortunits'] and unit.has_symbols():
+                    unit = unit.symbol()
+                else:
+                    unit = unit.get_name(self.interface.calculatormanager.calculator.number(answer)[0])
+                    unit = ' ' + unit
             else:
-                answer = answer.singular()
-        if unit is not None:
-            if self.options['shortunits'] and unit.has_symbols():
-                unit = unit.symbol()
-            else:
-                unit = unit.get_name(self.interface.calculatormanager.calculator.number(answer)[0])
-                unit = ' ' + unit
+                unit = ''
+            answerHtml = str(answer) + unit
+
+        elif isinstance(row, CalculatorDisplayError):
+            questionHtml, _ = self.interface.entry.makeHtml([row.err.statements[-1]], row.question[row.i:])
+            answerHtml = row.err.message
+
         else:
-            unit = ''
-        answerHtml = str(answer) + unit
+            raise Exception("Unrecognised type in renderAnswer: {}".format(type(row)))
 
         return self.makeQuestionWidget(questionHtml, n), self.makeAnswerWidget(answerHtml, n)
 
@@ -134,3 +142,11 @@ class CalculatorDisplayAnswer():
         self.question = question
         self.answer = answer
         self.unit = unit
+
+
+class CalculatorDisplayError():
+
+    def __init__(self, err, i, question):
+        self.err = err
+        self.i = i
+        self.question = question
