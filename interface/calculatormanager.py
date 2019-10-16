@@ -41,6 +41,14 @@ class CalculatorManager():
         self.setCalculator(calculator)
 
 
+    def initEmptyState(self):
+        self.importedFeatures = []
+        self.calculator.load_preset('Computing')
+        self.setPrecision(30)
+        self.setUnitSimplification(True)
+        self.setAutoExecute(True, False)
+        self.setShortUnits(False)
+
     def restoreCalculatorState(self):
         self.importedFeatures = self.interface.fetchStateArray("importedFeatures")
 
@@ -91,10 +99,12 @@ class CalculatorManager():
     def calc(self):
         question = self.entry.getContents().rstrip()
         response = None
+        err = None
         try:
             self.calculator.vars = {}
             response = self.calculator.calculate(question)
-        except CalculatingException as err:
+        except CalculatingException as theErr:
+            err = theErr
             i = err.find_pos(question)
             row, column = self.rowsColumns(question, i)
             response = err.response
@@ -109,6 +119,9 @@ class CalculatorManager():
                     result_value = result.value
                     result_value = self.calculator.number_to_string(result_value)
                     self.display.addAnswer(result.expression, result_value, result.unit)
+        if err is not None:
+            self.display.addError(err)
+        self.display.refresh()
 
     def rowsColumns(self, text, pos):
         row = 1

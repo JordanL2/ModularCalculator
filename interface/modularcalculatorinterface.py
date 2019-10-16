@@ -22,7 +22,7 @@ import traceback
 
 class ModularCalculatorInterface(StatefulApplication):
 
-    def __init__(self):
+    def __init__(self, clear):
         super().__init__()
 
         self.setWindowIcon(QIcon('modcalc.png'))
@@ -35,7 +35,10 @@ class ModularCalculatorInterface(StatefulApplication):
         self.filemanager.tabmanager = self.tabmanager
 
         self.initMenu()
-        self.restoreAllState()
+        if not clear:
+            self.restoreAllState()
+        else:
+            self.initEmptyState()
         self.initShortcuts()
 
         self.entry.setFocus()
@@ -191,6 +194,10 @@ class ModularCalculatorInterface(StatefulApplication):
         nextTab.activated.connect(self.tabmanager.nextTab)
 
 
+    def initEmptyState(self):
+        self.calculatormanager.initEmptyState()
+        self.tabmanager.initEmptyState()
+
     def restoreAllState(self):
         try:
             self.calculatormanager.restoreCalculatorState()
@@ -323,6 +330,10 @@ class ModularCalculatorInterface(StatefulApplication):
 
 
 if __name__ == '__main__':
+    clear = False
+    if len(sys.argv) >= 2 and sys.argv[1] == '--clear':
+        print("Will not restore state due to --clear flag")
+        clear = True
     app = QApplication(sys.argv)
-    calc = ModularCalculatorInterface()
+    calc = ModularCalculatorInterface(clear)
     sys.exit(app.exec_())

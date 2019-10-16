@@ -34,14 +34,16 @@ class CalculatorDisplay(QWidget):
         self.refresh()
 
     def addAnswer(self, question, answer, unit):
-        self.rawOutput.append((question, answer, unit))
-        self.refresh()
+        self.rawOutput.append(CalculatorDisplayAnswer(question, answer, unit))
+
+    def addError(self, err):
+        pass
 
     def refresh(self):
         self.clearLayout(self.layout)
 
-        for n, outputRow in enumerate(self.rawOutput):
-            questionWidget, answerWidget = self.renderAnswer(outputRow[0], outputRow[1], outputRow[2], n)
+        for n, row in enumerate(self.rawOutput):
+            questionWidget, answerWidget = self.renderAnswer(row, n)
             self.layout.addWidget(questionWidget, n, 0, 1, 1)
             self.layout.addWidget(answerWidget, n, 1, 1, 1)
 
@@ -59,10 +61,12 @@ class CalculatorDisplay(QWidget):
                 childLayout = item.layout()
                 self.clearLayout(childLayout)
 
-    def renderAnswer(self, question, answer, unit, n):
-        question = question.strip()
+    def renderAnswer(self, row, n):
+        question = row.question.strip()
         questionHtml = self.questionHtml(question)
 
+        answer = row.answer
+        unit = row.unit
         if isinstance(answer, UnitPowerList):
             if self.options['shortunits']:
                 answer = answer.symbol()
@@ -114,3 +118,11 @@ class CalculatorDisplay(QWidget):
 
     def saveState(self):
         return {'rawOutput': self.rawOutput}
+
+
+class CalculatorDisplayAnswer():
+
+    def __init__(self, question, answer, unit):
+        self.question = question
+        self.answer = answer
+        self.unit = unit

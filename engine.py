@@ -98,7 +98,6 @@ class Engine:
                 except ParseException as err:
                     statements[-1].extend(err.items)
                     raise ParsingException(err.message, statements, err.next)
-                
 
                 if items_found is not None or (length is not None and length > 0):
                     if items_found is not None:

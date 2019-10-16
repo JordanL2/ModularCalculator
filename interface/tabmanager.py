@@ -13,6 +13,13 @@ class TabManager():
         self.selectedTab = None
 
 
+    def initEmptyState(self):
+        self.addTab()
+        self.loadTab(0)
+        self.interface.tabbar.currentChanged.connect(self.selectTab)
+        self.interface.tabbar.tabCloseRequested.connect(self.closeTab)
+        self.interface.tabbar.tabMoved.connect(self.moveTab)
+
     def restoreTabs(self):
         self.tabs = self.interface.fetchStateArray("tabs")
         if len(self.tabs) > 0:
