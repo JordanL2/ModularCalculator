@@ -80,7 +80,11 @@ class CalculatorDisplay(QWidget):
                 unit = ' ' + unit
         else:
             unit = ''
+        answerHtml = str(answer) + unit
 
+        return self.makeQuestionWidget(questionHtml, n), self.makeAnswerWidget(answerHtml, n)
+
+    def makeQuestionWidget(self, questionHtml, n):
         questionWidget = QLabel(questionHtml)
         questionFont = QFontDatabase.systemFont(QFontDatabase.FixedFont)
         questionFont.setPointSize(10)
@@ -89,8 +93,10 @@ class CalculatorDisplay(QWidget):
         questionWidget.setAutoFillBackground(True)
         questionWidget.setMargin(self.margin)
         questionWidget.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.TextSelectableByKeyboard)
+        return questionWidget
 
-        answerWidget = MiddleClickableLabel(self, str(answer) + unit, CalculatorDisplay.insertAnswer)
+    def makeAnswerWidget(self, answerHtml, n):
+        answerWidget = MiddleClickableLabel(self, answerHtml, CalculatorDisplay.insertAnswer)
         answerFont = QFontDatabase.systemFont(QFontDatabase.FixedFont)
         answerFont.setPointSize(14)
         answerFont.setBold(True)
@@ -99,8 +105,7 @@ class CalculatorDisplay(QWidget):
         answerWidget.setAutoFillBackground(True)
         answerWidget.setMargin(self.margin)
         answerWidget.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.TextSelectableByKeyboard)
-
-        return questionWidget, answerWidget
+        return answerWidget
 
     def questionHtml(self, expr):
         statements, _, _ = self.interface.calculatormanager.calculator.parse(expr, {})
