@@ -85,6 +85,7 @@ class CalculatorDisplay(QWidget):
         return self.makeQuestionWidget(questionHtml, n), self.makeAnswerWidget(answerHtml, n)
 
     def makeQuestionWidget(self, questionHtml, n):
+        questionHtml = questionHtml.replace('&nbsp;', ' ')
         questionWidget = QLabel(questionHtml)
         questionFont = QFontDatabase.systemFont(QFontDatabase.FixedFont)
         questionFont.setPointSize(10)
