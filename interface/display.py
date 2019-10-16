@@ -93,6 +93,7 @@ class CalculatorDisplay(QWidget):
         questionWidget.setAutoFillBackground(True)
         questionWidget.setMargin(self.margin)
         questionWidget.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.TextSelectableByKeyboard)
+        questionWidget.setWordWrap(True)
         return questionWidget
 
     def makeAnswerWidget(self, answerHtml, n):
@@ -105,6 +106,7 @@ class CalculatorDisplay(QWidget):
         answerWidget.setAutoFillBackground(True)
         answerWidget.setMargin(self.margin)
         answerWidget.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.TextSelectableByKeyboard)
+        answerWidget.setWordWrap(True)
         return answerWidget
 
     def questionHtml(self, expr):

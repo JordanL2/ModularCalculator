@@ -99,6 +99,7 @@ These examples are available in examples/basic_integration.py. See examples/adva
 		* Alternatively, hide these options when features not installed
 	* Should unit in answer be coloured same as the syntax highlight colour for units?
 	* When error, put statement with error syntax highlighting and error message in the result list display
+	* Option to switch between horizontal and vertical layout
 
 * Stability:
 	* Auto-save state occasionally
@@ -119,3 +120,4 @@ These examples are available in examples/basic_integration.py. See examples/adva
 # Bugs
 
 * Unit normalisation: "1 joule / 1 m^3" gets simplified to "1 pascal" - Even Google has this issue
+* Question html doesn't word wrap well
