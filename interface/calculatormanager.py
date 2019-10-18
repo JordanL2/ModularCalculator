@@ -109,8 +109,7 @@ class CalculatorManager():
             pos = err.find_pos(question)
             response = err.response
         if response is not None:
-            if len([r for r in response.results if r.has_result()]) > 1:
-                self.display.clear()
+            self.display.clear()
             for i, result in enumerate(response.results):
                 if result.has_result():
                     result_value = result.value
