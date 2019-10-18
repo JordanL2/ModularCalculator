@@ -71,7 +71,7 @@ class Engine:
                             raise ExecutionException(err.message, statements[0:i] + [err.items], err.next, err.truncated)
 
                         except CalculatorException as err:
-                            raise ExecutionException(err.message, statements[0:i], None, False)
+                            raise ExecutionException(err.message, statements[0:i] + [[]], None, False)
 
                     response.add_result(result)
 
