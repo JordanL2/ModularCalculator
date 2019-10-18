@@ -85,7 +85,7 @@ class CalculatorDisplay(QWidget):
 
         elif isinstance(row, CalculatorDisplayError):
             questionHtml, _ = self.interface.entry.makeHtml([row.err.statements[-1]], row.question[row.i:])
-            answerHtml = row.err.message
+            answerHtml = "<span style=\"color:red\">{}</span".format(row.err.message)
 
         else:
             raise Exception("Unrecognised type in renderAnswer: {}".format(type(row)))

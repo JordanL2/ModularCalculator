@@ -107,11 +107,9 @@ class CalculatorManager():
         except CalculatingException as theErr:
             err = theErr
             pos = err.find_pos(question)
-            row, column = self.rowsColumns(question, pos)
             response = err.response
-            QMessageBox.critical(self.interface, "ERROR", "{0} at line {1}, character {2}".format(err.message, row, column))
-        except CalculatorException as err:
-            QMessageBox.critical(self.interface, "ERROR", "{0}".format(err.message))
+        except CalculatorException as theErr:
+            QMessageBox.critical(self.interface, "ERROR", "{0}".format(theErr.message))
         if response is not None:
             if len([r for r in response.results if r.has_result()]) > 1:
                 self.display.clear()
@@ -123,16 +121,6 @@ class CalculatorManager():
         if err is not None:
             self.display.addError(err, pos, question)
         self.display.refresh()
-
-    def rowsColumns(self, text, pos):
-        row = 1
-        column = 0
-        for i in range(0, pos):
-            if text[i] == "\n":
-                row += 1
-                column = 0
-            column += 1
-        return row, column
 
 
     def setUnitSimplification(self, value):
