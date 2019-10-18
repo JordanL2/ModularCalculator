@@ -1,6 +1,7 @@
 #!/bin/sh
 
-FILENAME=shift
+FILENAME=$0
+shift
 DIR=`dirname "$(readlink -f "$FILENAME")"`
 export PYTHONPATH=${DIR}/..
 cd $DIR
