@@ -108,8 +108,6 @@ class CalculatorManager():
             err = theErr
             pos = err.find_pos(question)
             response = err.response
-        except CalculatorException as theErr:
-            QMessageBox.critical(self.interface, "ERROR", "{0}".format(theErr.message))
         if response is not None:
             if len([r for r in response.results if r.has_result()]) > 1:
                 self.display.clear()

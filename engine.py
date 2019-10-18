@@ -70,6 +70,9 @@ class Engine:
                         except ExecuteException as err:
                             raise ExecutionException(err.message, statements[0:i] + [err.items], err.next, err.truncated)
 
+                        except CalculatorException as err:
+                            raise ExecutionException(err.message, statements[0:i], None, False)
+
                     response.add_result(result)
 
                     if 'include_state' in flags and flags['include_state']:
