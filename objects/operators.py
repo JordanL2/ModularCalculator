@@ -74,7 +74,14 @@ class Operation:
 
         result_value, result_unit, result_ref = None, None, None
         if calculator.unit_normaliser is not None and self.units_normalise:
-            values, units, result_unit = calculator.unit_normaliser.normalise_inputs(values, units, self.units_multi, self.units_relative)
+            if len([v for v in values if not calculator.validate_number(v)]) == 0:
+                number_types = []
+                for i in range(0, len(values)):
+                    values[i], this_type = calculator.number(values[i])
+                    number_types.append(this_type)
+                values, units, result_unit = calculator.unit_normaliser.normalise_inputs(values, units, self.units_multi, self.units_relative)
+                for i in range(0, len(values)):
+                    values[i] = calculator.restore_number_type(values[i], number_types[i])
         
         try:
             result = self.ref(calculator, values, units, refs, flags.copy())

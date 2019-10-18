@@ -34,6 +34,7 @@ class BasicArithmeticFeature(Feature):
             1, 
             [['number', 'unit'], 'number']),
         {'units_normalise': False})
+
         calculator.add_op(OperatorDefinition(
             'Numerical', 
             '*', 
@@ -43,6 +44,7 @@ class BasicArithmeticFeature(Feature):
             1, 
             [['number', 'unit'], ['number', 'unit']]), 
         {'units_relative': True, 'units_multi': True})
+
         calculator.add_op(OperatorDefinition(
             'Numerical', 
             '/', 
@@ -52,6 +54,7 @@ class BasicArithmeticFeature(Feature):
             1, 
             [['number', 'unit'], ['number', 'unit']]), 
         {'units_relative': True, 'units_multi': True})
+
         calculator.add_op(OperatorDefinition(
             'Numerical', 
             '+', 
@@ -61,6 +64,7 @@ class BasicArithmeticFeature(Feature):
             1, 
             'number'), 
         {'units_relative': True})
+
         calculator.add_op(OperatorDefinition(
             'Numerical', 
             '-', 
@@ -70,6 +74,7 @@ class BasicArithmeticFeature(Feature):
             1, 
             'number'), 
         {'units_relative': True})
+
         calculator.add_op(OperatorDefinition(
             'Numerical', 
             'IMPLICIT_MULTIPLY', 
@@ -79,6 +84,7 @@ class BasicArithmeticFeature(Feature):
             1, 
             'number'), 
         {'units_relative': True, 'units_multi': True, 'hidden': True})
+
         calculator.implicit_multiply_op = 'IMPLICIT_MULTIPLY'
         calculator.multiply_op = '*'
         calculator.divide_op = '/'

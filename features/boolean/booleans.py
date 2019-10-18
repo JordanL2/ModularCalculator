@@ -4,6 +4,7 @@ from modularcalculator.objects.exceptions import *
 from modularcalculator.objects.items import *
 from modularcalculator.objects.operators import OperationResult, OperatorDefinition
 from modularcalculator.features.feature import Feature
+from modularcalculator.numericalengine import NumberType
 
 from decimal import *
 import re
@@ -192,15 +193,18 @@ class BooleansFeature(Feature):
     def boolean(self, val):
         if type(val) == bool:
             return val
-        raise CalculatingException('Cannot cast to boolean: ' + repr(val))
+        raise CalculatorException('Cannot cast to boolean: ' + repr(val))
 
     def number_bool(self, val):
         if isinstance(val, bool):
             if val:
-                return Decimal(1), False
+                return Decimal(1), NumberType(BooleansFeature.restore_boolean)
             else:
-                return Decimal(0), False
+                return Decimal(0), NumberType(BooleansFeature.restore_boolean)
         return None, None
+
+    def restore_boolean(self, val, opts=None):
+        return val != 0
 
     def validate_boolean(self, value, unit, ref):
         try:
