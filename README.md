@@ -93,8 +93,7 @@ These examples are available in examples/basic_integration.py. See examples/adva
 * Functionality:
 
 * Usability / quality of life:
-	* Undo history
-	* When middle click answer to insert it, change focus to entry afterwards
+	* Redo functionality (also make Edit menu for undo and redo)
 	* Improve Light theme, it's too dark and high contrast
 	* Hotkeys for various insert operations, eg Ctrl+F = Insert Function
 	* Check if unit, function, constant, date features are installed when you click their Insert
