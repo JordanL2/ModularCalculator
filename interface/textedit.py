@@ -93,6 +93,8 @@ class CalculatorTextEdit(QTextEdit):
         self.css += '</style>'
 
     def keyPressEvent(self, e):
+        if len(self.history) > 0:
+            self.history[-1][1] = self.textCursor().position()
         if e.key() == Qt.Key_Tab:
             spaces = 4 - (self.textCursor().columnNumber() % 4)
             self.insert(' ' * spaces)
@@ -111,7 +113,7 @@ class CalculatorTextEdit(QTextEdit):
             expr = self.getContents()
 
             if not undo and (self.oldText is None or self.oldText != self.toHtml()):
-                self.history.append((expr, self.textCursor().position()))
+                self.history.append([expr, None])
                 if len(self.history) > self.historySize:
                     self.history.pop(0)
 
@@ -252,6 +254,7 @@ class CalculatorTextEdit(QTextEdit):
     def undo(self):
         if len(self.history) > 1:
             sliderpos = self.verticalScrollBar().sliderPosition()
+            
             self.history.pop()
             (expr, cursorpos) = self.history[-1]
             if len(self.history) > 1:
@@ -259,9 +262,11 @@ class CalculatorTextEdit(QTextEdit):
             else:
                 self.oldText = None
             self.setContents(expr, True)
-            cursor = self.textCursor()
-            cursor.setPosition(cursorpos)
-            self.setTextCursor(cursor)
+            
+            if cursorpos is not None:
+                cursor = self.textCursor()
+                cursor.setPosition(cursorpos)
+                self.setTextCursor(cursor)
             self.verticalScrollBar().setSliderPosition(sliderpos)
 
     def clearContents(self):
