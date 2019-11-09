@@ -184,6 +184,11 @@ class ModularCalculatorInterface(StatefulApplication):
         menubar.addAction(self.executeAction)
         self.executeAction.setShortcuts([QKeySequence(Qt.CTRL + Qt.Key_Enter), QKeySequence(Qt.CTRL + Qt.Key_Return)])
 
+        self.undoAction = QAction('Undo', self)
+        self.undoAction.triggered.connect(self.entry.undo)
+        menubar.addAction(self.undoAction)
+        self.undoAction.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_Z))
+
     def showExecuteToolTip(self):
         QToolTip.showText(QCursor.pos(), "Ctrl+Enter", self)
 

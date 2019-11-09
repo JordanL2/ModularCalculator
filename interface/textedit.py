@@ -33,6 +33,9 @@ class CalculatorTextEdit(QTextEdit):
 
         self.cached_response = None
 
+        self.history = []
+        self.historySize = 1000
+
     def setCalculator(self, calculator):
         self.calculator = calculator
 
@@ -93,6 +96,8 @@ class CalculatorTextEdit(QTextEdit):
         if e.key() == Qt.Key_Tab:
             spaces = 4 - (self.textCursor().columnNumber() % 4)
             self.insert(' ' * spaces)
+        elif e.key() == Qt.Key_Z and e.modifiers() & Qt.CTRL:
+            self.undo()
         else:
             super().keyPressEvent(e)
         self.checkSyntax()
@@ -101,9 +106,15 @@ class CalculatorTextEdit(QTextEdit):
         super().mouseReleaseEvent(e)
         self.checkSyntax()
 
-    def checkSyntax(self, force=False):
-        if self.calculator is not None and (force or self.oldText is None or self.oldText != self.toHtml()):
+    def checkSyntax(self, force=False, undo=False):
+        if self.calculator is not None and (force or undo or self.oldText is None or self.oldText != self.toHtml()):
             expr = self.getContents()
+
+            if not undo and (self.oldText is None or self.oldText != self.toHtml()):
+                self.history.append((expr, self.textCursor().position()))
+                if len(self.history) > self.historySize:
+                    self.history.pop(0)
+
             if len(expr) > 0 and expr[-1] != "\n":
                 expr += "\n"
 
@@ -234,9 +245,24 @@ class CalculatorTextEdit(QTextEdit):
     def getContents(self):
         return self.toPlainText()
 
-    def setContents(self, text):
+    def setContents(self, text, undo=False):
         self.setPlainText(text)
-        self.checkSyntax()
+        self.checkSyntax(False, undo)
+
+    def undo(self):
+        if len(self.history) > 1:
+            sliderpos = self.verticalScrollBar().sliderPosition()
+            self.history.pop()
+            (expr, cursorpos) = self.history[-1]
+            if len(self.history) > 1:
+                self.oldText = self.history[-2]
+            else:
+                self.oldText = None
+            self.setContents(expr, True)
+            cursor = self.textCursor()
+            cursor.setPosition(cursorpos)
+            self.setTextCursor(cursor)
+            self.verticalScrollBar().setSliderPosition(sliderpos)
 
     def clearContents(self):
         self.setContents('')
