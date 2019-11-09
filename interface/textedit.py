@@ -34,6 +34,7 @@ class CalculatorTextEdit(QTextEdit):
         self.cached_response = None
 
         self.history = []
+        self.historyPos = 0
         self.historySize = 1000
 
     def setCalculator(self, calculator):
@@ -94,12 +95,14 @@ class CalculatorTextEdit(QTextEdit):
 
     def keyPressEvent(self, e):
         if len(self.history) > 0:
-            self.history[-1][1] = self.textCursor().position()
+            self.history[self.historyPos - 1][1] = self.textCursor().position()
         if e.key() == Qt.Key_Tab:
             spaces = 4 - (self.textCursor().columnNumber() % 4)
             self.insert(' ' * spaces)
         elif e.key() == Qt.Key_Z and e.modifiers() & Qt.CTRL:
             self.undo()
+        elif e.key() == Qt.Key_Y and e.modifiers() & Qt.CTRL:
+            self.redo()
         else:
             super().keyPressEvent(e)
         self.checkSyntax()
@@ -113,9 +116,12 @@ class CalculatorTextEdit(QTextEdit):
             expr = self.getContents()
 
             if not undo and (self.oldText is None or self.oldText != self.toHtml()):
+                if self.historyPos < len(self.history):
+                    del self.history[self.historyPos:]
                 self.history.append([expr, None])
                 if len(self.history) > self.historySize:
                     self.history.pop(0)
+                self.historyPos = len(self.history)
 
             if len(expr) > 0 and expr[-1] != "\n":
                 expr += "\n"
@@ -252,15 +258,30 @@ class CalculatorTextEdit(QTextEdit):
         self.checkSyntax(False, undo)
 
     def undo(self):
-        if len(self.history) > 1:
+        if self.historyPos > 1:
             sliderpos = self.verticalScrollBar().sliderPosition()
             
-            self.history.pop()
-            (expr, cursorpos) = self.history[-1]
-            if len(self.history) > 1:
-                self.oldText = self.history[-2]
+            self.historyPos -= 1
+            (expr, cursorpos) = self.history[self.historyPos - 1]
+            if self.historyPos > 1:
+                self.oldText = self.history[self.historyPos - 2]
             else:
                 self.oldText = None
+            self.setContents(expr, True)
+            
+            if cursorpos is not None:
+                cursor = self.textCursor()
+                cursor.setPosition(cursorpos)
+                self.setTextCursor(cursor)
+            self.verticalScrollBar().setSliderPosition(sliderpos)
+
+    def redo(self):
+        if self.historyPos < len(self.history):
+            sliderpos = self.verticalScrollBar().sliderPosition()
+            
+            self.historyPos += 1
+            (expr, cursorpos) = self.history[self.historyPos - 1]
+            self.oldText = self.history[self.historyPos - 2]
             self.setContents(expr, True)
             
             if cursorpos is not None:

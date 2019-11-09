@@ -115,6 +115,18 @@ class ModularCalculatorInterface(StatefulApplication):
         fileSaveAs.setShortcut(QKeySequence(Qt.CTRL + Qt.SHIFT + Qt.Key_S))
         self.fileMenu.addAction(fileSaveAs)
 
+        editMenu = menubar.addMenu('Edit')
+
+        self.undoAction = QAction('Undo', self)
+        self.undoAction.triggered.connect(self.entry.undo)
+        editMenu.addAction(self.undoAction)
+        self.undoAction.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_Z))
+
+        self.redoAction = QAction('Redo', self)
+        self.redoAction.triggered.connect(self.entry.undo)
+        editMenu.addAction(self.redoAction)
+        self.redoAction.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_Y))
+
         viewMenu = menubar.addMenu('View')
 
         self.viewShortUnits = QAction('Units in Short Form', self, checkable=True)
@@ -183,11 +195,6 @@ class ModularCalculatorInterface(StatefulApplication):
         self.executeAction.hovered.connect(self.showExecuteToolTip)
         menubar.addAction(self.executeAction)
         self.executeAction.setShortcuts([QKeySequence(Qt.CTRL + Qt.Key_Enter), QKeySequence(Qt.CTRL + Qt.Key_Return)])
-
-        self.undoAction = QAction('Undo', self)
-        self.undoAction.triggered.connect(self.entry.undo)
-        menubar.addAction(self.undoAction)
-        self.undoAction.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_Z))
 
     def showExecuteToolTip(self):
         QToolTip.showText(QCursor.pos(), "Ctrl+Enter", self)
