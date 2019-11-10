@@ -123,7 +123,7 @@ class ModularCalculatorInterface(StatefulApplication):
         self.undoAction.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_Z))
 
         self.redoAction = QAction('Redo', self)
-        self.redoAction.triggered.connect(self.entry.undo)
+        self.redoAction.triggered.connect(self.entry.redo)
         editMenu.addAction(self.redoAction)
         self.redoAction.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_Y))
 
