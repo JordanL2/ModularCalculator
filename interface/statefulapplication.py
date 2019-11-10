@@ -10,7 +10,7 @@ class StatefulApplication(QMainWindow):
 
     def __init__(self):
         super().__init__()
-        self.settings = QSettings()
+        self.settings = QSettings('ModularCalculator', 'ModularCalculator')
 
     def closeEvent(self, e):
         self.storeAllState()
