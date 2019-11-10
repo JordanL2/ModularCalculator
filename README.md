@@ -93,10 +93,9 @@ These examples are available in examples/basic_integration.py. See examples/adva
 * Functionality:
 
 * Usability / quality of life:
+	* Hide insert unit, function, constant, date when features not installed
 	* Improve Light theme, it's too dark and high contrast
 	* Hotkeys for various insert operations, eg Ctrl+F = Insert Function
-	* Check if unit, function, constant, date features are installed when you click their Insert
-		* Alternatively, hide these options when features not installed
 	* Should unit in answer be coloured same as the syntax highlight colour for units?
 	* Option to switch between horizontal and vertical layout
 
