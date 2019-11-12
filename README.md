@@ -64,6 +64,7 @@ These examples are available in examples/basic_integration.py. See examples/adva
 * Ability to alter operator symbols as feature options
 * Ability to rename functions as feature options
 * Should bitwise not operator only allow positive integers, and throw error if something else?
+* FOR loops?
 
 ## Functions
 * Display operator/function syntax info on parameter validation error
@@ -104,13 +105,16 @@ These examples are available in examples/basic_integration.py. See examples/adva
 
 * Performance:
 	* When editing input, check if its possible to reuse later statements from cached result
+		* When syntax execution is disabled, no need to check state is the same after a statement
+	* Should syntax execution be removed altogether? Unless it can be sped up a lot
+	* A-sync syntax execution
 
 * Aesthetics and polish:
 
 ## Other
 * Comment code
 * Move to do / bug list to github page
-* Add code license - GPL 2 or LGPL 2
+* Add code license - Apache 2 or LGPL 2
 * Wiki
 * Make flatpak
 
