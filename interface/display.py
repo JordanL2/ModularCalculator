@@ -98,6 +98,8 @@ class CalculatorDisplay(QWidget):
         questionFont = QFontDatabase.systemFont(QFontDatabase.FixedFont)
         questionFont.setPointSize(10)
         questionWidget.setFont(questionFont)
+        #TODO enable this once widget sizing is fixed
+        #questionWidget.setAlignment(Qt.AlignLeft | Qt.AlignTop)
         questionWidget.setBackgroundRole(self.colours[n % len(self.colours)])
         questionWidget.setAutoFillBackground(True)
         questionWidget.setMargin(self.margin)
@@ -111,6 +113,8 @@ class CalculatorDisplay(QWidget):
         answerFont.setPointSize(14)
         answerFont.setBold(True)
         answerWidget.setFont(answerFont)
+        #TODO enable this once widget sizing is fixed
+        #answerWidget.setAlignment(Qt.AlignLeft | Qt.AlignTop)
         answerWidget.setBackgroundRole(self.colours[n % len(self.colours)])
         answerWidget.setAutoFillBackground(True)
         answerWidget.setMargin(self.margin)

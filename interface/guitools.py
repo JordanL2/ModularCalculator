@@ -3,11 +3,11 @@
 from PyQt5.QtCore import QSize
 from PyQt5.QtWidgets import QApplication
 
-import cgi
+import html
 
 
 def htmlSafe(text):
-    return cgi.escape(str(text)).replace("\n", '<br/>').replace(' ', '&nbsp;')
+    return html.escape(str(text)).replace("\n", '<br/>').replace(' ', '&nbsp;')
 
 def screenRelativeSize(width, height):
     size = QSize()
