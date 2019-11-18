@@ -355,6 +355,8 @@ class SyntaxHighlighterWorker(QRunnable):
         ii = self.ii
         error_statements = []
 
+        self.calculator.update_engine_prec()
+
         try:
             if len(response.results) > 0:
                 self.calculator.vars = response.results[-1].state.copy()
