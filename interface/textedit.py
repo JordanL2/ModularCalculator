@@ -181,7 +181,7 @@ class CalculatorTextEdit(QTextEdit):
 
             self.interface.filemanager.setCurrentFileAndModified(self.interface.filemanager.currentFile(), self.isModified())
 
-        self.oldText = self.toHtml()
+            self.oldText = self.toHtml()
 
     def makeHtml(self, statements, errorExpr):
         splitStatements = []
@@ -334,7 +334,7 @@ class CalculatorTextEdit(QTextEdit):
 
 class SyntaxHighlighterSignals(QObject):
 
-    result = pyqtSignal(object)
+    result = pyqtSignal(dict)
 
 
 class SyntaxHighlighterWorker(QRunnable):
@@ -346,4 +346,5 @@ class SyntaxHighlighterWorker(QRunnable):
 
     @pyqtSlot()
     def run(self):
-        pass
+        #TODO
+        self.signals.result.emit({'key1': 'test', 'key2': [1, 2, 3]})

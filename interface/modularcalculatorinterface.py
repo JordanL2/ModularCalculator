@@ -10,7 +10,7 @@ from modularcalculator.interface.statefulapplication import *
 from modularcalculator.interface.tabmanager import *
 from modularcalculator.interface.textedit import *
 
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QThreadPool
 from PyQt5.QtGui import QKeySequence, QCursor, QPalette, QIcon
 from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QSplitter, QAction, QFileDialog, QToolTip, QShortcut, QMessageBox, QScrollArea, QSizePolicy
 
@@ -26,6 +26,8 @@ class ModularCalculatorInterface(StatefulApplication):
         super().__init__()
 
         self.setWindowIcon(QIcon('modcalc.png'))
+
+        self.threadpool = QThreadPool()
 
         self.initUI()
 
