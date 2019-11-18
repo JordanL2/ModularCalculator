@@ -9,6 +9,7 @@ from PyQt5.QtWidgets import QTextEdit
 from PyQt5.QtGui import QFontDatabase, QTextCursor, QTextCharFormat, QGuiApplication, QTextFormat
 
 import time
+import uuid
 
 
 class CalculatorTextEdit(QTextEdit):
@@ -140,7 +141,8 @@ class CalculatorTextEdit(QTextEdit):
                     i -= len(newResponse.results[-1].expression)
                     del newResponse.results[-1]
 
-            worker = SyntaxHighlighterWorker(self.calculator, self.autoExecute, expr, newResponse, i, ii)
+            self.last_uuid = uuid.uuid4()
+            worker = SyntaxHighlighterWorker(self.calculator, self.autoExecute, expr, newResponse, i, ii, self.last_uuid)
             worker.signals.result.connect(self.finishSyntaxHighlighting)
             worker.setAutoDelete(True)
             self.interface.threadpool.clear()
@@ -152,7 +154,7 @@ class CalculatorTextEdit(QTextEdit):
         error_statements = result['error_statements']
         ii = result['ii']
 
-        if expr != self.getContents():
+        if result['uuid'] != self.last_uuid:
             return
 
         self.cached_response = newResponse
@@ -337,7 +339,7 @@ class SyntaxHighlighterSignals(QObject):
 
 class SyntaxHighlighterWorker(QRunnable):
 
-    def __init__(self, calculator, autoExecute, expr, response, i, ii):
+    def __init__(self, calculator, autoExecute, expr, response, i, ii, uuid):
         super(SyntaxHighlighterWorker, self).__init__()
         
         self.signals = SyntaxHighlighterSignals() 
@@ -348,6 +350,7 @@ class SyntaxHighlighterWorker(QRunnable):
         self.response = response
         self.i = i
         self.ii = ii
+        self.uuid = uuid
 
     @pyqtSlot()
     def run(self):
@@ -380,4 +383,5 @@ class SyntaxHighlighterWorker(QRunnable):
             'response': response,
             'error_statements': error_statements,
             'ii': ii,
+            'uuid': self.uuid,
             })
