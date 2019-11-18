@@ -113,10 +113,10 @@ class CalculatorTextEdit(QTextEdit):
         self.checkSyntax()
 
     def checkSyntax(self, force=False, undo=False):
-        if self.calculator is not None and (force or undo or self.oldText is None or self.oldText != self.toHtml()):
+        if self.calculator is not None and (force or undo or self.oldText is None or self.oldText != self.getContents()):
             expr = self.getContents()
 
-            if not undo and (self.oldText is None or self.oldText != self.toHtml()):
+            if not undo and (self.oldText is None or self.oldText != self.getContents()):
                 if self.historyPos < len(self.history):
                     del self.history[self.historyPos:]
                 self.history.append([expr, None])
@@ -147,6 +147,8 @@ class CalculatorTextEdit(QTextEdit):
             worker.setAutoDelete(True)
             self.interface.threadpool.clear()
             self.interface.threadpool.start(worker)
+
+        self.oldText = self.getContents()
 
     def finishSyntaxHighlighting(self, result):
         expr = result['expr']
@@ -180,8 +182,6 @@ class CalculatorTextEdit(QTextEdit):
         self.setExtraSelections(extraSelections)
 
         self.interface.filemanager.setCurrentFileAndModified(self.interface.filemanager.currentFile(), self.isModified())
-
-        self.oldText = self.toHtml()
 
     def makeHtml(self, statements, errorExpr):
         splitStatements = []
