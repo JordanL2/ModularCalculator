@@ -354,34 +354,39 @@ class SyntaxHighlighterWorker(QRunnable):
 
     @pyqtSlot()
     def run(self):
-        expr = self.expr
-        response = self.response
-        i = self.i
-        ii = self.ii
-        error_statements = []
-
         self.calculator.update_engine_prec()
 
-        try:
-            if len(response.results) > 0:
-                self.calculator.vars = response.results[-1].state.copy()
-            else:
-                self.calculator.vars = {}
-            calcResponse = self.calculator.calculate(expr[i:], {'parse_only': not self.autoExecute, 'include_state': True})
-            response.results.extend(calcResponse.results)
-            ii = len(expr)
-        except CalculatingException as err:
-            response.results.extend(err.response.results)
-            error_statements = err.statements[len(err.response.results):]
-            err.statements = [r.items for r in response.results] + error_statements
-            ii = err.find_pos(expr)
-        except CalculatorException as err:
-            ii = i
-        
-        self.signals.result.emit({
-            'expr': expr,
-            'response': response,
-            'error_statements': error_statements,
-            'ii': ii,
-            'uuid': self.uuid,
-            })
+        parse_only_list = [True]
+        if self.autoExecute:
+            parse_only_list.append(False)
+
+        for parse_only in parse_only_list:
+            expr = self.expr
+            response = self.response.copy()
+            i = self.i
+            ii = self.ii
+            error_statements = []
+
+            try:
+                if len(response.results) > 0:
+                    self.calculator.vars = response.results[-1].state.copy()
+                else:
+                    self.calculator.vars = {}
+                calcResponse = self.calculator.calculate(expr[i:], {'parse_only': parse_only, 'include_state': True})
+                response.results.extend(calcResponse.results)
+                ii = len(expr)
+            except CalculatingException as err:
+                response.results.extend(err.response.results)
+                error_statements = err.statements[len(err.response.results):]
+                err.statements = [r.items for r in response.results] + error_statements
+                ii = err.find_pos(expr)
+            except CalculatorException as err:
+                ii = i
+
+            self.signals.result.emit({
+                'expr': expr,
+                'response': response,
+                'error_statements': error_statements,
+                'ii': ii,
+                'uuid': self.uuid,
+                })

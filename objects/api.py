@@ -14,6 +14,12 @@ class CalculatorResponse:
     def add_result(self, result):
         self.results.append(result)
 
+    def copy(self):
+        response = CalculatorResponse()
+        response.results = self.results.copy()
+        response.items = self.items.copy()
+        return response
+
 
 class CalculatorResult:
 
