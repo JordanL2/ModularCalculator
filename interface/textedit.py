@@ -142,6 +142,8 @@ class CalculatorTextEdit(QTextEdit):
 
             worker = SyntaxHighlighterWorker(self.calculator, self.autoExecute, expr, newResponse, i, ii)
             worker.signals.result.connect(self.finishSyntaxHighlighting)
+            worker.setAutoDelete(True)
+            self.interface.threadpool.clear()
             self.interface.threadpool.start(worker)
 
     def finishSyntaxHighlighting(self, result):
