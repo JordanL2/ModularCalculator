@@ -151,6 +151,9 @@ class CalculatorTextEdit(QTextEdit):
         i = result['i']
         ii = result['ii']
 
+        if expr != self.getContents():
+            return
+
         self.cached_response = newResponse
 
         statements = [r.items for r in newResponse.results] + error_statements
