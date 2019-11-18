@@ -129,7 +129,6 @@ class CalculatorTextEdit(QTextEdit):
             newResponse = CalculatorResponse()
             i = 0
             ii = None
-            error_statements = []
             if self.cached_response is not None and not force:
                 for result in self.cached_response.results:
                     if expr[i:].startswith(result.expression):
@@ -141,47 +140,45 @@ class CalculatorTextEdit(QTextEdit):
                     i -= len(newResponse.results[-1].expression)
                     del newResponse.results[-1]
 
-            try:
-                if len(newResponse.results) > 0:
-                    self.calculator.vars = newResponse.results[-1].state.copy()
-                else:
-                    self.calculator.vars = {}
-                response = self.calculator.calculate(expr[i:], {'parse_only': not self.autoExecute, 'include_state': True})
-                newResponse.results.extend(response.results)
-                ii = len(expr)
-            except CalculatingException as err:
-                newResponse.results.extend(err.response.results)
-                error_statements = err.statements[len(err.response.results):]
-                err.statements = [r.items for r in newResponse.results] + error_statements
-                ii = err.find_pos(expr)
-            except CalculatorException as err:
-                ii = i
+            worker = SyntaxHighlighterWorker(self.calculator, expr, newResponse, i, ii)
+            worker.signals.result.connect(self.finishSyntaxHighlighting)
+            self.interface.threadpool.start(worker)
 
-            self.cached_response = newResponse
+    def finishSyntaxHighlighting(self, result):
+        expr = result['expr']
+        newResponse = result['response']
+        error_statements = result['error_statements']
+        i = result['i']
+        ii = result['ii']
+        print("expr", expr)
+        print("i", i)
+        print("ii", ii)
 
-            statements = [r.items for r in newResponse.results] + error_statements
-            errorExpr = expr[ii:]
-            newhtml, highlightPositions = self.makeHtml(statements, errorExpr)
-            self.updateHtml(newhtml)
+        self.cached_response = newResponse
 
-            extraSelections = []
-            for pos in highlightPositions:
-                selection = QTextEdit.ExtraSelection()
+        statements = [r.items for r in newResponse.results] + error_statements
+        errorExpr = expr[ii:]
+        newhtml, highlightPositions = self.makeHtml(statements, errorExpr)
+        self.updateHtml(newhtml)
 
-                selection.cursor = QTextCursor(self.document())
-                selection.cursor.setPosition(pos[0])
-                selection.cursor.setPosition(pos[1], QTextCursor.KeepAnchor)
+        extraSelections = []
+        for pos in highlightPositions:
+            selection = QTextEdit.ExtraSelection()
 
-                background = QGuiApplication.palette().alternateBase().color()
-                selection.format.setBackground(background)
-                selection.format.setProperty(QTextFormat.FullWidthSelection, True)
+            selection.cursor = QTextCursor(self.document())
+            selection.cursor.setPosition(pos[0])
+            selection.cursor.setPosition(pos[1], QTextCursor.KeepAnchor)
 
-                extraSelections.append(selection)
-            self.setExtraSelections(extraSelections)
+            background = QGuiApplication.palette().alternateBase().color()
+            selection.format.setBackground(background)
+            selection.format.setProperty(QTextFormat.FullWidthSelection, True)
 
-            self.interface.filemanager.setCurrentFileAndModified(self.interface.filemanager.currentFile(), self.isModified())
+            extraSelections.append(selection)
+        self.setExtraSelections(extraSelections)
 
-            self.oldText = self.toHtml()
+        self.interface.filemanager.setCurrentFileAndModified(self.interface.filemanager.currentFile(), self.isModified())
+
+        self.oldText = self.toHtml()
 
     def makeHtml(self, statements, errorExpr):
         splitStatements = []
@@ -339,12 +336,48 @@ class SyntaxHighlighterSignals(QObject):
 
 class SyntaxHighlighterWorker(QRunnable):
 
-    def __init__(self, expr):
+    def __init__(self, calculator, expr, response, i, ii):
         super(SyntaxHighlighterWorker, self).__init__()
+        
+        self.signals = SyntaxHighlighterSignals() 
+
+        self.calculator = calculator
         self.expr = expr
-        self.stop = False
+        self.response = response
+        self.i = i
+        self.ii = ii
 
     @pyqtSlot()
     def run(self):
-        #TODO
-        self.signals.result.emit({'key1': 'test', 'key2': [1, 2, 3]})
+        expr = self.expr
+        response = self.response
+        i = self.i
+        ii = self.ii
+        error_statements = []
+
+        try:
+            if len(response.results) > 0:
+                self.calculator.vars = response.results[-1].state.copy()
+            else:
+                self.calculator.vars = {}
+            #response = self.calculator.calculate(expr[i:], {'parse_only': not self.autoExecute, 'include_state': True})
+            print("sending:", expr[i:])
+            calcResponse = self.calculator.calculate(expr[i:], {'parse_only': False, 'include_state': True})
+            response.results.extend(calcResponse.results)
+            ii = len(expr)
+        except CalculatingException as err:
+            print(err.message)
+            response.results.extend(err.response.results)
+            error_statements = err.statements[len(err.response.results):]
+            err.statements = [r.items for r in response.results] + error_statements
+            ii = err.find_pos(expr)
+        except CalculatorException as err:
+            ii = i
+        
+        self.signals.result.emit({
+            'expr': expr,
+            'response': response,
+            'error_statements': error_statements,
+            'i': i,
+            'ii': ii,
+            })
