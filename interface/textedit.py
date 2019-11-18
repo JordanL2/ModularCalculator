@@ -150,9 +150,6 @@ class CalculatorTextEdit(QTextEdit):
         error_statements = result['error_statements']
         i = result['i']
         ii = result['ii']
-        print("expr", expr)
-        print("i", i)
-        print("ii", ii)
 
         self.cached_response = newResponse
 
@@ -367,7 +364,6 @@ class SyntaxHighlighterWorker(QRunnable):
             response.results.extend(calcResponse.results)
             ii = len(expr)
         except CalculatingException as err:
-            print(err.message)
             response.results.extend(err.response.results)
             error_statements = err.statements[len(err.response.results):]
             err.statements = [r.items for r in response.results] + error_statements
