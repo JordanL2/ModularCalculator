@@ -193,7 +193,7 @@ class CalculatorTextEdit(QTextEdit):
 
     def finishSyntaxHighlighting(self, result):
         expr = result['expr']
-        newResponse = result['response']
+        response = result['response']
         error_statements = result['error_statements']
         ii = result['ii']
 
@@ -201,9 +201,9 @@ class CalculatorTextEdit(QTextEdit):
             return
 
         if not result['parse_only']:
-            self.cached_response = newResponse
+            self.cached_response = response
 
-        statements = [r.items for r in newResponse.results] + error_statements
+        statements = [r.items for r in response.results] + error_statements
         errorExpr = expr[ii:]
         newhtml, highlightPositions = self.makeHtml(statements, errorExpr)
         self.updateHtml(newhtml)
