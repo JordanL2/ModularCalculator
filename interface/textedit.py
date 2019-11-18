@@ -127,28 +127,59 @@ class CalculatorTextEdit(QTextEdit):
             if len(expr) > 0 and expr[-1] != "\n":
                 expr += "\n"
 
-            newResponse = CalculatorResponse()
+            response = CalculatorResponse()
             i = 0
             ii = None
             if self.cached_response is not None and not force:
                 for result in self.cached_response.results:
                     if expr[i:].startswith(result.expression):
-                        newResponse.results.append(result)
+                        response.results.append(result)
                         i += len(result.expression)
                     else:
                         break
-                if len(newResponse.results) > 0 and len(newResponse.results) == len(self.cached_response.results):
-                    i -= len(newResponse.results[-1].expression)
-                    del newResponse.results[-1]
+                if len(response.results) > 0 and len(response.results) == len(self.cached_response.results):
+                    i -= len(response.results[-1].expression)
+                    del response.results[-1]
 
             self.last_uuid = uuid.uuid4()
-            worker = SyntaxHighlighterWorker(self.calculator, self.autoExecute, expr, newResponse, i, ii, self.last_uuid)
-            worker.signals.result.connect(self.finishSyntaxHighlighting)
-            worker.setAutoDelete(True)
-            self.interface.threadpool.clear()
-            self.interface.threadpool.start(worker)
+            self.finishSyntaxHighlighting(CalculatorTextEdit.doSyntaxParsing(self.calculator, expr, response.copy(), i, ii, self.last_uuid, True))
+
+            if self.autoExecute:
+                worker = SyntaxHighlighterWorker(self.calculator, expr, response, i, ii, self.last_uuid)
+                worker.signals.result.connect(self.finishSyntaxHighlighting)
+                worker.setAutoDelete(True)
+                self.interface.threadpool.clear()
+                self.interface.threadpool.start(worker)
 
         self.oldText = self.getContents()
+
+    def doSyntaxParsing(calculator, expr, response, i, ii, uuid, parse_only):
+        error_statements = []
+
+        try:
+            if len(response.results) > 0:
+                calculator.vars = response.results[-1].state.copy()
+            else:
+                calculator.vars = {}
+            calcResponse = calculator.calculate(expr[i:], {'parse_only': parse_only, 'include_state': True})
+            response.results.extend(calcResponse.results)
+            ii = len(expr)
+        except CalculatingException as err:
+            print(err.message)
+            response.results.extend(err.response.results)
+            error_statements = err.statements[len(err.response.results):]
+            err.statements = [r.items for r in response.results] + error_statements
+            ii = err.find_pos(expr)
+        except CalculatorException as err:
+            ii = i
+
+        return({
+            'expr': expr,
+            'response': response,
+            'error_statements': error_statements,
+            'ii': ii,
+            'uuid': uuid,
+            })
 
     def finishSyntaxHighlighting(self, result):
         expr = result['expr']
@@ -339,13 +370,12 @@ class SyntaxHighlighterSignals(QObject):
 
 class SyntaxHighlighterWorker(QRunnable):
 
-    def __init__(self, calculator, autoExecute, expr, response, i, ii, uuid):
+    def __init__(self, calculator, expr, response, i, ii, uuid):
         super(SyntaxHighlighterWorker, self).__init__()
         
         self.signals = SyntaxHighlighterSignals() 
 
         self.calculator = calculator
-        self.autoExecute = autoExecute
         self.expr = expr
         self.response = response
         self.i = i
@@ -356,37 +386,4 @@ class SyntaxHighlighterWorker(QRunnable):
     def run(self):
         self.calculator.update_engine_prec()
 
-        parse_only_list = [True]
-        if self.autoExecute:
-            parse_only_list.append(False)
-
-        for parse_only in parse_only_list:
-            expr = self.expr
-            response = self.response.copy()
-            i = self.i
-            ii = self.ii
-            error_statements = []
-
-            try:
-                if len(response.results) > 0:
-                    self.calculator.vars = response.results[-1].state.copy()
-                else:
-                    self.calculator.vars = {}
-                calcResponse = self.calculator.calculate(expr[i:], {'parse_only': parse_only, 'include_state': True})
-                response.results.extend(calcResponse.results)
-                ii = len(expr)
-            except CalculatingException as err:
-                response.results.extend(err.response.results)
-                error_statements = err.statements[len(err.response.results):]
-                err.statements = [r.items for r in response.results] + error_statements
-                ii = err.find_pos(expr)
-            except CalculatorException as err:
-                ii = i
-
-            self.signals.result.emit({
-                'expr': expr,
-                'response': response,
-                'error_statements': error_statements,
-                'ii': ii,
-                'uuid': self.uuid,
-                })
+        self.signals.result.emit(CalculatorTextEdit.doSyntaxParsing(self.calculator, self.expr, self.response, self.i, self.ii, self.uuid, False))
