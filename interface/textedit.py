@@ -140,7 +140,7 @@ class CalculatorTextEdit(QTextEdit):
                     i -= len(newResponse.results[-1].expression)
                     del newResponse.results[-1]
 
-            worker = SyntaxHighlighterWorker(self.calculator, expr, newResponse, i, ii)
+            worker = SyntaxHighlighterWorker(self.calculator, self.autoExecute, expr, newResponse, i, ii)
             worker.signals.result.connect(self.finishSyntaxHighlighting)
             self.interface.threadpool.start(worker)
 
@@ -336,12 +336,13 @@ class SyntaxHighlighterSignals(QObject):
 
 class SyntaxHighlighterWorker(QRunnable):
 
-    def __init__(self, calculator, expr, response, i, ii):
+    def __init__(self, calculator, autoExecute, expr, response, i, ii):
         super(SyntaxHighlighterWorker, self).__init__()
         
         self.signals = SyntaxHighlighterSignals() 
 
         self.calculator = calculator
+        self.autoExecute = autoExecute
         self.expr = expr
         self.response = response
         self.i = i
@@ -362,9 +363,7 @@ class SyntaxHighlighterWorker(QRunnable):
                 self.calculator.vars = response.results[-1].state.copy()
             else:
                 self.calculator.vars = {}
-            #response = self.calculator.calculate(expr[i:], {'parse_only': not self.autoExecute, 'include_state': True})
-            print("sending:", expr[i:])
-            calcResponse = self.calculator.calculate(expr[i:], {'parse_only': False, 'include_state': True})
+            calcResponse = self.calculator.calculate(expr[i:], {'parse_only': not self.autoExecute, 'include_state': True})
             response.results.extend(calcResponse.results)
             ii = len(expr)
         except CalculatingException as err:
