@@ -104,7 +104,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 	* Auto-save state occasionally
 
 * Performance:
-	* For the parse-only syntax highlight pass, try to reuse later statements from cache
 
 * Aesthetics and polish:
 
