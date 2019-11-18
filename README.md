@@ -104,10 +104,7 @@ These examples are available in examples/basic_integration.py. See examples/adva
 	* Auto-save state occasionally
 
 * Performance:
-	* When editing input, check if its possible to reuse later statements from cached result
-		* When syntax execution is disabled, no need to check state is the same after a statement
-	* Should syntax execution be removed altogether? Unless it can be sped up a lot
-	* A-sync syntax execution
+	* For the parse-only syntax highlight pass, try to reuse later statements from cache
 
 * Aesthetics and polish:
 
