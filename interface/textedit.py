@@ -4,7 +4,7 @@ from modularcalculator.objects.api import *
 from modularcalculator.services.syntaxhighlighter import *
 from modularcalculator.interface.guitools import *
 
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QObject, pyqtSignal, pyqtSlot, QRunnable
 from PyQt5.QtWidgets import QTextEdit
 from PyQt5.QtGui import QFontDatabase, QTextCursor, QTextCharFormat, QGuiApplication, QTextFormat
 
@@ -330,3 +330,20 @@ class CalculatorTextEdit(QTextEdit):
 
         if 'sliderPosition' in state:
             self.verticalScrollBar().setSliderPosition(state['sliderPosition'])
+
+
+class SyntaxHighlighterSignals(QObject):
+
+    result = pyqtSignal(object)
+
+
+class SyntaxHighlighterWorker(QRunnable):
+
+    def __init__(self, expr):
+        super(SyntaxHighlighterWorker, self).__init__()
+        self.expr = expr
+        self.stop = False
+
+    @pyqtSlot()
+    def run(self):
+        pass
