@@ -188,6 +188,7 @@ class CalculatorTextEdit(QTextEdit):
             'error_statements': error_statements,
             'ii': ii,
             'uuid': uuid,
+            'parse_only': parse_only,
             })
 
     def finishSyntaxHighlighting(self, result):
@@ -199,7 +200,8 @@ class CalculatorTextEdit(QTextEdit):
         if result['uuid'] != self.last_uuid:
             return
 
-        self.cached_response = newResponse
+        if not result['parse_only']:
+            self.cached_response = newResponse
 
         statements = [r.items for r in newResponse.results] + error_statements
         errorExpr = expr[ii:]
@@ -299,6 +301,8 @@ class CalculatorTextEdit(QTextEdit):
 
     def undo(self):
         if self.historyPos > 1:
+            self.cached_response = None
+
             sliderpos = self.verticalScrollBar().sliderPosition()
             
             self.historyPos -= 1
@@ -317,6 +321,8 @@ class CalculatorTextEdit(QTextEdit):
 
     def redo(self):
         if self.historyPos < len(self.history):
+            self.cached_response = None
+
             sliderpos = self.verticalScrollBar().sliderPosition()
             
             self.historyPos += 1
