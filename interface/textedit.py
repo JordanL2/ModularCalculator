@@ -148,7 +148,6 @@ class CalculatorTextEdit(QTextEdit):
         expr = result['expr']
         newResponse = result['response']
         error_statements = result['error_statements']
-        i = result['i']
         ii = result['ii']
 
         if expr != self.getContents():
@@ -378,6 +377,5 @@ class SyntaxHighlighterWorker(QRunnable):
             'expr': expr,
             'response': response,
             'error_statements': error_statements,
-            'i': i,
             'ii': ii,
             })
