@@ -130,7 +130,7 @@ class CalculatorTextEdit(QTextEdit):
             response = CalculatorResponse()
             i = 0
             ii = None
-            expr_copy = expr
+            expr_truncated = expr
             later_results = []
             if self.cached_response is not None and not force:
                 for result in self.cached_response.results:
@@ -148,14 +148,14 @@ class CalculatorTextEdit(QTextEdit):
                     later_results_length = 0
                     for l in later_results:
                         later_results_length += len(l.expression)
-                    expr_copy = expr[0:len(expr) - later_results_length]
+                    expr_truncated = expr[0:len(expr) - later_results_length]
 
             self.last_uuid = uuid.uuid4()
-            self.finishSyntaxHighlighting(CalculatorTextEdit.doSyntaxParsing(self.calculator, expr_copy, response.copy(), later_results, i, ii, self.last_uuid, True))
+            self.doSyntaxHighlighting(CalculatorTextEdit.doSyntaxParsing(self.calculator, expr_truncated, response.copy(), later_results, i, ii, self.last_uuid, True))
 
             if self.autoExecute:
                 worker = SyntaxHighlighterWorker(self.calculator, expr, response, i, ii, self.last_uuid)
-                worker.signals.result.connect(self.finishSyntaxHighlighting)
+                worker.signals.result.connect(self.doSyntaxHighlighting)
                 worker.setAutoDelete(True)
                 self.interface.threadpool.clear()
                 self.interface.threadpool.start(worker)
@@ -191,7 +191,7 @@ class CalculatorTextEdit(QTextEdit):
             'parse_only': parse_only,
             })
 
-    def finishSyntaxHighlighting(self, result):
+    def doSyntaxHighlighting(self, result):
         expr = result['expr']
         response = result['response']
         error_statements = result['error_statements']
