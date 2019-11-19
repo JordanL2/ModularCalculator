@@ -354,6 +354,8 @@ class CalculatorTextEdit(QTextEdit):
             'cursorSelectionStart': self.textCursor().selectionStart(),
             'cursorSelectionEnd': self.textCursor().selectionEnd(),
             'sliderPosition': self.verticalScrollBar().sliderPosition(),
+            'history': self.history,
+            'historyPos': self.historyPos,
         }
 
     def restoreState(self, state):
@@ -365,7 +367,6 @@ class CalculatorTextEdit(QTextEdit):
             self.setOriginal(state['original'])
         else:
             self.setOriginal()
-        self.refresh()
 
         if 'cursorSelectionStart' in state:
             cursor = self.textCursor()
@@ -376,6 +377,21 @@ class CalculatorTextEdit(QTextEdit):
 
         if 'sliderPosition' in state:
             self.verticalScrollBar().setSliderPosition(state['sliderPosition'])
+
+        if 'history' in state:
+            self.history = state['history']
+            if 'historyPos' in state:
+                self.historyPos = state['historyPos']
+            else:
+                raise 'history is in state but historyPos isn\'t'
+        else:
+            self.history = []
+            self.historyPos = 0
+
+        self.cached_response = None
+        self.oldText = None
+
+        self.refresh()
 
 
 class SyntaxHighlighterSignals(QObject):
