@@ -136,7 +136,7 @@ class ModularCalculatorInterface(StatefulApplication):
         self.viewShortUnits.triggered.connect(self.calculatormanager.setShortUnits)
         viewMenu.addAction(self.viewShortUnits)
 
-        self.viewSyntaxParsingAutoExecutes = QAction('Syntax Parsing Performs Evaluation', self, checkable=True)
+        self.viewSyntaxParsingAutoExecutes = QAction('Show Execution Errors', self, checkable=True)
         self.viewSyntaxParsingAutoExecutes.triggered.connect(self.calculatormanager.setAutoExecute)
         viewMenu.addAction(self.viewSyntaxParsingAutoExecutes)
 
