@@ -66,19 +66,21 @@ These examples are available in examples/basic_integration.py. See examples/adva
 * Should bitwise not operator only allow positive integers, and throw error if something else?
 * ARRAYS:
 	* Add an array type
-		* Create an array either with [1, 2, 3] or with ".." operator, eg: 1 .. 3
-		* Array is a LiteralItem with an array in its value
+		* Create an array as list inside [] eg [1, 2, 3]
+			* Also allow ".." inside the brackets to indicate range, eg [1, 3 .. 5, 7] - same as [1, 3, 4, 5, 7]
+			* Also allow "step" after the ".." to indicate step, eg [1, 3 .. 7 step 2, 9] = [1, 3, 5, 7, 9]
+		* Array is an ArrayItem, contains: list of OperandItems or pair of OperandItems which are a range
 		* Interface - display arrays properly
+		* Finalise - make it work with an array
 	* When running an op or function:
 		* If any inputs are arrays, find all inputs that are arrays
 		* Ensure they're all the same length
 		* Run the operation once for every element in the arrays, using the values given for the other non-array inputs
 		* Put all results into an array, and return it
 	* Add operator flag array_input:
-		* If operations has this flag, and there is ONE input which is an array, then the array is flattened into many inputs
+		* If operation has this flag, and there is ONE input which is an array, then the array is flattened into many inputs
 			* E.g. Use this for the mean() function, so "mean([1, 2, 6])" returns 3
 	* Make the above work with user defined functions
-	* Finalise - make it work with an array
 
 ## Functions
 * Display operator/function syntax info on parameter validation error

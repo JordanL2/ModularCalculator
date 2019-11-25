@@ -23,6 +23,11 @@ parser_map = [
     'constant',
     'units',
     'unitsystems',
+    'array',
+    'array_range',
+    'array_step',
+    'array_param',
+    'array_end',
     'var',
 ]
 
