@@ -43,10 +43,55 @@ class ArraysFeature(Feature):
 
     def parse_array(self, expr, i, items, flags):
         next = expr[i:]
-        symbol = self.feature_options['arrays.arrays']['Open']
+        start_symbol = self.feature_options['arrays.arrays']['Open']
+        range_symbol = self.feature_options['arrays.arrays']['Range']
+        step_symbol = self.feature_options['arrays.arrays']['Step']
+        param_symbol = self.feature_options['arrays.arrays']['Param']
+        end_symbol = self.feature_options['arrays.arrays']['Close']
 
-        if len(next) >= len(symbol) and next[0:len(symbol)] == symbol:
-            pass
+        if len(next) >= len(start_symbol) and next[0:len(start_symbol)] == start_symbol:
+            i = len(symbol)
+            elements = []
+            return_flags = {}
+            array_items = [ArrayStartItem(start_symbol)] #TODO needs non-func items
+            while 'end_array' not in return_flags:
+                items, length, return_flags = self.parse(next[i:], {'array': True, 'ignore_terminators': True})
+                items = items[0]
+                array_items += items
+                if len(items) > 0:
+                    i += length
+                    element = ArrayElement(items)
+
+                    if 'array_range' in return_flags:
+                        i += len(range_symbol)
+                        array_items += [ArrayRangeItem(range_symbol)]
+                        items, length, return_flags = self.parse(next[i:], {'array': True, 'ignore_terminators': True})
+                        items = items[0]
+                        array_items += items
+                        if len(items) > 0:
+                            i += length
+                            element.end_element = items
+
+                            if 'array_step' in return_flags:
+                                i += len(step_symbol)
+                                array_items += [ArrayStepItem(step_symbol)]
+                                items, length, return_flags = self.parse(next[i:], {'array': True, 'ignore_terminators': True})
+                                items = items[0]
+                                array_items += items
+                                if len(items) > 0:
+                                    i += length
+                                    element.step = items
+
+                    elements.append(element)
+
+                if 'end_array' not in return_flags:
+                    i += len(param_symbol)
+                    array_items += [ArrayParamItem(param_symbol)]
+
+            i += len(end_symbol)
+            array_items += [ArrayEndItem(symbol)]
+
+            return [ArrayItem(next[0:i], array_items, self, elements)], i, None
 
         return None, None, None
 
@@ -54,8 +99,9 @@ class ArraysFeature(Feature):
         next = expr[i:]
         symbol = self.feature_options['arrays.arrays']['Range']
 
-        if len(next) >= len(symbol) and next[0:len(symbol)] == symbol:
-            pass
+        array = ('array' in flags.keys() and flags['array'])
+        if array and len(next) >= len(symbol) and next[0:len(symbol)] == symbol:
+            return None, None, {'end': True, 'array_range': True}
 
         return None, None, None
 
@@ -63,8 +109,9 @@ class ArraysFeature(Feature):
         next = expr[i:]
         symbol = self.feature_options['arrays.arrays']['Step']
 
-        if len(next) >= len(symbol) and next[0:len(symbol)] == symbol:
-            pass
+        array = ('array' in flags.keys() and flags['array'])
+        if array and len(next) >= len(symbol) and next[0:len(symbol)] == symbol:
+            return None, None, {'end': True, 'array_step': True}
 
         return None, None, None
 
@@ -72,8 +119,9 @@ class ArraysFeature(Feature):
         next = expr[i:]
         symbol = self.feature_options['arrays.arrays']['Param']
 
-        if len(next) >= len(symbol) and next[0:len(symbol)] == symbol:
-            pass
+        array = ('array' in flags.keys() and flags['array'])
+        if array and len(next) >= len(symbol) and next[0:len(symbol)] == symbol:
+            return None, None, {'end': True}
 
         return None, None, None
 
@@ -81,16 +129,17 @@ class ArraysFeature(Feature):
         next = expr[i:]
         symbol = self.feature_options['arrays.arrays']['Close']
 
-        if len(next) >= len(symbol) and next[0:len(symbol)] == symbol:
-            pass
+        array = ('array' in flags.keys() and flags['array'])
+        if array and len(next) >= len(symbol) and next[0:len(symbol)] == symbol:
+            return None, None, {'end': True, 'end_array': True}
 
         return None, None, None
 
 
 class ArrayItem(RecursiveOperandItem):
 
-    def __init__(self, text, elements):
-        super().__init__(text)
+    def __init__(self, text, items, calculator, elements):
+        super().__init__(text, items, calculator)
         self.elements = elements
 
     def desc(self):
@@ -100,7 +149,7 @@ class ArrayItem(RecursiveOperandItem):
         array = []
 
         for i, element in enumerate(self.elements):
-            array.extend(element.value(flags))
+            array.extend(element.value(flags, calculator))
 
         return array
 
@@ -115,19 +164,84 @@ class ArrayElement():
     def __init__(self, element, end_element=None, step=None):
         self.element = element
         self.end_element = end_element
-        self.step_val = step_val
+        self.step = step
 
-    def value(self, flags):
-        element_result = self.calculator.execute(self.element, flags)
+    def value(self, flags, calculator):
+        element_result = calculator.execute(self.element, flags)
 
         end_element_result = None
         if self.end_element:
-            end_element_result = val = self.calculator.execute(self.end_element, flags)
+            end_element_result = val = calculator.execute(self.end_element, flags)
         else:
             return [element_result]
 
         step_result = Decimal('1')
         if self.step:
-            step_result = val = self.calculator.execute(self.step, flags)
+            step_result = val = calculator.execute(self.step, flags)
 
         return [x for x in range(element_result, end_element_result + step_result, step_result)]
+
+
+class ArrayStartItem(NonFunctionalItem):
+
+    def __init__(self, text):
+        super().__init__(text)
+
+    def desc(self):
+        return 'array_start'
+
+    def copy(self, classtype=None):
+        copy = super().copy(classtype or self.__class__)
+        return copy
+
+
+class ArrayRangeItem(NonFunctionalItem):
+
+    def __init__(self, text):
+        super().__init__(text)
+
+    def desc(self):
+        return 'array_range'
+
+    def copy(self, classtype=None):
+        copy = super().copy(classtype or self.__class__)
+        return copy
+
+
+class ArrayStepItem(NonFunctionalItem):
+
+    def __init__(self, text):
+        super().__init__(text)
+
+    def desc(self):
+        return 'array_step'
+
+    def copy(self, classtype=None):
+        copy = super().copy(classtype or self.__class__)
+        return copy
+
+
+class ArrayParamItem(NonFunctionalItem):
+
+    def __init__(self, text):
+        super().__init__(text)
+
+    def desc(self):
+        return 'array_param'
+
+    def copy(self, classtype=None):
+        copy = super().copy(classtype or self.__class__)
+        return copy
+
+
+class ArrayEndItem(NonFunctionalItem):
+
+    def __init__(self, text):
+        super().__init__(text)
+
+    def desc(self):
+        return 'array_end'
+
+    def copy(self, classtype=None):
+        copy = super().copy(classtype or self.__class__)
+        return copy
