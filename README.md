@@ -69,7 +69,7 @@ These examples are available in examples/basic_integration.py. See examples/adva
 	* Make ranges work with units - normalise end and step to start's unit
 	* Arrays with variables - ref is being lost
 	* Should operations filter out None results? Or should there be a function to do that? Should there be a "null" keyword?
-	* Nested arrays?
+	* Ability to pick an element from the array
 
 ## Functions
 * Display operator/function syntax info on parameter validation error

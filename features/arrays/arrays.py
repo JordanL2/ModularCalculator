@@ -157,15 +157,27 @@ class ArrayItem(RecursiveOperandItem):
 
     def value(self, flags):
         array = []
+        itemsi = 0
 
         for i, element in enumerate(self.elements):
-            array.extend(element.value(flags, self.calculator))
+            try:
+                itemsi += 1
+                array.extend(element.value(flags, self.calculator))
+                itemsi += element.number_of_items()
+            except ExecuteException as err:
+                self.items = self.items[0:itemsi]
+                #self.items.extend(err.items)
+                err.items = self.items
+                self.text = err.truncate(self.text)
+                self.truncated = True
+                raise ExecuteException(err.message, [self], err.next, True)
 
         return array
 
     def copy(self, classtype=None):
         copy = super().copy(classtype or self.__class__)
         copy.elements = self.elements
+        copy.calculator = self.calculator
         return copy
 
 
@@ -181,7 +193,7 @@ class ArrayElement():
 
         end_element_result = None
         if self.end_element:
-            end_element_result = val = calculator.execute(self.end_element, flags)
+            end_element_result = calculator.execute(self.end_element, flags)
         else:
             return [element_result]
 
@@ -196,6 +208,14 @@ class ArrayElement():
             array.append(OperandResult(n, None, None))
             n += step_result
         return array
+
+    def number_of_items(self):
+        items = len(self.element)
+        if self.end_element is not None:
+            items += (1 + len(self.end_element))
+        if self.step is not None:
+            items += (1 + len(self.step))
+        return items
 
 
 class ArrayStartItem(NonFunctionalItem):

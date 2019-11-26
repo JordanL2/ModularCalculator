@@ -111,8 +111,6 @@ class ExternalFunctionItem(RecursiveOperandItem):
         except:
             raise ExecuteException("Could not read file '{}'".format(path), [], None)
 
-        backup_vars = self.calculator.vars
-
         final_result = None
 
         array_inputs = []
@@ -145,11 +143,10 @@ class ExternalFunctionItem(RecursiveOperandItem):
 
             final_result = self.do_function(func_content, inputs)
 
-        self.calculator.vars = backup_vars
-
         return final_result
 
     def do_function(self, func_content, inputs):
+        backup_vars = self.calculator.vars
         self.calculator.vars = {}
         for i, var in enumerate(inputs):
             self.calculator.vars["PARAM{}".format(i + 1)] = (var.value, var.unit)
@@ -162,6 +159,7 @@ class ExternalFunctionItem(RecursiveOperandItem):
             self.calculator.vars = backup_vars
             raise err
         last_result = get_last_result(result.results)
+        self.calculator.vars = backup_vars
         return OperandResult(last_result.value, last_result.unit, None)
 
     def result(self, flags):

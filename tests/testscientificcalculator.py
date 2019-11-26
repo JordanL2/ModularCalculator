@@ -254,6 +254,8 @@ tests = [
     { 'test': r"mean([1 .. 100])", 'expected': Decimal('50.5') },
     { 'test': "a=[1 .. 100]\nmean(a)", 'expected': Decimal('50.5') },
 
+    #{ 'test': "a = 1\nb = [a]\na += 1\nb", 'expected': [Decimal('2')] },
+
 #    { 'test': r"", 'expected': Decimal('') },
 ]
 
