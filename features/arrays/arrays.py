@@ -189,6 +189,8 @@ class ArrayElement():
 
     def value(self, flags, calculator, arr):
         element_result = calculator.execute(self.element, flags)
+        if isinstance(element_result.value, ExecuteException):
+            raise element_result.value
         arr[0] += len(self.element)
 
         end_element_result = None
