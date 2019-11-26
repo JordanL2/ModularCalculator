@@ -69,8 +69,7 @@ class FunctionsFeature(Feature):
 
     def parse_function_param(self, expr, i, items, flags):
         next = expr[i:]
-        #inner = ('inner_expr' in flags.keys() and flags['inner_expr'])
-        if next.startswith(',') and 'func' in flags.keys():# and not inner:
+        if next.startswith(',') and 'func' in flags.keys():
             return None, None, {'end': True}
         return None, None, None
 

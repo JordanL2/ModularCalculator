@@ -57,47 +57,75 @@ class Operation:
         self.unit_restrictions.append({'fromparam': fromparam, 'toparam': toparam, 'dimensions': dimensions})
 
     def call(self, calculator, inputs, flags):
-        if not self.inputs_can_be_exceptions:
-            for i in inputs:
-                if isinstance(i.value, Exception):
-                    return i
+        array_inputs = []
+        for i, inp in enumerate(inputs):
+            if type(inp.value) == list:
+                array_inputs.append(i)
 
-        values = [i.value for i in inputs]
-        units = [i.unit for i in inputs]
-        refs = [i.ref for i in inputs]
+        if len(array_inputs) > 0:
 
-        self.validate(calculator, values, units, refs)
+            lengths = set()
+            for i in array_inputs:
+                lengths.add(len(inputs[array_inputs[i]].value))
+            if len(lengths) > 1:
+                raise CalculatorException("All array inputs must all be same length")
+            length = lengths.pop()
 
-        num_type = None
-        if self.auto_convert_numerical_inputs:
-            values, num_type = self.convert_numbers(calculator, values)
+            results = []
+            for i in range(0, length):
+                input_row = []
+                for ii, inp in enumerate(inputs):
+                    if ii in array_inputs:
+                        input_row.append(inp.value[i])
+                    else:
+                        input_row.append(inp)
+                results.append(self.call(calculator, input_row, flags))
 
-        result_value, result_unit, result_ref = None, None, None
-        if calculator.unit_normaliser is not None and self.units_normalise:
-            if len([v for v in values if not calculator.validate_number(v)]) == 0:
-                number_types = []
-                for i in range(0, len(values)):
-                    values[i], this_type = calculator.number(values[i])
-                    number_types.append(this_type)
-                values, units, result_unit = calculator.unit_normaliser.normalise_inputs(values, units, self.units_multi, self.units_relative)
-                for i in range(0, len(values)):
-                    values[i] = calculator.restore_number_type(values[i], number_types[i])
-        
-        try:
-            result = self.ref(calculator, values, units, refs, flags.copy())
-            result_value = result.value
-            if self.auto_convert_numerical_result and isinstance(result_value, Decimal) and num_type:
-                result_value = calculator.restore_number_type(result_value, num_type)
-            if result.unit_override:
-                result_unit = result.unit
-            if result.ref_override:
-                result_ref = result.ref
-            return OperandResult(result_value, result_unit, result_ref)
+            return OperandResult(results, None, None)
 
-        except CalculatorException as err:
-            raise err
-        except Exception as err:
-            raise CalculatorException("Could not execute {0}".format(self.name))
+        else:
+
+            if not self.inputs_can_be_exceptions:
+                for i in inputs:
+                    if isinstance(i.value, Exception):
+                        return i
+
+            values = [i.value for i in inputs]
+            units = [i.unit for i in inputs]
+            refs = [i.ref for i in inputs]
+
+            self.validate(calculator, values, units, refs)
+
+            num_type = None
+            if self.auto_convert_numerical_inputs:
+                values, num_type = self.convert_numbers(calculator, values)
+
+            result_value, result_unit, result_ref = None, None, None
+            if calculator.unit_normaliser is not None and self.units_normalise:
+                if len([v for v in values if not calculator.validate_number(v)]) == 0:
+                    number_types = []
+                    for i in range(0, len(values)):
+                        values[i], this_type = calculator.number(values[i])
+                        number_types.append(this_type)
+                    values, units, result_unit = calculator.unit_normaliser.normalise_inputs(values, units, self.units_multi, self.units_relative)
+                    for i in range(0, len(values)):
+                        values[i] = calculator.restore_number_type(values[i], number_types[i])
+            
+            try:
+                result = self.ref(calculator, values, units, refs, flags.copy())
+                result_value = result.value
+                if self.auto_convert_numerical_result and isinstance(result_value, Decimal) and num_type:
+                    result_value = calculator.restore_number_type(result_value, num_type)
+                if result.unit_override:
+                    result_unit = result.unit
+                if result.ref_override:
+                    result_ref = result.ref
+                return OperandResult(result_value, result_unit, result_ref)
+
+            except CalculatorException as err:
+                raise err
+            except Exception as err:
+                raise CalculatorException("Could not execute {0}".format(self.name))
 
     def validate(self, calculator, values, units, refs):
         if self.minparams is not None and len(values) < self.minparams:

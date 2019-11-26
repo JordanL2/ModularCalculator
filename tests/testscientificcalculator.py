@@ -247,6 +247,9 @@ tests = [
     { 'test': r"[1 .. 4, 9, 14 .. 20 step 2]", 'expected': [Decimal('1'), Decimal('2'), Decimal('3'), Decimal('4'), Decimal('9'), Decimal('14'), Decimal('16'), Decimal('18'), Decimal('20')] },
     { 'test': r"[1 cm, 2 seconds, 3]", 'expected': [(Decimal('1') , 'centimeter'), (Decimal('2'), 'seconds'), Decimal('3')] },
 
+    { 'test': r"[1, 2, 3] + 4", 'expected': [Decimal('5'), Decimal('6'), Decimal('7')] },
+    { 'test': r"abs([-5, 2 * 3, -3 - 4])", 'expected': [Decimal('5'), Decimal('6'), Decimal('7')] },
+
 #    { 'test': r"", 'expected': Decimal('') },
 ]
 
