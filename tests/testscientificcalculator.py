@@ -250,6 +250,10 @@ tests = [
     { 'test': r"[1, 2, 3] + 4", 'expected': [Decimal('5'), Decimal('6'), Decimal('7')] },
     { 'test': r"abs([-5, 2 * 3, -3 - 4])", 'expected': [Decimal('5'), Decimal('6'), Decimal('7')] },
 
+    { 'test': r"mean([1, 2, 6])", 'expected': Decimal('3') },
+    { 'test': r"mean([1 .. 100])", 'expected': Decimal('50.5') },
+    { 'test': "a=[1 .. 100]\nmean(a)", 'expected': Decimal('50.5') },
+
 #    { 'test': r"", 'expected': Decimal('') },
 ]
 

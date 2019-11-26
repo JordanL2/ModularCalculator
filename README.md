@@ -68,10 +68,8 @@ These examples are available in examples/basic_integration.py. See examples/adva
 	* Add an array type
 		* Error handling syntax highlighting
 		* Make ranges work with units - normalise end and step to start's unit
-	* Add operator flag array_input:
-		* If operation has this flag, and there is ONE input which is an array, then the array is flattened into many inputs
-			* E.g. Use this for the mean() function, so "mean([1, 2, 6])" returns 3
 	* Make the above work with user defined functions
+	* Nested arrays?
 
 ## Functions
 * Display operator/function syntax info on parameter validation error

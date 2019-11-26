@@ -48,6 +48,7 @@ class Operation:
         self.auto_convert_numerical_result = True
 
         self.array_inputs_raw = False
+        self.array_input_flattened = False
 
     def add_value_restriction(self, fromparam, toparam, objtypes):
         if objtypes is not None:
@@ -64,7 +65,9 @@ class Operation:
             if type(inp.value) == list:
                 array_inputs.append(i)
 
-        if not self.array_inputs_raw and len(array_inputs) > 0:
+        flatten = self.array_input_flattened and len(array_inputs) == 1 and len(inputs) == 1
+
+        if not self.array_inputs_raw and not flatten and len(array_inputs) > 0:
 
             lengths = set()
             for i in array_inputs:
@@ -92,9 +95,18 @@ class Operation:
                     if isinstance(i.value, Exception):
                         return i
 
-            values = [i.value for i in inputs]
-            units = [i.unit for i in inputs]
-            refs = [i.ref for i in inputs]
+            values = None
+            units = None
+            refs = None
+
+            if flatten:
+                values = [i.value for i in inputs[0].value]
+                units = [i.unit for i in inputs[0].value]
+                refs = [i.ref for i in inputs[0].value]
+            else:
+                values = [i.value for i in inputs]
+                units = [i.unit for i in inputs]
+                refs = [i.ref for i in inputs]
 
             self.validate(calculator, values, units, refs)
 

@@ -37,6 +37,8 @@ class StatisticalFunctionsFeature(Feature):
             1, 
             None, 
             'number')
+        calculator.funcs['sum'].array_input_flattened = True
+
         calculator.funcs['min'] = FunctionDefinition(
             'Statistics', 
             'min', 
@@ -46,6 +48,8 @@ class StatisticalFunctionsFeature(Feature):
             1, 
             None, 
             'number')
+        calculator.funcs['min'].array_input_flattened = True
+
         calculator.funcs['max'] = FunctionDefinition(
             'Statistics', 
             'max', 
@@ -55,6 +59,8 @@ class StatisticalFunctionsFeature(Feature):
             1, 
             None, 
             'number')
+        calculator.funcs['max'].array_input_flattened = True
+
         calculator.funcs['mean'] = FunctionDefinition(
             'Statistics', 
             'mean', 
@@ -64,6 +70,8 @@ class StatisticalFunctionsFeature(Feature):
             1, 
             None, 
             'number')
+        calculator.funcs['mean'].array_input_flattened = True
+
         calculator.funcs['median'] = FunctionDefinition(
             'Statistics', 
             'median', 
@@ -73,6 +81,8 @@ class StatisticalFunctionsFeature(Feature):
             1, 
             None, 
             'number')
+        calculator.funcs['median'].array_input_flattened = True
+
         calculator.funcs['mode'] = FunctionDefinition(
             'Statistics', 
             'mode', 
@@ -82,6 +92,8 @@ class StatisticalFunctionsFeature(Feature):
             1, 
             None, 
             'number')
+        calculator.funcs['mode'].array_input_flattened = True
+
         calculator.funcs['stdev'] = FunctionDefinition(
             'Statistics', 
             'stdev', 
@@ -91,6 +103,7 @@ class StatisticalFunctionsFeature(Feature):
             1, 
             None, 
             'number')
+        calculator.funcs['stdev'].array_input_flattened = True
 
 
     def func_sum(self, vals, units, refs, flags):
