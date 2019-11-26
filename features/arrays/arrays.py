@@ -50,7 +50,7 @@ class ArraysFeature(Feature):
         end_symbol = self.feature_options['arrays.arrays']['Close']
 
         if len(next) >= len(start_symbol) and next[0:len(start_symbol)] == start_symbol:
-            i = len(symbol)
+            i = len(start_symbol)
             elements = []
             return_flags = {}
             array_items = [ArrayStartItem(start_symbol)] #TODO needs non-func items
@@ -89,7 +89,7 @@ class ArraysFeature(Feature):
                     array_items += [ArrayParamItem(param_symbol)]
 
             i += len(end_symbol)
-            array_items += [ArrayEndItem(symbol)]
+            array_items += [ArrayEndItem(end_symbol)]
 
             return [ArrayItem(next[0:i], array_items, self, elements)], i, None
 
@@ -141,6 +141,7 @@ class ArrayItem(RecursiveOperandItem):
     def __init__(self, text, items, calculator, elements):
         super().__init__(text, items, calculator)
         self.elements = elements
+        self.calculator = calculator
 
     def desc(self):
         return 'array'
@@ -149,7 +150,7 @@ class ArrayItem(RecursiveOperandItem):
         array = []
 
         for i, element in enumerate(self.elements):
-            array.extend(element.value(flags, calculator))
+            array.extend(element.value(flags, self.calculator))
 
         return array
 

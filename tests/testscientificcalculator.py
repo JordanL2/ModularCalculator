@@ -240,6 +240,8 @@ tests = [
     
     { 'test': "x = 1\nreset()\nx", 'expected': None },
 
+    { 'test': r"[1, 2, 3]", 'expected': [Decimal('1'), Decimal('2'), Decimal('3')] },
+
 #    { 'test': r"", 'expected': Decimal('') },
 ]
 
