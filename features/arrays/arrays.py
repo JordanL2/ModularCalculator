@@ -203,20 +203,25 @@ class ArrayElement():
         else:
             return [element_result]
 
-        step_result = Decimal('1')
+        step_result = OperandResult(Decimal('1'), None, None)
         if self.step:
             arr[0] += 1
             step_result = calculator.execute(self.step, flags)
             if isinstance(step_result.value, ExecuteException):
                 raise step_result.value
-            step_result = step_result.value
             arr[0] += len(self.step)
+
+        if element_result.unit is not None or end_element_result.unit is not None or step_result.unit is not None:
+            for right_element in (end_element_result, step_result):
+                values, units, resultunit = calculator.unit_normaliser.normalise_inputs([element_result.value, right_element.value], [element_result.unit, right_element.unit], True, False)
+                right_element.value = values[1]
+                right_element.unit = units[1]
 
         array = []
         n = element_result.value
         while n <= end_element_result.value:
-            array.append(OperandResult(n, None, None))
-            n += step_result
+            array.append(OperandResult(n, element_result.unit, None))
+            n += step_result.value
         return array
 
 

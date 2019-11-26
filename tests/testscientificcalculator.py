@@ -254,6 +254,8 @@ tests = [
     { 'test': r"mean([1 .. 100])", 'expected': Decimal('50.5') },
     { 'test': "a=[1 .. 100]\nmean(a)", 'expected': Decimal('50.5') },
 
+    { 'test': r"[20 cm .. 1 meter step 20 cm]", 'expected': [(Decimal('20') , 'centimeters'), (Decimal('40') , 'centimeters'), (Decimal('60') , 'centimeters'), (Decimal('80') , 'centimeters'), (Decimal('100') , 'centimeters')] },
+
     #{ 'test': "a = 1\nb = [a]\na += 1\nb", 'expected': [Decimal('2')] },
 
 #    { 'test': r"", 'expected': Decimal('') },
