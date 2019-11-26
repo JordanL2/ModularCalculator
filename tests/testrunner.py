@@ -23,6 +23,17 @@ class TestRunner:
                 last_result = [r for r in response.results if r.has_result()][-1]
                 value = last_result.value
                 unit = last_result.unit
+                if type(value) == list:
+                    new_value = []
+                    for v in value:
+                        if v.unit is None:
+                            new_value.append(v.value)
+                        else:
+                            if v.value == Decimal('1'):
+                                new_value.append((v.value, v.unit.singular()))
+                            else:
+                                new_value.append((v.value, v.unit.plural()))
+                    value = new_value
                 if unit is None:
                     actual = value
                 else:

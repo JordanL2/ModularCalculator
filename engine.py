@@ -292,10 +292,14 @@ class Engine:
     def finalize(self, answer):
         if answer is None:
             return None
-        if self.unit_normaliser is not None and self.unit_simplification and answer.unit is not None and not answer.unit.no_simplify:
-            answer.value, answer.unit = self.unit_normaliser.simplify_units(answer.value, answer.unit)
-        for finalizer in self.finalizers:
-            answer = finalizer['ref'](self, answer)
+        if type(answer.value) == list:
+            for i, ans in enumerate(answer.value):
+                answer.value[i] = self.finalize(ans)
+        else:
+            if self.unit_normaliser is not None and self.unit_simplification and answer.unit is not None and not answer.unit.no_simplify:
+                answer.value, answer.unit = self.unit_normaliser.simplify_units(answer.value, answer.unit)
+            for finalizer in self.finalizers:
+                answer = finalizer['ref'](self, answer)
         return answer
 
     def validate_exception(self, value, unit, ref):
