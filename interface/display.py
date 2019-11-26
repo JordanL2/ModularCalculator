@@ -66,22 +66,12 @@ class CalculatorDisplay(QWidget):
             question = row.question.strip()
             questionHtml = self.questionHtml(question)
 
-            answer = row.answer
-            unit = row.unit
-            if isinstance(answer, UnitPowerList):
-                if self.options['shortunits']:
-                    answer = answer.symbol()
-                else:
-                    answer = answer.singular()
-            if unit is not None:
-                if self.options['shortunits'] and unit.has_symbols():
-                    unit = unit.symbol()
-                else:
-                    unit = unit.get_name(self.interface.calculatormanager.calculator.number(answer)[0])
-                    unit = ' ' + unit
+            if type(row.answer) == list:
+                answerHtml = '['
+                answerHtml += ', '.join([self.renderAnswerRow(r.value, r.unit) for r in row.answer])
+                answerHtml += ']'
             else:
-                unit = ''
-            answerHtml = str(answer) + unit
+                answerHtml = self.renderAnswerRow(row.answer, row.unit)
 
         elif isinstance(row, CalculatorDisplayError):
             questionHtml, _ = self.interface.entry.makeHtml([row.err.statements[-1]], row.question[row.i:])
@@ -91,6 +81,22 @@ class CalculatorDisplay(QWidget):
             raise Exception("Unrecognised type in renderAnswer: {}".format(type(row)))
 
         return self.makeQuestionWidget(questionHtml, n), self.makeAnswerWidget(answerHtml, n)
+
+    def renderAnswerRow(self, answer, unit):
+        if isinstance(answer, UnitPowerList):
+            if self.options['shortunits']:
+                answer = answer.symbol()
+            else:
+                answer = answer.singular()
+        if unit is not None:
+            if self.options['shortunits'] and unit.has_symbols():
+                unit = unit.symbol()
+            else:
+                unit = unit.get_name(self.interface.calculatormanager.calculator.number(answer)[0])
+                unit = ' ' + unit
+        else:
+            unit = ''
+        return str(answer) + unit
 
     def makeQuestionWidget(self, questionHtml, n):
         questionHtml = questionHtml.replace('&nbsp;', ' ')

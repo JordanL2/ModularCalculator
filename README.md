@@ -66,7 +66,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 * Should bitwise not operator only allow positive integers, and throw error if something else?
 * ARRAYS:
 	* Add an array type
-		* Interface - display arrays properly
 		* Error handling syntax highlighting
 		* Make ranges work with units - normalise end and step to start's unit
 	* Add operator flag array_input:
