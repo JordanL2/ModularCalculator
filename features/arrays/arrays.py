@@ -53,8 +53,8 @@ class ArraysFeature(Feature):
             i = len(start_symbol)
             elements = []
             return_flags = {}
-            array_items = [ArrayStartItem(start_symbol)] #TODO needs non-func items
-            while 'end_array' not in return_flags:
+            array_items = [ArrayStartItem(start_symbol)]
+            while 'end_array' not in return_flags and i < len(next):
                 items, length, return_flags = self.parse(next[i:], {'array': True, 'ignore_terminators': True})
                 items = items[0]
                 array_items += items
@@ -84,14 +84,16 @@ class ArraysFeature(Feature):
 
                     elements.append(element)
 
-                if 'end_array' not in return_flags:
+                if 'array_param' in return_flags:
                     i += len(param_symbol)
                     array_items += [ArrayParamItem(param_symbol)]
 
-            i += len(end_symbol)
-            array_items += [ArrayEndItem(end_symbol)]
-
-            return [ArrayItem(next[0:i], array_items, self, elements)], i, None
+            if 'end_array' in return_flags:
+                i += len(end_symbol)
+                array_items += [ArrayEndItem(end_symbol)]
+                return [ArrayItem(next[0:i], array_items, self, elements)], i, None
+            else:
+                raise ParseException('Array missing close symbol', [], next)
 
         return None, None, None
 
@@ -121,7 +123,7 @@ class ArraysFeature(Feature):
 
         array = ('array' in flags.keys() and flags['array'])
         if array and len(next) >= len(symbol) and next[0:len(symbol)] == symbol:
-            return None, None, {'end': True}
+            return None, None, {'end': True, 'array_param': True}
 
         return None, None, None
 
