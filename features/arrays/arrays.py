@@ -179,8 +179,14 @@ class ArrayElement():
         step_result = Decimal('1')
         if self.step:
             step_result = val = calculator.execute(self.step, flags)
+            step_result = step_result.value
 
-        return [x for x in range(element_result, end_element_result + step_result, step_result)]
+        array = []
+        n = element_result.value
+        while n <= end_element_result.value:
+            array.append(OperandResult(n, None, None))
+            n += step_result
+        return array
 
 
 class ArrayStartItem(NonFunctionalItem):

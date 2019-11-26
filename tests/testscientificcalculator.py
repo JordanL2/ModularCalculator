@@ -241,6 +241,9 @@ tests = [
     { 'test': "x = 1\nreset()\nx", 'expected': None },
 
     { 'test': r"[1, 2, 3]", 'expected': [Decimal('1'), Decimal('2'), Decimal('3')] },
+    { 'test': r"[1 .. 3]", 'expected': [Decimal('1'), Decimal('2'), Decimal('3')] },
+    { 'test': r"[1.5 .. 3.5]", 'expected': [Decimal('1.5'), Decimal('2.5'), Decimal('3.5')] },
+    { 'test': r"[1.5 .. 3.5 step 0.5]", 'expected': [Decimal('1.5'), Decimal('2'), Decimal('2.5'), Decimal('3'), Decimal('3.5')] },
 
 #    { 'test': r"", 'expected': Decimal('') },
 ]
