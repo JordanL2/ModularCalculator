@@ -55,34 +55,41 @@ class ArraysFeature(Feature):
             return_flags = {}
             array_items = [ArrayStartItem(start_symbol)]
             while 'end_array' not in return_flags and i < len(next):
-                items, length, return_flags = self.parse(next[i:], {'array': True, 'ignore_terminators': True})
-                items = items[0]
-                array_items += items
-                if len(items) > 0:
-                    i += length
-                    element = ArrayElement(items)
+                try:
+                    items, length, return_flags = self.parse(next[i:], {'array': True, 'ignore_terminators': True})
+                    items = items[0]
+                    array_items += items
+                    if len(items) > 0:
+                        i += length
+                        element = ArrayElement(items)
 
-                    if 'array_range' in return_flags:
-                        i += len(range_symbol)
-                        array_items += [ArrayRangeItem(range_symbol)]
-                        items, length, return_flags = self.parse(next[i:], {'array': True, 'ignore_terminators': True})
-                        items = items[0]
-                        array_items += items
-                        if len(items) > 0:
-                            i += length
-                            element.end_element = items
+                        if 'array_range' in return_flags:
+                            i += len(range_symbol)
+                            array_items += [ArrayRangeItem(range_symbol)]
+                            items, length, return_flags = self.parse(next[i:], {'array': True, 'ignore_terminators': True})
+                            items = items[0]
+                            array_items += items
+                            if len(items) > 0:
+                                i += length
+                                element.end_element = items
 
-                            if 'array_step' in return_flags:
-                                i += len(step_symbol)
-                                array_items += [ArrayStepItem(step_symbol)]
-                                items, length, return_flags = self.parse(next[i:], {'array': True, 'ignore_terminators': True})
-                                items = items[0]
-                                array_items += items
-                                if len(items) > 0:
-                                    i += length
-                                    element.step = items
+                                if 'array_step' in return_flags:
+                                    i += len(step_symbol)
+                                    array_items += [ArrayStepItem(step_symbol)]
+                                    items, length, return_flags = self.parse(next[i:], {'array': True, 'ignore_terminators': True})
+                                    items = items[0]
+                                    array_items += items
+                                    if len(items) > 0:
+                                        i += length
+                                        element.step = items
 
-                    elements.append(element)
+                        elements.append(element)
+
+                except ParsingException as err:
+                    newitems = array_items.copy()
+                    newitems.extend(err.statements[0])
+                    err.statements = [newitems]
+                    raise ParseException(err.message, [ArrayItem(err.truncate(next), newitems, self, elements)], err.next)
 
                 if 'array_param' in return_flags:
                     i += len(param_symbol)

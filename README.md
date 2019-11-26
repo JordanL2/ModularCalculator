@@ -69,11 +69,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 		* Interface - display arrays properly
 		* Error handling syntax highlighting
 		* Make ranges work with units - normalise end and step to start's unit
-	* When running an op or function:
-		* If any inputs are arrays, find all inputs that are arrays
-		* Ensure they're all the same length
-		* Run the operation once for every element in the arrays, using the values given for the other non-array inputs
-		* Put all results into an array, and return it
 	* Add operator flag array_input:
 		* If operation has this flag, and there is ONE input which is an array, then the array is flattened into many inputs
 			* E.g. Use this for the mean() function, so "mean([1, 2, 6])" returns 3
