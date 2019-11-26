@@ -47,6 +47,8 @@ class Operation:
         self.auto_convert_numerical_inputs = True
         self.auto_convert_numerical_result = True
 
+        self.array_inputs_raw = False
+
     def add_value_restriction(self, fromparam, toparam, objtypes):
         if objtypes is not None:
             if not isinstance(objtypes, list):
@@ -62,11 +64,11 @@ class Operation:
             if type(inp.value) == list:
                 array_inputs.append(i)
 
-        if len(array_inputs) > 0:
+        if not self.array_inputs_raw and len(array_inputs) > 0:
 
             lengths = set()
             for i in array_inputs:
-                lengths.add(len(inputs[array_inputs[i]].value))
+                lengths.add(len(inputs[i].value))
             if len(lengths) > 1:
                 raise CalculatorException("All array inputs must all be same length")
             length = lengths.pop()
