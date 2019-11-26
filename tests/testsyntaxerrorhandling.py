@@ -53,7 +53,7 @@ tests = [
 
     { 'test': "round((+))",  'expected': { 'message': r"Missing left operands for operator +",  'pos': 7, 'items': ['round','(','('] } },
     
-    { 'test': "[1 .. 2 step 2 / 0]",  'expected': { 'message': r"",  'pos': 1, 'items': [] } },
+    { 'test': "[1 .. 2 step 2 / 0]",  'expected': { 'message': r"Could not execute operator / with operands: '2', '0' - Could not execute Operator /",  'pos': 15, 'items': ['[','1',' ','..',' ','2',' ','step',' ','2',' '] } },
 
 #    { 'test': r"", 'expected': { 'exception': ParsingException, 'message': r"", 'pos': 0, 'items': [] } },
 ]

@@ -157,16 +157,15 @@ class ArrayItem(RecursiveOperandItem):
 
     def value(self, flags):
         array = []
-        itemsi = 0
+        arr = [0]
 
         for i, element in enumerate(self.elements):
             try:
-                itemsi += 1
-                array.extend(element.value(flags, self.calculator))
-                itemsi += element.number_of_items()
+                arr[0] += 1
+                array.extend(element.value(flags, self.calculator, arr))
             except ExecuteException as err:
-                self.items = self.items[0:itemsi]
-                #self.items.extend(err.items)
+                self.items = self.items[0:arr[0]]
+                self.items.extend(err.items)
                 err.items = self.items
                 self.text = err.truncate(self.text)
                 self.truncated = True
@@ -188,19 +187,24 @@ class ArrayElement():
         self.end_element = end_element
         self.step = step
 
-    def value(self, flags, calculator):
+    def value(self, flags, calculator, arr):
         element_result = calculator.execute(self.element, flags)
+        arr[0] += len(self.element)
 
         end_element_result = None
         if self.end_element:
+            arr[0] += 1
             end_element_result = calculator.execute(self.end_element, flags)
+            arr[0] += len(self.end_element)
         else:
             return [element_result]
 
         step_result = Decimal('1')
         if self.step:
+            arr[0] += 1
             step_result = val = calculator.execute(self.step, flags)
             step_result = step_result.value
+            arr[0] += len(self.step)
 
         array = []
         n = element_result.value
@@ -208,14 +212,6 @@ class ArrayElement():
             array.append(OperandResult(n, None, None))
             n += step_result
         return array
-
-    def number_of_items(self):
-        items = len(self.element)
-        if self.end_element is not None:
-            items += (1 + len(self.end_element))
-        if self.step is not None:
-            items += (1 + len(self.step))
-        return items
 
 
 class ArrayStartItem(NonFunctionalItem):
