@@ -113,8 +113,44 @@ class ExternalFunctionItem(RecursiveOperandItem):
 
         backup_vars = self.calculator.vars
 
+        final_result = None
+
+        array_inputs = []
+        for i, inp in enumerate(inputs):
+            if type(inp.value) == list:
+                array_inputs.append(i)
+
+        if len(array_inputs) > 0:
+
+            lengths = set()
+            for i in array_inputs:
+                lengths.add(len(inputs[i].value))
+            if len(lengths) > 1:
+                raise CalculatorException("All array inputs must all be same length")
+            length = lengths.pop()
+
+            results = []
+            for i in range(0, length):
+                input_row = []
+                for ii, inp in enumerate(inputs):
+                    if ii in array_inputs:
+                        input_row.append(inp.value[i])
+                    else:
+                        input_row.append(inp)
+                results.append(self.do_function(func_content, input_row))
+
+            final_result = OperandResult(results, None, None)
+
+        else:
+
+            final_result = self.do_function(func_content, inputs)
+
+        self.calculator.vars = backup_vars
+
+        return final_result
+
+    def do_function(self, func_content, inputs):
         self.calculator.vars = {}
-        self.calculator.vars['PARAM0'] = (path, None)
         for i, var in enumerate(inputs):
             self.calculator.vars["PARAM{}".format(i + 1)] = (var.value, var.unit)
         try:
@@ -125,11 +161,8 @@ class ExternalFunctionItem(RecursiveOperandItem):
         except Exception as err:
             self.calculator.vars = backup_vars
             raise err
-        final_result = get_last_result(result.results)
-
-        self.calculator.vars = backup_vars
-
-        return OperandResult(final_result.value, final_result.unit, None)
+        last_result = get_last_result(result.results)
+        return OperandResult(last_result.value, last_result.unit, None)
 
     def result(self, flags):
         return self.value(flags)

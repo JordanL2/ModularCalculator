@@ -66,7 +66,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 * Should bitwise not operator only allow positive integers, and throw error if something else?
 * ARRAYS:
 	* Error handling syntax highlighting
-	* Make array input handling work with user defined functions
 	* Make ranges work with units - normalise end and step to start's unit
 	* Arrays with variables - ref is being lost
 	* Should operations filter out None results? Or should there be a function to do that? Should there be a "null" keyword?
