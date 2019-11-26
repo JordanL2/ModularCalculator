@@ -195,6 +195,8 @@ class ArrayElement():
         if self.end_element:
             arr[0] += 1
             end_element_result = calculator.execute(self.end_element, flags)
+            if isinstance(end_element_result.value, ExecuteException):
+                raise end_element_result.value
             arr[0] += len(self.end_element)
         else:
             return [element_result]
@@ -202,7 +204,9 @@ class ArrayElement():
         step_result = Decimal('1')
         if self.step:
             arr[0] += 1
-            step_result = val = calculator.execute(self.step, flags)
+            step_result = calculator.execute(self.step, flags)
+            if isinstance(step_result.value, ExecuteException):
+                raise step_result.value
             step_result = step_result.value
             arr[0] += len(self.step)
 
