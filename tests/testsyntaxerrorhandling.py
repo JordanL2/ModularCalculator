@@ -59,9 +59,11 @@ tests = [
     { 'test': "[1 .. (2 / 0) step 2]",  'expected': { 'message': r"Could not execute operator / with operands: '2', '0' - Could not execute Operator /",  'pos': 9, 'items': ['[','1',' ','..',' ','(','2',' '] } },    
     { 'test': "[1 .. 2 step 2 / 0]",  'expected': { 'message': r"Could not execute operator / with operands: '2', '0' - Could not execute Operator /",  'pos': 15, 'items': ['[','1',' ','..',' ','2',' ','step',' ','2',' '] } },
     { 'test': "[1 .. 2 step (2 / 0)]",  'expected': { 'message': r"Could not execute operator / with operands: '2', '0' - Could not execute Operator /",  'pos': 16, 'items': ['[','1',' ','..',' ','2',' ','step',' ','(','2',' '] } },
+    { 'test': "round(1/0) then",  'expected': { 'message': r"Missing right operands for operator then",  'pos': 11, 'items': ['round','(','1','/','0',')',' '] } },
 
 #    { 'test': r"", 'expected': { 'exception': ParsingException, 'message': r"", 'pos': 0, 'items': [] } },
 ]
+tests=[{ 'test': "round(1/0) then",  'expected': { 'message': r"Missing right operands for operator then",  'pos': 11, 'items': ['round','(','1','/','0',')',' '] } },]
 
 failed = []
 for num, test in enumerate(tests):

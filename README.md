@@ -65,8 +65,11 @@ These examples are available in examples/basic_integration.py. See examples/adva
 * Ability to rename functions as feature options
 * Should bitwise not operator only allow positive integers, and throw error if something else?
 * ARRAYS:
-	* Arrays with variables - ref is being lost
 	* Functions that use entire array at once, or use them raw - describe this in Insert Function dialog somehow
+	* Current limitations:
+		* User defined functions can't override how arrays are passed to them
+		* Any variables put into an array are by-value, the ref is never used later to refetch the variable' value
+		* No nested arrays - not sure if this would ever be useful
 
 ## Functions
 * Display operator/function syntax info on parameter validation error
@@ -121,3 +124,4 @@ These examples are available in examples/basic_integration.py. See examples/adva
 
 * Unit normalisation: "1 joule / 1 m^3" gets simplified to "1 pascal" - Even Google has this issue
 * Display question/answer widgets change size slightly depending on how many answers there are
+* Arrays - error if step given with no end element
