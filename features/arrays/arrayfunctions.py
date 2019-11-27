@@ -40,7 +40,7 @@ class ArrayFunctionsFeature(Feature):
             'Arrays', 
             'element', 
             'Fetch a single element from an array',
-            ['array', 'array'],
+            ['array', 'number'],
             ArrayFunctionsFeature.func_array_element, 
             2, 
             2)#, 
@@ -71,13 +71,17 @@ class ArrayFunctionsFeature(Feature):
 
 
     def func_array_concat(self, vals, units, refs, flags):
-        res =  OperationResult()
+        res =  OperationResult(vals[0] + vals[1])
         res.set_unit(units[0])
         return res
 
     def func_array_element(self, vals, units, refs, flags):
-        res =  OperationResult()
-        res.set_unit(units[0])
+        array = vals[0]
+        index = int(vals[1])
+        element = array[index]
+        res =  OperationResult(element.value)
+        res.set_unit(element.unit)
+        res.set_ref(element.ref)
         return res
 
     def func_array_elements(self, vals, units, refs, flags):
