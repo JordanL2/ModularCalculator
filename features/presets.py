@@ -20,6 +20,7 @@ presets['Advanced'] = presets['Basic'] + [
 
 presets['Scientific'] = presets['Advanced'] + [
     'arrays.arrays',
+    'arrays.arrayfunctions',
     'numerical.decimalfunction',
     'numerical.expnumbers',
     'numerical.numericalconstants',

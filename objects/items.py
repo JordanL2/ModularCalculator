@@ -144,6 +144,7 @@ class OperandResult:
         self.value = value
         self.unit = unit
         self.ref = ref
+        self.flags = {}
 
     def __str__(self):
         if self.unit is not None:

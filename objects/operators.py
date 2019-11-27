@@ -85,7 +85,8 @@ class Operation:
                     else:
                         input_row.append(inp)
                 res = self.call(calculator, input_row, flags)
-                results.append(res)
+                if not 'ignore' in res.flags:
+                    results.append(res)
 
             return OperandResult(results, None, None)
 
