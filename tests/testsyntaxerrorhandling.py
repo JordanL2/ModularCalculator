@@ -21,9 +21,9 @@ tests = [
     { 'test': r"1 + (2  3)",            'expected': { 'message': r"Could not parse: 3)",                      'pos': 8,  'items': ['1',' ','+',' ','(','2',' ',' '] } },
     
     { 'test': r"min(1, 2, '')",         'expected': { 'message': r"Function min parameter 3 must be of type(s) number",   'pos': 0,  'items': [] } },
-    { 'test': r"1 + (min(1, 2, ''))",   'expected': { 'message': r"Function min parameter 3 must be of type(s) number",   'pos': 5,  'items': ['1',' ','+',' ','(',] } },
+    { 'test': r"1 + (min(1, 2, ''))",   'expected': { 'message': r"Function min parameter 3 must be of type(s) number",   'pos': 5,  'items': ['1',' ','+',' ','(',], 'next': 'min(1, 2, \'\')' } },
     { 'test': r"1 + (min(1, 2, 3 +)",   'expected': { 'message': r"Inner expression missing close symbol",    'pos': 4,  'items': ['1',' ','+',' '] } },
-    { 'test': r"1 + (min(1, 2, 3 +))",  'expected': { 'message': r"Missing right operands for operator +",          'pos': 17, 'items': ['1',' ','+',' ','(','min','(','1',',',' ','2',',',' ','3',' '] } },
+    { 'test': r"1 + (min(1, 2, 3 +))",  'expected': { 'message': r"Missing right operands for operator +",          'pos': 17, 'items': ['1',' ','+',' ','(','min','(','1',',',' ','2',',',' ','3',' '], 'next': '+' } },
     { 'test': r"1 + (min(1, 2, (1 2))", 'expected': { 'message': r"Could not parse: 2))",                     'pos': 18, 'items': ['1',' ','+',' ','(','min','(','1',',',' ','2',',',' ','(','1',' '] } },
 
     { 'test': r"1 / 0",                 'expected': { 'message': r"Could not execute operator / with operands: '1', '0' - Could not execute Operator /",     'pos': 2,  'items': ['1',' '] } },
@@ -52,7 +52,7 @@ tests = [
     { 'test': "f = './examples/ext_func_addition2'\n@f(1, 2)", 'expected': { 'exception': ParsingException, 'message': r"Could not execute function 'f'", 'pos': 36, 'items': ['f',' ','=',' ',"'./examples/ext_func_addition2'","\n"] } },
 
     { 'test': "round((+))",  'expected': { 'message': r"Missing left operands for operator +",  'pos': 7, 'items': ['round','(','('] } },
-    { 'test': "(1/0) +",  'expected': { 'message': r"Missing right operands for operator +",  'pos': 6, 'items': ['(','1',], 'next': '/0) +' } },
+    { 'test': "(1/0) +",  'expected': { 'message': r"Missing right operands for operator +",  'pos': 6, 'items': ['(','1','/','0',')',' '], 'next': '+' } },
     
     { 'test': "[1, 2 / 0]",  'expected': { 'message': r"Could not execute operator / with operands: '2', '0' - Could not execute Operator /",  'pos': 6, 'items': ['[','1',',',' ','2',' '] } },
     { 'test': "[1, (2 / 0)]",  'expected': { 'message': r"Could not execute operator / with operands: '2', '0' - Could not execute Operator /",  'pos': 7, 'items': ['[','1',',',' ','(','2',' '] } },
@@ -63,7 +63,8 @@ tests = [
 
 #    { 'test': r"", 'expected': { 'exception': ParsingException, 'message': r"", 'pos': 0, 'items': [] } },
 ]
-tests=[{ 'test': "(1/0) +",  'expected': { 'message': r"Missing right operands for operator +",  'pos': 6, 'items': ['(','1',], 'next': '/0) +' } },]
+#tests=[{ 'test': "(1/0) +",  'expected': { 'message': r"Missing right operands for operator +",  'pos': 6, 'items': ['(','1','/','0',')',' '], 'next': '+' } },]
+#tests=[{ 'test': r"1 + (min(1, 2, 3 +))",  'expected': { 'message': r"Missing right operands for operator +", 'pos': 17, 'items': ['1',' ','+',' ','(','min','(','1',',',' ','2',',',' ','3',' '], 'next': '+))' } },]
 
 failed = []
 for num, test in enumerate(tests):
@@ -77,14 +78,14 @@ for num, test in enumerate(tests):
             if err.message != expected['message']:
                 failed.append({'num': num, 'test': expr, 'stage': 'Exception message', 'expected': expected['message'], 'actual': err.message})
                 continue
-            i = err.find_pos(expr)
-            if i != expected['pos']:
-                failed.append({'num': num, 'test': expr, 'stage': 'Exception position', 'expected': expected['pos'], 'actual': i})
-                continue
             if 'next' in expected:
                 if err.next != expected['next']:
                     failed.append({'num': num, 'test': expr, 'stage': 'Next', 'expected': expected['next'], 'actual': err.next})
                     continue
+            i = err.find_pos(expr)
+            if i != expected['pos']:
+                failed.append({'num': num, 'test': expr, 'stage': 'Exception position', 'expected': expected['pos'], 'actual': i})
+                continue
             statements = hl.highlight_statements(err.statements)
             count = 0
             for items in statements:
