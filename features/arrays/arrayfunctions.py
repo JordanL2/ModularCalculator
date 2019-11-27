@@ -72,12 +72,11 @@ class ArrayFunctionsFeature(Feature):
 
     def func_array_concat(self, vals, units, refs, flags):
         res =  OperationResult(vals[0] + vals[1])
-        res.set_unit(units[0])
         return res
 
     def func_array_element(self, vals, units, refs, flags):
         array = vals[0]
-        index = int(vals[1])
+        index = int(vals[1]) - 1
         element = array[index]
         res =  OperationResult(element.value)
         res.set_unit(element.unit)
@@ -85,11 +84,12 @@ class ArrayFunctionsFeature(Feature):
         return res
 
     def func_array_elements(self, vals, units, refs, flags):
-        res =  OperationResult()
-        res.set_unit(units[0])
+        new_array = []
+        for i in vals[1]:
+            new_array.append(vals[0][int(i.value) - 1])
+        res =  OperationResult(new_array)
         return res
 
     def func_array_filter(self, vals, units, refs, flags):
         res =  OperationResult()
-        res.set_unit(units[0])
         return res
