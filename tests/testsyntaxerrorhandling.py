@@ -46,7 +46,7 @@ tests = [
     
     { 'test': "dateadd('2017-01-01', 3)",  'expected': { 'message': r"Function dateadd parameter 2 must have unit dimensions: time^1",  'pos': 0, 'items': [] } },
 
-    { 'test': "(1/0) else",  'expected': { 'message': r"Could not execute operator: else",  'pos': 6, 'items': ['(','1',' '] } },
+    { 'test': "(1/0) else",  'expected': { 'message': r"Could not execute operator: else",  'pos': 6, 'items': ['(','1','/','0',')',' '] } },
 
     { 'test': "f = './examples/does_not_exist'\n@f(1, 2)", 'expected': { 'exception': ParsingException, 'message': r"Could not read file './examples/does_not_exist'", 'pos': 32, 'items': ['f',' ','=',' ',"'./examples/does_not_exist'","\n"] } },
     { 'test': "f = './examples/ext_func_addition2'\n@f(1, 2)", 'expected': { 'exception': ParsingException, 'message': r"Could not execute function 'f'", 'pos': 36, 'items': ['f',' ','=',' ',"'./examples/ext_func_addition2'","\n"] } },

@@ -144,6 +144,7 @@ class Engine:
     def execute(self, items, flags):
         items = copy_items(items)
         original_items = items
+        very_original_items = copy_items(items)
         items = functional_items(items)
         try:
             if len(items) == 0:
@@ -201,10 +202,10 @@ class Engine:
                 raise ExecuteException("Not a value: \"{0}\"".format(str(items[0])), original_items[0:items[0]._INDEX], None)
             
             if isinstance(items[0].value, Exception):
-                items[0].value = self.restore_non_functional_items(items[0].value, original_items)
+                items[0].value = self.restore_non_functional_items(items[0].value, original_items, very_original_items)
             return items[0]
         except CalculateException as err:
-            raise self.restore_non_functional_items(err, original_items)
+            raise self.restore_non_functional_items(err, original_items, very_original_items)
 
     def is_unit(self, item):
         return isinstance(item, OperandResult) and isinstance(item.value, UnitPowerList)
@@ -273,18 +274,21 @@ class Engine:
 
         return items[0:input_start] + [op_result] + items[input_end:]
 
-    def restore_non_functional_items(self, err, original_items):
+    def restore_non_functional_items(self, err, original_items, very_original_items):
         exception_items = []
         functional_items = 0
         i = 0
         maxi = len(err.items)
         while i < len(original_items) and functional_items <= maxi:
             if err.truncated and functional_items < maxi:
-                exception_items.append(original_items[i])
+                if functional_items < maxi - 1:
+                    exception_items.append(very_original_items[i])
+                else:
+                    exception_items.append(original_items[i])
             if original_items[i].functional():
                 functional_items += 1
             if not err.truncated and functional_items <= maxi:
-                exception_items.append(original_items[i])
+                exception_items.append(very_original_items[i])
             i += 1
         err.items = exception_items
         return err
