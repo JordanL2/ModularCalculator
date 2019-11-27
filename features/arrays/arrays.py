@@ -191,28 +191,38 @@ class ArrayElement():
         element_result = calculator.execute(self.element, flags)
         if isinstance(element_result.value, ExecuteException):
             raise element_result.value
+        if self.end_element is not None and not isinstance(element_result.value, Decimal):
+            raise ExecuteException("Arrays with range must be numerical", [], None)
         arr[0] += len(self.element)
 
         end_element_result = None
-        if self.end_element:
+        if self.end_element is not None:
             arr[0] += 1
             end_element_result = calculator.execute(self.end_element, flags)
             if isinstance(end_element_result.value, ExecuteException):
                 raise end_element_result.value
+            if not isinstance(end_element_result.value, Decimal):
+                raise ExecuteException("Arrays with range must be numerical", [], None)
             arr[0] += len(self.end_element)
         else:
             return [element_result]
 
         step_result = OperandResult(Decimal('1'), None, None)
-        if self.step:
+        if self.step is not None:
             arr[0] += 1
             step_result = calculator.execute(self.step, flags)
             if isinstance(step_result.value, ExecuteException):
                 raise step_result.value
+            if not isinstance(step_result.value, Decimal):
+                raise ExecuteException("Arrays with range must be numerical", [], None)
             arr[0] += len(self.step)
 
         if element_result.unit is not None or end_element_result.unit is not None or step_result.unit is not None:
+            if element_result.unit is None:
+                raise ExecuteException("Arrays with range must have a consistent unit for the start, end and step components", [], None)
             for right_element in (end_element_result, step_result):
+                if right_element.unit is None:
+                    raise ExecuteException("Arrays with range must have a consistent unit for the start, end and step components", [], None)
                 values, units, resultunit = calculator.unit_normaliser.normalise_inputs([element_result.value, right_element.value], [element_result.unit, right_element.unit], True, False)
                 right_element.value = values[1]
                 right_element.unit = units[1]
