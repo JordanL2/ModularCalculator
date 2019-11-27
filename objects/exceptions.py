@@ -23,12 +23,6 @@ def find_pos(self, text, statements):
     if self.next is not None:
         ii = text.find(self.next, i)
         if ii == -1:
-            for items in statements:
-                print("STATEMENT")
-                for item in items:
-                    print("|" + item.text + "|")
-            print("Next: |" + self.next + "|")
-            print("Remaining: |" + self.next[i:] + "|")
             raise Exception("Could not find '{0}' in '{1}' after character {2}".format(self.next, text, i))
         i = ii
     return i
