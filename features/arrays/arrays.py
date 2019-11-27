@@ -41,6 +41,8 @@ class ArraysFeature(Feature):
         calculator.add_parser('array_param', ArraysFeature.parse_array_param)
         calculator.add_parser('array_end', ArraysFeature.parse_array_end)
 
+        calculator.validators['array'] = ArraysFeature.validate_array
+
     def parse_array(self, expr, i, items, flags):
         next = expr[i:]
         start_symbol = self.feature_options['arrays.arrays']['Open']
@@ -143,6 +145,9 @@ class ArraysFeature(Feature):
             return None, None, {'end': True, 'end_array': True}
 
         return None, None, None
+
+    def validate_array(self, value, unit, ref):
+        return type(value) == list
 
 
 class ArrayItem(RecursiveOperandItem):

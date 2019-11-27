@@ -66,7 +66,7 @@ These examples are available in examples/basic_integration.py. See examples/adva
 * Should bitwise not operator only allow positive integers, and throw error if something else?
 * ARRAYS:
 	* Arrays with variables - ref is being lost
-	* Functions that use entire array at once - describe this in Insert Function dialog somehow
+	* Functions that use entire array at once, or use them raw - describe this in Insert Function dialog somehow
 
 ## Functions
 * Display operator/function syntax info on parameter validation error

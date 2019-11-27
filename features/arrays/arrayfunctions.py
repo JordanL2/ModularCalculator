@@ -32,8 +32,8 @@ class ArrayFunctionsFeature(Feature):
             ['array', 'array'],
             ArrayFunctionsFeature.func_array_concat, 
             2, 
-            2)#, 
-            #'array')
+            2, 
+            'array')
         calculator.funcs['concat'].array_inputs_raw = True
 
         calculator.funcs['element'] = FunctionDefinition(
@@ -43,8 +43,8 @@ class ArrayFunctionsFeature(Feature):
             ['array', 'number'],
             ArrayFunctionsFeature.func_array_element, 
             2, 
-            2)#, 
-            #'array')
+            2, 
+            ['array', 'number'])
         calculator.funcs['element'].array_inputs_raw = True
 
         calculator.funcs['elements'] = FunctionDefinition(
@@ -54,8 +54,8 @@ class ArrayFunctionsFeature(Feature):
             ['array', 'array'],
             ArrayFunctionsFeature.func_array_elements, 
             2, 
-            2)#, 
-            #'array')
+            2, 
+            'array')
         calculator.funcs['elements'].array_inputs_raw = True
 
         calculator.funcs['filter'] = FunctionDefinition(
@@ -65,8 +65,8 @@ class ArrayFunctionsFeature(Feature):
             ['array', 'array'],
             ArrayFunctionsFeature.func_array_filter, 
             2, 
-            2)#, 
-            #'array')
+            2, 
+            'array')
         calculator.funcs['filter'].array_inputs_raw = True
 
 
