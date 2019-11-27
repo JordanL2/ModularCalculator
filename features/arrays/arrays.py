@@ -61,8 +61,8 @@ class ArraysFeature(Feature):
                     items, length, return_flags = self.parse(next[i:], {'array': True, 'ignore_terminators': True})
                     items = items[0]
                     array_items += items
+                    i += length
                     if len(items) > 0:
-                        i += length
                         element = ArrayElement(items)
 
                         if 'array_range' in return_flags:
@@ -71,8 +71,8 @@ class ArraysFeature(Feature):
                             items, length, return_flags = self.parse(next[i:], {'array': True, 'ignore_terminators': True})
                             items = items[0]
                             array_items += items
+                            i += length
                             if len(items) > 0:
-                                i += length
                                 element.end_element = items
 
                                 if 'array_step' in return_flags:
@@ -85,7 +85,13 @@ class ArraysFeature(Feature):
                                         i += length
                                         element.step = items
 
+                            elif length == 0:
+                                raise ParseException('Parsing error in array', [], None)
+
                         elements.append(element)
+
+                    elif length == 0:
+                        raise ParseException('Parsing error in array', [], None)
 
                 except ParsingException as err:
                     newitems = array_items.copy()
