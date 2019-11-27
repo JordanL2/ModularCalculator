@@ -254,6 +254,7 @@ tests = [
     { 'test': r"[1, 4, 9] < 5", 'expected': [True, True, False] },
     { 'test': "a = [1, 4, 9]\n a < 5", 'expected': [True, True, False] },
     { 'test': "a = [1, 4, 9]\n a < 5 then a else 25", 'expected': [Decimal('1'), Decimal('4'), Decimal('25')] },
+    { 'test': "a = [1 .. 7]\nfilter(a, a % 2 == 0)", 'expected': [Decimal('2'), Decimal('4'), Decimal('6')] },
 
     { 'test': "f = './examples/ext_func_addition'\n@f(5 - 4, 2)", 'expected': Decimal('3') },
     { 'test': "x=1 \nf = './examples/ext_func_addition'\n@f(5 - 4, 2) \nx", 'expected': Decimal('1') },

@@ -91,5 +91,9 @@ class ArrayFunctionsFeature(Feature):
         return res
 
     def func_array_filter(self, vals, units, refs, flags):
-        res =  OperationResult()
+        new_array = []
+        for i, truth in enumerate(vals[1]):
+            if truth.value:
+                new_array.append(vals[0][i])
+        res =  OperationResult(new_array)
         return res

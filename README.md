@@ -66,11 +66,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 * Should bitwise not operator only allow positive integers, and throw error if something else?
 * ARRAYS:
 	* Arrays with variables - ref is being lost
-	* Array functions:
-		* concatenate two together
-		* fetch an element from the array
-		* fetch a set of elements from an array (using an array for the indices) returning an array
-		* filter an array on a condition - this should replace the code in operation.call filtering out None results
 
 ## Functions
 * Display operator/function syntax info on parameter validation error
