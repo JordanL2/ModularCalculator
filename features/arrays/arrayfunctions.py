@@ -25,16 +25,16 @@ class ArrayFunctionsFeature(Feature):
 
     @classmethod
     def install(cls, calculator):
-        calculator.funcs['concat_arrays'] = FunctionDefinition(
+        calculator.funcs['concat'] = FunctionDefinition(
             'Arrays', 
-            'concat_arrays', 
+            'concat', 
             'Concatenate two arrays',
             ['array', 'array'],
             ArrayFunctionsFeature.func_array_concat, 
             2, 
             2)#, 
             #'array')
-        calculator.funcs['concat_arrays'].array_inputs_raw = True
+        calculator.funcs['concat'].array_inputs_raw = True
 
         calculator.funcs['element'] = FunctionDefinition(
             'Arrays', 

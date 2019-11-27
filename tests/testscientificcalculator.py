@@ -256,7 +256,7 @@ tests = [
 
     { 'test': r"[20 cm .. 1 meter step 20 cm]", 'expected': [(Decimal('20') , 'centimeters'), (Decimal('40') , 'centimeters'), (Decimal('60') , 'centimeters'), (Decimal('80') , 'centimeters'), (Decimal('100') , 'centimeters')] },
 
-    { 'test': r"concat_arrays([1, 2, 3], [4, 5])", 'expected': [Decimal('1'), Decimal('2'), Decimal('3'), Decimal('4'), Decimal('5')] },
+    { 'test': r"concat([1, 2, 3], [4, 5])", 'expected': [Decimal('1'), Decimal('2'), Decimal('3'), Decimal('4'), Decimal('5')] },
     { 'test': r"element([1, 2, 3], 2)", 'expected': Decimal('2') },
     { 'test': r"elements([1, 2, 3, 4, 5], [2 .. 4])", 'expected': [Decimal('2'), Decimal('3'), Decimal('4')] },
 
