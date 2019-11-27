@@ -207,7 +207,7 @@ class ArrayElement():
         else:
             return [element_result]
 
-        step_result = OperandResult(Decimal('1'), None, None)
+        step_result = OperandResult(Decimal('1'), element_result.unit, None)
         if self.step is not None:
             arr[0] += 1
             step_result = calculator.execute(self.step, flags)
