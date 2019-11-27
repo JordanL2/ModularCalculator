@@ -85,8 +85,7 @@ class Operation:
                     else:
                         input_row.append(inp)
                 res = self.call(calculator, input_row, flags)
-                if res.value is not None: #TODO do we really want to do this?
-                    results.append(res)
+                results.append(res)
 
             return OperandResult(results, None, None)
 
