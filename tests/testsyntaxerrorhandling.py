@@ -52,7 +52,7 @@ tests = [
     { 'test': "f = './examples/ext_func_addition2'\n@f(1, 2)", 'expected': { 'exception': ParsingException, 'message': r"Could not execute function 'f'", 'pos': 36, 'items': ['f',' ','=',' ',"'./examples/ext_func_addition2'","\n"] } },
 
     { 'test': "round((+))",  'expected': { 'message': r"Missing left operands for operator +",  'pos': 7, 'items': ['round','(','('] } },
-    { 'test': "(1/0) +",  'expected': { 'message': r"Missing right operands for operator +",  'pos': 6, 'items': ['(','1','/','0',')',' '] } },
+    { 'test': "(1/0) +",  'expected': { 'message': r"Missing right operands for operator +",  'pos': 6, 'items': ['(','1',], 'next': '/0) +' } },
     
     { 'test': "[1, 2 / 0]",  'expected': { 'message': r"Could not execute operator / with operands: '2', '0' - Could not execute Operator /",  'pos': 6, 'items': ['[','1',',',' ','2',' '] } },
     { 'test': "[1, (2 / 0)]",  'expected': { 'message': r"Could not execute operator / with operands: '2', '0' - Could not execute Operator /",  'pos': 7, 'items': ['[','1',',',' ','(','2',' '] } },
@@ -63,7 +63,7 @@ tests = [
 
 #    { 'test': r"", 'expected': { 'exception': ParsingException, 'message': r"", 'pos': 0, 'items': [] } },
 ]
-tests=[{ 'test': "(1/0) +",  'expected': { 'message': r"Missing right operands for operator +",  'pos': 6, 'items': ['(','1','/','0',')',' '] } },]
+tests=[{ 'test': "(1/0) +",  'expected': { 'message': r"Missing right operands for operator +",  'pos': 6, 'items': ['(','1',], 'next': '/0) +' } },]
 
 failed = []
 for num, test in enumerate(tests):
@@ -81,6 +81,10 @@ for num, test in enumerate(tests):
             if i != expected['pos']:
                 failed.append({'num': num, 'test': expr, 'stage': 'Exception position', 'expected': expected['pos'], 'actual': i})
                 continue
+            if 'next' in expected:
+                if err.next != expected['next']:
+                    failed.append({'num': num, 'test': expr, 'stage': 'Next', 'expected': expected['next'], 'actual': err.next})
+                    continue
             statements = hl.highlight_statements(err.statements)
             count = 0
             for items in statements:
