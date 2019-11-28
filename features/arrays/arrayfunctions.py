@@ -62,12 +62,13 @@ class ArrayFunctionsFeature(Feature):
             'Arrays', 
             'filter', 
             'Filter an array',
-            ['array', 'array'],
+            ['array', 'array[boolean]'],
             ArrayFunctionsFeature.func_array_filter, 
             2, 
-            2, 
-            'array')
+            2)
         calculator.funcs['filter'].array_inputs_raw = True
+        calculator.funcs['filter'].add_value_restriction(0, 0, ['array'])
+        calculator.funcs['filter'].add_value_restriction(1, 1, ['array[boolean]'])
 
 
     def func_array_concat(self, vals, units, refs, flags):

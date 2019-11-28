@@ -3,6 +3,8 @@
 from modularcalculator.objects.items import *
 from modularcalculator.objects.exceptions import *
 
+import re
+
 
 class OperationResult:
 
@@ -24,6 +26,8 @@ class OperationResult:
 
 
 class Operation:
+
+    validator_type = re.compile(r'(.+)\[(.+)\]')
 
     def __init__(self, category, name, description, syntax, ref, minparams=None, maxparams=None, objtypes=None):
         self.category = category
@@ -156,7 +160,7 @@ class Operation:
             objtypes = restriction['objtypes']
             for i in range(fromparam, toparam):
                 if i < len(values):
-                    if len([o for o in objtypes if o in calculator.validators and calculator.validators[o](calculator, values[i], units[i], refs[i])]) == 0:
+                    if len([o for o in objtypes if self.call_validator(o, calculator, values[i], units[i], refs[i])]) == 0:
                         raise CalculatorException("{0} parameter {1} must be of type(s) {2}".format(self.name, i + 1, str.join(', ', objtypes)))
         
         for restriction in self.unit_restrictions:
@@ -170,6 +174,16 @@ class Operation:
                     if not calculator.unit_normaliser.check_unit_dimensions(units[i], dimensions):
                         dimension_string = str.join(' ', ["{0}^{1}".format(dimensions[ii], str(dimensions[ii + 1])) for ii in range(0, len(dimensions), 2)])
                         raise CalculatorException("{0} parameter {1} must have unit dimensions: {2}".format(self.name, i + 1, dimension_string))
+
+    def call_validator(self, obj_type, calculator, value, unit, ref):
+        validator_type_match = self.validator_type.match(obj_type)
+        if validator_type_match:
+            obj_main_type = validator_type_match.group(1) + "[TYPE]"
+            obj_sub_type = validator_type_match.group(2)
+            return calculator.validators[obj_main_type](calculator, value, unit, ref, obj_sub_type)
+        if obj_type in calculator.validators and calculator.validators[obj_type](calculator, value, unit, ref):
+            return True
+        return False
 
     def convert_numbers(self, calculator, values):
         new_values = values.copy()

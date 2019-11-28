@@ -42,6 +42,7 @@ class ArraysFeature(Feature):
         calculator.add_parser('array_end', ArraysFeature.parse_array_end)
 
         calculator.validators['array'] = ArraysFeature.validate_array
+        calculator.validators['array[TYPE]'] = ArraysFeature.validate_array_type
 
     def parse_array(self, expr, i, items, flags):
         next = expr[i:]
@@ -154,6 +155,14 @@ class ArraysFeature(Feature):
 
     def validate_array(self, value, unit, ref):
         return type(value) == list
+
+    def validate_array_type(self, value, unit, ref, sub_type):
+        if type(value) != list:
+            return False
+        for element in value:
+            if sub_type not in self.validators or not self.validators[sub_type](self, element.value, element.unit, element.ref):
+                return False
+        return True
 
 
 class ArrayItem(RecursiveOperandItem):

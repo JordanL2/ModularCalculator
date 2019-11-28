@@ -66,7 +66,7 @@ These examples are available in examples/basic_integration.py. See examples/adva
 * Should bitwise not operator only allow positive integers, and throw error if something else?
 * ARRAYS:
 	* Rework how arrays are input to operations:
-		* A way to validate arrays contain a particular type, eg "array[number]"
+		* A way to validate arrays contain a particular type, eg "array[number]" - DONE
 		* Remove array_inputs_raw and array_input_flattened, instead if a param is type array it's left raw
 		* Statistical functions updated to use "array[number]" as their input
 		* elements function is now redundant, as we can just call element with an array in 2nd param
