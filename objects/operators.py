@@ -131,7 +131,6 @@ class Operation:
                         for i, this_value in enumerate(this_values):
                             values[ii][i].value = this_value
 
-            
             try:
                 result = self.ref(calculator, values, units, refs, flags.copy())
                 result_value = result.value
