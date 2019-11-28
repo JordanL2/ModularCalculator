@@ -65,10 +65,8 @@ These examples are available in examples/basic_integration.py. See examples/adva
 * Ability to rename functions as feature options
 * Should bitwise not operator only allow positive integers, and throw error if something else?
 * ARRAYS:
-	* Current limitations:
-		* User defined functions can't override how arrays are passed to them
-		* Any variables put into an array are by-value, the ref is never used later to refetch the variable's value
-		* No nested arrays - not sure if this would ever be useful
+	* User defined functions can't override how arrays are passed to them
+	* Any variables put into an array are by-value, the ref is never used later to refetch the variable's value
 
 ## Functions
 * Display operator/function syntax info on parameter validation error

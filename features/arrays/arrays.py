@@ -211,6 +211,8 @@ class ArrayElement():
         element_result = calculator.execute(self.element, flags)
         if isinstance(element_result.value, ExecuteException):
             raise element_result.value
+        if isinstance(element_result.value, list):
+            raise ExecuteException("Nested arrays are not allowed", [], None)
         if self.end_element is not None and not isinstance(element_result.value, Decimal):
             raise ExecuteException("Arrays with range must be numerical", [], None)
         arr[0] += len(self.element)
