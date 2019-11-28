@@ -24,7 +24,7 @@ class StatisticalFunctionsFeature(Feature):
         return 'Sum, mean, median, standard deviation etc'
 
     def dependencies():
-        return ['structure.functions']
+        return ['structure.functions', 'arrays.arrays']
 
     @classmethod
     def install(cls, calculator):
@@ -32,97 +32,97 @@ class StatisticalFunctionsFeature(Feature):
             'Statistics', 
             'sum', 
             'Sum all values',
-            ['number', '...'],
+            ['array[number]'],
             StatisticalFunctionsFeature.func_sum, 
             1, 
-            None, 
-            'number')
-        calculator.funcs['sum'].array_input_flattened = True
+            1, 
+            'array[number]')
 
         calculator.funcs['min'] = FunctionDefinition(
             'Statistics', 
             'min', 
             'Minimum of all values',
-            ['number', '...'],
+            ['array[number]'],
             StatisticalFunctionsFeature.func_min, 
             1, 
-            None, 
-            'number')
-        calculator.funcs['min'].array_input_flattened = True
+            1, 
+            'array[number]')
 
         calculator.funcs['max'] = FunctionDefinition(
             'Statistics', 
             'max', 
             'Maximum of all values',
-            ['number', '...'],
+            ['array[number]'],
             StatisticalFunctionsFeature.func_max, 
             1, 
-            None, 
-            'number')
-        calculator.funcs['max'].array_input_flattened = True
+            1, 
+            'array[number]')
 
         calculator.funcs['mean'] = FunctionDefinition(
             'Statistics', 
             'mean', 
             'Average of all values',
-            ['number', '...'],
+            ['array[number]'],
             StatisticalFunctionsFeature.func_mean, 
             1, 
-            None, 
-            'number')
-        calculator.funcs['mean'].array_input_flattened = True
+            1, 
+            'array[number]')
 
         calculator.funcs['median'] = FunctionDefinition(
             'Statistics', 
             'median', 
             'Median of all values',
-            ['number', '...'],
+            ['array[number]'],
             StatisticalFunctionsFeature.func_median, 
             1, 
-            None, 
-            'number')
-        calculator.funcs['median'].array_input_flattened = True
+            1, 
+            'array[number]')
 
         calculator.funcs['mode'] = FunctionDefinition(
             'Statistics', 
             'mode', 
             'Mode of all values',
-            ['number', '...'],
+            ['array[number]'],
             StatisticalFunctionsFeature.func_mode, 
             1, 
-            None, 
-            'number')
-        calculator.funcs['mode'].array_input_flattened = True
+            1, 
+            'array[number]')
 
         calculator.funcs['stdev'] = FunctionDefinition(
             'Statistics', 
             'stdev', 
             'Standard deviation of all values',
-            ['number', '...'],
+            ['array[number]'],
             StatisticalFunctionsFeature.func_stdev, 
             1, 
-            None, 
-            'number')
-        calculator.funcs['stdev'].array_input_flattened = True
+            1, 
+            'array[number]')
 
 
     def func_sum(self, vals, units, refs, flags):
-        return OperationResult(Decimal(sum(vals)))
+        values = [v.value for v in vals[0]]
+        return OperationResult(Decimal(sum(values)))
 
     def func_min(self, vals, units, refs, flags):
-        return OperationResult(Decimal(min(vals)))
+        values = [v.value for v in vals[0]]
+        return OperationResult(Decimal(min(values)))
 
     def func_max(self, vals, units, refs, flags):
-        return OperationResult(Decimal(max(vals)))
+        values = [v.value for v in vals[0]]
+        return OperationResult(Decimal(max(values)))
 
     def func_mean(self, vals, units, refs, flags):
-        return OperationResult(Decimal(statistics.mean(vals)))
+        values = [v.value for v in vals[0]]
+        return OperationResult(Decimal(statistics.mean(values)))
 
     def func_median(self, vals, units, refs, flags):
-        return OperationResult(Decimal(statistics.median(vals)))
+        values = [v.value for v in vals[0]]
+        return OperationResult(Decimal(statistics.median(values)))
 
     def func_mode(self, vals, units, refs, flags):
-        return OperationResult(Decimal(statistics.mode(vals)))
+        values = [v.value for v in vals[0]]
+        return OperationResult(Decimal(statistics.mode(values)))
 
     def func_stdev(self, vals, units, refs, flags):
-        return OperationResult(Decimal(statistics.stdev(vals)))
+        values = [v.value for v in vals[0]]
+        return OperationResult(Decimal(statistics.stdev(values)))

@@ -20,11 +20,12 @@ tests = [
     { 'test': r"1 + (2 3)",             'expected': { 'message': r"Could not parse: 3)",                      'pos': 7,  'items': ['1',' ','+',' ','(','2',' '] } },
     { 'test': r"1 + (2  3)",            'expected': { 'message': r"Could not parse: 3)",                      'pos': 8,  'items': ['1',' ','+',' ','(','2',' ',' '] } },
     
-    { 'test': r"min(1, 2, '')",         'expected': { 'message': r"Function min parameter 3 must be of type(s) number",   'pos': 0,  'items': [] } },
-    { 'test': r"1 + (min(1, 2, ''))",   'expected': { 'message': r"Function min parameter 3 must be of type(s) number",   'pos': 5,  'items': ['1',' ','+',' ','(',], 'next': 'min(1, 2, \'\')' } },
-    { 'test': r"1 + (min(1, 2, 3 +)",   'expected': { 'message': r"Inner expression missing close symbol",    'pos': 4,  'items': ['1',' ','+',' '] } },
-    { 'test': r"1 + (min(1, 2, 3 +))",  'expected': { 'message': r"Missing right operands for operator +",          'pos': 17, 'items': ['1',' ','+',' ','(','min','(','1',',',' ','2',',',' ','3',' '], 'next': '+' } },
-    { 'test': r"1 + (min(1, 2, (1 2))", 'expected': { 'message': r"Could not parse: 2))",                     'pos': 18, 'items': ['1',' ','+',' ','(','min','(','1',',',' ','2',',',' ','(','1',' '] } },
+    { 'test': r"min([1, 2, ''])",         'expected': { 'message': r"Function min parameter 1 must be of type(s) array[number]",   'pos': 0,  'items': [] } },
+    { 'test': r"1 + (min([1, 2, '']))",   'expected': { 'message': r"Function min parameter 1 must be of type(s) array[number]",   'pos': 5,  'items': ['1',' ','+',' ','(',], 'next': 'min([1, 2, \'\'])' } },
+    { 'test': r"1 + (min([1, 2, 3 +])",   'expected': { 'message': r"Inner expression missing close symbol",    'pos': 4,  'items': ['1',' ','+',' '] } },
+    { 'test': r"1 + (min([1, 2, 3 +]))",  'expected': { 'message': r"Missing right operands for operator +",          'pos': 18, 'items': ['1',' ','+',' ','(','min','(','[','1',',',' ','2',',',' ','3',' '], 'next': '+' } },
+    { 'test': r"1 + (min([1, 2, 3] +))",  'expected': { 'message': r"Missing right operands for operator +",          'pos': 19, 'items': ['1',' ','+',' ','(','min','(','[','1',',',' ','2',',',' ','3',']',' '], 'next': '+' } },
+    { 'test': r"1 + (min([1, 2, (1 2)])", 'expected': { 'message': r"Could not parse: 2)])",                     'pos': 19, 'items': ['1',' ','+',' ','(','min','(','[','1',',',' ','2',',',' ','(','1',' '] } },
 
     { 'test': r"1 / 0",                 'expected': { 'message': r"Could not execute operator / with operands: '1', '0' - Could not execute Operator /",     'pos': 2,  'items': ['1',' '] } },
     { 'test': r"2 + (1 / 0) + 3",       'expected': { 'message': r"Could not execute operator / with operands: '1', '0' - Could not execute Operator /",     'pos': 7,  'items': ['2',' ','+',' ','(','1',' '] } },

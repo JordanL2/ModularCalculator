@@ -18,7 +18,7 @@ tests = [
     { 'test': '2 + 3^3', 'expected': Decimal(29) },
     { 'test': '4 * (2 + (3)) - 3', 'expected': Decimal(17) },
     { 'test': '14 % 3', 'expected': Decimal(2) },
-    { 'test': r"stdev(1, 2, 3, 4)", 'expected': Decimal('1.290994448735805628393088466594') },
+    { 'test': r"stdev([1, 2, 3, 4])", 'expected': Decimal('1.290994448735805628393088466594') },
     { 'test': "'hello' +$ 'goodbye'", 'expected': 'hellogoodbye' },
     { 'test': r"'hello' +$ 'good\'bye\\'", 'expected': "hellogood'bye\\" },
     { 'test': r"123 +$ 'abc'", 'expected': '123abc' },

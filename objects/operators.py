@@ -51,8 +51,6 @@ class Operation:
         self.auto_convert_numerical_inputs = True
         self.auto_convert_numerical_result = True
 
-        self.array_input_flattened = False
-
     def add_value_restriction(self, fromparam, toparam, objtypes):
         if objtypes is not None:
             if not isinstance(objtypes, list):
@@ -68,9 +66,7 @@ class Operation:
             if type(inp.value) == list and not self.value_can_be_type(i, 'array') and not self.value_can_be_type(i, 'array[TYPE]') and not (inp.ref is not None and self.value_can_be_type(i, 'variable')):
                 array_inputs.append(i)
 
-        flatten = self.array_input_flattened and len(array_inputs) == 1 and len(inputs) == 1
-
-        if not flatten and len(array_inputs) > 0:
+        if len(array_inputs) > 0:
 
             lengths = set()
             for i in array_inputs:
@@ -99,18 +95,9 @@ class Operation:
                     if isinstance(i.value, Exception):
                         return i
 
-            values = None
-            units = None
-            refs = None
-
-            if flatten:
-                values = [i.value for i in inputs[0].value]
-                units = [i.unit for i in inputs[0].value]
-                refs = [i.ref for i in inputs[0].value]
-            else:
-                values = [i.value for i in inputs]
-                units = [i.unit for i in inputs]
-                refs = [i.ref for i in inputs]
+            values = [i.value for i in inputs]
+            units = [i.unit for i in inputs]
+            refs = [i.ref for i in inputs]
 
             self.validate(calculator, values, units, refs)
 
@@ -128,6 +115,22 @@ class Operation:
                     values, units, result_unit = calculator.unit_normaliser.normalise_inputs(values, units, self.units_multi, self.units_relative)
                     for i in range(0, len(values)):
                         values[i] = calculator.restore_number_type(values[i], number_types[i])
+                elif len(values) == 1 and type(values[0]) == list and len([v for v in values[0] if not calculator.validate_number(v.value)]) == 0:
+                    for ii in range(0, len(values)):
+                        this_values = [i.value for i in values[ii]]
+                        this_units = [i.unit for i in values[ii]]
+
+                        number_types = []
+                        for i in range(0, len(this_values)):
+                            this_values[i], this_type = calculator.number(this_values[i])
+                            number_types.append(this_type)
+                        this_values, this_units, result_unit = calculator.unit_normaliser.normalise_inputs(this_values, this_units, self.units_multi, self.units_relative)
+                        for i in range(0, len(this_values)):
+                            this_values[i] = calculator.restore_number_type(this_values[i], number_types[i])
+
+                        for i, this_value in enumerate(this_values):
+                            values[ii][i].value = this_value
+
             
             try:
                 result = self.ref(calculator, values, units, refs, flags.copy())
