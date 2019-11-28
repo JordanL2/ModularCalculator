@@ -67,7 +67,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 * ARRAYS:
 	* Current limitations:
 		* User defined functions can't override how arrays are passed to them
-		* Arrays are only unit normalised if units_normalise flag set, and there's only one parameter which is an array of numbers
 		* Any variables put into an array are by-value, the ref is never used later to refetch the variable's value
 		* No nested arrays - not sure if this would ever be useful
 

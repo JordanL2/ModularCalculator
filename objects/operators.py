@@ -115,22 +115,23 @@ class Operation:
                     values, units, result_unit = calculator.unit_normaliser.normalise_inputs(values, units, self.units_multi, self.units_relative)
                     for i in range(0, len(values)):
                         values[i] = calculator.restore_number_type(values[i], number_types[i])
-                elif len(values) == 1 and type(values[0]) == list and len([v for v in values[0] if not calculator.validate_number(v.value)]) == 0:
-                    for ii in range(0, len(values)):
-                        this_values = [i.value for i in values[ii]]
-                        this_units = [i.unit for i in values[ii]]
+                else:
+                    for i in range(0, len(values)):
+                        if type(values[i]) == list and len([v for v in values[i] if not calculator.validate_number(v.value)]) == 0:
+                            this_values = [v.value for v in values[i]]
+                            this_units = [v.unit for v in values[i]]
 
-                        number_types = []
-                        for i in range(0, len(this_values)):
-                            this_values[i], this_type = calculator.number(this_values[i])
-                            number_types.append(this_type)
-                        this_values, this_units, result_unit = calculator.unit_normaliser.normalise_inputs(this_values, this_units, self.units_multi, self.units_relative)
-                        for i in range(0, len(this_values)):
-                            this_values[i] = calculator.restore_number_type(this_values[i], number_types[i])
+                            number_types = []
+                            for ii in range(0, len(this_values)):
+                                this_values[ii], this_type = calculator.number(this_values[ii])
+                                number_types.append(this_type)
+                            this_values, this_units, result_unit = calculator.unit_normaliser.normalise_inputs(this_values, this_units, self.units_multi, self.units_relative)
+                            for ii in range(0, len(this_values)):
+                                this_values[ii] = calculator.restore_number_type(this_values[ii], number_types[ii])
 
-                        values[ii] = values[ii].copy()
-                        for i in range(0, len(this_values)):
-                            values[ii][i] = OperandResult(this_values[i], this_units[i], values[ii][i].ref)
+                            values[i] = values[i].copy()
+                            for ii in range(0, len(this_values)):
+                                values[i][ii] = OperandResult(this_values[ii], this_units[ii], values[i][ii].ref)
 
             try:
                 result = self.ref(calculator, values, units, refs, flags.copy())
