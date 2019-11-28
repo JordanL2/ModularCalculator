@@ -34,7 +34,6 @@ class ArrayFunctionsFeature(Feature):
             2, 
             2, 
             'array')
-        calculator.funcs['concat'].array_inputs_raw = True
 
         calculator.funcs['element'] = FunctionDefinition(
             'Arrays', 
@@ -45,7 +44,6 @@ class ArrayFunctionsFeature(Feature):
             2, 
             2, 
             ['array', 'number'])
-        calculator.funcs['element'].array_inputs_raw = True
 
         calculator.funcs['elements'] = FunctionDefinition(
             'Arrays', 
@@ -56,7 +54,6 @@ class ArrayFunctionsFeature(Feature):
             2, 
             2, 
             'array')
-        calculator.funcs['elements'].array_inputs_raw = True
 
         calculator.funcs['filter'] = FunctionDefinition(
             'Arrays', 
@@ -66,7 +63,6 @@ class ArrayFunctionsFeature(Feature):
             ArrayFunctionsFeature.func_array_filter, 
             2, 
             2)
-        calculator.funcs['filter'].array_inputs_raw = True
         calculator.funcs['filter'].add_value_restriction(0, 0, ['array'])
         calculator.funcs['filter'].add_value_restriction(1, 1, ['array[boolean]'])
 

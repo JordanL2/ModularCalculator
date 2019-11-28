@@ -36,8 +36,8 @@ class AssignmentFeature(Feature):
             AssignmentFeature.op_var_set, 
             1, 
             1, 
-            ['variable', None]), 
-        {'units_normalise': False, 'array_inputs_raw': True})
+            ['variable', [None, 'array']]), 
+        {'units_normalise': False})
         calculator.add_op(OperatorDefinition(
             'Assignment', 
             '||=', 
@@ -45,8 +45,8 @@ class AssignmentFeature(Feature):
             AssignmentFeature.op_var_set_if_empty, 
             1, 
             1, 
-            ['variable', None]), 
-        {'units_normalise': False, 'array_inputs_raw': True})
+            ['variable', [None, 'array']]), 
+        {'units_normalise': False})
 
         calculator.vars = {}
 

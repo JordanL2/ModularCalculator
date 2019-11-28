@@ -51,7 +51,6 @@ class Operation:
         self.auto_convert_numerical_inputs = True
         self.auto_convert_numerical_result = True
 
-        self.array_inputs_raw = False
         self.array_input_flattened = False
 
     def add_value_restriction(self, fromparam, toparam, objtypes):
@@ -66,12 +65,12 @@ class Operation:
     def call(self, calculator, inputs, flags):
         array_inputs = []
         for i, inp in enumerate(inputs):
-            if type(inp.value) == list:
+            if type(inp.value) == list and not self.value_can_be_type(i, 'array') and not self.value_can_be_type(i, 'array[TYPE]') and not self.value_can_be_type(i, 'variable'):
                 array_inputs.append(i)
 
         flatten = self.array_input_flattened and len(array_inputs) == 1 and len(inputs) == 1
 
-        if not self.array_inputs_raw and not flatten and len(array_inputs) > 0:
+        if not flatten and len(array_inputs) > 0:
 
             lengths = set()
             for i in array_inputs:
@@ -176,13 +175,34 @@ class Operation:
                         raise CalculatorException("{0} parameter {1} must have unit dimensions: {2}".format(self.name, i + 1, dimension_string))
 
     def call_validator(self, obj_type, calculator, value, unit, ref):
+        if obj_type is None:
+            return True
+        obj_type, obj_sub_type = self.generalise_type(obj_type)
+        if obj_sub_type is not None:
+            return calculator.validators[obj_type](calculator, value, unit, ref, obj_sub_type)
+        if obj_type in calculator.validators and calculator.validators[obj_type](calculator, value, unit, ref):
+            return True
+        return False
+
+    def generalise_type(self, obj_type):
+        if obj_type is None:
+            return (None, None)
         validator_type_match = self.validator_type.match(obj_type)
         if validator_type_match:
             obj_main_type = validator_type_match.group(1) + "[TYPE]"
             obj_sub_type = validator_type_match.group(2)
-            return calculator.validators[obj_main_type](calculator, value, unit, ref, obj_sub_type)
-        if obj_type in calculator.validators and calculator.validators[obj_type](calculator, value, unit, ref):
-            return True
+            return (obj_main_type, obj_sub_type)
+        return (obj_type, None)
+
+    def value_can_be_type(self, i, obj_type):
+        for restriction in self.value_restrictions:
+            fromparam = restriction['fromparam']
+            toparam = None
+            if 'toparam' in restriction and restriction['toparam'] is not None:
+                toparam = restriction['toparam']
+            objtypes = [self.generalise_type(o)[0] for o in restriction['objtypes']]
+            if i >= fromparam and (toparam is None or i <= toparam) and obj_type in objtypes:
+                return True
         return False
 
     def convert_numbers(self, calculator, values):
