@@ -65,7 +65,11 @@ These examples are available in examples/basic_integration.py. See examples/adva
 * Ability to rename functions as feature options
 * Should bitwise not operator only allow positive integers, and throw error if something else?
 * ARRAYS:
-	* Functions that use entire array at once, or use them raw - describe this in Insert Function dialog somehow
+	* Rework how arrays are input to operations:
+		* A way to validate arrays contain a particular type, eg "array[number]"
+		* Remove array_inputs_raw and array_input_flattened, instead if a param is type array it's left raw
+		* Statistical functions updated to use "array[number]" as their input
+		* elements function is now redundant, as we can just call element with an array in 2nd param
 	* Current limitations:
 		* User defined functions can't override how arrays are passed to them
 		* Any variables put into an array are by-value, the ref is never used later to refetch the variable' value
@@ -124,4 +128,3 @@ These examples are available in examples/basic_integration.py. See examples/adva
 
 * Unit normalisation: "1 joule / 1 m^3" gets simplified to "1 pascal" - Even Google has this issue
 * Display question/answer widgets change size slightly depending on how many answers there are
-* Arrays - error if step given with no end element
