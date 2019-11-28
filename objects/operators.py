@@ -128,8 +128,9 @@ class Operation:
                         for i in range(0, len(this_values)):
                             this_values[i] = calculator.restore_number_type(this_values[i], number_types[i])
 
-                        for i, this_value in enumerate(this_values):
-                            values[ii][i].value = this_value
+                        for i in range(0, len(this_values)):
+                            values[ii][i].value = this_values[i]
+                            values[ii][i].unit = this_units[i]
 
             try:
                 result = self.ref(calculator, values, units, refs, flags.copy())
