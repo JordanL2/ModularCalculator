@@ -267,6 +267,7 @@ tests = [
     { 'test': r"concat([1, 2, 3], [4, 5])", 'expected': [Decimal('1'), Decimal('2'), Decimal('3'), Decimal('4'), Decimal('5')] },
     { 'test': r"element([1, 2, 3], 2)", 'expected': Decimal('2') },
     { 'test': r"element([1, 2, 3, 4, 5], [2 .. 4])", 'expected': [Decimal('2'), Decimal('3'), Decimal('4')] },
+    { 'test': r"element([1 cm, 2 seconds, 3 metres], 2)", 'expected': (Decimal('2'), 'seconds') },
 
     #{ 'test': "a = 1\nb = [a]\na += 1\nb", 'expected': [Decimal('2')] },
 

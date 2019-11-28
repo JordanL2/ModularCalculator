@@ -34,6 +34,7 @@ class ArrayFunctionsFeature(Feature):
             2, 
             2, 
             'array')
+        calculator.funcs['concat'].units_normalise = False
 
         calculator.funcs['element'] = FunctionDefinition(
             'Arrays', 
@@ -45,6 +46,7 @@ class ArrayFunctionsFeature(Feature):
             2)
         calculator.funcs['element'].add_value_restriction(0, 0, ['array'])
         calculator.funcs['element'].add_value_restriction(1, 1, ['number'])
+        calculator.funcs['element'].units_normalise = False
 
         calculator.funcs['filter'] = FunctionDefinition(
             'Arrays', 
@@ -56,6 +58,7 @@ class ArrayFunctionsFeature(Feature):
             2)
         calculator.funcs['filter'].add_value_restriction(0, 0, ['array'])
         calculator.funcs['filter'].add_value_restriction(1, 1, ['array[boolean]'])
+        calculator.funcs['filter'].units_normalise = False
 
 
     def func_array_concat(self, vals, units, refs, flags):
