@@ -65,7 +65,7 @@ class Operation:
     def call(self, calculator, inputs, flags):
         array_inputs = []
         for i, inp in enumerate(inputs):
-            if type(inp.value) == list and not self.value_can_be_type(i, 'array') and not self.value_can_be_type(i, 'array[TYPE]') and not self.value_can_be_type(i, 'variable'):
+            if type(inp.value) == list and not self.value_can_be_type(i, 'array') and not self.value_can_be_type(i, 'array[TYPE]') and not (inp.ref is not None and self.value_can_be_type(i, 'variable')):
                 array_inputs.append(i)
 
         flatten = self.array_input_flattened and len(array_inputs) == 1 and len(inputs) == 1

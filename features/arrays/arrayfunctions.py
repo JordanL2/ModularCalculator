@@ -42,18 +42,9 @@ class ArrayFunctionsFeature(Feature):
             ['array', 'number'],
             ArrayFunctionsFeature.func_array_element, 
             2, 
-            2, 
-            ['array', 'number'])
-
-        calculator.funcs['elements'] = FunctionDefinition(
-            'Arrays', 
-            'elements', 
-            'Fetch a set of elements from an array, making a new array',
-            ['array', 'array'],
-            ArrayFunctionsFeature.func_array_elements, 
-            2, 
-            2, 
-            'array')
+            2)
+        calculator.funcs['element'].add_value_restriction(0, 0, ['array'])
+        calculator.funcs['element'].add_value_restriction(1, 1, ['number'])
 
         calculator.funcs['filter'] = FunctionDefinition(
             'Arrays', 
@@ -78,13 +69,6 @@ class ArrayFunctionsFeature(Feature):
         res =  OperationResult(element.value)
         res.set_unit(element.unit)
         res.set_ref(element.ref)
-        return res
-
-    def func_array_elements(self, vals, units, refs, flags):
-        new_array = []
-        for i in vals[1]:
-            new_array.append(vals[0][int(i.value) - 1])
-        res =  OperationResult(new_array)
         return res
 
     def func_array_filter(self, vals, units, refs, flags):
