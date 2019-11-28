@@ -86,12 +86,12 @@ class ArraysFeature(Feature):
                                         element.step = items
 
                             elif length == 0:
-                                raise ParseException('Parsing error in array', [], None)
+                                raise ParsingException('Parsing error in array', [[]], next[i:])
 
                         elements.append(element)
 
                     elif length == 0:
-                        raise ParseException('Parsing error in array', [], None)
+                        raise ParsingException('Parsing error in array', [[]], next[i:])
 
                 except ParsingException as err:
                     newitems = array_items.copy()
