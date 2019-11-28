@@ -65,15 +65,10 @@ These examples are available in examples/basic_integration.py. See examples/adva
 * Ability to rename functions as feature options
 * Should bitwise not operator only allow positive integers, and throw error if something else?
 * ARRAYS:
-	* Rework how arrays are input to operations:
-		* A way to validate arrays contain a particular type, eg "array[number]" - DONE
-		* Remove array_inputs_raw, instead if a param is type array it's left raw - DONE
-		* elements function is now redundant, as we can just call element with an array in 2nd param - DONE
-		* Remove array_input_flattened, statistical functions updated to use "array[number]" as their input - DONE
 	* Current limitations:
 		* User defined functions can't override how arrays are passed to them
 		* Arrays are only unit normalised if units_normalise flag set, and there's only one parameter which is an array of numbers
-		* Any variables put into an array are by-value, the ref is never used later to refetch the variable' value
+		* Any variables put into an array are by-value, the ref is never used later to refetch the variable's value
 		* No nested arrays - not sure if this would ever be useful
 
 ## Functions
