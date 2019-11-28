@@ -259,6 +259,8 @@ tests = [
     { 'test': r"mean([1, 2, 6])", 'expected': Decimal('3') },
     { 'test': r"mean([1 .. 100])", 'expected': Decimal('50.5') },
     { 'test': "a=[1 .. 100]\nmean(a)", 'expected': Decimal('50.5') },
+    { 'test': "a=[1cm, 3 feet]", 'expected': [(Decimal('1'), 'centimeter'), (Decimal('3'), 'feet')] },
+    { 'test': "a=[1cm, 3 feet]\nmean(a)\na", 'expected': [(Decimal('1'), 'centimeter'), (Decimal('3'), 'feet')] },
 
     { 'test': r"[20 cm .. 1 meter step 20 cm]", 'expected': [(Decimal('20') , 'centimeters'), (Decimal('40') , 'centimeters'), (Decimal('60') , 'centimeters'), (Decimal('80') , 'centimeters'), (Decimal('100') , 'centimeters')] },
 
