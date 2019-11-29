@@ -167,10 +167,10 @@ tests = [
     { 'test': r"(27s^3)^(1/3)", 'expected': (Decimal('3'), 'seconds') },
     { 'test': r"3 / 2s", 'expected': (Decimal('1.5'), 'hertz') },
 
-    { 'test': r"min([1kg, 2g])", 'expected': (Decimal('0.002'), 'kilograms') },
+    { 'test': r"min([1kg, 2g])", 'expected': (Decimal('2'), 'grams') },
     { 'test': r"mean([1g, 2kg])", 'expected': (Decimal('1000.5'), 'grams') },
-    { 'test': r"min([2W, 1.5J/s])", 'expected': (Decimal('1.5'), 'watts') },
-    { 'test': r"min([1kg, 2kg, 500g])", 'expected': (Decimal('0.5'), 'kilograms') },
+    { 'test': r"min([2W, 1.5J/s])", 'expected': (Decimal('1.5'), 'joules/second') },
+    { 'test': r"min([1kg, 2kg, 500g])", 'expected': (Decimal('500'), 'grams') },
     
     { 'test': r"5 kg m/s^2", 'expected': (Decimal('5'), 'kilogram meters/second^2') },
     { 'test': r"25 kg m / 5 s^2", 'expected': (Decimal('5'), 'newtons') },
@@ -271,8 +271,9 @@ tests = [
     { 'test': r"element([1 cm, 2 seconds, 3 metres], 2)", 'expected': (Decimal('2'), 'seconds') },
     { 'test': r"count([2 .. 6 step 2])", 'expected': Decimal('3') },
     { 'test': r"sort([4, 2, 3, 1])", 'expected': [Decimal('1'), Decimal('2'), Decimal('3'), Decimal('4')] },
-    { 'test': r"sort([4 cm, 2 meters, 3 feet])", 'expected': [(Decimal('4'), 'centimeters'), (Decimal('91.44'), 'centimeters'), (Decimal('200'), 'centimeters')] },
+    { 'test': r"sort([4 cm, 2 meters, 3 feet])", 'expected': [(Decimal('4'), 'centimeters'), (Decimal('3'), 'feet'), (Decimal('2'), 'meters')] },
     { 'test': r"reverse([4, 2, 3, 1])", 'expected': [Decimal('1'), Decimal('3'), Decimal('2'), Decimal('4')] },
+    { 'test': r"min([1 metre, 40 cm])", 'expected': (Decimal('40'), 'centimeters') },
 
     #{ 'test': "a = 1\nb = [a]\na += 1\nb", 'expected': [Decimal('2')] },
 

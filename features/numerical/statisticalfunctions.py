@@ -104,8 +104,12 @@ class StatisticalFunctionsFeature(Feature):
         return OperationResult(Decimal(sum(values)))
 
     def func_min(self, vals, units, refs, flags):
-        values = [v.value for v in vals[0]]
-        return OperationResult(Decimal(min(values)))
+        min_val = min(vals[0], key=lambda x: x.value)
+        res = OperationResult(min_val.value)
+        res.set_ref(min_val.ref)
+        res.original_value = min_val.original_value
+        res.original_unit = min_val.original_unit
+        return res
 
     def func_max(self, vals, units, refs, flags):
         values = [v.value for v in vals[0]]
