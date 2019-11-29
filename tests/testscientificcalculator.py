@@ -274,6 +274,7 @@ tests = [
     { 'test': r"sort([4 cm, 2 meters, 3 feet])", 'expected': [(Decimal('4'), 'centimeters'), (Decimal('3'), 'feet'), (Decimal('2'), 'meters')] },
     { 'test': r"reverse([4, 2, 3, 1])", 'expected': [Decimal('1'), Decimal('3'), Decimal('2'), Decimal('4')] },
     { 'test': r"min([1 metre, 40 cm])", 'expected': (Decimal('40'), 'centimeters') },
+    { 'test': r"max([40 cm, 1 metre])", 'expected': (Decimal('1'), 'meter') },
 
     #{ 'test': "a = 1\nb = [a]\na += 1\nb", 'expected': [Decimal('2')] },
 

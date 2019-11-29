@@ -105,8 +105,6 @@ class Operation:
             if self.auto_convert_numerical_inputs:
                 values, num_type = self.convert_numbers(calculator, values)
 
-            normalised_units = True
-
             result_value, result_unit, result_ref = None, None, None
             if calculator.unit_normaliser is not None and self.units_normalise:
                 if len([i for i in range(0, len(values)) if not self.input_can_be_type(i, 'number') or not calculator.validate_number(values[i])]) == 0:
@@ -139,26 +137,18 @@ class Operation:
                                 values[i][ii].original_value = original_value
                                 values[i][ii].original_unit = original_unit
 
-                            normalised_units = True
-
             try:
                 result = self.ref(calculator, values, units, refs, flags.copy())
                 result_value = result.value
                 if self.auto_convert_numerical_result and isinstance(result_value, Decimal) and num_type:
                     result_value = calculator.restore_number_type(result_value, num_type)
 
-                if normalised_units:
-                    if type(result_value) == list:
-                        for i, val in enumerate(result_value):
-                            if hasattr(val, 'original_value'):
-                                val.value = val.original_value
-                            if hasattr(val, 'original_unit'):
-                                val.unit = val.original_unit
-                    else:
-                        if hasattr(result, 'original_value'):
-                            result_value = result.original_value
-                        if hasattr(result, 'original_unit'):
-                            result_unit = result.original_unit
+                if type(result_value) == list:
+                    for i, val in enumerate(result_value):
+                        if hasattr(val, 'original_value'):
+                            val.value = val.original_value
+                        if hasattr(val, 'original_unit'):
+                            val.unit = val.original_unit
 
                 if result.unit_override:
                     result_unit = result.unit
