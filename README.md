@@ -68,9 +68,9 @@ These examples are available in examples/basic_integration.py. See examples/adva
 	* User defined functions can't override how arrays are passed to them
 	* Any variables put into an array are by-value, the ref is never used later to refetch the variable's value
 	* Functions:
-		* sort
-		* replace element
-		* delete element
+		* sort - with optional operator (string of the symbol) to use for sorting, eg "<" or "<$"
+		* replace element? technically possible with element and concat
+		* delete element? technically possible with element and concat
 
 ## Functions
 * Display operator/function syntax info on parameter validation error

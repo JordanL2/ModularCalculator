@@ -34,7 +34,6 @@ class ArrayFunctionsFeature(Feature):
             2, 
             2, 
             'array')
-        calculator.funcs['concat'].units_normalise = False
 
         calculator.funcs['element'] = FunctionDefinition(
             'Arrays', 
@@ -46,7 +45,6 @@ class ArrayFunctionsFeature(Feature):
             2)
         calculator.funcs['element'].add_value_restriction(0, 0, ['array'])
         calculator.funcs['element'].add_value_restriction(1, 1, ['number'])
-        calculator.funcs['element'].units_normalise = False
 
         calculator.funcs['filter'] = FunctionDefinition(
             'Arrays', 
@@ -58,7 +56,16 @@ class ArrayFunctionsFeature(Feature):
             2)
         calculator.funcs['filter'].add_value_restriction(0, 0, ['array'])
         calculator.funcs['filter'].add_value_restriction(1, 1, ['array[boolean]'])
-        calculator.funcs['filter'].units_normalise = False
+
+        calculator.funcs['count'] = FunctionDefinition(
+            'Arrays',
+            'count',
+            'Count the number of elements in an array',
+            ['array'],
+            ArrayFunctionsFeature.func_array_count,
+            1,
+            1,
+            'array')
 
 
     def func_array_concat(self, vals, units, refs, flags):
@@ -80,4 +87,8 @@ class ArrayFunctionsFeature(Feature):
             if truth.value:
                 new_array.append(vals[0][i])
         res =  OperationResult(new_array)
+        return res
+
+    def func_array_count(self, vals, units, refs, flags):
+        res =  OperationResult(Decimal(len(vals[0])))
         return res
