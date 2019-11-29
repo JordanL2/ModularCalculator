@@ -210,7 +210,7 @@ class ArrayElement():
             raise element_result.value
         if isinstance(element_result.value, list):
             raise ExecuteException("Nested arrays are not allowed", [], None)
-        if self.end_element is not None and not isinstance(element_result.value, Decimal):
+        if self.end_element is not None and not calculator.validate_number(element_result.value):
             raise ExecuteException("Arrays with range must be numerical", [], None)
         state['items'] += len(self.element)
 
@@ -220,7 +220,7 @@ class ArrayElement():
             end_element_result = calculator.execute(self.end_element, flags)
             if isinstance(end_element_result.value, ExecuteException):
                 raise end_element_result.value
-            if not isinstance(end_element_result.value, Decimal):
+            if not calculator.validate_number(end_element_result.value):
                 raise ExecuteException("Arrays with range must be numerical", [], None)
             state['items'] += len(self.end_element)
         else:
@@ -232,7 +232,7 @@ class ArrayElement():
             step_result = calculator.execute(self.step, flags)
             if isinstance(step_result.value, ExecuteException):
                 raise step_result.value
-            if not isinstance(step_result.value, Decimal):
+            if not calculator.validate_number(step_result.value):
                 raise ExecuteException("Arrays with range must be numerical", [], None)
             state['items'] += len(self.step)
 
@@ -247,10 +247,10 @@ class ArrayElement():
                 right_element.unit = units[1]
 
         array = []
-        n = element_result.value
-        while n <= end_element_result.value:
+        n = Decimal(element_result.value)
+        while n <= Decimal(end_element_result.value):
             array.append(OperandResult(n, element_result.unit, None))
-            n += step_result.value
+            n += Decimal(step_result.value)
         return array
 
 
