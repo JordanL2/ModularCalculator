@@ -51,7 +51,7 @@ class ArrayFunctionsFeature(Feature):
         calculator.funcs['filter'] = FunctionDefinition(
             'Arrays', 
             'filter', 
-            'Filter an array',
+            'Filter an array based on a second array of booleans',
             ['array', 'array[boolean]'],
             ArrayFunctionsFeature.func_array_filter, 
             2, 

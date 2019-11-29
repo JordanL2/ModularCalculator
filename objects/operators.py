@@ -107,7 +107,7 @@ class Operation:
 
             result_value, result_unit, result_ref = None, None, None
             if calculator.unit_normaliser is not None and self.units_normalise:
-                if len([v for v in values if not calculator.validate_number(v)]) == 0:
+                if len([i for i in range(0, len(values)) if not self.value_can_be_type(i, 'number') or not calculator.validate_number(values[i])]) == 0:
                     number_types = []
                     for i in range(0, len(values)):
                         values[i], this_type = calculator.number(values[i])
@@ -117,7 +117,7 @@ class Operation:
                         values[i] = calculator.restore_number_type(values[i], number_types[i])
                 else:
                     for i in range(0, len(values)):
-                        if type(values[i]) == list and len([v for v in values[i] if not calculator.validate_number(v.value)]) == 0:
+                        if type(values[i]) == list and self.value_can_be_type(i, 'array', 'number'):
                             this_values = [v.value for v in values[i]]
                             this_units = [v.unit for v in values[i]]
 
@@ -198,14 +198,15 @@ class Operation:
             return (obj_main_type, obj_sub_type)
         return (obj_type, None)
 
-    def value_can_be_type(self, i, obj_type):
+    def value_can_be_type(self, i, obj_type, sub_type=None):
         for restriction in self.value_restrictions:
             fromparam = restriction['fromparam']
             toparam = None
             if 'toparam' in restriction and restriction['toparam'] is not None:
                 toparam = restriction['toparam']
             objtypes = [self.parse_sub_type(o)[0] for o in restriction['objtypes']]
-            if i >= fromparam and (toparam is None or i <= toparam) and obj_type in objtypes:
+            subtypes = [self.parse_sub_type(o)[1] for o in restriction['objtypes']]
+            if i >= fromparam and (toparam is None or i <= toparam) and obj_type in objtypes and (sub_type is None or sub_type in subtypes):
                 return True
         return False
 
