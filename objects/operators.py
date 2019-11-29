@@ -63,7 +63,7 @@ class Operation:
     def call(self, calculator, inputs, flags):
         array_inputs = []
         for i, inp in enumerate(inputs):
-            if type(inp.value) == list and not self.value_can_be_type(i, 'array') and not self.value_can_be_type(i, 'array[TYPE]') and not (inp.ref is not None and self.value_can_be_type(i, 'variable')):
+            if type(inp.value) == list and not self.value_can_be_type(i, 'array') and not (inp.ref is not None and self.value_can_be_type(i, 'variable')):
                 array_inputs.append(i)
 
         if len(array_inputs) > 0:
@@ -181,19 +181,19 @@ class Operation:
     def call_validator(self, obj_type, calculator, value, unit, ref):
         if obj_type is None:
             return True
-        obj_type, obj_sub_type = self.generalise_type(obj_type)
+        obj_type, obj_sub_type = self.parse_sub_type(obj_type)
         if obj_sub_type is not None:
             return calculator.validators[obj_type](calculator, value, unit, ref, obj_sub_type)
         if obj_type in calculator.validators and calculator.validators[obj_type](calculator, value, unit, ref):
             return True
         return False
 
-    def generalise_type(self, obj_type):
+    def parse_sub_type(self, obj_type):
         if obj_type is None:
             return (None, None)
         validator_type_match = self.validator_type.match(obj_type)
         if validator_type_match:
-            obj_main_type = validator_type_match.group(1) + "[TYPE]"
+            obj_main_type = validator_type_match.group(1)
             obj_sub_type = validator_type_match.group(2)
             return (obj_main_type, obj_sub_type)
         return (obj_type, None)
@@ -204,7 +204,7 @@ class Operation:
             toparam = None
             if 'toparam' in restriction and restriction['toparam'] is not None:
                 toparam = restriction['toparam']
-            objtypes = [self.generalise_type(o)[0] for o in restriction['objtypes']]
+            objtypes = [self.parse_sub_type(o)[0] for o in restriction['objtypes']]
             if i >= fromparam and (toparam is None or i <= toparam) and obj_type in objtypes:
                 return True
         return False
