@@ -177,14 +177,14 @@ class ArrayItem(RecursiveOperandItem):
 
     def value(self, flags):
         array = []
-        arr = [0]
+        state = {'items': 0}
 
         for i, element in enumerate(self.elements):
             try:
-                arr[0] += 1
-                array.extend(element.value(flags, self.calculator, arr))
+                state['items'] += 1
+                array.extend(element.value(flags, self.calculator, state))
             except ExecuteException as err:
-                self.items = self.items[0:arr[0]]
+                self.items = self.items[0:state['items']]
                 self.items.extend(err.items)
                 err.items = self.items
                 self.text = err.truncate(self.text)
@@ -207,7 +207,7 @@ class ArrayElement():
         self.end_element = end_element
         self.step = step
 
-    def value(self, flags, calculator, arr):
+    def value(self, flags, calculator, state):
         element_result = calculator.execute(self.element, flags)
         if isinstance(element_result.value, ExecuteException):
             raise element_result.value
@@ -215,29 +215,29 @@ class ArrayElement():
             raise ExecuteException("Nested arrays are not allowed", [], None)
         if self.end_element is not None and not isinstance(element_result.value, Decimal):
             raise ExecuteException("Arrays with range must be numerical", [], None)
-        arr[0] += len(self.element)
+        state['items'] += len(self.element)
 
         end_element_result = None
         if self.end_element is not None:
-            arr[0] += 1
+            state['items'] += 1
             end_element_result = calculator.execute(self.end_element, flags)
             if isinstance(end_element_result.value, ExecuteException):
                 raise end_element_result.value
             if not isinstance(end_element_result.value, Decimal):
                 raise ExecuteException("Arrays with range must be numerical", [], None)
-            arr[0] += len(self.end_element)
+            state['items'] += len(self.end_element)
         else:
             return [element_result]
 
         step_result = OperandResult(Decimal('1'), element_result.unit, None)
         if self.step is not None:
-            arr[0] += 1
+            state['items'] += 1
             step_result = calculator.execute(self.step, flags)
             if isinstance(step_result.value, ExecuteException):
                 raise step_result.value
             if not isinstance(step_result.value, Decimal):
                 raise ExecuteException("Arrays with range must be numerical", [], None)
-            arr[0] += len(self.step)
+            state['items'] += len(self.step)
 
         if element_result.unit is not None or end_element_result.unit is not None or step_result.unit is not None:
             if element_result.unit is None:

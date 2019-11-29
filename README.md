@@ -67,6 +67,10 @@ These examples are available in examples/basic_integration.py. See examples/adva
 * ARRAYS:
 	* User defined functions can't override how arrays are passed to them
 	* Any variables put into an array are by-value, the ref is never used later to refetch the variable's value
+	* Functions:
+		* sort
+		* replace element
+		* delete element
 
 ## Functions
 * Display operator/function syntax info on parameter validation error
