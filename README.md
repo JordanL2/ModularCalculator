@@ -67,8 +67,8 @@ These examples are available in examples/basic_integration.py. See examples/adva
 * ARRAYS:
 	* User defined functions can't override how arrays are passed to them
 	* Any variables put into an array are by-value, the ref is never used later to refetch the variable's value
+	* Sorting and picking min/max: is it possible to preserve each elements original unit?
 	* Functions:
-		* sort - with optional operator (string of the symbol) to use for sorting, eg "<" or "<$"
 		* replace element? technically possible with element and concat
 		* delete element? technically possible with element and concat
 

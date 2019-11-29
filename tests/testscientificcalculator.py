@@ -270,6 +270,9 @@ tests = [
     { 'test': r"element([1, 2, 3, 4, 5], [2 .. 4])", 'expected': [Decimal('2'), Decimal('3'), Decimal('4')] },
     { 'test': r"element([1 cm, 2 seconds, 3 metres], 2)", 'expected': (Decimal('2'), 'seconds') },
     { 'test': r"count([2 .. 6 step 2])", 'expected': Decimal('3') },
+    { 'test': r"sort([4, 2, 3, 1])", 'expected': [Decimal('1'), Decimal('2'), Decimal('3'), Decimal('4')] },
+    { 'test': r"sort([4 cm, 2 meters, 3 feet])", 'expected': [(Decimal('4'), 'centimeters'), (Decimal('91.44'), 'centimeters'), (Decimal('200'), 'centimeters')] },
+    { 'test': r"reverse([4, 2, 3, 1])", 'expected': [Decimal('1'), Decimal('3'), Decimal('2'), Decimal('4')] },
 
     #{ 'test': "a = 1\nb = [a]\na += 1\nb", 'expected': [Decimal('2')] },
 

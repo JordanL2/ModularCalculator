@@ -67,6 +67,26 @@ class ArrayFunctionsFeature(Feature):
             1,
             'array')
 
+        calculator.funcs['sort'] = FunctionDefinition(
+            'Arrays',
+            'sort',
+            'Sort an array in ascending order',
+            ['array[number]'],
+            ArrayFunctionsFeature.func_array_sort,
+            1,
+            1,
+            'array[number]')
+
+        calculator.funcs['reverse'] = FunctionDefinition(
+            'Arrays',
+            'reverse',
+            'Reverse the order of elements in an array',
+            ['array'],
+            ArrayFunctionsFeature.func_array_reverse,
+            1,
+            1,
+            'array')
+
 
     def func_array_concat(self, vals, units, refs, flags):
         res =  OperationResult(vals[0] + vals[1])
@@ -91,4 +111,16 @@ class ArrayFunctionsFeature(Feature):
 
     def func_array_count(self, vals, units, refs, flags):
         res =  OperationResult(Decimal(len(vals[0])))
+        return res
+
+    def func_array_sort(self, vals, units, refs, flags):
+        sorted_array = sorted(vals[0], key=lambda x: x.value)
+        res =  OperationResult(sorted_array)
+        res.set_unit(None)
+        return res
+
+    def func_array_reverse(self, vals, units, refs, flags):
+        reversed_array = vals[0].copy()
+        reversed_array.reverse()
+        res =  OperationResult(reversed_array)
         return res
