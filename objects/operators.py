@@ -63,7 +63,7 @@ class Operation:
     def call(self, calculator, inputs, flags):
         array_inputs = []
         for i, inp in enumerate(inputs):
-            if type(inp.value) == list and not self.value_can_be_type(i, 'array') and not (inp.ref is not None and self.value_can_be_type(i, 'variable')):
+            if type(inp.value) == list and not self.input_can_be_type(i, 'array') and not (inp.ref is not None and self.input_can_be_type(i, 'variable')):
                 array_inputs.append(i)
 
         if len(array_inputs) > 0:
@@ -107,7 +107,7 @@ class Operation:
 
             result_value, result_unit, result_ref = None, None, None
             if calculator.unit_normaliser is not None and self.units_normalise:
-                if len([i for i in range(0, len(values)) if not self.value_can_be_type(i, 'number') or not calculator.validate_number(values[i])]) == 0:
+                if len([i for i in range(0, len(values)) if not self.input_can_be_type(i, 'number') or not calculator.validate_number(values[i])]) == 0:
                     number_types = []
                     for i in range(0, len(values)):
                         values[i], this_type = calculator.number(values[i])
@@ -117,7 +117,7 @@ class Operation:
                         values[i] = calculator.restore_number_type(values[i], number_types[i])
                 else:
                     for i in range(0, len(values)):
-                        if type(values[i]) == list and self.value_must_be_type(i, 'array', 'number'):
+                        if type(values[i]) == list and self.input_must_be_type(i, 'array', 'number'):
                             this_values = [v.value for v in values[i]]
                             this_units = [v.unit for v in values[i]]
 
@@ -163,7 +163,7 @@ class Operation:
             objtypes = restriction['objtypes']
             for i in range(fromparam, toparam):
                 if i < len(values):
-                    if len([o for o in objtypes if self.call_validator(o, calculator, values[i], units[i], refs[i])]) == 0:
+                    if len([o for o in objtypes if self.validate_input(o, calculator, values[i], units[i], refs[i])]) == 0:
                         raise CalculatorException("{0} parameter {1} must be of type(s) {2}".format(self.name, i + 1, str.join(', ', objtypes)))
         
         for restriction in self.unit_restrictions:
@@ -178,7 +178,7 @@ class Operation:
                         dimension_string = str.join(' ', ["{0}^{1}".format(dimensions[ii], str(dimensions[ii + 1])) for ii in range(0, len(dimensions), 2)])
                         raise CalculatorException("{0} parameter {1} must have unit dimensions: {2}".format(self.name, i + 1, dimension_string))
 
-    def call_validator(self, obj_type, calculator, value, unit, ref):
+    def validate_input(self, obj_type, calculator, value, unit, ref):
         if obj_type is None:
             return True
         obj_type, obj_sub_type = self.parse_sub_type(obj_type)
@@ -198,7 +198,7 @@ class Operation:
             return (obj_main_type, obj_sub_type)
         return (obj_type, None)
 
-    def value_can_be_type(self, i, obj_type, sub_type=None):
+    def input_can_be_type(self, i, obj_type, sub_type=None):
         for restriction in self.value_restrictions:
             fromparam = restriction['fromparam']
             toparam = None
@@ -210,7 +210,7 @@ class Operation:
                 return True
         return False
 
-    def value_must_be_type(self, i, obj_type, sub_type=None):
+    def input_must_be_type(self, i, obj_type, sub_type=None):
         found_type = False
         for restriction in self.value_restrictions:
             fromparam = restriction['fromparam']
