@@ -102,6 +102,7 @@ tests = [
     { 'test': r"1K + 1°C", 'expected': (Decimal('2'), 'kelvin') },
     { 'test': r"1°C + 1K", 'expected': (Decimal('2'), 'Celsius') },
 
+    { 'test': r"meters * meters", 'expected': 'meters^2' },
     { 'test': r"2 meters * 3 meters", 'expected': (Decimal('6'), 'meters^2') },
     { 'test': r"20 meters / 5 meters", 'expected': Decimal('4') },
     { 'test': r"12 meters * 3°C", 'expected': (Decimal('36'), 'meter Celsius') },

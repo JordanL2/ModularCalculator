@@ -117,7 +117,7 @@ class Operation:
                         values[i] = calculator.restore_number_type(values[i], number_types[i])
                 else:
                     for i in range(0, len(values)):
-                        if type(values[i]) == list and self.value_can_be_type(i, 'array', 'number'):
+                        if type(values[i]) == list and self.value_must_be_type(i, 'array', 'number'):
                             this_values = [v.value for v in values[i]]
                             this_units = [v.unit for v in values[i]]
 
@@ -209,6 +209,22 @@ class Operation:
             if i >= fromparam and (toparam is None or i <= toparam) and obj_type in objtypes and (sub_type is None or sub_type in subtypes):
                 return True
         return False
+
+    def value_must_be_type(self, i, obj_type, sub_type=None):
+        found_type = False
+        for restriction in self.value_restrictions:
+            fromparam = restriction['fromparam']
+            toparam = None
+            if 'toparam' in restriction and restriction['toparam'] is not None:
+                toparam = restriction['toparam']
+            objtypes = [self.parse_sub_type(o)[0] for o in restriction['objtypes']]
+            subtypes = [self.parse_sub_type(o)[1] for o in restriction['objtypes']]
+            if i >= fromparam and (toparam is None or i <= toparam):
+                if obj_type in objtypes and len(objtypes) == 1 and (sub_type is None or (sub_type in subtypes and len(subtypes) == 1)):
+                    found_type = True
+                else:
+                    return False
+        return found_type
 
     def convert_numbers(self, calculator, values):
         new_values = values.copy()
