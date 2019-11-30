@@ -157,9 +157,12 @@ class Operation:
             try:
                 result = self.ref(calculator, values, units, refs, flags.copy())
                 result_value = result.value
+
+                # Convert the number type of the result
                 if self.auto_convert_numerical_result and isinstance(result_value, Decimal) and num_type:
                     result_value = calculator.restore_number_type(result_value, num_type)
 
+                # If result is an array, restore each element back to its original value and unit
                 if type(result_value) == list:
                     for i, val in enumerate(result_value):
                         if hasattr(val, 'original_value'):
@@ -167,6 +170,7 @@ class Operation:
                         if hasattr(val, 'original_unit'):
                             val.unit = val.original_unit
 
+                # If the operation wants to override the result's unit or ref, use the override value
                 if result.unit_override:
                     result_unit = result.unit
                 if result.ref_override:
@@ -179,38 +183,43 @@ class Operation:
                 raise CalculatorException("Could not execute {0}".format(self.name))
 
     def validate(self, calculator, values, units, refs):
+        # Check if we're been given at least the minimum number of params
         if self.minparams is not None and len(values) < self.minparams:
             raise CalculatorException("{0} requires at least {1} params, only given {2}".format(self.name, self.minparams, len(values)))
+        
+        # Check we've not been given more than the maximum
         if self.maxparams is not None and len(values) > self.maxparams:
             raise CalculatorException("{0} requires at most {1} params, was given {2}".format(self.name, self.maxparams, len(values)))
-        
+
+        # Check all restrictions on input values are true
         for restriction in self.value_restrictions:
             fromparam = restriction['fromparam']
-            toparam = len(units)
+            toparam = len(values)
             if 'toparam' in restriction and restriction['toparam'] is not None:
-                toparam = restriction['toparam'] + 1
+                toparam = min(len(values), restriction['toparam'] + 1)
+            # Cycle through each param this restriction applies to, and make sure it matches at least one allowed type
             objtypes = restriction['objtypes']
             for i in range(fromparam, toparam):
-                if i < len(values):
-                    if len([o for o in objtypes if self.validate_input(o, calculator, values[i], units[i], refs[i])]) == 0:
-                        raise CalculatorException("{0} parameter {1} must be of type(s) {2}".format(self.name, i + 1, str.join(', ', objtypes)))
-        
+                if len([o for o in objtypes if self.validate_input(o, calculator, values[i], units[i], refs[i])]) == 0:
+                    raise CalculatorException("{0} parameter {1} must be of type(s) {2}".format(self.name, i + 1, str.join(', ', objtypes)))
+
+        # Check all restrictions on input units are true
         for restriction in self.unit_restrictions:
             fromparam = restriction['fromparam']
             toparam = len(units)
             if 'toparam' in restriction and restriction['toparam'] is not None:
-                toparam = restriction['toparam'] + 1
+                toparam = min(len(units), restriction['toparam'] + 1)
+            # Cycle through each param this restriction applies to, and make sure the unit matches the required dimensions
             dimensions = restriction['dimensions']
             for i in range(fromparam, toparam):
-                if i < len(units):
-                    if not calculator.unit_normaliser.check_unit_dimensions(units[i], dimensions):
-                        try:
-                            dimension_string = str.join(' ', ["{0}^{1}".format(dimensions[ii], str(dimensions[ii + 1])) for ii in range(0, len(dimensions), 2)])
-                            raise CalculatorException("{0} parameter {1} must have unit dimensions: {2}".format(self.name, i + 1, dimension_string))
-                        except CalculatorException as e:
-                            raise e
-                        except Exception as e:
-                            raise CalculatorException("{0} parameter {1} unit dimension validation failed".format(self.name, i + 1))
+                if not calculator.unit_normaliser.check_unit_dimensions(units[i], dimensions):
+                    try:
+                        dimension_string = str.join(' ', ["{0}^{1}".format(dimensions[ii], str(dimensions[ii + 1])) for ii in range(0, len(dimensions), 2)])
+                        raise CalculatorException("{0} parameter {1} must have unit dimensions: {2}".format(self.name, i + 1, dimension_string))
+                    except CalculatorException as e:
+                        raise e
+                    except Exception as e:
+                        raise CalculatorException("{0} parameter {1} has an invalid unit dimension definition".format(self.name, i + 1))
 
     def validate_input(self, obj_type, calculator, value, unit, ref):
         if obj_type is None:
