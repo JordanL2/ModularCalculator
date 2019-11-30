@@ -223,7 +223,20 @@ class MiddleClickCloseableTabBar(QTabBar):
             super().mouseReleaseEvent(event)
 
 
-class MiddleClickableLabel(QLabel):
+class FixedSizeLabel(QLabel):
+
+    def __init__(self, text):
+        super().__init__(text)
+        self.height = None
+
+    def sizeHint(self):
+        size = super().sizeHint()
+        if self.height is not None:
+            size.setHeight(self.height)
+        return size
+
+
+class MiddleClickableLabel(FixedSizeLabel):
 
     def __init__(self, parent, text, middleClickFunction):
         self.parent = parent

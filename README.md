@@ -75,7 +75,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 * Performance:
 
 * Aesthetics and polish:
-	* Display: Align questions and answers to top of label (BLOCKED by bug changing question/answer widget sizes)
 
 ## Other
 * Comment code
@@ -88,4 +87,3 @@ These examples are available in examples/basic_integration.py. See examples/adva
 # Bugs
 
 * Unit normalisation: "1 joule / 1 m^3" gets simplified to "1 pascal" - Even Google has this issue
-* Display question/answer widgets change size slightly depending on how many answers there are
