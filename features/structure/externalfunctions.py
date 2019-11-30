@@ -110,57 +110,42 @@ class ExternalFunctionItem(RecursiveOperandItem):
             func_content = str.join("", fh.readlines())
         except:
             raise ExecuteException("Could not read file '{}'".format(path), [], None)
+        inputs.insert(0, OperandResult(func_content, None, None))
 
-        final_result = None
+        func = FunctionDefinition(
+            'EXTERNAL', 
+            'external function', 
+            path,
+            [],
+            ExternalFunctionItem.do_function)
 
-        array_inputs = []
-        for i, inp in enumerate(inputs):
-            if type(inp.value) == list:
-                array_inputs.append(i)
-
-        if len(array_inputs) > 0:
-
-            lengths = set()
-            for i in array_inputs:
-                lengths.add(len(inputs[i].value))
-            if len(lengths) > 1:
-                raise CalculatorException("All array inputs must all be same length")
-            length = lengths.pop()
-
-            results = []
-            for i in range(0, length):
-                input_row = []
-                for ii, inp in enumerate(inputs):
-                    if ii in array_inputs:
-                        input_row.append(inp.value[i])
-                    else:
-                        input_row.append(inp)
-                results.append(self.do_function(func_content, input_row))
-
-            final_result = OperandResult(results, None, None)
-
-        else:
-
-            final_result = self.do_function(func_content, inputs)
+        final_result = func.call(self.calculator, inputs, flags)
 
         return final_result
 
-    def do_function(self, func_content, inputs):
-        backup_vars = self.calculator.vars
-        self.calculator.vars = {}
-        for i, var in enumerate(inputs):
-            self.calculator.vars["PARAM{}".format(i + 1)] = (var.value, var.unit)
+    def do_function(self, vals, units, refs, flags):
+        func_content = vals[0]
+        vals.pop(0)
+        units.pop(0)
+        refs.pop(0)
+
+        backup_vars = self.vars
+        self.vars = {}
+        
+        for i in range(0, len(vals)):
+            self.vars["PARAM{}".format(i + 1)] = (vals[i], units[i])
         try:
-            result = self.calculator.calculate(func_content)
-        except ExecutionException as err:
-            self.calculator.vars = backup_vars
-            raise ExecuteException("Could not execute function '{}'".format(self.name), [], None)
+            result = self.calculate(func_content)
         except Exception as err:
-            self.calculator.vars = backup_vars
+            self.vars = backup_vars
             raise err
+        
+        self.vars = backup_vars
+        
         last_result = get_last_result(result.results)
-        self.calculator.vars = backup_vars
-        return OperandResult(last_result.value, last_result.unit, None)
+        res = OperationResult(last_result.value)
+        res.set_unit(last_result.unit)
+        return res
 
     def result(self, flags):
         return self.value(flags)

@@ -50,7 +50,7 @@ tests = [
     { 'test': "(1/0) else",  'expected': { 'message': r"Could not execute operator: else",  'pos': 6, 'items': ['(','1','/','0',')',' '] } },
 
     { 'test': "f = './examples/does_not_exist'\n@f(1, 2)", 'expected': { 'exception': ParsingException, 'message': r"Could not read file './examples/does_not_exist'", 'pos': 32, 'items': ['f',' ','=',' ',"'./examples/does_not_exist'","\n"] } },
-    { 'test': "f = './examples/ext_func_addition2'\n@f(1, 2)", 'expected': { 'exception': ParsingException, 'message': r"Could not execute function 'f'", 'pos': 36, 'items': ['f',' ','=',' ',"'./examples/ext_func_addition2'","\n"] } },
+    { 'test': "f = './examples/ext_func_addition2'\n@f(1, 2)", 'expected': { 'exception': ParsingException, 'message': r"Could not execute operator + with operands: '3', 'None' - Operator + parameter 2 must be of type(s) number", 'pos': 36, 'items': ['f',' ','=',' ',"'./examples/ext_func_addition2'","\n"] } },
 
     { 'test': "round((+))",  'expected': { 'message': r"Missing left operands for operator +",  'pos': 7, 'items': ['round','(','('] } },
     { 'test': "(1/0) +",  'expected': { 'message': r"Missing right operands for operator +",  'pos': 6, 'items': ['(','1','/','0',')',' '], 'next': '+' } },
