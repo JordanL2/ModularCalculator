@@ -83,8 +83,8 @@ class CalculatorDisplay(QWidget):
                 answerHtml = self.renderAnswerRow(row.answer, row.unit)
 
         elif isinstance(row, CalculatorDisplayError):
-            questionHtml, _ = self.interface.entry.makeHtml([row.err.statements[-1]], row.question[row.i:])
-            answerHtml = makeSpan(row.err.message, 'error')
+            questionHtml, _ = self.interface.entry.makeHtml([row.err.statements[-1]], row.question[row.i:], True)
+            answerHtml = makeSpan(htmlSafe(row.err.message, True), 'error')
 
         else:
             raise Exception("Unrecognised type in renderAnswer: {}".format(type(row)))
@@ -105,13 +105,12 @@ class CalculatorDisplay(QWidget):
             else:
                 unit = unit.get_name(self.interface.calculatormanager.calculator.number(answer)[0])
                 unit = ' ' + unit
-            unit = makeSpan(unit, 'unit', True)
+            unit = makeSpan(htmlSafe(unit, True), 'unit')
         else:
             unit = ''
-        return self.interface.entry.css + makeSpan(answer, answer_type, True) + unit
+        return self.interface.entry.css + makeSpan(htmlSafe(answer, True), answer_type) + unit
 
     def makeQuestionWidget(self, questionHtml, n):
-        questionHtml = questionHtml.replace('&nbsp;', ' ')
         questionWidget = FixedSizeLabel(questionHtml)
         questionFont = QFontDatabase.systemFont(QFontDatabase.FixedFont)
         questionFont.setPointSize(10)
@@ -142,7 +141,7 @@ class CalculatorDisplay(QWidget):
 
     def questionHtml(self, expr):
         statements, _, _ = self.interface.calculatormanager.calculator.parse(expr, {})
-        html, _ = self.interface.entry.makeHtml(statements, '')
+        html, _ = self.interface.entry.makeHtml(statements, '', True)
         return html
 
     def insertAnswer(self, widget, e):

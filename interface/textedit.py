@@ -225,7 +225,7 @@ class CalculatorTextEdit(QTextEdit):
 
         self.interface.filemanager.setCurrentFileAndModified(self.interface.filemanager.currentFile(), self.isModified())
 
-    def makeHtml(self, statements, errorExpr):
+    def makeHtml(self, statements, errorExpr, breaking=False):
         splitStatements = []
         for items in statements:
             funcItems = [i for i, item in enumerate(items) if item.functional() and not item.text.strip() == '']
@@ -264,14 +264,14 @@ class CalculatorTextEdit(QTextEdit):
             for item in highlightItems:
                 style = item[0]
                 text = item[1]
-                newhtml += makeSpan(text, style)
+                newhtml += makeSpan(htmlSafe(text, breaking), style)
                 p += len(text)
 
             if alternate:
                 highlightPositions.append((p0, p))
 
         if errorExpr != '':
-            newhtml += makeSpan(errorExpr, 'error')
+            newhtml += makeSpan(htmlSafe(errorExpr, breaking), 'error')
 
         return newhtml, highlightPositions
 
