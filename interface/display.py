@@ -105,10 +105,10 @@ class CalculatorDisplay(QWidget):
             else:
                 unit = unit.get_name(self.interface.calculatormanager.calculator.number(answer)[0])
                 unit = ' ' + unit
-            unit = makeSpan(unit, 'unit')
+            unit = makeSpan(unit, 'unit', True)
         else:
             unit = ''
-        return self.interface.entry.css + makeSpan(answer, answer_type) + unit
+        return self.interface.entry.css + makeSpan(answer, answer_type, True) + unit
 
     def makeQuestionWidget(self, questionHtml, n):
         questionHtml = questionHtml.replace('&nbsp;', ' ')
