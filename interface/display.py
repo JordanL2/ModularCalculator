@@ -75,7 +75,7 @@ class CalculatorDisplay(QWidget):
 
         elif isinstance(row, CalculatorDisplayError):
             questionHtml, _ = self.interface.entry.makeHtml([row.err.statements[-1]], row.question[row.i:])
-            answerHtml = "<span style=\"color:red\">{}</span".format(row.err.message)
+            answerHtml = makeSpan(row.err.message, 'error')
 
         else:
             raise Exception("Unrecognised type in renderAnswer: {}".format(type(row)))
@@ -83,7 +83,9 @@ class CalculatorDisplay(QWidget):
         return self.makeQuestionWidget(questionHtml, n), self.makeAnswerWidget(answerHtml, n)
 
     def renderAnswerRow(self, answer, unit):
+        answer_type = 'literal'
         if isinstance(answer, UnitPowerList):
+            answer_type = 'unit'
             if self.options['shortunits']:
                 answer = answer.symbol()
             else:
@@ -94,9 +96,10 @@ class CalculatorDisplay(QWidget):
             else:
                 unit = unit.get_name(self.interface.calculatormanager.calculator.number(answer)[0])
                 unit = ' ' + unit
+            unit = makeSpan(unit, 'unit')
         else:
             unit = ''
-        return str(answer) + unit
+        return self.interface.entry.css + makeSpan(answer, answer_type) + unit
 
     def makeQuestionWidget(self, questionHtml, n):
         questionHtml = questionHtml.replace('&nbsp;', ' ')

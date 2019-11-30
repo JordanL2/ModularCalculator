@@ -264,14 +264,14 @@ class CalculatorTextEdit(QTextEdit):
             for item in highlightItems:
                 style = item[0]
                 text = item[1]
-                newhtml += "<span class='{0}'>{1}</span>".format(style, htmlSafe(text))
+                newhtml += makeSpan(text, style)
                 p += len(text)
 
             if alternate:
                 highlightPositions.append((p0, p))
 
         if errorExpr != '':
-            newhtml += "<span class='{0}'>{1}</span>".format('error', htmlSafe(errorExpr))
+            newhtml += makeSpan(errorExpr, 'error')
 
         return newhtml, highlightPositions
 

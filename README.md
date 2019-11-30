@@ -74,7 +74,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 
 * Usability / quality of life:
 	* Improve Light theme, it's too dark and high contrast
-	* Should unit in answer be coloured same as the syntax highlight colour for units?
 
 * Stability:
 	* Auto-save state occasionally
@@ -82,6 +81,7 @@ These examples are available in examples/basic_integration.py. See examples/adva
 * Performance:
 
 * Aesthetics and polish:
+	* Display: Align questions and answers to top of label (BLOCKED by bug changing question/answer widget sizes)
 
 ## Other
 * Comment code

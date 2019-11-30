@@ -14,3 +14,6 @@ def screenRelativeSize(width, height):
     size.setWidth(QApplication.desktop().screenGeometry().width() * width)
     size.setHeight(QApplication.desktop().screenGeometry().height() * height)
     return size
+
+def makeSpan(text, style):
+    return "<span class='{0}'>{1}</span>".format(style, htmlSafe(str(text)))
