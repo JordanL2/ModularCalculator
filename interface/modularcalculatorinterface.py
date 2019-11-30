@@ -149,26 +149,32 @@ class ModularCalculatorInterface(StatefulApplication):
         
         insertConstant = QAction('Constant', self)
         insertConstant.triggered.connect(self.insertConstant)
+        insertConstant.setShortcut(QKeySequence(Qt.CTRL + Qt.SHIFT + Qt.Key_C))
         actionMenu.addAction(insertConstant)
         
         insertDate = QAction('Date && Time', self)
         insertDate.triggered.connect(self.insertDate)
+        insertDate.setShortcut(QKeySequence(Qt.CTRL + Qt.SHIFT + Qt.Key_D))
         actionMenu.addAction(insertDate)
         
         insertUnit = QAction('Unit', self)
         insertUnit.triggered.connect(self.insertUnit)
+        insertUnit.setShortcut(QKeySequence(Qt.CTRL + Qt.SHIFT + Qt.Key_U))
         actionMenu.addAction(insertUnit)
         
         insertOperator = QAction('Operator', self)
         insertOperator.triggered.connect(self.insertOperator)
+        insertOperator.setShortcut(QKeySequence(Qt.CTRL + Qt.SHIFT + Qt.Key_O))
         actionMenu.addAction(insertOperator)
         
         insertFunction = QAction('Function', self)
         insertFunction.triggered.connect(self.insertFunction)
+        insertFunction.setShortcut(QKeySequence(Qt.CTRL + Qt.SHIFT + Qt.Key_F))
         actionMenu.addAction(insertFunction)
         
         insertUserDefinedFunction = QAction('User-Defined Function', self)
         insertUserDefinedFunction.triggered.connect(self.insertUserDefinedFunction)
+        insertUserDefinedFunction.setShortcut(QKeySequence(Qt.CTRL + Qt.SHIFT + Qt.Key_E))
         actionMenu.addAction(insertUserDefinedFunction)
 
         optionsMenu = menubar.addMenu('Options')

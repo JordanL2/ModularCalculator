@@ -56,22 +56,13 @@ These examples are available in examples/basic_integration.py. See examples/adva
 ## Features
 * Dates:
 	* Timezones?
-	* Adding years/months to dates issue:
-		* Date function to increment a particular element of the date, eg dateincrement('2017-01-01', 3, 'year') => '2020-01-01' (also: datedecrement)
-		* Alternatively, dateadd checks if the unit is year or month, and number is integer, and increments year/month in that case - too much black magic
-* Feature to execute an arbitrary script as a function, with the parameters as command line arguments and STDOUT being the return value
-	* Works like user defined functions but with @@ symbol to execute as default
+	* Date function to increment a particular element of the date, eg dateincrement('2017-01-01', 3, 'year') => '2020-01-01' (also: datedecrement)
 * Ability to alter operator symbols as feature options
 * Ability to rename functions as feature options
 * Should bitwise not operator only allow positive integers, and throw error if something else?
-* ARRAYS:
-	* Any variables put into an array are by-value, the ref is never used later to refetch the variable's value
-	* Functions:
-		* replace element? technically possible with element and concat
-		* delete element? technically possible with element and concat
+* Any variables put into an array are by-value, the ref is never used later to refetch the variable's value
 
 ## Functions
-* Display operator/function syntax info on parameter validation error
 * Function to remove leading zeros on binary numbers
 
 ## Units
@@ -81,16 +72,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 * Force
 	* Pounds of force
 	* Tonnes of force (long, short, metric?)
-* Angles:
-	Minute of arc
-	Second of arc
-	Milliradian
-* Solid Angles - minutes and seconds
-* Connection between angle and solid angle (solid angle = angle * angle ?)
-* Can kWh become recognisable? Also all other prefixes, and "mph"
-	* possibly a composite unit type eg "kWh" => ['kilowatt', 'hour']
-	* allows simplification from the element units into the composite unit, eg "1 kW * 3 h" = "3 kWh"
-	* alternatively just add "mph" and "kWh" etc as velocity and energy units, disable simplification to them
 
 ## Constants
 
@@ -100,9 +81,7 @@ These examples are available in examples/basic_integration.py. See examples/adva
 * Usability / quality of life:
 	* Hide insert unit, function, constant, date when features not installed
 	* Improve Light theme, it's too dark and high contrast
-	* Hotkeys for various insert operations, eg Ctrl+F = Insert Function
 	* Should unit in answer be coloured same as the syntax highlight colour for units?
-	* Option to switch between horizontal and vertical layout
 
 * Stability:
 	* Auto-save state occasionally
