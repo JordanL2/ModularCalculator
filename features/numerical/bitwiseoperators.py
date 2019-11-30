@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+from modularcalculator.objects.exceptions import *
 from modularcalculator.objects.operators import OperationResult, OperatorDefinition
 from modularcalculator.features.feature import Feature
 
@@ -93,6 +94,9 @@ class BitwiseOperatorsFeature(Feature):
 
     def op_bitwise_not(self, vals, units, refs, flags):
         dec_num, num_type = self.number(vals[0])
+
+        if dec_num < 0 or dec_num % 1 != 0:
+            raise CalculatorException('Operator requires positive integers')
 
         int_val = int(dec_num)
         if num_type and 'width' in num_type.opts:

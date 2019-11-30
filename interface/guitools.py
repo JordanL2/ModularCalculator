@@ -16,4 +16,6 @@ def screenRelativeSize(width, height):
     return size
 
 def makeSpan(text, style):
-    return "<span class='{0}'>{1}</span>".format(style, htmlSafe(str(text))).replace('&nbsp;', ' ')
+    html = "<span class='{0}'>{1}</span>".format(style, htmlSafe(str(text)))
+    html = html.replace('&nbsp;', ' ')
+    return html

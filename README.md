@@ -55,7 +55,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 
 ## Features
 * Date timezones
-* Should bitwise not operator only allow positive integers, and throw error if something else?
 
 ## Functions
 * Function to remove leading zeros on binary numbers
