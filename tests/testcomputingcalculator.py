@@ -258,6 +258,7 @@ tests = [
 
     { 'test': "f = './examples/ext_func_addition'\n@f(5 - 4, 2)", 'expected': Decimal('3') },
     { 'test': "x=1 \nf = './examples/ext_func_addition'\n@f(5 - 4, 2) \nx", 'expected': Decimal('1') },
+    { 'test': "f = './examples/mean'\n@f([1 .. 10])", 'expected': Decimal('5.5') },
 
     { 'test': """#PARAM1 ||= 2^128
 #PARAM1 = 0.0546
