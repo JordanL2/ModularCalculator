@@ -55,8 +55,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 
 ## Features
 * Date timezones
-* Ability to alter operator symbols as feature options
-* Ability to rename functions as feature options
 * Should bitwise not operator only allow positive integers, and throw error if something else?
 
 ## Functions
@@ -70,7 +68,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 * Functionality:
 
 * Usability / quality of life:
-	* Improve Light theme, it's too dark and high contrast
 
 * Stability:
 	* Auto-save state occasionally
