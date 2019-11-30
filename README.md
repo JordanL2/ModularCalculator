@@ -63,9 +63,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 * Function to remove leading zeros on binary numbers
 
 ## Units
-* Pressure
-	* PSI
-	* Atmospheres
 
 ## Constants
 

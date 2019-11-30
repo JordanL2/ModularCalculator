@@ -23,9 +23,25 @@ class PressureUnitFeature(AbstractUnitFeature):
         
         calculator.unit_normaliser.add_prefixed_unit('pressure', UnitDefinitionPascal)
 
+        calculator.unit_normaliser.add_unit('pressure', UnitDefinitionAtmosphere())
+        calculator.unit_normaliser.add_unit('pressure', UnitDefinitionPSI())
+
 
 class UnitDefinitionPascal(UnitDefinition):
 
     namelist = ['pascals','pascal']
     symbollist = ['Pa']
     systems = ['si']
+
+class UnitDefinitionAtmosphere(UnitDefinition):
+
+    namelist = ['atmospheres','atmosphere']
+    symbollist = ['atm']
+    unitscale = Decimal('101325')
+
+class UnitDefinitionPSI(UnitDefinition):
+
+    namelist = ['pound-force per square inch','pound-force per square inch']
+    symbollist = ['psi']
+    unitscale = Decimal('6894.757')
+    systems = ['us', 'uk']
