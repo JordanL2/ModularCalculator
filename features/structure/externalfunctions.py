@@ -119,13 +119,10 @@ class ExternalFunctionItem(RecursiveOperandItem):
             [],
             ExternalFunctionItem.do_function)
 
-        final_result = func.call(self.calculator, inputs, flags)
-
-        return final_result
+        return func.call(self.calculator, inputs, flags)
 
     def do_function(self, vals, units, refs, flags):
-        func_content = vals[0]
-        vals.pop(0)
+        func_content = vals.pop(0)
         units.pop(0)
         refs.pop(0)
 
