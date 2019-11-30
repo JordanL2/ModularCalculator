@@ -54,13 +54,10 @@ These examples are available in examples/basic_integration.py. See examples/adva
 ## Engine
 
 ## Features
-* Dates:
-	* Timezones?
-	* Date function to increment a particular element of the date, eg dateincrement('2017-01-01', 3, 'year') => '2020-01-01' (also: datedecrement)
+* Date timezones
 * Ability to alter operator symbols as feature options
 * Ability to rename functions as feature options
 * Should bitwise not operator only allow positive integers, and throw error if something else?
-* Any variables put into an array are by-value, the ref is never used later to refetch the variable's value
 
 ## Functions
 * Function to remove leading zeros on binary numbers
@@ -69,9 +66,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 * Pressure
 	* PSI
 	* Atmospheres
-* Force
-	* Pounds of force
-	* Tonnes of force (long, short, metric?)
 
 ## Constants
 
@@ -79,7 +73,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 * Functionality:
 
 * Usability / quality of life:
-	* Hide insert unit, function, constant, date when features not installed
 	* Improve Light theme, it's too dark and high contrast
 	* Should unit in answer be coloured same as the syntax highlight colour for units?
 

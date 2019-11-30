@@ -39,7 +39,15 @@ class CalculatorManager():
             if featureId in calculator.feature_options:
                 calculator.feature_options[featureId] = featureOptions
         self.setCalculator(calculator)
+        self.updateInsertOptions()
 
+    def updateInsertOptions(self):
+        self.interface.insertConstantAction.setVisible('state.constants' in self.calculator.installed_features)
+        self.interface.insertDateAction.setVisible('dates.dates' in self.calculator.installed_features)
+        self.interface.insertUnitAction.setVisible('units.units' in self.calculator.installed_features)
+        self.interface.insertOperatorAction.setVisible('structure.operators' in self.calculator.installed_features)
+        self.interface.insertFunctionAction.setVisible('structure.functions' in self.calculator.installed_features)
+        self.interface.insertUserDefinedFunctionAction.setVisible('structure.externalfunctions' in self.calculator.installed_features)
 
     def initEmptyState(self):
         self.importedFeatures = []

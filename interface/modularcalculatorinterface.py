@@ -42,6 +42,7 @@ class ModularCalculatorInterface(StatefulApplication):
             self.restoreAllState()
         else:
             self.initEmptyState()
+        self.calculatormanager.updateInsertOptions()
         self.initShortcuts()
 
         self.entry.setFocus()
@@ -147,35 +148,35 @@ class ModularCalculatorInterface(StatefulApplication):
 
         actionMenu = menubar.addMenu('Insert')
         
-        insertConstant = QAction('Constant', self)
-        insertConstant.triggered.connect(self.insertConstant)
-        insertConstant.setShortcut(QKeySequence(Qt.CTRL + Qt.SHIFT + Qt.Key_C))
-        actionMenu.addAction(insertConstant)
+        self.insertConstantAction = QAction('Constant', self)
+        self.insertConstantAction.triggered.connect(self.insertConstant)
+        self.insertConstantAction.setShortcut(QKeySequence(Qt.CTRL + Qt.SHIFT + Qt.Key_C))
+        actionMenu.addAction(self.insertConstantAction)
         
-        insertDate = QAction('Date && Time', self)
-        insertDate.triggered.connect(self.insertDate)
-        insertDate.setShortcut(QKeySequence(Qt.CTRL + Qt.SHIFT + Qt.Key_D))
-        actionMenu.addAction(insertDate)
+        self.insertDateAction = QAction('Date && Time', self)
+        self.insertDateAction.triggered.connect(self.insertDate)
+        self.insertDateAction.setShortcut(QKeySequence(Qt.CTRL + Qt.SHIFT + Qt.Key_D))
+        actionMenu.addAction(self.insertDateAction)
         
-        insertUnit = QAction('Unit', self)
-        insertUnit.triggered.connect(self.insertUnit)
-        insertUnit.setShortcut(QKeySequence(Qt.CTRL + Qt.SHIFT + Qt.Key_U))
-        actionMenu.addAction(insertUnit)
+        self.insertUnitAction = QAction('Unit', self)
+        self.insertUnitAction.triggered.connect(self.insertUnit)
+        self.insertUnitAction.setShortcut(QKeySequence(Qt.CTRL + Qt.SHIFT + Qt.Key_U))
+        actionMenu.addAction(self.insertUnitAction)
         
-        insertOperator = QAction('Operator', self)
-        insertOperator.triggered.connect(self.insertOperator)
-        insertOperator.setShortcut(QKeySequence(Qt.CTRL + Qt.SHIFT + Qt.Key_O))
-        actionMenu.addAction(insertOperator)
+        self.insertOperatorAction = QAction('Operator', self)
+        self.insertOperatorAction.triggered.connect(self.insertOperator)
+        self.insertOperatorAction.setShortcut(QKeySequence(Qt.CTRL + Qt.SHIFT + Qt.Key_O))
+        actionMenu.addAction(self.insertOperatorAction)
         
-        insertFunction = QAction('Function', self)
-        insertFunction.triggered.connect(self.insertFunction)
-        insertFunction.setShortcut(QKeySequence(Qt.CTRL + Qt.SHIFT + Qt.Key_F))
-        actionMenu.addAction(insertFunction)
+        self.insertFunctionAction = QAction('Function', self)
+        self.insertFunctionAction.triggered.connect(self.insertFunction)
+        self.insertFunctionAction.setShortcut(QKeySequence(Qt.CTRL + Qt.SHIFT + Qt.Key_F))
+        actionMenu.addAction(self.insertFunctionAction)
         
-        insertUserDefinedFunction = QAction('User-Defined Function', self)
-        insertUserDefinedFunction.triggered.connect(self.insertUserDefinedFunction)
-        insertUserDefinedFunction.setShortcut(QKeySequence(Qt.CTRL + Qt.SHIFT + Qt.Key_E))
-        actionMenu.addAction(insertUserDefinedFunction)
+        self.insertUserDefinedFunctionAction = QAction('User-Defined Function', self)
+        self.insertUserDefinedFunctionAction.triggered.connect(self.insertUserDefinedFunction)
+        self.insertUserDefinedFunctionAction.setShortcut(QKeySequence(Qt.CTRL + Qt.SHIFT + Qt.Key_E))
+        actionMenu.addAction(self.insertUserDefinedFunctionAction)
 
         optionsMenu = menubar.addMenu('Options')
         
