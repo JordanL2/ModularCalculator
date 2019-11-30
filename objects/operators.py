@@ -61,6 +61,7 @@ class Operation:
         self.unit_restrictions.append({'fromparam': fromparam, 'toparam': toparam, 'dimensions': dimensions})
 
     def call(self, calculator, inputs, flags):
+        # Get a list of the indices of any inputs that are arrays, that aren't declared can be arrays
         array_inputs = []
         for i, inp in enumerate(inputs):
             if type(inp.value) == list and not self.input_can_be_type(i, 'array') and not (inp.ref is not None and self.input_can_be_type(i, 'variable')):
@@ -68,6 +69,10 @@ class Operation:
 
         if len(array_inputs) > 0:
 
+            # If some inputs are arrays (and not meant to be) then call this operation once for each element in the arrays,
+            # putting the results into an array. All array inputs are iterated on each call to the operation.
+
+            # Ensure all arrays are same length
             lengths = set()
             for i in array_inputs:
                 lengths.add(len(inputs[i].value))
@@ -75,13 +80,16 @@ class Operation:
                 raise CalculatorException("All array inputs must all be same length")
             length = lengths.pop()
 
+            # Call operation once for each element in the arrays
             results = []
             for i in range(0, length):
                 input_row = []
                 for ii, inp in enumerate(inputs):
                     if ii in array_inputs:
+                        # This input is an array, get the element for this iteration
                         input_row.append(inp.value[i])
                     else:
+                        # This input is not an array, simply use the fixed value
                         input_row.append(inp)
                 res = self.call(calculator, input_row, flags)
                 results.append(res)
@@ -90,47 +98,48 @@ class Operation:
 
         else:
 
+            # If any inputs are an exception, and this operation isn't flagged as allowing them as inputs, then throw the exception
             if not self.inputs_can_be_exceptions:
                 for i in inputs:
                     if isinstance(i.value, Exception):
                         return i
 
+            # Validate the values and units for this operation
             values = [i.value for i in inputs]
             units = [i.unit for i in inputs]
             refs = [i.ref for i in inputs]
-
             self.validate(calculator, values, units, refs)
 
+            # Auto-convert all numbers into decimal numbers. Store the original number type of the first input, this will be used
+            # for the result.
             num_type = None
             if self.auto_convert_numerical_inputs:
                 values, num_type = self.convert_numbers(calculator, values)
 
+            # Normalise the units of all inputs if units_normalise flag is set
             result_value, result_unit, result_ref = None, None, None
             if calculator.unit_normaliser is not None and self.units_normalise:
+
                 if len([i for i in range(0, len(values)) if not self.input_can_be_type(i, 'number') or not calculator.validate_number(values[i])]) == 0:
-                    number_types = []
-                    for i in range(0, len(values)):
-                        values[i], this_type = calculator.number(values[i])
-                        number_types.append(this_type)
+
+                    # All inputs are numbers, normalise them to be all be the same unit
                     values, units, result_unit = calculator.unit_normaliser.normalise_inputs(values, units, self.units_multi, self.units_relative)
-                    for i in range(0, len(values)):
-                        values[i] = calculator.restore_number_type(values[i], number_types[i])
+
                 else:
+
+                    # Go through each input and check if it's an array of numbers
                     for i in range(0, len(values)):
                         if type(values[i]) == list and self.input_must_be_type(i, 'array', 'number'):
+
+                            # This is an array of numbers, normalise all elements to be the same unit
+
                             this_values = [v.value for v in values[i]]
                             this_units = [v.unit for v in values[i]]
-
-                            number_types = []
-                            for ii in range(0, len(this_values)):
-                                this_values[ii], this_type = calculator.number(this_values[ii])
-                                number_types.append(this_type)
                             this_values, this_units, result_unit = calculator.unit_normaliser.normalise_inputs(this_values, this_units, self.units_multi, self.units_relative)
-                            for ii in range(0, len(this_values)):
-                                this_values[ii] = calculator.restore_number_type(this_values[ii], number_types[ii])
 
                             values[i] = values[i].copy()
                             for ii in range(0, len(this_values)):
+                                # Replace the element with a normalised version, saving the original value and unit
                                 original_value = values[i][ii].value
                                 original_unit = values[i][ii].unit
                                 values[i][ii] = OperandResult(this_values[ii], this_units[ii], values[i][ii].ref)
@@ -249,17 +258,18 @@ class Operation:
 
         for restriction in self.value_restrictions:
             objtypes = restriction['objtypes']
-            if len(objtypes) == 1 and objtypes[0] == 'number':
+            if 'number' in objtypes:
                 fromparam = restriction['fromparam']
                 toparam = len(values)
                 if 'toparam' in restriction and restriction['toparam'] is not None:
                     toparam = restriction['toparam'] + 1
                 for i in range(fromparam, toparam):
                     if i < len(values):
-                        num, num_type_res = calculator.number(values[i])
-                        new_values[i] = num
-                        if num_type is None:
-                            num_type = num_type_res
+                        if calculator.validate_number(values[i]):
+                            num, num_type_res = calculator.number(values[i])
+                            new_values[i] = num
+                            if num_type is None:
+                                num_type = num_type_res
 
         return new_values, num_type
 

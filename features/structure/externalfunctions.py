@@ -89,9 +89,12 @@ class ExternalFunctionItem(RecursiveOperandItem):
     def value(self, flags):
         if self.name not in self.calculator.vars:
             raise ExecuteException("Variable {} not found".format(self.name), [self], '', True)
+        
+        # Path of function file
         path = self.calculator.vars[self.name][0]
         path = os.path.expanduser(path)
         
+        # Execute the items for each argument, put the results in a list of inputs
         inputs = []
         itemsi = 2
         for i, arg in enumerate(self.args):
@@ -107,6 +110,7 @@ class ExternalFunctionItem(RecursiveOperandItem):
                 self.truncated = True
                 raise ExecuteException(err.message, [self], err.next, True)
 
+        # Extract the content of the external function file, add to the end of the argument list
         try:
             fh = open(path, 'r')
             func_content = str.join("", fh.readlines())
@@ -114,6 +118,7 @@ class ExternalFunctionItem(RecursiveOperandItem):
             raise ExecuteException("Could not read file '{}'".format(path), [], None)
         inputs.append(OperandResult(func_content, None, None))
 
+        # External function definition to execute
         func = FunctionDefinition(
             'EXTERNAL', 
             'external function', 
@@ -121,26 +126,29 @@ class ExternalFunctionItem(RecursiveOperandItem):
             [],
             ExternalFunctionItem.do_function)
 
+        # If function content has a top line declaring the input type, parse it
         topline = func_content.split('\n', 1)[0]
         input_line_regex_match = self.input_line_regex.match(topline)
         if input_line_regex_match:
             i = 0
-            for value_unit in input_line_regex_match.group(1).split():
+            for value in input_line_regex_match.group(1).split():
 
-                value = None
                 unit = None
                 power = None
 
-                if ',' in value_unit:
-                    value, unit = value_unit.split(',')
+                # If type has a comma, first part is value type, second is unit dimension
+                if ',' in value:
+                    value, unit = value.split(',')
                 else:
-                    value, unit = value_unit, None
+                    value, unit = value, None
 
+                # If unit dimension has a power, parse it, otherwise power defaults to 1
                 if unit is not None and '^' in unit:
                     unit, power = unit.split('^')
                 else:
                     unit, power = unit, 1
 
+                # Apply value and unit restrictions to the function definition
                 func.add_value_restriction(i, i, [value])
                 if unit is not None:
                     func.add_unit_restriction(i, i, [unit, power])
@@ -153,19 +161,25 @@ class ExternalFunctionItem(RecursiveOperandItem):
         units.pop(-1)
         refs.pop(-1)
 
+        # Back up the calculator state, then clear it
         backup_vars = self.vars
         self.vars = {}
         
+        # For each input, set it in the calculator state as a variable called "PARAM" + n
         for i in range(0, len(vals)):
             self.vars["PARAM{}".format(i + 1)] = (vals[i], units[i])
+
+        # Execute the function content
         try:
             result = self.calculate(func_content)
         except Exception as err:
             self.vars = backup_vars
             raise err
-        
+
+        # Restore calculator state
         self.vars = backup_vars
-        
+
+        # The last result of the function is the return value
         last_result = get_last_result(result.results)
         res = OperationResult(last_result.value)
         res.set_unit(last_result.unit)

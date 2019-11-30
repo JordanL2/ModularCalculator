@@ -81,6 +81,8 @@ tests = [
     { 'test': r"hex(15.125)", 'expected': '0xF.2' },
     { 'test': r"hex(-15.125)", 'expected': '-0xF.2' },
     { 'test': r"hex(0)", 'expected': '0x0' },
+    { 'test': r"0xF + 4", 'expected': '0x13' },
+    { 'test': r"4 + 0xF", 'expected': Decimal('19') },
 
     { 'test': r"base(71, 36)", 'expected': '036z1Z' },
     { 'test': r"base(0, 36)", 'expected': '036z0' },
@@ -255,6 +257,8 @@ tests = [
     { 'test': "a = [1, 4, 9]\n a < 5", 'expected': [True, True, False] },
     { 'test': "a = [1, 4, 9]\n a < 5 then a else 25", 'expected': [Decimal('1'), Decimal('4'), Decimal('25')] },
     { 'test': "a = [1 .. 7]\nfilter(a, a % 2 == 0)", 'expected': [Decimal('2'), Decimal('4'), Decimal('6')] },
+    #{ 'test': r"mean([4, 0xF])", 'expected': Decimal('10') },
+    #{ 'test': r"mean([0xF, 4])", 'expected': '0xA' },
 
     { 'test': "f = './examples/ext_func_addition'\n@f(5 - 4, 2)", 'expected': Decimal('3') },
     { 'test': "x=1 \nf = './examples/ext_func_addition'\n@f(5 - 4, 2) \nx", 'expected': Decimal('1') },
@@ -291,6 +295,7 @@ str +$ '*10^' +$ dec""", 'expected': '4*10^-1' },
 
 #    { 'test': r"", 'expected': '' },
 ]
+#tests=[{ 'test': r"mean([4, 0xF])", 'expected': Decimal('10') },]
 
 tester = TestRunner(CalculatorException)
 tester.test(c.calculate, tests)
