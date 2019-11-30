@@ -65,10 +65,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 * Ability to rename functions as feature options
 * Should bitwise not operator only allow positive integers, and throw error if something else?
 * ARRAYS:
-	* User defined functions can't override how arrays are passed to them
-		* Perhaps first LINE of a user def func can optionally declare an array of input types in a comment, eg:
-		#INPUT number string array[boolean]
-		which is parsed by the external function running code, and used to validate input, leaving inputs as arrays if asked for
 	* Any variables put into an array are by-value, the ref is never used later to refetch the variable's value
 	* Functions:
 		* replace element? technically possible with element and concat

@@ -64,9 +64,9 @@ class ExternalFunctionsFeature(Feature):
                         func_items.append(FunctionEndItem())
                     else:
                         func_items.append(FunctionParamItem())
-                except ParseException as err:
-                    newitems = func_items + err.statements
-                    err.statements = newitems
+                except ParsingException as err:
+                    newitems = func_items + err.statements[0]
+                    err.statements = [newitems]
                     raise ParseException(err.message, [FunctionItem(err.truncate(next), newitems, self, ext_func_name, [])], err.next)
             if 'end_func' not in return_flags:
                 raise ParseException('Function missing close symbol', [], next)
@@ -75,6 +75,8 @@ class ExternalFunctionsFeature(Feature):
 
 
 class ExternalFunctionItem(RecursiveOperandItem):
+
+    input_line_regex = re.compile(r'^#INPUT((\s+\S+)+)')
 
     def __init__(self, text, items, calculator, name, args):
         super().__init__(text, items, calculator)
@@ -110,7 +112,7 @@ class ExternalFunctionItem(RecursiveOperandItem):
             func_content = str.join("", fh.readlines())
         except:
             raise ExecuteException("Could not read file '{}'".format(path), [], None)
-        inputs.insert(0, OperandResult(func_content, None, None))
+        inputs.append(OperandResult(func_content, None, None))
 
         func = FunctionDefinition(
             'EXTERNAL', 
@@ -119,12 +121,37 @@ class ExternalFunctionItem(RecursiveOperandItem):
             [],
             ExternalFunctionItem.do_function)
 
+        topline = func_content.split('\n', 1)[0]
+        input_line_regex_match = self.input_line_regex.match(topline)
+        if input_line_regex_match:
+            i = 0
+            for value_unit in input_line_regex_match.group(1).split():
+
+                value = None
+                unit = None
+                power = None
+
+                if ',' in value_unit:
+                    value, unit = value_unit.split(',')
+                else:
+                    value, unit = value_unit, None
+
+                if unit is not None and '^' in unit:
+                    unit, power = unit.split('^')
+                else:
+                    unit, power = unit, 1
+
+                func.add_value_restriction(i, i, [value])
+                if unit is not None:
+                    func.add_unit_restriction(i, i, [unit, power])
+                i += 1
+
         return func.call(self.calculator, inputs, flags)
 
     def do_function(self, vals, units, refs, flags):
-        func_content = vals.pop(0)
-        units.pop(0)
-        refs.pop(0)
+        func_content = vals.pop(-1)
+        units.pop(-1)
+        refs.pop(-1)
 
         backup_vars = self.vars
         self.vars = {}

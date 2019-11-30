@@ -1,3 +1,5 @@
+#INPUT number,distance number,mass number,distance
+
 # This sets the parameters only if they're not already set, for developing and testing this function
 PARAM1 ||= 2000km
 PARAM2 ||= 5.97237e24kg

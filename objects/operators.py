@@ -187,8 +187,13 @@ class Operation:
             for i in range(fromparam, toparam):
                 if i < len(units):
                     if not calculator.unit_normaliser.check_unit_dimensions(units[i], dimensions):
-                        dimension_string = str.join(' ', ["{0}^{1}".format(dimensions[ii], str(dimensions[ii + 1])) for ii in range(0, len(dimensions), 2)])
-                        raise CalculatorException("{0} parameter {1} must have unit dimensions: {2}".format(self.name, i + 1, dimension_string))
+                        try:
+                            dimension_string = str.join(' ', ["{0}^{1}".format(dimensions[ii], str(dimensions[ii + 1])) for ii in range(0, len(dimensions), 2)])
+                            raise CalculatorException("{0} parameter {1} must have unit dimensions: {2}".format(self.name, i + 1, dimension_string))
+                        except CalculatorException as e:
+                            raise e
+                        except Exception as e:
+                            raise CalculatorException("{0} parameter {1} unit dimension validation failed".format(self.name, i + 1))
 
     def validate_input(self, obj_type, calculator, value, unit, ref):
         if obj_type is None:
