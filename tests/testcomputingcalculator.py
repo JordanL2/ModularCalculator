@@ -192,7 +192,7 @@ tests = [
     { 'test': r"'ABC123abc' =~ '^\\w{3}\\d{3}\\w{2}$'", 'expected': False },
     { 'test': r"'ABC' !~ '\\w'", 'expected': False },
     { 'test': r"'ABC' !~ '\\d'", 'expected': True },
-    { 'test': r"regexget('123ABC123', '[A-Z]+')", 'expected': 'ABC' },
+    { 'test': r"regexget('123ABC123DEF123GHI123', '[A-Z]+')", 'expected': ['ABC', 'DEF', 'GHI'] },
     { 'test': r"regexget('123ABC456', '\\d+', 2)", 'expected': '456' },
     { 'test': r"regexsub('123ABC123', '[A-Z]+', 'defg')", 'expected': '123defg123' },
     { 'test': r"regexsub('123ABC456XYZ789', '[A-Z]+', 'defg')", 'expected': '123defg456defg789' },
@@ -271,7 +271,7 @@ str = decfound then
     replace(str, '.', '')
     else str
 leadingspaces = (str =~ '^(0+)') then
-    length(regexget(str, '^(0+)'))
+    length(regexget(str, '^(0+)', 1))
     else 0
 dec = leadingspaces > 1 then
     (dec - (leadingspaces - 1))

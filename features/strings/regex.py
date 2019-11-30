@@ -25,7 +25,7 @@ class RegexFeature(Feature):
         return 'Functions for regular expressions'
 
     def dependencies():
-        return ['strings.strings','structure.functions']
+        return ['strings.strings','structure.functions','arrays.arrays']
 
     @classmethod
     def install(cls, calculator):
@@ -50,7 +50,7 @@ class RegexFeature(Feature):
         calculator.funcs['regexget'] = FunctionDefinition(
             'Regular Expression', 
             'regexget', 
-            'Return either first or a specific occurrence of a pattern in a value',
+            'Return either all or a specific occurrence of a pattern in a value',
             ['value', 'pattern', '[group]'],
             RegexFeature.func_regexget, 
             2, 
@@ -86,10 +86,12 @@ class RegexFeature(Feature):
         return OperationResult((re.search(StringsFeature.string(self, vals[1]), StringsFeature.string(self, vals[0])) is None))
 
     def func_regexget(self, vals, units, refs, flags):
-        group = 1
+        found = re.findall(StringsFeature.string(self, vals[1]), StringsFeature.string(self, vals[0]))
         if len(vals) == 3:
-            group = vals[2]
-        return OperationResult(re.findall(StringsFeature.string(self, vals[1]), StringsFeature.string(self, vals[0]))[int(group) - 1])
+            group = vals[2] - 1
+            return OperationResult(found[int(group)])
+        found = [OperandResult(f, None, None) for f in found]
+        return OperationResult(found)
 
     def func_regexsub(self, vals, units, refs, flags):
         if len(vals) == 4:
