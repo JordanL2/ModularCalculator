@@ -1,0 +1,3 @@
+mean = './examples/mean'
+
+@mean([1 .. 10])
