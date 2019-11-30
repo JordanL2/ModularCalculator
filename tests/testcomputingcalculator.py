@@ -257,8 +257,8 @@ tests = [
     { 'test': "a = [1, 4, 9]\n a < 5", 'expected': [True, True, False] },
     { 'test': "a = [1, 4, 9]\n a < 5 then a else 25", 'expected': [Decimal('1'), Decimal('4'), Decimal('25')] },
     { 'test': "a = [1 .. 7]\nfilter(a, a % 2 == 0)", 'expected': [Decimal('2'), Decimal('4'), Decimal('6')] },
-    #{ 'test': r"mean([4, 0xF])", 'expected': Decimal('10') },
-    #{ 'test': r"mean([0xF, 4])", 'expected': '0xA' },
+    { 'test': r"mean([5, 0xF])", 'expected': Decimal('10') },
+    { 'test': r"mean([0xF, 5])", 'expected': '0xA' },
 
     { 'test': "f = './examples/ext_func_addition'\n@f(5 - 4, 2)", 'expected': Decimal('3') },
     { 'test': "x=1 \nf = './examples/ext_func_addition'\n@f(5 - 4, 2) \nx", 'expected': Decimal('1') },

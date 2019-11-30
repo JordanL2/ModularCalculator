@@ -112,39 +112,47 @@ class Operation:
 
             # Auto-convert all numbers into decimal numbers. Store the original number type of the first input, this will be used
             # for the result.
-            num_type = None
+            result_value, result_unit, result_ref, num_type = None, None, None, None
             if self.auto_convert_numerical_inputs:
                 values, num_type = self.convert_numbers(calculator, values)
 
             # Normalise the units of all inputs if units_normalise flag is set
-            result_value, result_unit, result_ref = None, None, None
-            if calculator.unit_normaliser is not None and self.units_normalise:
+            if len([i for i in range(0, len(values)) if not self.input_can_be_type(i, 'number') or not calculator.validate_number(values[i])]) == 0:
 
-                if len([i for i in range(0, len(values)) if not self.input_can_be_type(i, 'number') or not calculator.validate_number(values[i])]) == 0:
-
-                    # All inputs are numbers, normalise them to be all be the same unit
+                # All inputs are numbers, normalise them to be all be the same unit
+                if calculator.unit_normaliser is not None and self.units_normalise:
                     values, units, result_unit = calculator.unit_normaliser.normalise_inputs(values, units, self.units_multi, self.units_relative)
 
-                else:
+            else:
 
-                    # Go through each input and check if it's an array of numbers
-                    for i in range(0, len(values)):
-                        if type(values[i]) == list and self.input_must_be_type(i, 'array', 'number'):
+                # Go through each input and check if it's an array of numbers
+                for i in range(0, len(values)):
+                    if type(values[i]) == list and self.input_must_be_type(i, 'array', 'number'):
 
-                            # This is an array of numbers, normalise all elements to be the same unit
+                        # This is an array of numbers
 
-                            this_values = [v.value for v in values[i]]
-                            this_units = [v.unit for v in values[i]]
+                        # Normalise all elements to be decimal
+                        this_values = [v.value for v in values[i]]
+                        for ii in range(0, len(values[i])):
+                            num, num_type_res = calculator.number(this_values[ii])
+                            this_values[ii] = num
+                            if num_type is None:
+                                # Take the first number type we get as the one we should use for the final result
+                                num_type = num_type_res
+
+                        # Normalise all elements to be the same unit
+                        this_units = [v.unit for v in values[i]]
+                        if calculator.unit_normaliser is not None and self.units_normalise:
                             this_values, this_units, result_unit = calculator.unit_normaliser.normalise_inputs(this_values, this_units, self.units_multi, self.units_relative)
 
-                            values[i] = values[i].copy()
-                            for ii in range(0, len(this_values)):
-                                # Replace the element with a normalised version, saving the original value and unit
-                                original_value = values[i][ii].value
-                                original_unit = values[i][ii].unit
-                                values[i][ii] = OperandResult(this_values[ii], this_units[ii], values[i][ii].ref)
-                                values[i][ii].original_value = original_value
-                                values[i][ii].original_unit = original_unit
+                        values[i] = values[i].copy()
+                        for ii in range(0, len(this_values)):
+                            # Replace the element with a normalised version, saving the original value and unit
+                            original_value = values[i][ii].value
+                            original_unit = values[i][ii].unit
+                            values[i][ii] = OperandResult(this_values[ii], this_units[ii], values[i][ii].ref)
+                            values[i][ii].original_value = original_value
+                            values[i][ii].original_unit = original_unit
 
             try:
                 result = self.ref(calculator, values, units, refs, flags.copy())
@@ -256,6 +264,7 @@ class Operation:
         new_values = values.copy()
         num_type = None
 
+        # If an input is declared it can be a number, and it contains a numerical value, convert it to decimal
         for restriction in self.value_restrictions:
             objtypes = restriction['objtypes']
             if 'number' in objtypes:
@@ -265,10 +274,12 @@ class Operation:
                     toparam = restriction['toparam'] + 1
                 for i in range(fromparam, toparam):
                     if i < len(values):
+                        # This input is declared it can be a number, check it contains a number
                         if calculator.validate_number(values[i]):
                             num, num_type_res = calculator.number(values[i])
                             new_values[i] = num
                             if num_type is None:
+                                # Take the first number type we get as the one we should use for the final result
                                 num_type = num_type_res
 
         return new_values, num_type
