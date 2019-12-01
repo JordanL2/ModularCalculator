@@ -126,6 +126,11 @@ class ExternalFunctionItem(RecursiveOperandItem):
             [],
             ExternalFunctionItem.do_function)
 
+        # Disable any kind of auto conversion of inputs
+        func.units_normalise = False
+        func.auto_convert_numerical_inputs = False
+        func.auto_convert_numerical_result = False
+
         # If function content has a top line declaring the input type, parse it
         topline = func_content.split('\n', 1)[0]
         input_line_regex_match = self.input_line_regex.match(topline)
