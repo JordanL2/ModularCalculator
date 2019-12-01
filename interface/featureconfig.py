@@ -77,14 +77,14 @@ class FeatureConfigDialog(QDialog):
         
         self.featureItems = {}
         self.featureList.clear()
-        for featureCategory, features in featuresByCategory.items():
+        for featureCategory, features in sorted(featuresByCategory.items(), key=lambda c: c[0].lower()):
             categoryItem = QListWidgetItem(featureCategory, self.featureList)
             categoryFont = QFontDatabase.systemFont(QFontDatabase.TitleFont)
             categoryFont.setBold(True)
             categoryItem.setFont(categoryFont)
             categoryItem.setFlags(Qt.NoItemFlags)
 
-            for feature in sorted(features, key=lambda f : f.title()):
+            for feature in sorted(features, key=lambda f : f.title().lower()):
                 featureId = feature.id()
                 if feature.desc() != '':
                     featureText = "{} - {}".format(feature.title(), feature.desc())
