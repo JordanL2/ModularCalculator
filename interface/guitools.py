@@ -18,8 +18,10 @@ def htmlSafe(text, breaking=False):
             i += 1
             if not breaking or i % 2 == 0:
                 c = '&nbsp;'
-        elif c == "\n":
-            c = '<br/>'
+        else:
+            i = 0
+            if c == "\n":
+                c = '<br/>'
         htmlText += c
 
     return htmlText
