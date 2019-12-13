@@ -101,11 +101,11 @@ class CalculatorDisplay(QWidget):
                 answer = answer.singular()
         if unit is not None:
             if self.options['shortunits'] and unit.has_symbols():
-                unit = unit.symbol()
+                unit_parts = unit.symbol(False)
             else:
-                unit = unit.get_name(self.interface.calculatormanager.calculator.number(answer)[0])
-                unit = ' ' + unit
-            unit = makeSpan(htmlSafe(unit, True), 'unit')
+                unit_parts = unit.get_name(self.interface.calculatormanager.calculator.number(answer)[0], False)
+                unit_parts = [(' ', 'space')] + unit_parts
+            unit = ''.join([makeSpan(htmlSafe(u[0], True), u[1]) for u in unit_parts])
         else:
             unit = ''
         return self.interface.entry.css + makeSpan(htmlSafe(answer, True), answer_type) + unit
