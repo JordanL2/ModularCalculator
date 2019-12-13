@@ -92,13 +92,16 @@ class CalculatorDisplay(QWidget):
         return self.makeQuestionWidget(questionHtml, n), self.makeAnswerWidget(answerHtml, n)
 
     def renderAnswerRow(self, answer, unit):
-        answer_type = 'literal'
+        answer_rendered = None
         if isinstance(answer, UnitPowerList):
-            answer_type = 'unit'
-            if self.options['shortunits']:
-                answer = answer.symbol()
+            if self.options['shortunits'] and answer.has_symbols():
+                unit_parts = answer.symbol(False)
             else:
-                answer = answer.singular()
+                unit_parts = answer.singular(False, False)
+                unit_parts = [(' ', 'space')] + unit_parts
+            answer_rendered = ''.join([makeSpan(htmlSafe(u[0], True), u[1]) for u in unit_parts])
+        else:
+            answer_rendered = makeSpan(htmlSafe(answer, True), 'literal')
         if unit is not None:
             if self.options['shortunits'] and unit.has_symbols():
                 unit_parts = unit.symbol(False)
@@ -108,7 +111,7 @@ class CalculatorDisplay(QWidget):
             unit = ''.join([makeSpan(htmlSafe(u[0], True), u[1]) for u in unit_parts])
         else:
             unit = ''
-        return self.interface.entry.css + makeSpan(htmlSafe(answer, True), answer_type) + unit
+        return self.interface.entry.css + answer_rendered + unit
 
     def makeQuestionWidget(self, questionHtml, n):
         questionWidget = FixedSizeLabel(questionHtml)

@@ -86,4 +86,3 @@ These examples are available in examples/basic_integration.py. See examples/adva
 
 * Unit normalisation: "1 joule / 1 m^3" gets simplified to "1 pascal" - Even Google has this issue
 * External function #INPUT parsing - use comment's actual symbol option, ensure comment feature is enabled
-* Interface - unit in answer - colour units and operators properly
