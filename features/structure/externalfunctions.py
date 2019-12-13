@@ -76,8 +76,6 @@ class ExternalFunctionsFeature(Feature):
 
 class ExternalFunctionItem(RecursiveOperandItem):
 
-    input_line_regex = re.compile(r'^#INPUT((\s+\S+)+)')
-
     def __init__(self, text, items, calculator, name, args):
         super().__init__(text, items, calculator)
         self.name = name
@@ -133,7 +131,8 @@ class ExternalFunctionItem(RecursiveOperandItem):
 
         # If function content has a top line declaring the input type, parse it
         topline = func_content.split('\n', 1)[0]
-        input_line_regex_match = self.input_line_regex.match(topline)
+        input_line_regex = re.compile(r'^' + self.calculator.feature_options['nonfunctional.comments']['Symbol'] + r'INPUT((\s+\S+)+)')
+        input_line_regex_match = input_line_regex.match(topline)
         if input_line_regex_match:
             i = 0
             for value in input_line_regex_match.group(1).split():
