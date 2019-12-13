@@ -98,7 +98,6 @@ class CalculatorDisplay(QWidget):
                 unit_parts = answer.symbol(False)
             else:
                 unit_parts = answer.singular(False, False)
-                unit_parts = [(' ', 'space')] + unit_parts
             answer_rendered = ''.join([makeSpan(htmlSafe(u[0], True), u[1]) for u in unit_parts])
         else:
             answer_rendered = makeSpan(htmlSafe(answer, True), 'literal')
@@ -106,7 +105,8 @@ class CalculatorDisplay(QWidget):
             if self.options['shortunits'] and unit.has_symbols():
                 unit_parts = unit.symbol(False)
             else:
-                unit_parts = unit.get_name(self.interface.calculatormanager.calculator.number(answer)[0], False)
+                answer_number = self.interface.calculatormanager.calculator.number(answer)[0]
+                unit_parts = unit.get_name(answer_number, False)
                 unit_parts = [(' ', 'space')] + unit_parts
             unit = ''.join([makeSpan(htmlSafe(u[0], True), u[1]) for u in unit_parts])
         else:
