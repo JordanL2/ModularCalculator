@@ -313,13 +313,13 @@ class UnitPowerList(AbstractPowerList):
                 unitname = mult.unit.symbol()
             elif plural and last:
                 unitname = mult.unit.plural()
-            multstrings.append(' ')
+            multstrings.append((' ', 'space'))
             if mult.power > 1:
-                multstrings.append(unitname)
-                multstrings.append('^')
-                multstrings.append(str(mult.power))
+                multstrings.append((unitname, 'unit'))
+                multstrings.append(('^', 'op'))
+                multstrings.append((str(mult.power), 'literal'))
             else:
-                multstrings.append(unitname)
+                multstrings.append((unitname, 'unit'))
         if len(multstrings) > 0:
             multstrings.pop(0)
 
@@ -330,30 +330,33 @@ class UnitPowerList(AbstractPowerList):
                 unitname = div.unit.symbol()
             elif negative_powers:
                 unitname = div.unit.plural()
-            divstrings.append(' ')
+            divstrings.append((' ', 'space'))
             if div.power < -1 or negative_powers:
-                divstrings.append(unitname)
-                divstrings.append('^')
+                divstrings.append((unitname, 'unit'))
+                divstrings.append(('^', 'op'))
                 if negative_powers:
-                    divstrings.append(str(div.power))
+                    divstrings.append((str(div.power), 'literal'))
                 else:
-                    divstrings.append(str(-div.power))
+                    divstrings.append((str(-div.power), 'literal'))
             else:
-                divstrings.append(unitname)
+                divstrings.append((unitname, 'unit'))
         if len(divstrings) > 0:
             divstrings.pop(0)
         if len(mults) > 0 and len(divs) > 1 and not negative_powers:
-            divstrings = ['('] + divstrings + [')']
+            divstrings = [('(', 'inner_expr_start')] + divstrings + [('(', 'inner_expr_end')]
 
         finalstrings = []
         if len(mults) > 0 and len(divs) > 0:
-            finalstrings = multstrings + ['/'] + divstrings
+            finalstrings = multstrings + [('/', 'op')] + divstrings
         elif len(mults) > 0:
             finalstrings = multstrings
         elif len(divs) > 0:
             finalstrings = divstrings
 
-        return ''.join(finalstrings)
+        if string_result:
+            return ''.join([s[0] for s in finalstrings])
+        else:
+            return finalstrings
 
     def convert(self, num, power, relative):
         for unitpower in self.list():
