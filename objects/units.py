@@ -274,19 +274,19 @@ class UnitPowerList(AbstractPowerList):
         unitpowerlist.no_simplify = self.no_simplify
         return unitpowerlist
 
-    def get_name(self, num):
+    def get_name(self, num, string_result=True):
         if num == Decimal('1'):
-            return self.singular()
-        return self.plural()
+            return self.singular(False, string_result)
+        return self.plural(False, string_result)
 
-    def plural(self, negative_powers=False):
-        return self.name(True, False, negative_powers)
+    def plural(self, negative_powers=False, string_result=True):
+        return self.name(True, False, negative_powers, string_result)
 
-    def singular(self, negative_powers=False):
-        return self.name(False, False, negative_powers)
+    def singular(self, negative_powers=False, string_result=True):
+        return self.name(False, False, negative_powers, string_result)
 
-    def symbol(self):
-        return self.name(False, True, False)
+    def symbol(self, string_result=True):
+        return self.name(False, True, False, string_result)
 
     def has_symbols(self):
         for unitpower in self.list():
@@ -294,7 +294,7 @@ class UnitPowerList(AbstractPowerList):
                 return False
         return True
 
-    def name(self, plural, symbol, negative_powers):
+    def name(self, plural, symbol, negative_powers, string_result):
         mults = []
         divs = []
         for unitpower in self.list():
@@ -313,11 +313,15 @@ class UnitPowerList(AbstractPowerList):
                 unitname = mult.unit.symbol()
             elif plural and last:
                 unitname = mult.unit.plural()
+            multstrings.append(' ')
             if mult.power > 1:
-                multstrings.append("{0}^{1}".format(unitname, mult.power))
+                multstrings.append(unitname)
+                multstrings.append('^')
+                multstrings.append(str(mult.power))
             else:
                 multstrings.append(unitname)
-        multstring = str.join(' ', multstrings)
+        if len(multstrings) > 0:
+            multstrings.pop(0)
 
         divstrings = []
         for i, div in enumerate(divs):
@@ -326,26 +330,30 @@ class UnitPowerList(AbstractPowerList):
                 unitname = div.unit.symbol()
             elif negative_powers:
                 unitname = div.unit.plural()
+            divstrings.append(' ')
             if div.power < -1 or negative_powers:
+                divstrings.append(unitname)
+                divstrings.append('^')
                 if negative_powers:
-                    divstrings.append("{0}^{1}".format(unitname, div.power))
+                    divstrings.append(str(div.power))
                 else:
-                    divstrings.append("{0}^{1}".format(unitname, -div.power))
+                    divstrings.append(str(-div.power))
             else:
                 divstrings.append(unitname)
-        divstring = str.join(' ', divstrings)
+        if len(divstrings) > 0:
+            divstrings.pop(0)
         if len(mults) > 0 and len(divs) > 1 and not negative_powers:
-            divstring = '(' + divstring + ')'
+            divstrings = ['('] + divstrings + [')']
 
-        finalstring = ''
+        finalstrings = []
         if len(mults) > 0 and len(divs) > 0:
-            finalstring = multstring + '/' + divstring
+            finalstrings = multstrings + ['/'] + divstrings
         elif len(mults) > 0:
-            finalstring = multstring
+            finalstrings = multstrings
         elif len(divs) > 0:
-            finalstring = divstring
+            finalstrings = divstrings
 
-        return finalstring
+        return ''.join(finalstrings)
 
     def convert(self, num, power, relative):
         for unitpower in self.list():
