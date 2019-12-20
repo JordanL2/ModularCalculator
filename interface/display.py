@@ -113,33 +113,29 @@ class CalculatorDisplay(QWidget):
             unit = ''
         return self.interface.entry.css + answer_rendered + unit
 
+    def makeStatementWidget(self, widget, n):
+        widget.setAlignment(Qt.AlignLeft | Qt.AlignTop)
+        widget.setBackgroundRole(self.colours[n % len(self.colours)])
+        widget.setAutoFillBackground(True)
+        widget.setMargin(self.margin)
+        widget.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.TextSelectableByKeyboard)
+        widget.setWordWrap(True)
+        widget.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Maximum)
+        return widget
+
     def makeQuestionWidget(self, questionHtml, n):
-        questionWidget = FixedSizeLabel(questionHtml)
+        questionWidget = self.makeStatementWidget(FixedSizeLabel(questionHtml), n)
         questionFont = QFontDatabase.systemFont(QFontDatabase.FixedFont)
         questionFont.setPointSize(10)
         questionWidget.setFont(questionFont)
-        questionWidget.setAlignment(Qt.AlignLeft | Qt.AlignTop)
-        questionWidget.setBackgroundRole(self.colours[n % len(self.colours)])
-        questionWidget.setAutoFillBackground(True)
-        questionWidget.setMargin(self.margin)
-        questionWidget.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.TextSelectableByKeyboard)
-        questionWidget.setWordWrap(True)
-        questionWidget.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Maximum)
         return questionWidget
 
     def makeAnswerWidget(self, answerHtml, n):
-        answerWidget = MiddleClickableLabel(self, answerHtml, CalculatorDisplay.insertAnswer)
+        answerWidget = self.makeStatementWidget(MiddleClickableLabel(self, answerHtml, CalculatorDisplay.insertAnswer), n)
         answerFont = QFontDatabase.systemFont(QFontDatabase.FixedFont)
         answerFont.setPointSize(14)
         answerFont.setBold(True)
         answerWidget.setFont(answerFont)
-        answerWidget.setAlignment(Qt.AlignLeft | Qt.AlignTop)
-        answerWidget.setBackgroundRole(self.colours[n % len(self.colours)])
-        answerWidget.setAutoFillBackground(True)
-        answerWidget.setMargin(self.margin)
-        answerWidget.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.TextSelectableByKeyboard)
-        answerWidget.setWordWrap(True)
-        answerWidget.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Maximum)
         return answerWidget
 
     def questionHtml(self, expr):
