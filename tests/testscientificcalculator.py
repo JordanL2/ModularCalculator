@@ -69,6 +69,12 @@ tests = [
     { 'test': r"1.23e2 + 1.2e1", 'expected': '1.35E2' },
     { 'test': r"1.23e2kg + 1.2e1kg", 'expected': ('1.35E2', 'kilograms') },
     { 'test': r"dec(1.23e2 + 1.2e1)", 'expected': Decimal('135') },
+    { 'test': r"1E9 * 1", 'expected': '1E9' },
+    { 'test': r"1 * 1E9", 'expected': Decimal('1000000000') },
+    { 'test': r"dec(1E9)", 'expected': Decimal('1000000000') },
+    { 'test': r"1E9 m", 'expected': ('1E9', 'meters') },
+    { 'test': r"dec(1E9 m)", 'expected': (Decimal('1000000000'), 'meters') },
+    { 'test': r"dec(1E9) m", 'expected': (Decimal('1000000000'), 'meters') },
 
     { 'test': r"scientific(123.456789)", 'expected': '1.23456789E2' },
     { 'test': r"scientific(123.45678900000)", 'expected': '1.23456789E2' },
