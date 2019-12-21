@@ -3,6 +3,7 @@
 from modularcalculator.interface.guitools import *
 
 from PyQt5.QtCore import Qt, QStringListModel, QSize
+from PyQt5.QtGui import QFontMetrics
 from PyQt5.QtWidgets import QListWidget, QWidgetAction, QSpinBox, QLabel, QHBoxLayout, QVBoxLayout, QWidget, QListView, QDialog, QAbstractItemView, QPushButton, QCalendarWidget, QTimeEdit, QComboBox, QTabBar
 
 
@@ -226,25 +227,31 @@ class MiddleClickCloseableTabBar(QTabBar):
 class FixedSizeLabel(QLabel):
 
     def __init__(self, text):
-        super().__init__(text)
+        super().__init__()
+        self.setTextFormat(Qt.RichText)
+        self.setText(text)
         self.height = None
 
     def sizeHint(self):
-        size = super().sizeHint()
+        fontMetrics = QFontMetrics(self.font())
+        boundingRect = fontMetrics.boundingRect(0, 0, self.width(), 1000, Qt.AlignLeft | Qt.AlignTop | Qt.TextWordWrap, self.text())
+
+        size = QSize(self.width(), boundingRect.height())
         if self.height is not None:
             size.setHeight(self.height)
+
         return size
 
 
 class MiddleClickableLabel(FixedSizeLabel):
 
-    def __init__(self, parent, text, middleClickFunction):
-        self.parent = parent
+    def __init__(self, interface, text, middleClickFunction):
+        self.interface = interface
         super().__init__(text)
         self.middleClickFunction = middleClickFunction
 
     def mouseReleaseEvent(self, e):
         if e.button() == Qt.MiddleButton:
-            self.middleClickFunction(self.parent, self, e)
+            self.middleClickFunction(self.interface, self, e)
         else:
             super().mouseReleaseEvent(e)
