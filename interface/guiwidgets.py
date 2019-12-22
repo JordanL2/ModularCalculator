@@ -234,7 +234,7 @@ class FixedSizeLabel(QLabel):
 
     def sizeHint(self):
         fontMetrics = QFontMetrics(self.font())
-        boundingRect = fontMetrics.boundingRect(0, 0, self.width(), 1000, Qt.AlignLeft | Qt.AlignTop | Qt.TextWordWrap, self.text())
+        boundingRect = fontMetrics.boundingRect(0, 0, self.width(), 0, Qt.AlignLeft | Qt.AlignTop | Qt.TextWordWrap, self.text())
 
         size = QSize(self.width(), boundingRect.height())
         if self.height is not None:
