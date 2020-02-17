@@ -52,6 +52,7 @@ presets['Computing'] = presets['Scientific'] + [
     'numerical.hexadecimalnumbers',
     'numerical.octalnumbers',
     'strings.regex',
+    'strings.stringarrayfunctions',
     'strings.stringcomparison',
     'strings.stringfunctions',
     'strings.strings',

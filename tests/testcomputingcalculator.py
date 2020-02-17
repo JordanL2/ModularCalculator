@@ -221,6 +221,11 @@ tests = [
     { 'test': r"substr('123456', 4, 4)", 'expected': '5' },
     { 'test': r"substr('123456', 0b100, 0b100)", 'expected': '5' },
 
+    { 'test': r"join('||', ['ab', 'b', 'c'])", 'expected': 'ab||b||c' },
+    { 'test': r"join('||', ['ab', 'b', 2])", 'expected': 'ab||b||2' },
+    { 'test': r"split('||', 'ab||b||2')", 'expected': ['ab', 'b', '2'] },
+    { 'test': r"split(3, 12345367)", 'expected': ['12', '45', '67'] },
+
     { 'test': "123 + (#comment\n456)", 'expected': Decimal(579) },
     { 'test': "123 + 456#comment", 'expected': Decimal(579) },
 
