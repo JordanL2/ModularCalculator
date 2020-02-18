@@ -52,6 +52,19 @@ These examples are available in examples/basic_integration.py. See examples/adva
 # To Do
 
 ## Engine
+* Multi-thread calculation?
+	* Multiple runners, external processes running listening to a queue that gives them jobs
+	* Number of runners set with argument when Calculator is created
+	* Runners initialised on Calculator creation
+	* execute method:
+		* Loop to execute operands passes each operand into the input queue
+		* When all operand results are received from the output queue, execute continues
+			* Since the output queue can be getting read by runners, we need a way of reading the output queue without removing the results, only removing results that are relevant to the execute instance
+			* Or, should each execute instance have its own output queue? Placed inside the job as a reference
+	* Runner:
+		* Listens to input queue for jobs
+		* When a job received, splits a interpreter thread to execute the operand
+		* When thread finishes, it writes the result to the output queue
 
 ## Features
 * Date timezones
