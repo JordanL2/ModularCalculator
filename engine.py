@@ -6,6 +6,9 @@ from modularcalculator.objects.items import *
 from modularcalculator.objects.units import *
 from modularcalculator.services.unitnormaliser import *
 
+import multiprocessing
+from queue import Empty, Full
+from threading import Thread
 import time
 
 
@@ -26,6 +29,29 @@ class Engine:
         self.unit_assignment_op = None
         self.unit_multiply_op = None
         self.unit_divide_op = None
+
+        self.workers = None
+        self.work_queue = multiprocessing.Queue()
+        self.init_workers(1)
+
+    def init_workers(self, num):
+        self.workers = []
+        for i in range(0, num):
+            worker = multiprocessing.Process(
+                target=self.worker,
+                args=[self.work_queue],
+                daemon=True)
+            worker.start()
+            self.workers.append(worker)
+
+    def worker(self, work_queue):
+        print("worker running")
+        while True:
+            job = work_queue.get(block=True)
+            #print(job)
+            execute_thread = ExecuteThread(self, job)
+            execute_thread.daemon = True
+            execute_thread.start()
 
     def setup(self):
         self.ops_list = dict([(sym, op) for prec in self.ops for sym, op in prec.items()])
@@ -150,9 +176,12 @@ class Engine:
             if len(items) == 0:
                 raise ExecuteException("Empty expression", [], None)
 
-            for i, item in enumerate(items):
-                items[i] = self.execute_operand(items[i], original_items[0:i], flags)
-                items[i]._INDEX = i
+            if self.workers is None:
+                for i, item in enumerate(items):
+                    items[i] = self.execute_operand(items[i], original_items[0:i], flags)
+                    items[i]._INDEX = i
+            else:
+                items = self.multithreaded_execute_operands(items, original_items, flags)
 
             while True:
                 for prec in self.ops:
@@ -206,6 +235,29 @@ class Engine:
             return items[0]
         except CalculateException as err:
             raise self.restore_non_functional_items(err, original_items, very_original_items)
+
+    def multithreaded_execute_operands(self, items, original_items, flags):
+        #result_queue = multiprocessing.Queue()
+        result_sender, result_receiver = multiprocessing.Pipe()
+        for i, item in enumerate(items):
+            job = {
+                'i': i,
+                'item': item,
+                'previous_items': original_items[0:i],
+                'flags': flags,
+                'result_sender': result_sender
+            }
+            self.work_queue.put(job, block=False)
+        results = [None] * len(items)
+        waiting_for = len(items)
+        while waiting_for > 0:
+            result = result_receiver.recv()
+            i = result['i']
+            item = result['item']
+            item._INDEX = i
+            results[i] = item
+            waiting_for -= 1
+        return results
 
     def is_unit(self, item):
         return isinstance(item, OperandResult) and isinstance(item.value, UnitPowerList)
@@ -308,3 +360,22 @@ class Engine:
 
     def validate_exception(self, value, unit, ref):
         return isinstance(value, Exception)
+
+
+class ExecuteThread(Thread):
+
+    def __init__(self, calculator, job):
+        Thread.__init__(self)
+        self.calculator = calculator
+        self.job = job
+
+    def run(self):
+        job = self.job
+        #print('- executing job:', job)
+        result_item = self.calculator.execute_operand(job['item'], job['previous_items'], job['flags'])
+        result_sender = job['result_sender']
+        job_result = {
+            'i': job['i'],
+            'item': result_item,
+        }
+        result_sender.send(job_result)
