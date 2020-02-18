@@ -35,16 +35,21 @@ class Engine:
         self.init_workers(1)
 
     def init_workers(self, num):
+        self.manager = multiprocessing.Manager()
+        self.vars = self.manager.dict()
         self.workers = []
+        workers = []
         for i in range(0, num):
             worker = multiprocessing.Process(
                 target=self.worker,
-                args=[self.work_queue],
+                args=[self.work_queue, self.vars],
                 daemon=True)
             worker.start()
-            self.workers.append(worker)
+            workers.append(worker)
+        self.workers = workers
 
-    def worker(self, work_queue):
+    def worker(self, work_queue, vars):
+        self.vars = vars
         print("worker running")
         while True:
             job = work_queue.get(block=True)
@@ -239,6 +244,7 @@ class Engine:
     def multithreaded_execute_operands(self, items, original_items, flags):
         #result_queue = multiprocessing.Queue()
         result_sender, result_receiver = multiprocessing.Pipe()
+        print(result_receiver)
         for i, item in enumerate(items):
             job = {
                 'i': i,
@@ -272,7 +278,7 @@ class Engine:
                     return OperandResult(UnitPowerList(), None, None)
                 return OperandResult(None, None, None)
             try:
-                item = item.result(flags)
+                item = item.result(flags, self)
             except ExecuteException as err:
                 err.items = previous_items + err.items
                 return OperandResult(err, None, None)

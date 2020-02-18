@@ -48,7 +48,7 @@ class AssignmentFeature(Feature):
             ['variable', [None, 'array']]), 
         {'units_normalise': False})
 
-        calculator.vars = {}
+        #calculator.vars = {}
 
         calculator.validators['variable'] = AssignmentFeature.validate_variable
 
@@ -59,7 +59,7 @@ class AssignmentFeature(Feature):
         var_match = AssignmentFeature.var_regex.match(next)
         if (var_match):
             var = var_match.group(1)
-            return [VariableItem(var, self)], len(var), None
+            return [VariableItem(var)], len(var), None
         return None, None, None
 
     def op_var_set(self, vals, units, refs, flags):
@@ -92,29 +92,27 @@ class AssignmentFeature(Feature):
 
 class VariableItem(OperandItem):
 
-    def __init__(self, var, calculator):
+    def __init__(self, var):
         super().__init__(var)
         self.var = var
-        self.calculator = calculator
 
     def desc(self):
         return 'variable'
 
-    def value(self, flags):
-        if self.var not in self.calculator.vars:
+    def value(self, flags, calculator):
+        if self.var not in calculator.vars:
             return OperandResult(None, None, self)
-        valueunit = self.calculator.vars[self.var]
+        valueunit = calculator.vars[self.var]
         value = valueunit[0]
         unit = valueunit[1]
         if unit is not None:
             unit = unit.copy()
         return OperandResult(value, unit, self)
 
-    def result(self, flags):
-        return self.value(flags)
+    def result(self, flags, calculator):
+        return self.value(flags, calculator)
 
     def copy(self, classtype=None):
         copy = super().copy(classtype or self.__class__)
         copy.var = self.var
-        copy.calculator = self.calculator
         return copy

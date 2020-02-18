@@ -81,7 +81,7 @@ class OperandItem(Item):
     def value(self, flags):
         raise CalculatorException("Must override this method")
 
-    def result(self, flags):
+    def result(self, flags, calculator):
         return OperandResult(self.value(flags), self.unit, self)
 
     def copy(self, classtype=None):
@@ -110,15 +110,13 @@ class LiteralItem(OperandItem):
 
 class RecursiveOperandItem(OperandItem):
 
-    def __init__(self, text, items, calculator):
+    def __init__(self, text, items):
         super().__init__(text)
         self.items = items
-        self.calculator = calculator
 
     def copy(self, classtype=None):
         copy = super().copy(classtype or self.__class__)
         copy.items = self.items.copy()
-        copy.calculator = self.calculator
         return copy
 
 

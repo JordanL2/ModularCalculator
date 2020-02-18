@@ -38,11 +38,11 @@ class InnerExpressionsFeature(Feature):
                 inner_items = inner_items[0]
             except ParsingException as err:
                 err.statements[-1].insert(0, InnerExpressionStartItem())
-                raise ParseException(err.message, [InnerExpressionItem(err.truncate(next), err.statements[0], self)], err.next, True)
+                raise ParseException(err.message, [InnerExpressionItem(err.truncate(next), err.statements[0])], err.next, True)
             inner_items.insert(0, InnerExpressionStartItem())
             if 'end_inner_expr' not in return_flags:
                 raise ParseException('Inner expression missing close symbol', [], next)
-            return [InnerExpressionItem(next[0:length + 2], inner_items, self)], length + 2, None
+            return [InnerExpressionItem(next[0:length + 2], inner_items)], length + 2, None
         return None, None, None
 
     def parse_close_inner_expr(self, expr, i, items, flags):
@@ -57,15 +57,15 @@ class InnerExpressionsFeature(Feature):
 
 class InnerExpressionItem(RecursiveOperandItem):
 
-    def __init__(self, text, items, calculator):
-        super().__init__(text, items, calculator)
+    def __init__(self, text, items):
+        super().__init__(text, items)
     
     def desc(self):
         return 'inner_expr'
 
-    def value(self, flags):
+    def value(self, flags, calculator):
         try:
-            val = self.calculator.execute(self.items, flags.copy())
+            val = calculator.execute(self.items, flags.copy())
             if isinstance(val.value, Exception):
                 raise val.value
             return OperandResult(val.value, val.unit, val.ref)
@@ -75,8 +75,8 @@ class InnerExpressionItem(RecursiveOperandItem):
             self.truncated = True
             raise ExecuteException(err.message, [self], err.next, True)
 
-    def result(self, flags):
-        return self.value(flags)
+    def result(self, flags, calculator):
+        return self.value(flags, calculator)
 
     def copy(self, classtype=None):
         copy = super().copy(classtype or self.__class__)
