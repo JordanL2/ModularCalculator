@@ -58,11 +58,11 @@ class UnitSystemItem(OperandItem):
     def desc(self):
         return 'unitsystem'
 
-    def value(self, flags):
+    def value(self, flags, calculator):
         return self.text
 
-    def result(self, flags):
-        return OperandResult(self.value(flags), None, self)
+    def result(self, flags, calculator):
+        return OperandResult(self.value(flags, calculator), None, self)
 
     def copy(self, classtype=None):
         copy = super().copy(classtype or self.__class__)

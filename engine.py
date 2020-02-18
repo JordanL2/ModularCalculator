@@ -253,24 +253,31 @@ class Engine:
 
     def multithreaded_execute_operands(self, items, original_items, flags):
         result_receivers = []
+        remote_items = []
         for i, item in enumerate(items):
-            result_sender, result_receiver = multiprocessing.Pipe()
-            result_receivers.append(result_receiver)
-            job = {
-                'i': i,
-                'item': item,
-                'previous_items': original_items[0:i],
-                'flags': flags,
-                'result_sender': result_sender,
-            }
-            self.work_queue.put(job, block=True)
+            if isinstance(item, OperandItem):
+                result_sender, result_receiver = multiprocessing.Pipe()
+                result_receivers.append(result_receiver)
+                remote_items.append(i)
+                job = {
+                    'i': i,
+                    'item': item,
+                    'previous_items': original_items[0:i],
+                    'flags': flags,
+                    'result_sender': result_sender,
+                }
+                self.work_queue.put(job, block=True)
         results = [None] * len(items)
+        for i, item in enumerate(items):
+            if i not in remote_items:
+                results[i] = self.execute_operand(items[i], original_items[0:i], flags)
+                items[i]._INDEX = i
         for result_receiver in result_receivers:
-           result = result_receiver.recv()
-           i = result['i']
-           item = result['item']
-           item._INDEX = i
-           results[i] = item
+            result = result_receiver.recv()
+            i = result['i']
+            item = result['item']
+            item._INDEX = i
+            results[i] = item
         return results
 
     def is_unit(self, item):

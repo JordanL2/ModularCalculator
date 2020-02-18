@@ -55,13 +55,13 @@ class ConstantItem(OperandItem):
     def desc(self):
         return 'constant'
 
-    def value(self, flags):
+    def value(self, flags, calculator):
         if self.unit is not None:
             return OperandResult(self.val, self.unit.copy(), self)
         return OperandResult(self.val, None, self)
 
-    def result(self, flags):
-        return self.value(flags)
+    def result(self, flags, calculator):
+        return self.value(flags, calculator)
 
     def copy(self, classtype=None):
         copy = super().copy(classtype or self.__class__)

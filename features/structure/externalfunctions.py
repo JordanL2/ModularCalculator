@@ -67,29 +67,29 @@ class ExternalFunctionsFeature(Feature):
                 except ParsingException as err:
                     newitems = func_items + err.statements[0]
                     err.statements = [newitems]
-                    raise ParseException(err.message, [FunctionItem(err.truncate(next), newitems, self, ext_func_name, [])], err.next)
+                    raise ParseException(err.message, [FunctionItem(err.truncate(next), newitems, ext_func_name, [])], err.next)
             if 'end_func' not in return_flags:
                 raise ParseException('Function missing close symbol', [], next)
-            return [ExternalFunctionItem(next[0:i], func_items, self, ext_func_name, args)], i, None
+            return [ExternalFunctionItem(next[0:i], func_items, ext_func_name, args)], i, None
         return None, None, None
 
 
 class ExternalFunctionItem(RecursiveOperandItem):
 
-    def __init__(self, text, items, calculator, name, args):
-        super().__init__(text, items, calculator)
+    def __init__(self, text, items, name, args):
+        super().__init__(text, items)
         self.name = name
         self.args = args
     
     def desc(self):
         return 'ext_function'
 
-    def value(self, flags):
-        if self.name not in self.calculator.vars:
+    def value(self, flags, calculator):
+        if self.name not in calculator.vars:
             raise ExecuteException("Variable {} not found".format(self.name), [self], '', True)
         
         # Path of function file
-        path = self.calculator.vars[self.name][0]
+        path = calculator.vars[self.name][0]
         path = os.path.expanduser(path)
         
         # Execute the items for each argument, put the results in a list of inputs
@@ -97,7 +97,7 @@ class ExternalFunctionItem(RecursiveOperandItem):
         itemsi = 2
         for i, arg in enumerate(self.args):
             try:
-                argresult = self.calculator.execute(arg, flags)
+                argresult = calculator.execute(arg, flags)
                 itemsi += len(arg) + 1
                 inputs.append(argresult)
             except ExecuteException as err:
@@ -189,8 +189,8 @@ class ExternalFunctionItem(RecursiveOperandItem):
         res.set_unit(last_result.unit)
         return res
 
-    def result(self, flags):
-        return self.value(flags)
+    def result(self, flags, calculator):
+        return self.value(flags, calculator)
 
     def copy(self, classtype=None):
         copy = super().copy(classtype or self.__class__)

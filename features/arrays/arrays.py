@@ -106,7 +106,7 @@ class ArraysFeature(Feature):
             if 'end_array' in return_flags:
                 i += len(end_symbol)
                 array_items += [ArrayEndItem(end_symbol)]
-                return [ArrayItem(next[0:i], array_items, self, elements)], i, None
+                return [ArrayItem(next[0:i], array_items, elements)], i, None
             else:
                 raise ParseException('Array missing close symbol', [], next)
 
@@ -164,22 +164,21 @@ class ArraysFeature(Feature):
 
 class ArrayItem(RecursiveOperandItem):
 
-    def __init__(self, text, items, calculator, elements):
-        super().__init__(text, items, calculator)
+    def __init__(self, text, items, elements):
+        super().__init__(text, items)
         self.elements = elements
-        self.calculator = calculator
 
     def desc(self):
         return 'array'
 
-    def value(self, flags):
+    def value(self, flags, calculator):
         array = []
         state = {'items': 0}
 
         for i, element in enumerate(self.elements):
             try:
                 state['items'] += 1
-                array.extend(element.value(flags, self.calculator, state))
+                array.extend(element.value(flags, calculator, state))
             except ExecuteException as err:
                 self.items = self.items[0:state['items']]
                 self.items.extend(err.items)
@@ -193,7 +192,6 @@ class ArrayItem(RecursiveOperandItem):
     def copy(self, classtype=None):
         copy = super().copy(classtype or self.__class__)
         copy.elements = self.elements
-        copy.calculator = self.calculator
         return copy
 
 

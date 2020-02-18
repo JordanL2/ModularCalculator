@@ -78,11 +78,11 @@ class OperandItem(Item):
     def isop(self):
         return False
 
-    def value(self, flags):
+    def value(self, flags, calculator):
         raise CalculatorException("Must override this method")
 
     def result(self, flags, calculator):
-        return OperandResult(self.value(flags), self.unit, self)
+        return OperandResult(self.value(flags, calculator), self.unit, self)
 
     def copy(self, classtype=None):
         copy = super().copy(classtype or self.__class__)
@@ -99,7 +99,7 @@ class LiteralItem(OperandItem):
     def desc(self):
         return 'literal'
 
-    def value(self, flags):
+    def value(self, flags, calculator):
         return self.val
 
     def copy(self, classtype=None):
@@ -128,7 +128,7 @@ class NonFunctionalItem(Item):
     def functional(self):
         return False
 
-    def value(self, flags):
+    def value(self, flags, calculator):
         raise Exception("value() called on non-functional item")
 
     def copy(self, classtype=None):
