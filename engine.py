@@ -41,10 +41,12 @@ class Engine:
 
     def init_workers(self, num):
         if self.workers is not None:
+            #print("shutting down {} workers".format(len(self.workers)))
             for worker in self.workers:
                 worker.terminate()
             self.workers = None
         if num > 0:
+            #print("starting {} workers".format(num))
             self.manager = multiprocessing.Manager()
             self.vars = self.manager.dict()
             self.workers = []
@@ -235,8 +237,6 @@ class Engine:
             if len(items) == 0:
                 raise Exception("Ended up with no items: {0}".format(original_items))
             if len(items) > 1:
-                for item in items:
-                    print("item: |{}|".format(repr(item)))
                 item_index = items[0]._INDEX
                 ops = [i for i in items if isinstance(i, OperatorItem)]
                 if len(ops) > 0:
@@ -264,7 +264,7 @@ class Engine:
                 'flags': flags,
                 'result_sender': result_sender,
             }
-            self.work_queue.put(job, block=False)
+            self.work_queue.put(job, block=True)
         results = [None] * len(items)
         for result_receiver in result_receivers:
            result = result_receiver.recv()
