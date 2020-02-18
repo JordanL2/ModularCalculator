@@ -32,7 +32,7 @@ class Engine:
 
         self.workers = None
         self.work_queue = multiprocessing.Queue()
-        self.init_workers(1)
+        self.init_workers(4)
 
     def init_workers(self, num):
         self.manager = multiprocessing.Manager()
@@ -50,10 +50,8 @@ class Engine:
 
     def worker(self, work_queue, vars):
         self.vars = vars
-        print("worker running")
         while True:
             job = work_queue.get(block=True)
-            #print(job)
             execute_thread = ExecuteThread(self, job)
             execute_thread.daemon = True
             execute_thread.start()
@@ -242,27 +240,24 @@ class Engine:
             raise self.restore_non_functional_items(err, original_items, very_original_items)
 
     def multithreaded_execute_operands(self, items, original_items, flags):
-        #result_queue = multiprocessing.Queue()
-        result_sender, result_receiver = multiprocessing.Pipe()
-        print(result_receiver)
+        result_receivers = []
         for i, item in enumerate(items):
+            result_sender, result_receiver = multiprocessing.Pipe()
+            result_receivers.append(result_receiver)
             job = {
                 'i': i,
                 'item': item,
                 'previous_items': original_items[0:i],
                 'flags': flags,
-                'result_sender': result_sender
+                'result_sender': result_sender,
             }
             self.work_queue.put(job, block=False)
         results = [None] * len(items)
-        waiting_for = len(items)
-        while waiting_for > 0:
-            result = result_receiver.recv()
-            i = result['i']
-            item = result['item']
-            item._INDEX = i
-            results[i] = item
-            waiting_for -= 1
+        for i, result_receiver in enumerate(result_receivers):
+           result = result_receiver.recv()
+           item = result['item']
+           item._INDEX = i
+           results[i] = item
         return results
 
     def is_unit(self, item):
@@ -377,7 +372,6 @@ class ExecuteThread(Thread):
 
     def run(self):
         job = self.job
-        #print('- executing job:', job)
         result_item = self.calculator.execute_operand(job['item'], job['previous_items'], job['flags'])
         result_sender = job['result_sender']
         job_result = {
