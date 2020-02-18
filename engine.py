@@ -32,6 +32,8 @@ class Engine:
 
         self.workers = None
         self.work_queue = multiprocessing.Queue()
+        self.manager = multiprocessing.Manager()
+        self.vars = self.manager.dict()
         self.worker_count = 4
 
     def setup(self):
@@ -47,23 +49,20 @@ class Engine:
             self.workers = None
         if num > 0:
             #print("starting {} workers".format(num))
-            self.manager = multiprocessing.Manager()
-            self.vars = self.manager.dict()
             self.workers = []
             workers = []
             for i in range(0, num):
                 worker = multiprocessing.Process(
                     target=self.worker,
-                    args=[self.work_queue, self.vars],
+                    args=[],
                     daemon=True)
                 worker.start()
                 workers.append(worker)
             self.workers = workers
 
-    def worker(self, work_queue, vars):
-        self.vars = vars
+    def worker(self):
         while True:
-            job = work_queue.get(block=True)
+            job = self.work_queue.get(block=True)
             execute_thread = ExecuteThread(self, job)
             execute_thread.daemon = True
             execute_thread.start()

@@ -59,7 +59,10 @@ class TerminatorFeature(Feature):
             except Exception:
                 pass
             finally:
-                self.vars = backup_vars
+                for k in self.vars.copy():
+                    del self.vars[k]
+                for k, v in backup_vars.items():
+                    self.vars[k] = v
 
             return [TerminatorItem(symbol)], len(symbol), {'end_statement': True}
 
