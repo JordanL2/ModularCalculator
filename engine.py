@@ -32,21 +32,31 @@ class Engine:
 
         self.workers = None
         self.work_queue = multiprocessing.Queue()
-        self.init_workers(4)
+        self.worker_count = 4
+
+    def setup(self):
+        self.ops_list = dict([(sym, op) for prec in self.ops for sym, op in prec.items()])
+        self.ops_symbols = [sym for prec in self.ops for sym in prec.keys()] + [sym for prec in self.ops for op in prec.values() for sym in op.linputs + op.rinputs if isinstance(sym, str)]
+        self.init_workers(self.worker_count)
 
     def init_workers(self, num):
-        self.manager = multiprocessing.Manager()
-        self.vars = self.manager.dict()
-        self.workers = []
-        workers = []
-        for i in range(0, num):
-            worker = multiprocessing.Process(
-                target=self.worker,
-                args=[self.work_queue, self.vars],
-                daemon=True)
-            worker.start()
-            workers.append(worker)
-        self.workers = workers
+        if self.workers is not None:
+            for worker in self.workers:
+                worker.terminate()
+            self.workers = None
+        if num > 0:
+            self.manager = multiprocessing.Manager()
+            self.vars = self.manager.dict()
+            self.workers = []
+            workers = []
+            for i in range(0, num):
+                worker = multiprocessing.Process(
+                    target=self.worker,
+                    args=[self.work_queue, self.vars],
+                    daemon=True)
+                worker.start()
+                workers.append(worker)
+            self.workers = workers
 
     def worker(self, work_queue, vars):
         self.vars = vars
@@ -55,10 +65,6 @@ class Engine:
             execute_thread = ExecuteThread(self, job)
             execute_thread.daemon = True
             execute_thread.start()
-
-    def setup(self):
-        self.ops_list = dict([(sym, op) for prec in self.ops for sym, op in prec.items()])
-        self.ops_symbols = [sym for prec in self.ops for sym in prec.keys()] + [sym for prec in self.ops for op in prec.values() for sym in op.linputs + op.rinputs if isinstance(sym, str)]
 
     def enable_units(self):
         self.unit_normaliser = UnitNormaliser(self)
@@ -200,18 +206,23 @@ class Engine:
                         prev_is_op = (i > 0 and self.is_op(items[i - 1]))
                         next_is_unit = (i < len(items) - 1 and self.is_unit(items[i + 1]))
 
+                        # Unit assignment
                         if self.unit_assignment_op is not None and self.unit_assignment_op in prec and item_is_unit and i > 0 and not prev_is_op and not prev_is_unit:
                             items = self.execute_operator(self.unit_assignment_op, items, i, 0, original_items, flags)
                             break
+                        # Unit multiplication
                         if self.unit_multiply_op is not None and self.unit_multiply_op in prec and item_is_unit and prev_is_unit:
                             items = self.execute_operator(self.unit_multiply_op, items, i, 0, original_items, flags)
                             break
+                        # Unit division
                         if self.unit_divide_op is not None and self.unit_divide_op in prec and item_is_op and item.op == self.divide_op and prev_is_unit and next_is_unit:
                             items = self.execute_operator(self.unit_divide_op, items, i, 1, original_items, flags)
                             break
+                        # Implicit multiplication
                         if self.implicit_multiply_op is not None and self.implicit_multiply_op in prec and not item_is_op and not item_is_unit and i > 0 and not prev_is_op:
                             items = self.execute_operator(self.implicit_multiply_op, items, i, 0, original_items, flags)
                             break
+                        # Other operators
                         if item_is_op and item.op in prec and item.op not in (self.unit_multiply_op, self.unit_divide_op, self.implicit_multiply_op) and (not prev_is_unit or item.op != self.divide_op or not next_is_unit):
                             items = self.execute_operator(item.op, items, i, 1, original_items, flags)
                             break
@@ -224,6 +235,8 @@ class Engine:
             if len(items) == 0:
                 raise Exception("Ended up with no items: {0}".format(original_items))
             if len(items) > 1:
+                for item in items:
+                    print("item: |{}|".format(repr(item)))
                 item_index = items[0]._INDEX
                 ops = [i for i in items if isinstance(i, OperatorItem)]
                 if len(ops) > 0:
@@ -253,8 +266,9 @@ class Engine:
             }
             self.work_queue.put(job, block=False)
         results = [None] * len(items)
-        for i, result_receiver in enumerate(result_receivers):
+        for result_receiver in result_receivers:
            result = result_receiver.recv()
+           i = result['i']
            item = result['item']
            item._INDEX = i
            results[i] = item

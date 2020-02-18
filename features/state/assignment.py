@@ -48,8 +48,6 @@ class AssignmentFeature(Feature):
             ['variable', [None, 'array']]), 
         {'units_normalise': False})
 
-        #calculator.vars = {}
-
         calculator.validators['variable'] = AssignmentFeature.validate_variable
 
     var_regex = re.compile(r'([a-zA-Z_][a-zA-Z0-9_]*)')
