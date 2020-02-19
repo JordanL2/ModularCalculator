@@ -34,7 +34,7 @@ class Engine:
         self.work_queue = multiprocessing.Queue()
         self.manager = multiprocessing.Manager()
         self.vars = self.manager.dict()
-        self.worker_count = 4
+        self.worker_count = 0
 
     def setup(self):
         self.ops_list = dict([(sym, op) for prec in self.ops for sym, op in prec.items()])
@@ -255,7 +255,7 @@ class Engine:
         result_receivers = []
         remote_items = []
         for i, item in enumerate(items):
-            if isinstance(item, OperandItem):
+            if isinstance(item, RecursiveOperandItem):
                 result_sender, result_receiver = multiprocessing.Pipe()
                 result_receivers.append(result_receiver)
                 remote_items.append(i)
@@ -271,7 +271,7 @@ class Engine:
         for i, item in enumerate(items):
             if i not in remote_items:
                 results[i] = self.execute_operand(items[i], original_items[0:i], flags)
-                items[i]._INDEX = i
+                results[i]._INDEX = i
         for result_receiver in result_receivers:
             result = result_receiver.recv()
             i = result['i']

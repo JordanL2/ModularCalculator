@@ -45,7 +45,7 @@ class AssignmentFunctionsFeature(Feature):
             1)
 
     def func_reset(self, vals, units, refs, flags):
-        for k in self.vars:
+        for k in self.vars.copy():
             del self.vars[k]
         return OperationResult(None)
 
