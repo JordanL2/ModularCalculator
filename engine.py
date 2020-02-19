@@ -394,6 +394,7 @@ class ExecuteThread(Thread):
         self.job = job
 
     def run(self):
+        self.calculator.update_engine_prec()
         job = self.job
         result_item = self.calculator.execute_operand(job['item'], job['previous_items'], job['flags'])
         result_sender = job['result_sender']

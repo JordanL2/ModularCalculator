@@ -131,7 +131,7 @@ class ExternalFunctionItem(RecursiveOperandItem):
 
         # If function content has a top line declaring the input type, parse it
         topline = func_content.split('\n', 1)[0]
-        input_line_regex = re.compile(r'^' + self.calculator.feature_options['nonfunctional.comments']['Symbol'] + r'INPUT((\s+\S+)+)')
+        input_line_regex = re.compile(r'^' + calculator.feature_options['nonfunctional.comments']['Symbol'] + r'INPUT((\s+\S+)+)')
         input_line_regex_match = input_line_regex.match(topline)
         if input_line_regex_match:
             i = 0
@@ -158,7 +158,7 @@ class ExternalFunctionItem(RecursiveOperandItem):
                     func.add_unit_restriction(i, i, [unit, power])
                 i += 1
 
-        return func.call(self.calculator, inputs, flags)
+        return func.call(calculator, inputs, flags)
 
     def do_function(self, vals, units, refs, flags):
         func_content = vals.pop(-1)
