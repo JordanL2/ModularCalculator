@@ -167,7 +167,8 @@ class ExternalFunctionItem(RecursiveOperandItem):
 
         # Back up the calculator state, then clear it
         backup_vars = self.vars
-        self.vars = {}
+        for k in self.vars.copy():
+            del self.vars[k]
         
         # For each input, set it in the calculator state as a variable called "PARAM" + n
         for i in range(0, len(vals)):
@@ -177,11 +178,17 @@ class ExternalFunctionItem(RecursiveOperandItem):
         try:
             result = self.calculate(func_content)
         except Exception as err:
-            self.vars = backup_vars
+            for k in self.vars.copy():
+                del self.vars[k]
+            for k, v in backup_vars.items():
+                self.vars[k] = v
             raise err
 
         # Restore calculator state
-        self.vars = backup_vars
+        for k in self.vars.copy():
+            del self.vars[k]
+        for k, v in backup_vars.items():
+            self.vars[k] = v
 
         # The last result of the function is the return value
         last_result = get_last_result(result.results)
