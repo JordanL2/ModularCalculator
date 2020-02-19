@@ -167,8 +167,9 @@ class ExternalFunctionItem(RecursiveOperandItem):
 
         # Back up the calculator state, then clear it
         backup_vars = self.vars
-        for k in self.vars.copy():
-            del self.vars[k]
+        self.vars = {}
+        old_multithread = self.multithread
+        self.multithread = False
         
         # For each input, set it in the calculator state as a variable called "PARAM" + n
         for i in range(0, len(vals)):
@@ -178,17 +179,13 @@ class ExternalFunctionItem(RecursiveOperandItem):
         try:
             result = self.calculate(func_content)
         except Exception as err:
-            for k in self.vars.copy():
-                del self.vars[k]
-            for k, v in backup_vars.items():
-                self.vars[k] = v
+            self.vars = backup_vars
+            self.multithread = old_multithread
             raise err
 
         # Restore calculator state
-        for k in self.vars.copy():
-            del self.vars[k]
-        for k, v in backup_vars.items():
-            self.vars[k] = v
+        self.multithread = old_multithread
+        self.vars = backup_vars
 
         # The last result of the function is the return value
         last_result = get_last_result(result.results)

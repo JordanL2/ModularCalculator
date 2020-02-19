@@ -30,6 +30,7 @@ class Engine:
         self.unit_multiply_op = None
         self.unit_divide_op = None
 
+        self.multithread = True
         self.workers = None
         self.manager = multiprocessing.Manager()
         self.vars = self.manager.dict()
@@ -189,7 +190,7 @@ class Engine:
             if len(items) == 0:
                 raise ExecuteException("Empty expression", [], None)
 
-            if self.workers is None:
+            if self.workers is None or not self.multithread:
                 for i, item in enumerate(items):
                     items[i] = self.execute_operand(items[i], original_items[0:i], flags)
                     items[i]._INDEX = i
