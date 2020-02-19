@@ -31,10 +31,9 @@ class Engine:
         self.unit_divide_op = None
 
         self.workers = None
-        self.work_queue = multiprocessing.Queue()
         self.manager = multiprocessing.Manager()
         self.vars = self.manager.dict()
-        self.worker_count = 0
+        self.worker_count = 5
 
     def setup(self):
         self.ops_list = dict([(sym, op) for prec in self.ops for sym, op in prec.items()])
@@ -48,21 +47,25 @@ class Engine:
                 worker.terminate()
             self.workers = None
         if num > 0:
+            self.work_queue = multiprocessing.Queue()
             #print("starting {} workers".format(num))
             self.workers = []
             workers = []
             for i in range(0, num):
                 worker = multiprocessing.Process(
                     target=self.worker,
-                    args=[],
+                    args=[i],
                     daemon=True)
                 worker.start()
                 workers.append(worker)
             self.workers = workers
 
-    def worker(self):
+    def worker(self, n):
+        #print("worker {} started".format(n))
         while True:
+            #print("worker {} waiting for job from queue {}".format(n, self.work_queue))
             job = self.work_queue.get(block=True)
+            #print("worker {} got job".format(n))
             execute_thread = ExecuteThread(self, job)
             execute_thread.daemon = True
             execute_thread.start()

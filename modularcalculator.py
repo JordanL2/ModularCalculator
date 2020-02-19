@@ -31,6 +31,7 @@ class ModularCalculator(NumericalEngine):
         self.feature_options = {}
         if preset is not None:
             self.load_preset(preset)
+            self.setup()
 
     def scan_feature_files(self):
         topdir = os.path.dirname(__file__) + '/features'
@@ -75,7 +76,7 @@ class ModularCalculator(NumericalEngine):
     def list_features(self):
         return self.feature_list
 
-    def install_features(self, names, debug=False, skipMissing=False, recursive=False):
+    def install_features(self, names, debug=False, skipMissing=False):
         if isinstance(names, str):
             names = [names]
 
@@ -107,17 +108,15 @@ class ModularCalculator(NumericalEngine):
                     if do_before not in self.installed_features and do_before in self.features_to_install:
                         if debug:
                             print("... Must install after {0}, installing now".format(do_before))
-                        self.install_features(do_before, debug, False, True)
+                        self.install_features(do_before, debug, False)
                 dependencies = self.feature_list[name].dependencies()
                 for dependency in dependencies:
                     if dependency not in self.installed_features:
                         if debug:
                             print("... Missing dependency {0}, installing now".format(dependency))
-                        self.install_features(dependency, debug, False, True)
+                        self.install_features(dependency, debug, False)
                 self.feature_list[name].install(self)
                 self.installed_features.add(name)
-        if not recursive:
-            self.setup()
 
     def add_feature_to_be_installed(self, name):
         if name in self.features_to_install:
