@@ -21,13 +21,6 @@ class NumericalEngine(Engine):
         self.finalizers.append({'ref': NumericalEngine.finalize_number})
         self.validators['number'] = NumericalEngine.validate_number
 
-    def number_size_set(self, size):
-        self.number_size = size
-        self.update_engine_prec()
-
-    def number_size_get(self):
-        return self.number_size
-
     def number_prec_set(self, prec):
         self.number_prec = prec
         self.update_engine_prec()
@@ -59,9 +52,6 @@ class NumericalEngine(Engine):
 
     def floor_number(self, num):
         return Decimal(math.floor(num))
-
-    def is_whole_number(self, num):
-        return self.round_number(num) == self.floor_number(num)
 
     def number(self, val):
         for caster in self.number_casters:
