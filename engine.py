@@ -153,22 +153,28 @@ class Engine:
         items = copy_items(items)
         original_items = items
         very_original_items = copy_items(items)
+        # Strip out all non-functional items for now as they aren't relevant to the actual execution
         items = functional_items(items)
         try:
             if len(items) == 0:
                 raise ExecuteException("Empty expression", [], None)
 
+            # For each operand, evaluate them so we only have a flat list of actual values left, which can be passed into operators
             for i, item in enumerate(items):
                 items[i] = self.execute_operand(items[i], original_items[0:i], flags)
                 items[i]._INDEX = i
 
             while True:
+                # Step through each precedence level of operators, so highest precedence ones are executed first
                 for prec in self.ops:
+                    # By default, we step through the items from left to right
                     item_order = range(0, len(items))
+                    # Some operator precedence levels needs to evaluate items from right to left
                     if self.ops_list[list(prec)[0]].rtl:
                         item_order = reversed(item_order)
                     
                     for i in item_order:
+                        # Gather information about the current, previous, and next items
                         item = items[i]
                         item_is_unit = self.is_unit(item)
                         item_is_op = self.is_op(item)
@@ -176,25 +182,33 @@ class Engine:
                         prev_is_op = (i > 0 and self.is_op(items[i - 1]))
                         next_is_unit = (i < len(items) - 1 and self.is_unit(items[i + 1]))
 
+                        # Check if we can assign a unit to a value (a value is followed by a unit)
                         if self.unit_assignment_op is not None and self.unit_assignment_op in prec and item_is_unit and i > 0 and not prev_is_op and not prev_is_unit:
                             items = self.execute_operator(self.unit_assignment_op, items, i, 0, original_items, flags)
                             break
+                        # Check if we can multiply two units together (two units are next to each other)
                         if self.unit_multiply_op is not None and self.unit_multiply_op in prec and item_is_unit and prev_is_unit:
                             items = self.execute_operator(self.unit_multiply_op, items, i, 0, original_items, flags)
                             break
+                        # Check if we can divide one unit by another (unit / unit)
                         if self.unit_divide_op is not None and self.unit_divide_op in prec and item_is_op and item.op == self.divide_op and prev_is_unit and next_is_unit:
                             items = self.execute_operator(self.unit_divide_op, items, i, 1, original_items, flags)
                             break
+                        # Check if we can implicitly multiply two values together (two values are next to each other)
                         if self.implicit_multiply_op is not None and self.implicit_multiply_op in prec and not item_is_op and not item_is_unit and i > 0 and not prev_is_op:
                             items = self.execute_operator(self.implicit_multiply_op, items, i, 0, original_items, flags)
                             break
+                        # All other operators
                         if item_is_op and item.op in prec and item.op not in (self.unit_multiply_op, self.unit_divide_op, self.implicit_multiply_op) and (not prev_is_unit or item.op != self.divide_op or not next_is_unit):
                             items = self.execute_operator(item.op, items, i, 1, original_items, flags)
                             break
                     else:
+                        # If we stepped though the item list without an operator in this precedence level being executed, we go onto the next level
                         continue
+                    # Otherwise, we start from the first precedence level again
                     break
                 else:
+                    # If we went through all precedence levels without an operator being executed, we should stop
                     break
 
             if len(items) == 0:
