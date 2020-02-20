@@ -57,6 +57,7 @@ These examples are available in examples/basic_integration.py. See examples/adva
 * Date timezones
 
 ## Functions
+* Split - should substring be a regex? Maybe a new function for splitting on regex? regexsplit?
 
 ## Units
 
@@ -76,9 +77,9 @@ These examples are available in examples/basic_integration.py. See examples/adva
 
 ## Other
 * Comment code
-* Move to do / bug list to github page
-* Add code license - Apache 2 or LGPL 2
 * Wiki
+* Add code license - Apache 2 or LGPL 2
+* Move to do / bug list to github page
 * Make flatpak
 
 

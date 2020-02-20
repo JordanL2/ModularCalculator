@@ -48,20 +48,24 @@ class Engine:
         if len(expr) > 0:
 
             try:
+                # Parse statements from expression
                 statements, length, return_flags = self.parse(expr, flags)
 
                 for i, items in enumerate(statements):
                     result = CalculatorResult(items_text(items), items)
                     result.set_timing('parse', return_flags['times'][i])
 
+                    # Only execute statement if there are functional items in it
                     if len(functional_items(items)) > 0 and ('parse_only' not in flags or not flags['parse_only']):
                         try:
+                            # Execute statement, time how long it takes
                             start_time = time.perf_counter()
                             answer = self.execute(items, flags)
                             if isinstance(answer.value, Exception):
                                 raise answer.value
                             result.set_timing('exec', time.perf_counter() - start_time)
 
+                            # Finalize the answer, time how long it takes
                             start_time = time.perf_counter()
                             final = self.finalize(answer)
                             result.set_timing('finalize', time.perf_counter() - start_time)
@@ -94,36 +98,40 @@ class Engine:
         while(i < len(expr)):
             next = expr[i:]
 
+            # Iterate through list of parsers, attempt to parse the next part of the expression with each one
             for parser in self.parsers:
-                items_found, length, return_flags = None, None, None
                 try:
                     items_found, length, return_flags = parser['ref'](self, expr, i, statements[-1], flags.copy())
                 except ParseException as err:
                     statements[-1].extend(err.items)
                     raise ParsingException(err.message, statements, err.next)
 
+                break_after_this = False
                 if items_found is not None or (length is not None and length > 0):
+                    # Items were found, or length was > 0, meaning we should advance though the expression
+                    break_after_this = True
                     if items_found is not None:
+                        # Add the items found to the current statement
                         statements[-1].extend(items_found)
                     if length is not None:
+                        # Advance our position in the expression
                         i += length
-                    if return_flags is not None and 'end_statement' in return_flags:
-                        return_flags = self.update_times(start_time, statements, times, return_flags)
-                        start_time = time.perf_counter()
-                        statements.append([])
-                    if return_flags is not None and 'end' in return_flags:
-                        return_flags = self.update_times(start_time, statements, times, return_flags)
-                        return statements, i, return_flags
-                    break
 
                 if return_flags is not None and 'end_statement' in return_flags:
+                    # The current statement has been terminated, start a fresh one
                     return_flags = self.update_times(start_time, statements, times, return_flags)
                     start_time = time.perf_counter()
                     statements.append([])
                 if return_flags is not None and 'end' in return_flags:
+                    # All parsing has been terminated (for example, we're parsing an inner statement and hit a closing bracket)
                     return_flags = self.update_times(start_time, statements, times, return_flags)
                     return statements, i, return_flags
 
+                # Since a parser returned something, we start from the list of parsers at the beginning next time
+                if break_after_this:
+                    break
+
+            # If our position has not changed after going through the entire list of parsers, then we've hit something we cannot parse
             if i == lasti:
                 raise ParsingException("Could not parse: {0}".format(next), statements, next)
             lasti = i
