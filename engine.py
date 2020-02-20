@@ -251,15 +251,17 @@ class Engine:
         return item
 
     def execute_operator(self, sym, items, i, opwidth, original_items, flags):
-        item = None
+        op_item = None
         if opwidth == 1:
-            item = items[i]
+            # If opwidth is 0, then it's an invisible operator
+            op_item = items[i]
         op = self.ops_list[sym]
         linputs = op.linputs
         rinputs = op.rinputs
         item_index = items[i]._INDEX
         previous_items = original_items[0:item_index]
 
+        # Using operator's expected left and right inputs, make a list of expected and actual inputs for the operator
         input_start = min(i - len(linputs), i)
         if input_start < 0:
             raise ExecuteException("Missing left operands for operator {0}".format(sym), previous_items, sym)
@@ -269,6 +271,7 @@ class Engine:
         actual_items = [items[index] for index in list(range(input_start, i)) + list(range(i + opwidth, input_end))]
         expected_items = linputs + rinputs
 
+        # Validate the actual inputs match the expected inputs
         inputs = []
         for index, this_item in enumerate(actual_items):
             expected_item = expected_items[index]
@@ -284,16 +287,18 @@ class Engine:
             op_result = inputs[0]
             op_result._INDEX = item_index
         else:
+            # Execute the operator code with the inputs
             try:
                 op_result = op.call(self, inputs, flags)
                 op_result._INDEX = item_index
             except CalculatorException as err:
                 values = str.join(', ', ["'" + str(op_input) + "'" for op_input in inputs])
                 itemtext = None
-                if item is not None:
-                    itemtext = item.text
+                if op_item is not None:
+                    itemtext = op_item.text
                 raise ExecuteException("Could not execute operator {0} with operands: {1} - {2}".format(sym, values, err.message), previous_items, itemtext)
 
+        # Return the list of items, with the operator and its input replaced with the operator result
         return items[0:input_start] + [op_result] + items[input_end:]
 
     def restore_non_functional_items(self, err, original_items, very_original_items):
@@ -319,10 +324,12 @@ class Engine:
         if answer is None:
             return None
         if type(answer.value) == list:
+            # If answer is an array, apply finalization to each element
             for i, ans in enumerate(answer.value):
                 answer.value[i] = self.finalize(ans)
         else:
             if self.unit_normaliser is not None and self.unit_simplification and answer.unit is not None and not answer.unit.no_simplify:
+                # Simplify the answer's unit
                 answer.value, answer.unit = self.unit_normaliser.simplify_units(answer.value, answer.unit)
             for finalizer in self.finalizers:
                 answer = finalizer['ref'](self, answer)
