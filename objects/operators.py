@@ -200,7 +200,10 @@ class Operation:
             # Cycle through each param this restriction applies to, and make sure it matches at least one allowed type
             objtypes = restriction['objtypes']
             for i in range(fromparam, toparam):
-                if len([o for o in objtypes if self.validate_input(o, calculator, values[i], units[i], refs[i])]) == 0:
+                for objtype in objtypes:
+                    if self.validate_input(objtype, calculator, values[i], units[i], refs[i]):
+                        break
+                else:
                     raise CalculatorException("{0} parameter {1} must be of type(s) {2}".format(self.name, i + 1, str.join(', ', objtypes)))
 
         # Check all restrictions on input units are true
