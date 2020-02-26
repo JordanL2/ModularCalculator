@@ -111,6 +111,7 @@ tests = [
     { 'test': r"meters * meters", 'expected': 'meters^2' },
     { 'test': r"2 meters * 3 meters", 'expected': (Decimal('6'), 'meters^2') },
     { 'test': r"20 meters / 5 meters", 'expected': Decimal('4') },
+    { 'test': r"20 meters \ 5 meters", 'expected': Decimal('4') },
     { 'test': r"12 meters * 3°C", 'expected': (Decimal('36'), 'meter Celsius') },
     { 'test': r"2 meters * 3 meters * 4 meters", 'expected': (Decimal('24'), 'meters^3') },
     { 'test': r"(2 meters * 3 meters * 4 meters) / 2 meters", 'expected': (Decimal('12'), 'meters^2') },
