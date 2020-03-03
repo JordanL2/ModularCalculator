@@ -31,6 +31,7 @@ class UnitsFeature(Feature):
         calculator.unit_normaliser.prefixes = [
             (None, None, Decimal('1')),
         ]
+        calculator.unit_symbols_enabled = False
 
         calculator.add_parser('units', UnitsFeature.parse_units)
         
@@ -92,12 +93,13 @@ class UnitsFeature(Feature):
                     unitobj = UnitPowerList.newfromunit(unit_def)
                     return [UnitItem(unittext, unitobj)], len(unittext), None
             
-            symbol = next[0: length]
-            if symbol in self.unit_normaliser.unitsymbols:
-                if len(next) == len(symbol) or not next[len(symbol)].isalpha():
-                    unit_def = self.unit_normaliser.get_unit(symbol)
-                    unitobj = UnitPowerList.newfromunit(unit_def)
-                    return [UnitItem(symbol, unitobj)], len(symbol), None
+            if self.unit_symbols_enabled:
+                symbol = next[0: length]
+                if symbol in self.unit_normaliser.unitsymbols:
+                    if len(next) == len(symbol) or not next[len(symbol)].isalpha():
+                        unit_def = self.unit_normaliser.get_unit(symbol)
+                        unitobj = UnitPowerList.newfromunit(unit_def)
+                        return [UnitItem(symbol, unitobj)], len(symbol), None
             
         return None, None, None
 

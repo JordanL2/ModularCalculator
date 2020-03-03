@@ -55,6 +55,7 @@ These examples are available in examples/basic_integration.py. See examples/adva
 
 ## Features
 * Date timezones
+* Perhaps a separate feature to enable c = speed of light - not included in any preset by default
 
 ## Functions
 * Split - should substring be a regex? Maybe a new function for splitting on regex? regexsplit?

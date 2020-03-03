@@ -10,6 +10,7 @@ import argparse
 
 print("ScientificCalculator tests:")
 c = ModularCalculator('Scientific')
+c.install_features(['units.unitsymbols'])
 hl = SyntaxHighlighter()
 
 parser = argparse.ArgumentParser()
