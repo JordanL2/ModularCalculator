@@ -6,25 +6,12 @@ from PyQt5.QtWidgets import QApplication
 import html
 
 
-def htmlSafe(text, breaking=False):
-    htmlText = ''
-
-    i = 0
+def htmlSafe(text):
     text_escape = html.escape(str(text))
-    for c in text_escape:
-        if c == ' ':
-            # If this text should line-wrap, replace every other non-breaking space with a normal space
-            # so the line wraps, but multiple spaces don't get compacted down to one
-            i += 1
-            if not breaking or i % 2 == 0:
-                c = '&nbsp;'
-        else:
-            i = 0
-            if c == "\n":
-                c = '<br/>'
-        htmlText += c
+    text_escape = text_escape.replace(' ', '&nbsp;')
+    text_escape = text_escape.replace("\n", '<br/>')
 
-    return htmlText
+    return text_escape
 
 def screenRelativeSize(width, height):
     size = QSize()

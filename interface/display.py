@@ -86,8 +86,8 @@ class CalculatorDisplay(QWidget):
                 answerHtml = self.renderAnswerRow(row.answer, row.unit)
 
         elif isinstance(row, CalculatorDisplayError):
-            questionHtml, _ = self.interface.entry.makeHtml([row.err.statements[-1]], row.question[row.i:], True)
-            answerHtml = makeSpan(htmlSafe(row.err.message, True), 'error')
+            questionHtml, _ = self.interface.entry.makeHtml([row.err.statements[-1]], row.question[row.i:])
+            answerHtml = makeSpan(htmlSafe(row.err.message), 'error')
 
         else:
             raise Exception("Unrecognised type in renderAnswer: {}".format(type(row)))
@@ -101,9 +101,9 @@ class CalculatorDisplay(QWidget):
                 unit_parts = answer.symbol(False)
             else:
                 unit_parts = answer.singular(False, False)
-            answer_rendered = ''.join([makeSpan(htmlSafe(u[0], True), u[1]) for u in unit_parts])
+            answer_rendered = ''.join([makeSpan(htmlSafe(u[0]), u[1]) for u in unit_parts])
         else:
-            answer_rendered = makeSpan(htmlSafe(answer, True), 'literal')
+            answer_rendered = makeSpan(htmlSafe(answer), 'literal')
         if unit is not None:
             if self.options['shortunits'] and unit.has_symbols():
                 unit_parts = unit.symbol(False)
@@ -111,7 +111,7 @@ class CalculatorDisplay(QWidget):
                 answer_number = self.interface.calculatormanager.calculator.number(answer)[0]
                 unit_parts = unit.get_name(answer_number, False)
                 unit_parts = [(' ', 'space')] + unit_parts
-            unit = ''.join([makeSpan(htmlSafe(u[0], True), u[1]) for u in unit_parts])
+            unit = ''.join([makeSpan(htmlSafe(u[0]), u[1]) for u in unit_parts])
         else:
             unit = ''
         return self.interface.entry.css + answer_rendered + unit
@@ -143,7 +143,7 @@ class CalculatorDisplay(QWidget):
 
     def questionHtml(self, expr):
         statements, _, _ = self.interface.calculatormanager.calculator.parse(expr, {})
-        html, _ = self.interface.entry.makeHtml(statements, '', True)
+        html, _ = self.interface.entry.makeHtml(statements, '')
         return html
 
     def insertAnswer(self, widget, e):
