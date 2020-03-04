@@ -41,19 +41,24 @@ class CalculatorDisplay(QWidget):
 
     def refresh(self):
         self.clearLayout(self.layout)
+        widgets = []
 
         for n, row in enumerate(self.rawOutput):
             questionWidget, answerWidget = self.renderAnswer(row, n)
             questionWidget.setPartner(answerWidget)
             answerWidget.setPartner(questionWidget)
-
             self.layout.addWidget(questionWidget, n, 0, 1, 1)
             self.layout.addWidget(answerWidget, n, 1, 1, 1)
+            widgets.append((questionWidget, answerWidget))
 
         verticalSpacer = QSpacerItem(40, 20, QSizePolicy.Ignored, QSizePolicy.Expanding)
         self.layout.addItem(verticalSpacer, len(self.rawOutput), 0, 1, 2, Qt.AlignTop)
 
         self.layout.update()
+
+        for n, pair in enumerate(widgets):
+            pair[0].doResize()
+            pair[1].doResize()
 
     def clearLayout(self, layout):
         while True:

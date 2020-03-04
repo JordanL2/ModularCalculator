@@ -3,7 +3,7 @@
 from modularcalculator.interface.guitools import *
 
 from PyQt5.QtCore import Qt, QStringListModel, QSize
-from PyQt5.QtGui import QFontMetrics, QTextDocument, QGuiApplication, QPalette
+from PyQt5.QtGui import QFontMetrics, QTextDocument, QGuiApplication, QPalette, QTextOption
 from PyQt5.QtWidgets import QListWidget, QWidgetAction, QSpinBox, QLabel, QHBoxLayout, QVBoxLayout, QWidget, QListView, QDialog, QAbstractItemView, QPushButton, QCalendarWidget, QTimeEdit, QComboBox, QTabBar, QSizePolicy, QTextEdit, QFrame
 
 
@@ -282,6 +282,8 @@ class DisplayLabel2(QTextEdit):
         self.setReadOnly(True)
         self.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.TextSelectableByKeyboard)
 
+        self.setWordWrapMode(QTextOption.WrapAnywhere)
+
         colorRole = display.colours[n % len(display.colours)]
         backgroundColor = QGuiApplication.palette().color(colorRole)
         palette = self.palette()
@@ -299,18 +301,22 @@ class DisplayLabel2(QTextEdit):
     def setPartner(self, partner):
         self.partner = partner
 
-    def sizeHint(self):
-        size = super().sizeHint()
-        size.setHeight(self.optimumHeight())
+    def optimumHeight(self):
+        fontMetrics = self.fontMetrics()
+        width = self.width()
+        boundingRect = fontMetrics.boundingRect(0, 0, self.width(), 1000, Qt.AlignLeft | Qt.AlignTop | Qt.TextWordWrap, self.toPlainText())
+        return boundingRect.height() + 10
+
+    def resizeEvent(self, e):
+        super().resizeEvent(e)
+        self.doResize()
+
+    def doResize(self):
+        height = self.optimumHeight()
 
         if self.partner is not None:
             partnerHeight = self.partner.optimumHeight()
-            if partnerHeight > size.height():
-                size.setHeight(partnerHeight)
+            if partnerHeight > height:
+                height = partnerHeight
 
-        return size
-
-    def optimumHeight(self):
-        #TODO rewrite this to calculate best height based on text content
-        size = super().sizeHint()
-        return size.height()
+        self.setFixedHeight(height)
