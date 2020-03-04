@@ -298,3 +298,19 @@ class DisplayLabel2(QTextEdit):
 
     def setPartner(self, partner):
         self.partner = partner
+
+    def sizeHint(self):
+        size = super().sizeHint()
+        size.setHeight(self.optimumHeight())
+
+        if self.partner is not None:
+            partnerHeight = self.partner.optimumHeight()
+            if partnerHeight > size.height():
+                size.setHeight(partnerHeight)
+
+        return size
+
+    def optimumHeight(self):
+        #TODO rewrite this to calculate best height based on text content
+        size = super().sizeHint()
+        return size.height()
