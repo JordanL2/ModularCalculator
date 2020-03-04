@@ -6,7 +6,7 @@ from modularcalculator.objects.units import *
 
 from PyQt5.QtCore import Qt, QTimer, QCoreApplication
 from PyQt5.QtGui import QFontDatabase, QPalette
-from PyQt5.QtWidgets import QTextEdit, QWidget, QGridLayout, QLabel, QVBoxLayout, QSizePolicy
+from PyQt5.QtWidgets import QTextEdit, QWidget, QGridLayout, QLabel, QVBoxLayout, QSizePolicy, QSpacerItem
 
 
 class CalculatorDisplay(QWidget):
@@ -55,6 +55,9 @@ class CalculatorDisplay(QWidget):
 
             self.layout.addWidget(questionWidget, n, 0, 1, 1)
             self.layout.addWidget(answerWidget, n, 1, 1, 1)
+
+        verticalSpacer = QSpacerItem(40, 20, QSizePolicy.Ignored, QSizePolicy.Expanding)
+        self.layout.addItem(verticalSpacer, len(self.rawOutput), 0, 1, 2, Qt.AlignTop)
 
         self.layout.update()
 

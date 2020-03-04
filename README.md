@@ -56,6 +56,8 @@ These examples are available in examples/basic_integration.py. See examples/adva
 ## Features
 * Date timezones
 * Perhaps a separate feature to enable c = speed of light - not included in any preset by default
+	* Perhaps e and G should also be moved to this feature, and have long names by default?
+* Consider if unit symbols should be enabled by default
 
 ## Functions
 * Split - should substring be a regex? Maybe a new function for splitting on regex? regexsplit?
@@ -66,6 +68,7 @@ These examples are available in examples/basic_integration.py. See examples/adva
 
 ## Graphical Interface
 * Functionality:
+	* Make display properly wrap answers
 
 * Usability / quality of life:
 	* Save state any time it changes
