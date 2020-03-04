@@ -3,8 +3,8 @@
 from modularcalculator.interface.guitools import *
 
 from PyQt5.QtCore import Qt, QStringListModel, QSize
-from PyQt5.QtGui import QFontMetrics, QTextDocument
-from PyQt5.QtWidgets import QListWidget, QWidgetAction, QSpinBox, QLabel, QHBoxLayout, QVBoxLayout, QWidget, QListView, QDialog, QAbstractItemView, QPushButton, QCalendarWidget, QTimeEdit, QComboBox, QTabBar, QSizePolicy, QTextEdit
+from PyQt5.QtGui import QFontMetrics, QTextDocument, QGuiApplication, QPalette
+from PyQt5.QtWidgets import QListWidget, QWidgetAction, QSpinBox, QLabel, QHBoxLayout, QVBoxLayout, QWidget, QListView, QDialog, QAbstractItemView, QPushButton, QCalendarWidget, QTimeEdit, QComboBox, QTabBar, QSizePolicy, QTextEdit, QFrame
 
 
 class SelectionDialog(QDialog):
@@ -278,6 +278,17 @@ class DisplayLabel2(QTextEdit):
         self.partner = None
         self.display = display
         self.middleClickFunction = middleClickFunction
+
+        self.setReadOnly(True)
+        self.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.TextSelectableByKeyboard)
+
+        colorRole = display.colours[n % len(display.colours)]
+        backgroundColor = QGuiApplication.palette().color(colorRole)
+        palette = self.palette()
+        palette.setColor(QPalette.Base, backgroundColor)
+        self.setPalette(palette)
+
+        self.setFrameStyle(QFrame.NoFrame)
 
     def mouseReleaseEvent(self, e):
         if self.middleClickFunction is not None and e.button() == Qt.MiddleButton:
