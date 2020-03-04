@@ -44,14 +44,8 @@ class CalculatorDisplay(QWidget):
 
         for n, row in enumerate(self.rawOutput):
             questionWidget, answerWidget = self.renderAnswer(row, n)
-
-            # Make the two widgets the same size
-            questionHeight = questionWidget.sizeHint().height()
-            answerHeight = answerWidget.sizeHint().height()
-            if questionHeight < answerHeight:
-                questionWidget.height = answerHeight
-            else:
-                answerWidget.height = questionHeight
+            questionWidget.partner = answerWidget
+            answerWidget.partner = questionWidget
 
             self.layout.addWidget(questionWidget, n, 0, 1, 1)
             self.layout.addWidget(answerWidget, n, 1, 1, 1)
@@ -127,7 +121,7 @@ class CalculatorDisplay(QWidget):
         return widget
 
     def makeQuestionWidget(self, questionHtml, n):
-        questionWidget = self.makeStatementWidget(FixedSizeLabel(questionHtml), n)
+        questionWidget = self.makeStatementWidget(DisplayLabel(questionHtml), n)
         questionFont = QFontDatabase.systemFont(QFontDatabase.FixedFont)
         questionFont.setPointSize(10)
         questionWidget.setFont(questionFont)
