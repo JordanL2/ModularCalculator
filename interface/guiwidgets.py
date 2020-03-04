@@ -229,7 +229,6 @@ class DisplayLabel(QLabel):
     def __init__(self, html, n, display, middleClickFunction=None):
         super().__init__()
         self.setTextFormat(Qt.RichText)
-        self.originalHtml = html
         self.setText(html)
         self.partner = None
         self.display = display
@@ -240,7 +239,6 @@ class DisplayLabel(QLabel):
         self.setAutoFillBackground(True)
         self.setMargin(display.margin)
         self.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.TextSelectableByKeyboard)
-        #widget.setWordWrap(True)
         self.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Maximum)
 
     def sizeHint(self):
@@ -267,3 +265,6 @@ class DisplayLabel(QLabel):
         doc = QTextDocument()
         doc.setHtml(self.text())
         return doc.toPlainText()
+
+    def setPartner(self, partner):
+        self.partner = partner

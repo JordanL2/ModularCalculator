@@ -44,8 +44,8 @@ class CalculatorDisplay(QWidget):
 
         for n, row in enumerate(self.rawOutput):
             questionWidget, answerWidget = self.renderAnswer(row, n)
-            questionWidget.partner = answerWidget
-            answerWidget.partner = questionWidget
+            questionWidget.setPartner(answerWidget)
+            answerWidget.setPartner(questionWidget)
 
             self.layout.addWidget(questionWidget, n, 0, 1, 1)
             self.layout.addWidget(answerWidget, n, 1, 1, 1)
