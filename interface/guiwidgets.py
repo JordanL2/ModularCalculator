@@ -4,7 +4,7 @@ from modularcalculator.interface.guitools import *
 
 from PyQt5.QtCore import Qt, QStringListModel, QSize
 from PyQt5.QtGui import QFontMetrics, QTextDocument
-from PyQt5.QtWidgets import QListWidget, QWidgetAction, QSpinBox, QLabel, QHBoxLayout, QVBoxLayout, QWidget, QListView, QDialog, QAbstractItemView, QPushButton, QCalendarWidget, QTimeEdit, QComboBox, QTabBar, QSizePolicy
+from PyQt5.QtWidgets import QListWidget, QWidgetAction, QSpinBox, QLabel, QHBoxLayout, QVBoxLayout, QWidget, QListView, QDialog, QAbstractItemView, QPushButton, QCalendarWidget, QTimeEdit, QComboBox, QTabBar, QSizePolicy, QTextEdit
 
 
 class SelectionDialog(QDialog):
@@ -261,10 +261,29 @@ class DisplayLabel(QLabel):
         else:
             super().mouseReleaseEvent(e)
 
-    def getPlainText(self):
+    def toPlainText(self):
         doc = QTextDocument()
         doc.setHtml(self.text())
         return doc.toPlainText()
+
+    def setPartner(self, partner):
+        self.partner = partner
+
+
+class DisplayLabel2(QTextEdit):
+
+    def __init__(self, html, n, display, middleClickFunction=None):
+        super().__init__()
+        self.setHtml(html)
+        self.partner = None
+        self.display = display
+        self.middleClickFunction = middleClickFunction
+
+    def mouseReleaseEvent(self, e):
+        if self.middleClickFunction is not None and e.button() == Qt.MiddleButton:
+            self.middleClickFunction(self.display, self, e)
+        else:
+            super().mouseReleaseEvent(e)
 
     def setPartner(self, partner):
         self.partner = partner
