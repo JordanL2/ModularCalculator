@@ -283,6 +283,7 @@ class DisplayLabel2(QTextEdit):
         self.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.TextSelectableByKeyboard)
 
         self.setWordWrapMode(QTextOption.WrapAnywhere)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
         colorRole = display.colours[n % len(display.colours)]
         backgroundColor = QGuiApplication.palette().color(colorRole)
@@ -303,9 +304,9 @@ class DisplayLabel2(QTextEdit):
 
     def optimumHeight(self):
         fontMetrics = self.fontMetrics()
-        width = self.width()
+        width = self.contentsRect().width() - 10
         boundingRect = fontMetrics.boundingRect(0, 0, self.width(), 1000, Qt.AlignLeft | Qt.AlignTop | Qt.TextWordWrap, self.toPlainText())
-        return boundingRect.height() + 10
+        return boundingRect.height() + self.contentsMargins().bottom() + self.contentsMargins().top() + 10
 
     def resizeEvent(self, e):
         super().resizeEvent(e)
