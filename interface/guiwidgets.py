@@ -304,8 +304,8 @@ class DisplayLabel2(QTextEdit):
 
     def optimumHeight(self):
         fontMetrics = self.fontMetrics()
-        width = self.contentsRect().width() - 10
-        boundingRect = fontMetrics.boundingRect(0, 0, self.width(), 1000, Qt.AlignLeft | Qt.AlignTop | Qt.TextWordWrap, self.toPlainText())
+        width = self.contentsRect().width() - 30
+        boundingRect = fontMetrics.boundingRect(0, 0, width, 1000, Qt.AlignLeft | Qt.AlignTop | Qt.TextWrapAnywhere, self.toPlainText())
         #print(self.toPlainText(), width, boundingRect.height())
         return boundingRect.height() + self.contentsMargins().bottom() + self.contentsMargins().top() + 10
 
