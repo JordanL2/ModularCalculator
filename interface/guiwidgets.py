@@ -3,7 +3,7 @@
 from modularcalculator.interface.guitools import *
 
 from PyQt5.QtCore import Qt, QStringListModel, QSize
-from PyQt5.QtGui import QFontMetrics
+from PyQt5.QtGui import QFontMetrics, QTextDocument
 from PyQt5.QtWidgets import QListWidget, QWidgetAction, QSpinBox, QLabel, QHBoxLayout, QVBoxLayout, QWidget, QListView, QDialog, QAbstractItemView, QPushButton, QCalendarWidget, QTimeEdit, QComboBox, QTabBar, QSizePolicy
 
 
@@ -262,3 +262,8 @@ class DisplayLabel(QLabel):
             self.middleClickFunction(self.display, self, e)
         else:
             super().mouseReleaseEvent(e)
+
+    def getPlainText(self):
+        doc = QTextDocument()
+        doc.setHtml(self.text())
+        return doc.toPlainText()

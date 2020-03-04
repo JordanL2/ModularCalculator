@@ -131,7 +131,7 @@ class CalculatorDisplay(QWidget):
         return html
 
     def insertAnswer(self, widget, e):
-        self.interface.entry.insert(widget.text())
+        self.interface.entry.insert(widget.getPlainText())
         self.interface.entry.setFocus()
 
     def restoreState(self, state):
