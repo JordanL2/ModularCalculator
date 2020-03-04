@@ -306,11 +306,14 @@ class DisplayLabel2(QTextEdit):
         fontMetrics = self.fontMetrics()
         width = self.contentsRect().width() - 10
         boundingRect = fontMetrics.boundingRect(0, 0, self.width(), 1000, Qt.AlignLeft | Qt.AlignTop | Qt.TextWordWrap, self.toPlainText())
+        #print(self.toPlainText(), width, boundingRect.height())
         return boundingRect.height() + self.contentsMargins().bottom() + self.contentsMargins().top() + 10
 
     def resizeEvent(self, e):
         super().resizeEvent(e)
         self.doResize()
+        if e.oldSize().width() != e.size().width() and self.partner is not None:
+            self.partner.doResize()
 
     def doResize(self):
         height = self.optimumHeight()
