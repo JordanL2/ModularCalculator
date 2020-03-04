@@ -226,19 +226,19 @@ class MiddleClickCloseableTabBar(QTabBar):
 
 class DisplayLabel(QLabel):
 
-    def __init__(self, html, n, interface, middleClickFunction=None):
+    def __init__(self, html, n, display, middleClickFunction=None):
         super().__init__()
         self.setTextFormat(Qt.RichText)
         self.originalHtml = html
         self.setText(html)
         self.partner = None
-        self.interface = interface
+        self.display = display
         self.middleClickFunction = middleClickFunction
 
         self.setAlignment(Qt.AlignLeft | Qt.AlignTop)
-        self.setBackgroundRole(interface.colours[n % len(interface.colours)])
+        self.setBackgroundRole(display.colours[n % len(display.colours)])
         self.setAutoFillBackground(True)
-        self.setMargin(interface.margin)
+        self.setMargin(display.margin)
         self.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.TextSelectableByKeyboard)
         #widget.setWordWrap(True)
         self.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Maximum)
@@ -259,6 +259,6 @@ class DisplayLabel(QLabel):
 
     def mouseReleaseEvent(self, e):
         if self.middleClickFunction is not None and e.button() == Qt.MiddleButton:
-            self.middleClickFunction(self.interface, self, e)
+            self.middleClickFunction(self.display, self, e)
         else:
             super().mouseReleaseEvent(e)
