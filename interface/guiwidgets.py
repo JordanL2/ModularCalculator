@@ -4,7 +4,7 @@ from modularcalculator.interface.guitools import *
 
 from PyQt5.QtCore import Qt, QStringListModel, QSize
 from PyQt5.QtGui import QFontMetrics
-from PyQt5.QtWidgets import QListWidget, QWidgetAction, QSpinBox, QLabel, QHBoxLayout, QVBoxLayout, QWidget, QListView, QDialog, QAbstractItemView, QPushButton, QCalendarWidget, QTimeEdit, QComboBox, QTabBar
+from PyQt5.QtWidgets import QListWidget, QWidgetAction, QSpinBox, QLabel, QHBoxLayout, QVBoxLayout, QWidget, QListView, QDialog, QAbstractItemView, QPushButton, QCalendarWidget, QTimeEdit, QComboBox, QTabBar, QSizePolicy
 
 
 class SelectionDialog(QDialog):
@@ -226,12 +226,22 @@ class MiddleClickCloseableTabBar(QTabBar):
 
 class DisplayLabel(QLabel):
 
-    def __init__(self, html):
+    def __init__(self, html, n, interface, middleClickFunction=None):
         super().__init__()
         self.setTextFormat(Qt.RichText)
         self.originalHtml = html
         self.setText(html)
         self.partner = None
+        self.interface = interface
+        self.middleClickFunction = middleClickFunction
+
+        self.setAlignment(Qt.AlignLeft | Qt.AlignTop)
+        self.setBackgroundRole(interface.colours[n % len(interface.colours)])
+        self.setAutoFillBackground(True)
+        self.setMargin(interface.margin)
+        self.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.TextSelectableByKeyboard)
+        #widget.setWordWrap(True)
+        self.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Maximum)
 
     def sizeHint(self):
         size = super().sizeHint()
@@ -247,16 +257,8 @@ class DisplayLabel(QLabel):
         size = super().sizeHint()
         return size.height()
 
-
-class MiddleClickableLabel(DisplayLabel):
-
-    def __init__(self, interface, html, middleClickFunction):
-        self.interface = interface
-        super().__init__(html)
-        self.middleClickFunction = middleClickFunction
-
     def mouseReleaseEvent(self, e):
-        if e.button() == Qt.MiddleButton:
+        if self.middleClickFunction is not None and e.button() == Qt.MiddleButton:
             self.middleClickFunction(self.interface, self, e)
         else:
             super().mouseReleaseEvent(e)
