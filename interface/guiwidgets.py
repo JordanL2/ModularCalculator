@@ -311,8 +311,8 @@ class DisplayLabel2(QTextEdit):
 
     def resizeEvent(self, e):
         super().resizeEvent(e)
-        self.doResize()
         if e.oldSize().width() != e.size().width() and self.partner is not None:
+            self.doResize()
             self.partner.doResize()
 
     def doResize(self):
