@@ -24,7 +24,6 @@ class CalculatorDisplay(QWidget):
 
     def defaultStyling(self):
         self.colours = [ QPalette.Base, QPalette.AlternateBase ]
-        self.margin = 10
 
     def initOutput(self):
         self.rawOutput = []

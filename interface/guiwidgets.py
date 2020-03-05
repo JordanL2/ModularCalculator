@@ -304,17 +304,17 @@ class DisplayLabel2(QTextEdit):
 
     def optimumHeight(self):
         fontMetrics = self.fontMetrics()
-        width = self.contentsRect().width() - 30
-        boundingRect = fontMetrics.boundingRect(0, 0, width, 1000, Qt.AlignLeft | Qt.AlignTop | Qt.TextWrapAnywhere, self.toPlainText())
-        #print(self.toPlainText(), width, boundingRect.height())
-        return boundingRect.height() + self.contentsMargins().bottom() + self.contentsMargins().top() + 10
+        width = self.contentsRect().width() - 20
+        boundingRect = fontMetrics.boundingRect(0, 0, width, 0, Qt.AlignLeft | Qt.AlignTop | Qt.TextWrapAnywhere, self.toPlainText())
+        height = boundingRect.height() + self.contentsMargins().bottom() + self.contentsMargins().top() + 10
+        #print(self.toPlainText()[0:20], width, height)
+        return height
 
     def resizeEvent(self, e):
         super().resizeEvent(e)
-        if e.oldSize().width() != e.size().width():
-            self.doResize()
-            if self.partner is not None:
-                self.partner.doResize()
+        self.doResize()
+        if self.partner is not None:
+            self.partner.doResize()
 
     def doResize(self):
         height = self.optimumHeight()
@@ -323,5 +323,6 @@ class DisplayLabel2(QTextEdit):
             partnerHeight = self.partner.optimumHeight()
             if partnerHeight > height:
                 height = partnerHeight
+                #print("using partner height", partnerHeight)
 
         self.setFixedHeight(height)
