@@ -313,11 +313,9 @@ class DisplayLabel2(QTextEdit):
 
     def resizeEvent(self, e):
         super().resizeEvent(e)
-        height = self.doResize()
-        if self.partner is not None:
-            self.partner.doResize(height)
+        self.doResize()
 
-    def doResize(self, partnerHeight=None):
+    def doResize(self):
         height = self.optimumHeight()
 
         if height >= self.maxHeight:
@@ -327,11 +325,16 @@ class DisplayLabel2(QTextEdit):
             self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
         if self.partner is not None:
-            if partnerHeight is None:
-                partnerHeight = self.partner.optimumHeight()
-            if partnerHeight > height:
-                height = partnerHeight
+            partnerHeight = self.partner.optimumHeight()
                 #print("using partner height", partnerHeight)
 
+            if partnerHeight >= self.maxHeight:
+                self.partner.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+            else:
+                self.partner.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+
+            if partnerHeight > height:
+                height = partnerHeight
+            self.partner.setFixedHeight(min(height, self.maxHeight))
+
         self.setFixedHeight(min(height, self.maxHeight))
-        return height
