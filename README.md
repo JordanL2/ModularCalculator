@@ -11,7 +11,7 @@ Also has a Qt interface, allowing it to be used as a desktop app. The supported 
 
 * Linux (other operating systems not tested)
 * Python 3.4+
-* Qt 5 (todo - figure out precisely which minor version is minimum)
+* Qt 5.11+
 * PyQt5
 
 
