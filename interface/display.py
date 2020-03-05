@@ -5,7 +5,7 @@ from modularcalculator.interface.guiwidgets import *
 from modularcalculator.objects.units import *
 
 from PyQt5.QtCore import Qt, QPointF
-from PyQt5.QtGui import QFontDatabase, QPalette, QTextOption, QGuiApplication, QTextLayout
+from PyQt5.QtGui import QFontDatabase, QPalette, QTextOption, QGuiApplication, QTextLayout, QTextDocument
 from PyQt5.QtWidgets import QTextEdit, QWidget, QGridLayout, QSizePolicy, QSpacerItem, QFrame
 
 import math
@@ -217,6 +217,7 @@ class DisplayLabel(QTextEdit):
         self.setPalette(palette)
 
         self.setFrameStyle(QFrame.NoFrame)
+        self.setLineWidth(0)
 
     def mouseReleaseEvent(self, e):
         if self.middleClickFunction is not None and e.button() == Qt.MiddleButton:
@@ -229,8 +230,11 @@ class DisplayLabel(QTextEdit):
         lineWidth = self.contentsRect().width() - 8
         fontMetrics = self.fontMetrics()
         leading = fontMetrics.leading()
+
+        doc = QTextDocument()
+        doc.setHtml(self.toHtml())
         
-        textLayout = QTextLayout(self.toPlainText(), self.font(), self)
+        textLayout = doc.firstBlock().layout()
         textLayout.setCacheEnabled(True)
         textOption = QTextOption()
         textOption.setWrapMode(QTextOption.WrapAnywhere)
