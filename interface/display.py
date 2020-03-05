@@ -5,7 +5,7 @@ from modularcalculator.interface.guiwidgets import *
 from modularcalculator.objects.units import *
 
 from PyQt5.QtCore import Qt, QPointF
-from PyQt5.QtGui import QFontDatabase, QPalette, QTextOption, QGuiApplication, QTextLayout, QTextDocument
+from PyQt5.QtGui import QFontDatabase, QPalette, QTextOption, QGuiApplication
 from PyQt5.QtWidgets import QTextEdit, QWidget, QGridLayout, QSizePolicy, QSpacerItem, QFrame
 
 import math
@@ -228,27 +228,27 @@ class DisplayLabel(QTextEdit):
     def optimumHeight(self):
         #TODO figure out why we need the -8 magic number
         lineWidth = self.contentsRect().width() - 8
-        fontMetrics = self.fontMetrics()
-        leading = fontMetrics.leading()
 
-        doc = QTextDocument()
-        doc.setHtml(self.toHtml())
-        
-        textLayout = doc.firstBlock().layout()
+        textLayout = self.document().firstBlock().layout()
         textLayout.setCacheEnabled(True)
         textOption = QTextOption()
         textOption.setWrapMode(QTextOption.WrapAnywhere)
         textLayout.setTextOption(textOption)
         textLayout.beginLayout()
+
         height = 0
         while (True):
             line = textLayout.createLine()
             if not line.isValid():
                 break
             line.setLineWidth(lineWidth)
-            height += leading
+            if not line.leadingIncluded():
+                height += line.leading()
             line.setPosition(QPointF(0, height))
             height += line.height()
         textLayout.endLayout()
         
-        return height + 10
+        #TODO should this be generated from the font?
+        verticalMargin = 10
+
+        return height + verticalMargin
