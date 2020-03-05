@@ -3,8 +3,8 @@
 from modularcalculator.interface.guitools import *
 
 from PyQt5.QtCore import Qt, QStringListModel, QSize
-from PyQt5.QtGui import QFontMetrics, QTextDocument, QGuiApplication, QPalette, QTextOption
-from PyQt5.QtWidgets import QListWidget, QWidgetAction, QSpinBox, QLabel, QHBoxLayout, QVBoxLayout, QWidget, QListView, QDialog, QAbstractItemView, QPushButton, QCalendarWidget, QTimeEdit, QComboBox, QTabBar, QSizePolicy, QTextEdit, QFrame
+from PyQt5.QtGui import QGuiApplication, QPalette, QTextOption
+from PyQt5.QtWidgets import QListWidget, QWidgetAction, QSpinBox, QLabel, QHBoxLayout, QVBoxLayout, QWidget, QListView, QDialog, QAbstractItemView, QPushButton, QCalendarWidget, QTimeEdit, QComboBox, QTabBar, QTextEdit, QFrame
 
 
 class SelectionDialog(QDialog):
@@ -224,53 +224,7 @@ class MiddleClickCloseableTabBar(QTabBar):
             super().mouseReleaseEvent(event)
 
 
-class DisplayLabel(QLabel):
-
-    def __init__(self, html, n, display, middleClickFunction=None):
-        super().__init__()
-        self.setTextFormat(Qt.RichText)
-        self.setText(html)
-        self.partner = None
-        self.display = display
-        self.middleClickFunction = middleClickFunction
-
-        self.setAlignment(Qt.AlignLeft | Qt.AlignTop)
-        self.setBackgroundRole(display.colours[n % len(display.colours)])
-        self.setAutoFillBackground(True)
-        self.setMargin(display.margin)
-        self.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.TextSelectableByKeyboard)
-        self.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Maximum)
-
-    def sizeHint(self):
-        size = super().sizeHint()
-
-        if self.partner is not None:
-            partnerHeight = self.partner.originalHeight()
-            if partnerHeight > size.height():
-                size.setHeight(partnerHeight)
-
-        return size
-
-    def originalHeight(self):
-        size = super().sizeHint()
-        return size.height()
-
-    def mouseReleaseEvent(self, e):
-        if self.middleClickFunction is not None and e.button() == Qt.MiddleButton:
-            self.middleClickFunction(self.display, self, e)
-        else:
-            super().mouseReleaseEvent(e)
-
-    def toPlainText(self):
-        doc = QTextDocument()
-        doc.setHtml(self.text())
-        return doc.toPlainText()
-
-    def setPartner(self, partner):
-        self.partner = partner
-
-
-class DisplayLabel2(QTextEdit):
+class DisplayLabel(QTextEdit):
 
     def __init__(self, html, n, display, middleClickFunction=None):
         super().__init__()
@@ -303,14 +257,6 @@ class DisplayLabel2(QTextEdit):
     def setPartner(self, partner):
         self.partner = partner
 
-    def optimumHeight(self):
-        fontMetrics = self.fontMetrics()
-        width = self.contentsRect().width() - 20
-        boundingRect = fontMetrics.boundingRect(0, 0, width, 0, Qt.AlignLeft | Qt.AlignTop | Qt.TextWrapAnywhere, self.toPlainText())
-        height = boundingRect.height() + self.contentsMargins().bottom() + self.contentsMargins().top() + 10
-        #print(self.toPlainText()[0:20], width, height)
-        return height
-
     def resizeEvent(self, e):
         super().resizeEvent(e)
         self.doResize()
@@ -329,12 +275,21 @@ class DisplayLabel2(QTextEdit):
                 #print("using partner height", partnerHeight)
 
             if partnerHeight >= self.maxHeight:
+                partnerHeight = self.maxHeight
                 self.partner.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
             else:
                 self.partner.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
             if partnerHeight > height:
                 height = partnerHeight
-            self.partner.setFixedHeight(min(height, self.maxHeight))
+            self.partner.setFixedHeight(height)
 
-        self.setFixedHeight(min(height, self.maxHeight))
+        self.setFixedHeight(height)
+
+    def optimumHeight(self):
+        fontMetrics = self.fontMetrics()
+        width = self.contentsRect().width() - 20
+        boundingRect = fontMetrics.boundingRect(0, 0, width, 0, Qt.AlignLeft | Qt.AlignTop | Qt.TextWrapAnywhere, self.toPlainText())
+        height = boundingRect.height() + self.contentsMargins().bottom() + self.contentsMargins().top() + 10
+        #print(self.toPlainText()[0:20], width, height)
+        return height
