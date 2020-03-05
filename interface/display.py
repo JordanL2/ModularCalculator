@@ -230,10 +230,6 @@ class DisplayLabel(QTextEdit):
         lineWidth = self.contentsRect().width() - 8
 
         textLayout = self.document().firstBlock().layout()
-        textLayout.setCacheEnabled(True)
-        textOption = QTextOption()
-        textOption.setWrapMode(QTextOption.WrapAnywhere)
-        textLayout.setTextOption(textOption)
         textLayout.beginLayout()
 
         height = 0
