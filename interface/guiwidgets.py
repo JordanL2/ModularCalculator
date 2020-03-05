@@ -284,6 +284,7 @@ class DisplayLabel2(QTextEdit):
 
         self.setWordWrapMode(QTextOption.WrapAnywhere)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.maxHeight = 500
 
         colorRole = display.colours[n % len(display.colours)]
         backgroundColor = QGuiApplication.palette().color(colorRole)
@@ -312,17 +313,25 @@ class DisplayLabel2(QTextEdit):
 
     def resizeEvent(self, e):
         super().resizeEvent(e)
-        self.doResize()
+        height = self.doResize()
         if self.partner is not None:
-            self.partner.doResize()
+            self.partner.doResize(height)
 
-    def doResize(self):
+    def doResize(self, partnerHeight=None):
         height = self.optimumHeight()
 
+        if height >= self.maxHeight:
+            height = self.maxHeight
+            self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        else:
+            self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+
         if self.partner is not None:
-            partnerHeight = self.partner.optimumHeight()
+            if partnerHeight is None:
+                partnerHeight = self.partner.optimumHeight()
             if partnerHeight > height:
                 height = partnerHeight
                 #print("using partner height", partnerHeight)
 
-        self.setFixedHeight(height)
+        self.setFixedHeight(min(height, self.maxHeight))
+        return height
