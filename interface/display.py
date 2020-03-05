@@ -8,6 +8,8 @@ from PyQt5.QtCore import Qt, QTimer, QCoreApplication
 from PyQt5.QtGui import QFontDatabase, QPalette, QTextOption, QGuiApplication
 from PyQt5.QtWidgets import QTextEdit, QWidget, QGridLayout, QSizePolicy, QSpacerItem, QFrame
 
+import math
+
 
 class CalculatorDisplay(QWidget):
 
@@ -224,8 +226,16 @@ class DisplayLabel(QTextEdit):
 
     def optimumHeight(self):
         fontMetrics = self.fontMetrics()
-        #TODO the -20 here is a hack to avoid clipping
-        width = self.contentsRect().width() - 20
-        boundingRect = fontMetrics.boundingRect(0, 0, width, 0, Qt.AlignLeft | Qt.AlignTop | Qt.TextWrapAnywhere, self.toPlainText())
-        height = boundingRect.height() + self.contentsMargins().bottom() + self.contentsMargins().top() + 10
+        width = self.contentsRect().width()
+        charRect = fontMetrics.boundingRect('_')
+        charWidth = charRect.width()
+        charHeight = charRect.height()
+        charsPerLine = math.floor(width / charWidth)
+        lines = 0
+        for line in self.toPlainText().split("\n"):
+            chars = len(line)
+            while chars > 0:
+                chars -= charsPerLine
+                lines += 1
+        height = lines * charHeight + 10
         return height
