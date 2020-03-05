@@ -43,8 +43,6 @@ class CalculatorDisplay(QWidget):
 
         for n, row in enumerate(self.rawOutput):
             questionWidget, answerWidget = self.renderAnswer(row, n)
-            questionWidget.setPartner(answerWidget)
-            answerWidget.setPartner(questionWidget)
             self.layout.addPair(n, questionWidget, answerWidget)
 
         verticalSpacer = QSpacerItem(0, 0, QSizePolicy.Ignored, QSizePolicy.Expanding)
@@ -154,6 +152,7 @@ class DisplayLayout(QGridLayout):
     def __init__(self):
         super().__init__()
         self.displayWidgets = []
+        self.maxHeight = 500
 
     def reset(self):
         self.displayWidgets = []
@@ -178,7 +177,21 @@ class DisplayLayout(QGridLayout):
 
     def doResize(self):
         for pair in self.displayWidgets:
-            pair[0].doResize()
+            height0 = pair[0].optimumHeight()
+            if height0 >= self.maxHeight:
+                pair[0].setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+            else:
+                pair[0].setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+
+            height1 = pair[1].optimumHeight()
+            if height1 >= self.maxHeight:
+                pair[1].setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+            else:
+                pair[1].setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+
+            pairHeight = min(max(height0, height1), self.maxHeight)
+            pair[0].setFixedHeight(pairHeight)
+            pair[1].setFixedHeight(pairHeight)
 
 
 class DisplayLabel(QTextEdit):
@@ -186,7 +199,6 @@ class DisplayLabel(QTextEdit):
     def __init__(self, html, n, display, middleClickFunction=None):
         super().__init__()
         self.setHtml(html)
-        self.partner = None
         self.display = display
         self.middleClickFunction = middleClickFunction
 
@@ -195,8 +207,7 @@ class DisplayLabel(QTextEdit):
 
         self.setWordWrapMode(QTextOption.WrapAnywhere)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.maxHeight = 500
-
+        
         colorRole = display.colours[n % len(display.colours)]
         backgroundColor = QGuiApplication.palette().color(colorRole)
         palette = self.palette()
@@ -210,33 +221,6 @@ class DisplayLabel(QTextEdit):
             self.middleClickFunction(self.display, self, e)
         else:
             super().mouseReleaseEvent(e)
-
-    def setPartner(self, partner):
-        self.partner = partner
-
-    def doResize(self):
-        height = self.optimumHeight()
-
-        if height >= self.maxHeight:
-            height = self.maxHeight
-            self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
-        else:
-            self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-
-        if self.partner is not None:
-            partnerHeight = self.partner.optimumHeight()
-
-            if partnerHeight >= self.maxHeight:
-                partnerHeight = self.maxHeight
-                self.partner.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
-            else:
-                self.partner.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-
-            if partnerHeight > height:
-                height = partnerHeight
-            self.partner.setFixedHeight(height)
-
-        self.setFixedHeight(height)
 
     def optimumHeight(self):
         fontMetrics = self.fontMetrics()
