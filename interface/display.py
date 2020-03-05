@@ -4,8 +4,8 @@ from modularcalculator.interface.guitools import *
 from modularcalculator.interface.guiwidgets import *
 from modularcalculator.objects.units import *
 
-from PyQt5.QtCore import Qt, QTimer, QCoreApplication
-from PyQt5.QtGui import QFontDatabase, QPalette, QTextOption, QGuiApplication
+from PyQt5.QtCore import Qt, QPointF
+from PyQt5.QtGui import QFontDatabase, QPalette, QTextOption, QGuiApplication, QTextLayout
 from PyQt5.QtWidgets import QTextEdit, QWidget, QGridLayout, QSizePolicy, QSpacerItem, QFrame
 
 import math
@@ -225,17 +225,26 @@ class DisplayLabel(QTextEdit):
             super().mouseReleaseEvent(e)
 
     def optimumHeight(self):
+        #TODO figure out why we need the -8 magic number
+        lineWidth = self.contentsRect().width() - 8
         fontMetrics = self.fontMetrics()
-        width = self.contentsRect().width()
-        charRect = fontMetrics.boundingRect('_')
-        charWidth = charRect.width()
-        charHeight = charRect.height()
-        charsPerLine = math.floor(width / charWidth)
-        lines = 0
-        for line in self.toPlainText().split("\n"):
-            chars = len(line)
-            while chars > 0:
-                chars -= charsPerLine
-                lines += 1
-        height = lines * charHeight + 10
-        return height
+        leading = fontMetrics.leading()
+        
+        textLayout = QTextLayout(self.toPlainText(), self.font(), self)
+        textLayout.setCacheEnabled(True)
+        textOption = QTextOption()
+        textOption.setWrapMode(QTextOption.WrapAnywhere)
+        textLayout.setTextOption(textOption)
+        textLayout.beginLayout()
+        height = 0
+        while (True):
+            line = textLayout.createLine()
+            if not line.isValid():
+                break
+            line.setLineWidth(lineWidth)
+            height += leading
+            line.setPosition(QPointF(0, height))
+            height += line.height()
+        textLayout.endLayout()
+        
+        return height + 10
