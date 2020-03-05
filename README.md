@@ -68,7 +68,6 @@ These examples are available in examples/basic_integration.py. See examples/adva
 
 ## Graphical Interface
 * Functionality:
-	* Make display properly wrap answers
 
 * Usability / quality of life:
 	* Save state any time it changes
@@ -90,3 +89,5 @@ These examples are available in examples/basic_integration.py. See examples/adva
 # Bugs
 
 * Unit normalisation: "1 joule / 1 m^3" gets simplified to "1 pascal" - Even Google has this issue
+* Display widgets - optimalHeight not quite perfect, having to subtract 20 from width to avoid text clipping, sometimes results in extra line not needed
+* Fix "This plugin supports grabbing the mouse only for popup windows" warning

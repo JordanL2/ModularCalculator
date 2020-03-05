@@ -224,6 +224,7 @@ class DisplayLabel(QTextEdit):
 
     def optimumHeight(self):
         fontMetrics = self.fontMetrics()
+        #TODO the -20 here is a hack to avoid clipping
         width = self.contentsRect().width() - 20
         boundingRect = fontMetrics.boundingRect(0, 0, width, 0, Qt.AlignLeft | Qt.AlignTop | Qt.TextWrapAnywhere, self.toPlainText())
         height = boundingRect.height() + self.contentsMargins().bottom() + self.contentsMargins().top() + 10
