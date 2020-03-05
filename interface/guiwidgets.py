@@ -3,8 +3,7 @@
 from modularcalculator.interface.guitools import *
 
 from PyQt5.QtCore import Qt, QStringListModel, QSize
-from PyQt5.QtGui import QGuiApplication, QPalette, QTextOption
-from PyQt5.QtWidgets import QListWidget, QWidgetAction, QSpinBox, QLabel, QHBoxLayout, QVBoxLayout, QWidget, QListView, QDialog, QAbstractItemView, QPushButton, QCalendarWidget, QTimeEdit, QComboBox, QTabBar, QTextEdit, QFrame
+from PyQt5.QtWidgets import QListWidget, QWidgetAction, QSpinBox, QLabel, QHBoxLayout, QVBoxLayout, QWidget, QListView, QDialog, QAbstractItemView, QPushButton, QCalendarWidget, QTimeEdit, QComboBox, QTabBar
 
 
 class SelectionDialog(QDialog):
@@ -222,74 +221,3 @@ class MiddleClickCloseableTabBar(QTabBar):
             self.tabCloseRequested.emit(self.tabAt(event.pos()))
         else:
             super().mouseReleaseEvent(event)
-
-
-class DisplayLabel(QTextEdit):
-
-    def __init__(self, html, n, display, middleClickFunction=None):
-        super().__init__()
-        self.setHtml(html)
-        self.partner = None
-        self.display = display
-        self.middleClickFunction = middleClickFunction
-
-        self.setReadOnly(True)
-        self.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.TextSelectableByKeyboard)
-
-        self.setWordWrapMode(QTextOption.WrapAnywhere)
-        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.maxHeight = 500
-
-        colorRole = display.colours[n % len(display.colours)]
-        backgroundColor = QGuiApplication.palette().color(colorRole)
-        palette = self.palette()
-        palette.setColor(QPalette.Base, backgroundColor)
-        self.setPalette(palette)
-
-        self.setFrameStyle(QFrame.NoFrame)
-
-    def mouseReleaseEvent(self, e):
-        if self.middleClickFunction is not None and e.button() == Qt.MiddleButton:
-            self.middleClickFunction(self.display, self, e)
-        else:
-            super().mouseReleaseEvent(e)
-
-    def setPartner(self, partner):
-        self.partner = partner
-
-    def resizeEvent(self, e):
-        super().resizeEvent(e)
-        self.doResize()
-
-    def doResize(self):
-        height = self.optimumHeight()
-
-        if height >= self.maxHeight:
-            height = self.maxHeight
-            self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
-        else:
-            self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-
-        if self.partner is not None:
-            partnerHeight = self.partner.optimumHeight()
-                #print("using partner height", partnerHeight)
-
-            if partnerHeight >= self.maxHeight:
-                partnerHeight = self.maxHeight
-                self.partner.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
-            else:
-                self.partner.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-
-            if partnerHeight > height:
-                height = partnerHeight
-            self.partner.setFixedHeight(height)
-
-        self.setFixedHeight(height)
-
-    def optimumHeight(self):
-        fontMetrics = self.fontMetrics()
-        width = self.contentsRect().width() - 20
-        boundingRect = fontMetrics.boundingRect(0, 0, width, 0, Qt.AlignLeft | Qt.AlignTop | Qt.TextWrapAnywhere, self.toPlainText())
-        height = boundingRect.height() + self.contentsMargins().bottom() + self.contentsMargins().top() + 10
-        #print(self.toPlainText()[0:20], width, height)
-        return height

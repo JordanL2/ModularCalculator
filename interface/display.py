@@ -5,15 +5,15 @@ from modularcalculator.interface.guiwidgets import *
 from modularcalculator.objects.units import *
 
 from PyQt5.QtCore import Qt, QTimer, QCoreApplication
-from PyQt5.QtGui import QFontDatabase, QPalette
-from PyQt5.QtWidgets import QTextEdit, QWidget, QGridLayout, QSizePolicy, QSpacerItem
+from PyQt5.QtGui import QFontDatabase, QPalette, QTextOption, QGuiApplication
+from PyQt5.QtWidgets import QTextEdit, QWidget, QGridLayout, QSizePolicy, QSpacerItem, QFrame
 
 
 class CalculatorDisplay(QWidget):
 
     def __init__(self, interface):
         super().__init__()
-        self.layout = QGridLayout()
+        self.layout = DisplayLayout()
         self.layout.setSpacing(0)
         self.setLayout(self.layout)
 
@@ -39,31 +39,18 @@ class CalculatorDisplay(QWidget):
         self.rawOutput.append(CalculatorDisplayError(err, i, question))
 
     def refresh(self):
-        self.clearLayout(self.layout)
+        self.layout.reset()
 
         for n, row in enumerate(self.rawOutput):
             questionWidget, answerWidget = self.renderAnswer(row, n)
             questionWidget.setPartner(answerWidget)
             answerWidget.setPartner(questionWidget)
-            self.layout.addWidget(questionWidget, n, 0, 1, 1)
-            self.layout.addWidget(answerWidget, n, 1, 1, 1)
+            self.layout.addPair(n, questionWidget, answerWidget)
 
         verticalSpacer = QSpacerItem(0, 0, QSizePolicy.Ignored, QSizePolicy.Expanding)
         self.layout.addItem(verticalSpacer, len(self.rawOutput), 0, 1, 2, Qt.AlignTop)
 
         self.layout.update()
-
-    def clearLayout(self, layout):
-        while True:
-            item = layout.takeAt(0)
-            if item is None:
-                break
-            if item.widget() is not None:
-                widget = item.widget()
-                widget.deleteLater()
-            if item.layout() is not None:
-                childLayout = item.layout()
-                self.clearLayout(childLayout)
 
     def renderAnswer(self, row, n):
         if isinstance(row, CalculatorDisplayAnswer):
@@ -141,6 +128,10 @@ class CalculatorDisplay(QWidget):
     def saveState(self):
         return {'rawOutput': self.rawOutput}
 
+    def resizeEvent(self, e):
+        super().resizeEvent(e)
+        if self.layout is not None:
+            self.layout.doResize()
 
 class CalculatorDisplayAnswer():
 
@@ -156,3 +147,100 @@ class CalculatorDisplayError():
         self.err = err
         self.i = i
         self.question = question
+
+
+class DisplayLayout(QGridLayout):
+
+    def __init__(self):
+        super().__init__()
+        self.displayWidgets = []
+
+    def reset(self):
+        self.displayWidgets = []
+        self.clearLayout(self)
+
+    def clearLayout(self, layout):
+        while True:
+            item = layout.takeAt(0)
+            if item is None:
+                break
+            if item.widget() is not None:
+                widget = item.widget()
+                widget.deleteLater()
+            if item.layout() is not None:
+                childLayout = item.layout()
+                self.clearLayout(childLayout)
+
+    def addPair(self, n, questionWidget, answerWidget):
+        self.displayWidgets.append((questionWidget, answerWidget))
+        self.addWidget(questionWidget, n, 0, 1, 1)
+        self.addWidget(answerWidget, n, 1, 1, 1)
+
+    def doResize(self):
+        for pair in self.displayWidgets:
+            pair[0].doResize()
+
+
+class DisplayLabel(QTextEdit):
+
+    def __init__(self, html, n, display, middleClickFunction=None):
+        super().__init__()
+        self.setHtml(html)
+        self.partner = None
+        self.display = display
+        self.middleClickFunction = middleClickFunction
+
+        self.setReadOnly(True)
+        self.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.TextSelectableByKeyboard)
+
+        self.setWordWrapMode(QTextOption.WrapAnywhere)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.maxHeight = 500
+
+        colorRole = display.colours[n % len(display.colours)]
+        backgroundColor = QGuiApplication.palette().color(colorRole)
+        palette = self.palette()
+        palette.setColor(QPalette.Base, backgroundColor)
+        self.setPalette(palette)
+
+        self.setFrameStyle(QFrame.NoFrame)
+
+    def mouseReleaseEvent(self, e):
+        if self.middleClickFunction is not None and e.button() == Qt.MiddleButton:
+            self.middleClickFunction(self.display, self, e)
+        else:
+            super().mouseReleaseEvent(e)
+
+    def setPartner(self, partner):
+        self.partner = partner
+
+    def doResize(self):
+        height = self.optimumHeight()
+
+        if height >= self.maxHeight:
+            height = self.maxHeight
+            self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        else:
+            self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+
+        if self.partner is not None:
+            partnerHeight = self.partner.optimumHeight()
+
+            if partnerHeight >= self.maxHeight:
+                partnerHeight = self.maxHeight
+                self.partner.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+            else:
+                self.partner.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+
+            if partnerHeight > height:
+                height = partnerHeight
+            self.partner.setFixedHeight(height)
+
+        self.setFixedHeight(height)
+
+    def optimumHeight(self):
+        fontMetrics = self.fontMetrics()
+        width = self.contentsRect().width() - 20
+        boundingRect = fontMetrics.boundingRect(0, 0, width, 0, Qt.AlignLeft | Qt.AlignTop | Qt.TextWrapAnywhere, self.toPlainText())
+        height = boundingRect.height() + self.contentsMargins().bottom() + self.contentsMargins().top() + 10
+        return height
