@@ -222,11 +222,11 @@ class ModularCalculatorInterface(StatefulApplication):
 
     def restoreAllState(self):
         try:
-            self.calculatormanager.restoreCalculatorState()
-
             self.restoreGeometry(self.fetchState("mainWindowGeometry"))
             self.restoreState(self.fetchState("mainWindowState"))
             self.splitter.restoreState(self.fetchState("splitterSizes"))
+
+            self.calculatormanager.restoreState(self.fetchStateMap("calculatorManager"))
 
             self.tabmanager.restoreTabs()
         except Exception as e:
@@ -234,11 +234,11 @@ class ModularCalculatorInterface(StatefulApplication):
             print(traceback.format_exc())
 
     def storeAllState(self):
-        self.calculatormanager.storeCalculatorState()
-
         self.storeState("mainWindowGeometry", self.saveGeometry())
         self.storeState("mainWindowState", self.saveState())
         self.storeState("splitterSizes", self.splitter.saveState())
+
+        self.storeStateMap("calculatorManager", self.calculatormanager.saveState())
 
         self.tabmanager.storeSelectedTab()
         self.storeStateArray("tabs", self.tabmanager.tabs)

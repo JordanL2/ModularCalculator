@@ -2,6 +2,7 @@
 
 from modularcalculator.modularcalculator import *
 from modularcalculator.objects.exceptions import *
+from modularcalculator.interface.tools import *
 
 from PyQt5.QtWidgets import  QMessageBox
 
@@ -57,9 +58,19 @@ class CalculatorManager():
         self.setAutoExecute(True, False)
         self.setShortUnits(False)
 
-    def restoreCalculatorState(self):
-        self.importedFeatures = self.interface.fetchStateArray("importedFeatures")
+    def restoreState(self, state):
+        defaultState(state, {
+                "importedFeatures": [],
+                "calculatorFeatures": None,
+                "precision": 30,
+                "simplifyUnits": True,
+                "unitSystemsPreference": None,
+                "calculatorFeatureOptions": {},
+                "viewSyntaxParsingAutoExecutes": True,
+                "viewShortUnits": False,
+            })
 
+        self.importedFeatures = state["importedFeatures"]
         foundImportedFeatures = []
         for featureFile in self.importedFeatures:
             try:
@@ -69,39 +80,46 @@ class CalculatorManager():
                 print("!!! Couldn't import {} - {} !!!".format(featureFile, err))
         self.importedFeatures = foundImportedFeatures
 
-        features = self.interface.fetchStateArray("calculatorFeatures")
-        if features is not None and len(features) > 0:
+        features = state["calculatorFeatures"]
+        if features is not None:
             self.calculator.install_features(features, False, True)
         else:
             self.calculator.load_preset('Computing')
 
-        self.setPrecision(self.interface.fetchStateNumber("precision", 30))
-        self.setUnitSimplification(self.interface.fetchStateBoolean("simplifyUnits", True))
-        unitSystems = self.interface.fetchStateArray("unitSystemsPreference")
-        if unitSystems is not None and len(unitSystems) > 0:
+        self.setPrecision(state["precision"])
+
+        self.setUnitSimplification(state["simplifyUnits"])
+
+        unitSystems = state["unitSystemsPreference"]
+        if unitSystems is not None:
             self.calculator.unit_normaliser.systems_preference = unitSystems
 
-        featureOptions = self.interface.fetchStateMap("calculatorFeatureOptions")
+        featureOptions = state["calculatorFeatureOptions"]
         for featureId, featuresOptions in featureOptions.items():
             for field, value in featuresOptions.items():
                 if field in self.calculator.feature_list[featureId].default_options():
                     self.calculator.feature_options[featureId][field] = value
             
-        self.setAutoExecute(self.interface.fetchStateBoolean("viewSyntaxParsingAutoExecutes", True), False)
-        self.setShortUnits(self.interface.fetchStateBoolean("viewShortUnits", False), False)
+        self.setAutoExecute(state["viewSyntaxParsingAutoExecutes"], False)
 
-    def storeCalculatorState(self):
-        self.interface.storeStateArray("importedFeatures", list(set(self.importedFeatures)))
+        self.setShortUnits(state["viewShortUnits"], False)
 
-        self.interface.storeStateArray("calculatorFeatures", self.calculator.installed_features)
-        self.interface.storeStateNumber("precision", self.interface.precisionSpinBox.spinbox.value())
-        self.interface.storeStateBoolean("simplifyUnits", self.interface.optionsSimplifyUnits.isChecked())
-        self.interface.storeStateArray("unitSystemsPreference", self.calculator.unit_normaliser.systems_preference)
+    def saveState(self):
+        state = {}
 
-        self.interface.storeStateMap("calculatorFeatureOptions", self.calculator.feature_options)
+        state["importedFeatures"] = list(set(self.importedFeatures))
+
+        state["calculatorFeatures"] = self.calculator.installed_features
+        state["precision"] = self.interface.precisionSpinBox.spinbox.value()
+        state["simplifyUnits"] = self.interface.optionsSimplifyUnits.isChecked()
+        state["unitSystemsPreference"] = self.calculator.unit_normaliser.systems_preference
+
+        state["calculatorFeatureOptions"] = self.calculator.feature_options
         
-        self.interface.storeStateBoolean("viewShortUnits", self.interface.viewShortUnits.isChecked())
-        self.interface.storeStateBoolean("viewSyntaxParsingAutoExecutes", self.interface.viewSyntaxParsingAutoExecutes.isChecked())
+        state["viewShortUnits"] = self.interface.viewShortUnits.isChecked()
+        state["viewSyntaxParsingAutoExecutes"] = self.interface.viewSyntaxParsingAutoExecutes.isChecked()
+
+        return state
 
 
     def calc(self):
