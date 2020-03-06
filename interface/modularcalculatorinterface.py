@@ -9,8 +9,9 @@ from modularcalculator.interface.guiwidgets import *
 from modularcalculator.interface.statefulapplication import *
 from modularcalculator.interface.tabmanager import *
 from modularcalculator.interface.textedit import *
+from modularcalculator.interface.tools import *
 
-from PyQt5.QtCore import Qt, QThreadPool
+from PyQt5.QtCore import Qt, QThreadPool, QTimer
 from PyQt5.QtGui import QKeySequence, QCursor, QPalette, QIcon
 from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QSplitter, QAction, QFileDialog, QToolTip, QShortcut, QMessageBox, QScrollArea, QSizePolicy
 
@@ -38,10 +39,16 @@ class ModularCalculatorInterface(StatefulApplication):
         self.filemanager.tabmanager = self.tabmanager
 
         self.initMenu()
+
+        self.stateHashes = {}
         if not clear:
             self.restoreAllState()
         else:
             self.initEmptyState()
+        self.saveStateTimer = QTimer(self)
+        self.saveStateTimer.start(15000)
+        self.saveStateTimer.timeout.connect(self.storeAllState)
+
         self.calculatormanager.updateInsertOptions()
         self.initShortcuts()
 
@@ -234,13 +241,35 @@ class ModularCalculatorInterface(StatefulApplication):
             print(traceback.format_exc())
 
     def storeAllState(self):
-        self.storeState("mainWindowGeometry", self.saveGeometry())
-        self.storeState("mainWindowState", self.saveState())
-        self.storeState("splitterSizes", self.splitter.saveState())
+        mainWindowGeometry = self.saveGeometry()
+        mainWindowGeometryHash = hash(mainWindowGeometry)
+        if 'mainWindowGeometry' not in self.stateHashes or mainWindowGeometryHash != self.stateHashes['mainWindowGeometry']:
+            self.stateHashes['mainWindowGeometry'] = mainWindowGeometryHash
+            self.storeState("mainWindowGeometry", mainWindowGeometry)
 
-        self.storeStateMap("calculatorManager", self.calculatormanager.saveState())
+        mainWindowState = self.saveState()
+        mainWindowStateHash = hash(mainWindowState)
+        if 'mainWindowState' not in self.stateHashes or mainWindowStateHash != self.stateHashes['mainWindowState']:
+            self.stateHashes['mainWindowState'] = mainWindowStateHash
+            self.storeState("mainWindowState", mainWindowState)
 
-        self.storeStateMap("tabManager", self.tabmanager.saveState())
+        splitterSizes = self.splitter.saveState()
+        splitterSizesHash = hash(splitterSizes)
+        if 'splitterSizes' not in self.stateHashes or splitterSizesHash != self.stateHashes['splitterSizes']:
+            self.stateHashes['splitterSizes'] = splitterSizesHash
+            self.storeState("splitterSizes", splitterSizes)
+
+        calculatorManager = self.calculatormanager.saveState()
+        calculatorManagerHash = maphash(calculatorManager)
+        if 'calculatorManager' not in self.stateHashes or calculatorManagerHash != self.stateHashes['calculatorManager']:
+            self.stateHashes['calculatorManager'] = calculatorManagerHash
+            self.storeStateMap("calculatorManager", calculatorManager)
+
+        tabManager = self.tabmanager.saveState()
+        tabManagerHash = maphash(tabManager)
+        if 'tabManager' not in self.stateHashes or tabManagerHash != self.stateHashes['tabManager']:
+            self.stateHashes['tabManager'] = tabManagerHash
+            self.storeStateMap("tabManager", tabManager)
 
     def insertConstant(self):
         constants = sorted(self.calculatormanager.calculator.constants.keys(), key=str)
