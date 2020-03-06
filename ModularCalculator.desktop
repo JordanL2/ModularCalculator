@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Modular Calculator
-Exec=io.github.modularcalculator.ModularCalculator
+Exec=/app/bin/modularcalculator/run
 Type=Application
 Icon=io.github.modularcalculator.ModularCalculator
 Categories=Office;
