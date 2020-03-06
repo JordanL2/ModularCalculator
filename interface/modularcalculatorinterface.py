@@ -228,7 +228,7 @@ class ModularCalculatorInterface(StatefulApplication):
 
             self.calculatormanager.restoreState(self.fetchStateMap("calculatorManager"))
 
-            self.tabmanager.restoreTabs()
+            self.tabmanager.restoreState(self.fetchStateMap("tabManager"))
         except Exception as e:
             print("Exception when trying to restore state")
             print(traceback.format_exc())
@@ -240,9 +240,7 @@ class ModularCalculatorInterface(StatefulApplication):
 
         self.storeStateMap("calculatorManager", self.calculatormanager.saveState())
 
-        self.tabmanager.storeSelectedTab()
-        self.storeStateArray("tabs", self.tabmanager.tabs)
-        self.storeStateNumber("selectedTab", self.tabmanager.selectedTab)
+        self.storeStateMap("tabManager", self.tabmanager.saveState())
 
     def insertConstant(self):
         constants = sorted(self.calculatormanager.calculator.constants.keys(), key=str)

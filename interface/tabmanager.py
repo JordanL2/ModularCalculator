@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 
+from modularcalculator.interface.tools import *
+
 
 class TabManager():
 
@@ -20,13 +22,18 @@ class TabManager():
         self.interface.tabbar.tabCloseRequested.connect(self.closeTab)
         self.interface.tabbar.tabMoved.connect(self.moveTab)
 
-    def restoreTabs(self):
-        self.tabs = self.interface.fetchStateArray("tabs")
+    def restoreState(self, state):
+        defaultState(state, {
+                "tabs": [],
+                "selectedTab": None,
+            })
+
+        self.tabs = state["tabs"]
         if len(self.tabs) > 0:
             for tab in self.tabs:
                 tabfile = self.getTabName(tab['currentFile'], tab['currentFileModified'])
                 self.tabbar.addTab(tabfile)
-            self.selectedTab = self.interface.fetchStateNumber("selectedTab")
+            self.selectedTab = state["selectedTab"]
             if self.selectedTab is None:
                 self.loadTab(0)
             else:
@@ -37,6 +44,16 @@ class TabManager():
         self.interface.tabbar.currentChanged.connect(self.selectTab)
         self.interface.tabbar.tabCloseRequested.connect(self.closeTab)
         self.interface.tabbar.tabMoved.connect(self.moveTab)
+
+    def saveState(self):
+        state = {}
+
+        self.storeSelectedTab()
+        state["tabs"] = self.tabs
+
+        state["selectedTab"] = self.selectedTab
+
+        return state
 
 
     def getTabName(self, currentFile, currentFileModified):
