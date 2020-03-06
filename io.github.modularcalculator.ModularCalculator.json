@@ -1,0 +1,41 @@
+{
+    "app-id": "io.github.modularcalculator.ModularCalculator",
+    "runtime": "org.kde.Platform",
+    "runtime-version": "5.14",
+    "sdk": "org.kde.Sdk",
+    "default-branch": "stable",
+    "command": "/app/bin/modularcalculator/run",
+    "finish-args": [
+        "--filesystem=home",
+        "--socket=x11",
+        "--socket=wayland"
+    ],
+    "modules": [
+        {
+            "name": "install-pyqt5",
+            "buildsystem": "simple",
+            "build-options": {
+                "build-args": [
+                    "--share=network"
+                ]
+            },
+            "build-commands": [
+                "pip3 install --prefix=/app PyQt5"
+            ]
+        },
+        {
+            "name": "modularcalculator",
+            "buildsystem": "simple",
+            "build-commands": [
+                "mkdir -p /app/bin/",
+                "cp -r . /app/bin/modularcalculator"
+            ],
+            "sources": [
+                {
+                    "type": "dir",
+                    "path": "."
+                }
+            ]
+        }
+    ]
+}
