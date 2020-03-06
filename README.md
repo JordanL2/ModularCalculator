@@ -30,12 +30,12 @@ You can initialise the object with the name of a preset, which will auto-install
 ```
 c = ModularCalculator('Advanced')
 ```
-See what presets are available and their features in features/list.py.
+See what presets are available and their features in features/presets.py.
 
 Otherwise, initialise an empty ModularCalculator and add the features you want, using each feature's id field.
 ```
 c = ModularCalculator()
-c.add_features(['numerical.basicarithmetic', 'numerical.decimalnumbers', 'structure.operators'])
+c.install_features(['numerical.basicarithmetic', 'numerical.decimalnumbers', 'structure.operators'])
 ```
 Each feature's dependencies will also be installed automatically. The order of the features doesn't matter, if each feature's dependencies and installation order hints have been defined correctly they will be installed in the correct order. Because installation order matters, it is best to install all your features in one call to add_features().
 
