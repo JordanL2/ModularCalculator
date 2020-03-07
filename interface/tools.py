@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+from modularcalculator.objects.items import OperandResult
 from modularcalculator.interface.display import CalculatorDisplayAnswer, CalculatorDisplayError
 
 import json
@@ -22,6 +23,11 @@ class SetEncoder(json.JSONEncoder):
 				'err': obj.err.message,
 				'i': obj.i,
 				'question': obj.question,
+			}
+		if isinstance(obj, OperandResult):
+			return {
+				'value': str(obj.value),
+				'unit': str(obj.unit),
 			}
 		return json.JSONEncoder.default(self, obj)
  
