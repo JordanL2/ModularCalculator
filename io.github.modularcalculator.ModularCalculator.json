@@ -6,12 +6,12 @@
     "default-branch": "stable",
     "command": "modularcalculator",
     "finish-args": [
-        "--filesystem=home",
+        "--share=network",
+        "--share=ipc",
         "--socket=x11",
         "--socket=wayland",
-        "--share=ipc",
-        "--share=network",
-        "--device=dri"
+        "--device=dri",
+        "--filesystem=host"
     ],
     "modules": [
         {
