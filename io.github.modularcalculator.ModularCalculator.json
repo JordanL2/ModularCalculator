@@ -8,7 +8,10 @@
     "finish-args": [
         "--filesystem=home",
         "--socket=x11",
-        "--socket=wayland"
+        "--socket=wayland",
+        "--share=ipc",
+        "--share=network",
+        "--device=dri"
     ],
     "modules": [
         {
