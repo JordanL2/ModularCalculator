@@ -145,40 +145,18 @@
             "name": "modularcalculator",
             "buildsystem": "simple",
             "build-commands": [
-                "cp -r . /app/bin"
-            ],
-            "sources": [
-                {
-                    "type": "dir",
-                    "path": "."
-                }
-            ]
-        },
-        {
-            "name": "icon",
-            "buildsystem": "simple",
-            "build-commands": [
+                "cp -r modularcalculator /app/bin/modularcalculator",
+                "cp modularcalculator-run /app/bin/",
+                "cp modcalc.png /app/bin/",
                 "mkdir -p /app/share/icons/hicolor/256x256/apps",
-                "cp ./modcalc.png /app/share/icons/hicolor/256x256/apps/io.github.modularcalculator.ModularCalculator.png"
-            ],
-            "sources": [
-                {
-                    "type": "file",
-                    "path": "modcalc.png"
-                }
-            ]
-        },
-        {
-            "name": "desktop",
-            "buildsystem": "simple",
-            "build-commands": [
+                "cp ./modcalc.png /app/share/icons/hicolor/256x256/apps/io.github.modularcalculator.ModularCalculator.png",
                 "mkdir -p /app/share/applications",
                 "cp ./ModularCalculator.desktop /app/share/applications/io.github.modularcalculator.ModularCalculator.desktop"
             ],
             "sources": [
                 {
-                    "type": "file",
-                    "path": "ModularCalculator.desktop"
+                    "type": "dir",
+                    "path": "."
                 }
             ]
         }
