@@ -13,12 +13,6 @@
         "--device=dri",
         "--filesystem=host"
     ],
-    "build-options": {
-        "env": {
-            "PYTHON": "/usr/bin/python3",
-            "PIP": "/usr/bin/pip3"
-        }
-    },
     "modules": [
         "pyqt.json",
         {

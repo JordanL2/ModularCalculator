@@ -7,7 +7,7 @@
             "name": "python-pyparsing",
             "buildsystem": "simple",
             "build-commands": [
-                "${PIP} install --no-deps --no-use-pep517 --prefix=${FLATPAK_DEST} ."
+                "pip3 install --no-deps --no-use-pep517 --prefix=${FLATPAK_DEST} ."
             ],
             "cleanup": [
                 "*"
@@ -24,7 +24,7 @@
             "name": "python-packaging",
             "buildsystem": "simple",
             "build-commands": [
-                "${PIP} install --no-deps --no-use-pep517 --prefix=${FLATPAK_DEST} ."
+                "pip3 install --no-deps --no-use-pep517 --prefix=${FLATPAK_DEST} ."
             ],
             "cleanup": [
                 "*"
@@ -41,7 +41,7 @@
             "name": "python-toml",
             "buildsystem": "simple",
             "build-commands": [
-                "${PIP} install --no-deps --no-use-pep517 --prefix=${FLATPAK_DEST} ."
+                "pip3 install --no-deps --no-use-pep517 --prefix=${FLATPAK_DEST} ."
             ],
             "cleanup": [
                 "*"
@@ -58,7 +58,7 @@
             "name": "sip",
             "buildsystem": "simple",
             "build-commands": [
-                "${PIP} install --no-deps --no-use-pep517 --prefix=${FLATPAK_DEST} ."
+                "pip3 install --no-deps --no-use-pep517 --prefix=${FLATPAK_DEST} ."
             ],
             "cleanup": [
                 "*"
@@ -75,7 +75,7 @@
             "name": "pyqt-sip",
             "buildsystem": "simple",
             "build-commands": [
-                "${PIP} install --no-deps --no-use-pep517 --prefix=${FLATPAK_DEST} ."
+                "pip3 install --no-deps --no-use-pep517 --prefix=${FLATPAK_DEST} ."
             ],
             "sources": [
                 {
@@ -89,7 +89,7 @@
             "name": "pyqt-builder",
             "buildsystem": "simple",
             "build-commands": [
-                "${PIP} install --no-deps --no-use-pep517 --prefix=${FLATPAK_DEST} ."
+                "pip3 install --no-deps --no-use-pep517 --prefix=${FLATPAK_DEST} ."
             ],
             "cleanup": [
                 "*"
