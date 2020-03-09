@@ -37,6 +37,7 @@ presets['Scientific'] = presets['Advanced'] + [
     'units.unitconstants',
     'units.unitfunctions',
     'units.units',
+    'units.unitsymbols',
 ]
 
 presets['Computing'] = presets['Scientific'] + [

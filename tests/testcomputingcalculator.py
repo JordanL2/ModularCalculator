@@ -8,7 +8,6 @@ from modularcalculator.objects.exceptions import *
 
 print("ComputingCalculator tests:")
 c = ModularCalculator('Computing')
-c.install_features(['units.unitsymbols'])
 hl = SyntaxHighlighter()
 
 tests = [
