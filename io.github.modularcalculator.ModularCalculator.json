@@ -20,14 +20,12 @@
             "buildsystem": "simple",
             "build-commands": [
                 "cp -r modularcalculator /app/bin/modularcalculator",
-                "cp modularcalculator-run /app/bin/",
-                "cp modcalc.png /app/bin/",
-                "mkdir -p /app/share/icons/hicolor",
+                "install -m 0755 modularcalculator-run /app/bin/modularcalculator-run",
+                "install modcalc.png /app/bin/modcalc.png",
+                "mkdir -p /app/share/icons/hicolor/",
                 "cp -r icons/* /app/share/icons/hicolor/",
-                "mkdir -p /app/share/applications",
-                "cp ModularCalculator.desktop /app/share/applications/io.github.modularcalculator.ModularCalculator.desktop",
-                "mkdir -p /app/share/metainfo",
-                "cp io.github.modularcalculator.ModularCalculator.appdata.xml /app/share/metainfo/io.github.modularcalculator.ModularCalculator.metainfo.xml"
+                "install -D ModularCalculator.desktop /app/share/applications/io.github.modularcalculator.ModularCalculator.desktop",
+                "install -D io.github.modularcalculator.ModularCalculator.appdata.xml /app/share/metainfo/io.github.modularcalculator.ModularCalculator.metainfo.xml"
             ],
             "sources": [
                 {
