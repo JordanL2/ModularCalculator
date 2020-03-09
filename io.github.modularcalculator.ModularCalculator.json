@@ -28,8 +28,8 @@
                 "cp -r modularcalculator /app/bin/modularcalculator",
                 "cp modularcalculator-run /app/bin/",
                 "cp modcalc.png /app/bin/",
-                "mkdir -p /app/share/icons/hicolor/256x256/apps",
-                "cp ./modcalc.png /app/share/icons/hicolor/256x256/apps/io.github.modularcalculator.ModularCalculator.png",
+                "mkdir -p /app/share/icons/hicolor",
+                "cp -r icons/* /app/share/icons/hicolor/",
                 "mkdir -p /app/share/applications",
                 "cp ./ModularCalculator.desktop /app/share/applications/io.github.modularcalculator.ModularCalculator.desktop"
             ],

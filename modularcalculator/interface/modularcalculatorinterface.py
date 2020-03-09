@@ -26,7 +26,7 @@ class ModularCalculatorInterface(StatefulApplication):
     def __init__(self, clear):
         super().__init__()
 
-        self.setWindowIcon(QIcon('modcalc.png'))
+        self.setWindowIcon(QIcon('icons/256x256/apps/io.github.modularcalculator.ModularCalculator.png'))
 
         self.threadpool = QThreadPool()
         self.threadpool.setMaxThreadCount(1)
