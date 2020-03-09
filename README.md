@@ -18,7 +18,7 @@ Also has a Qt interface, allowing it to be used as a desktop app. The supported 
 # Usage
 
 ## As a Graphical App
-Run the "run" shell script to launch the interface. This can also be symlinked to, for example from /usr/bin.
+Run the "modularcalculator-run" shell script to launch the interface. This can also be symlinked to, for example from /usr/bin.
 
 ## As a Component in a Python App
 Import the ModularCalculator class:
