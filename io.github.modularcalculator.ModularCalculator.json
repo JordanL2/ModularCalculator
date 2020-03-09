@@ -4,7 +4,7 @@
     "runtime-version": "5.14",
     "sdk": "org.kde.Sdk",
     "default-branch": "stable",
-    "command": "modularcalculator",
+    "command": "modularcalculator-run",
     "finish-args": [
         "--share=network",
         "--share=ipc",
@@ -30,8 +30,7 @@
             "name": "modularcalculator",
             "buildsystem": "simple",
             "build-commands": [
-                "cp -r . /app/bin",
-                "ln -s /app/bin /app/modularcalculator"
+                "cp -r . /app/bin"
             ],
             "sources": [
                 {

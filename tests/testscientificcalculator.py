@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from modularcalculator.tests.testrunner import *
+from testrunner import *
 from modularcalculator.modularcalculator import *
 from modularcalculator.services.syntaxhighlighter import *
 from modularcalculator.objects.exceptions import *
