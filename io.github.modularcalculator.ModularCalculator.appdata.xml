@@ -28,10 +28,6 @@
   </provides>
 
   <releases>
-    <release version="1.0.0" date="2020-03-09">
-      <description>
-        TODO
-      </description>
-    </release>
+    <release version="1.0.0" date="2020-03-09"/>
   </releases>
 </component>
