@@ -2,5 +2,5 @@
 Name=Modular Calculator
 Exec=modularcalculator-run
 Type=Application
-Icon=io.github.modularcalculator.ModularCalculator
+Icon=io.github.jordanl2.ModularCalculator
 Categories=Office;

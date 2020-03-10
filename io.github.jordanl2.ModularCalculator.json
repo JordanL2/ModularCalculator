@@ -1,5 +1,5 @@
 {
-    "app-id": "io.github.modularcalculator.ModularCalculator",
+    "app-id": "io.github.jordanl2.ModularCalculator",
     "runtime": "org.kde.Platform",
     "runtime-version": "5.14",
     "sdk": "org.kde.Sdk",
@@ -24,8 +24,8 @@
                 "install modcalc.png /app/bin/modcalc.png",
                 "mkdir -p /app/share/icons/hicolor/",
                 "cp -r icons/* /app/share/icons/hicolor/",
-                "install -D ModularCalculator.desktop /app/share/applications/io.github.modularcalculator.ModularCalculator.desktop",
-                "install -D io.github.modularcalculator.ModularCalculator.appdata.xml /app/share/metainfo/io.github.modularcalculator.ModularCalculator.metainfo.xml"
+                "install -D ModularCalculator.desktop /app/share/applications/io.github.jordanl2.ModularCalculator.desktop",
+                "install -D io.github.jordanl2.ModularCalculator.appdata.xml /app/share/metainfo/io.github.jordanl2.ModularCalculator.metainfo.xml"
             ],
             "sources": [
                 {
