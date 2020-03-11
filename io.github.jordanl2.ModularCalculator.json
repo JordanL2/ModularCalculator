@@ -4,7 +4,7 @@
     "runtime-version": "5.14",
     "sdk": "org.kde.Sdk",
     "default-branch": "stable",
-    "command": "modularcalculator-run",
+    "command": "modularcalculator",
     "finish-args": [
         "--share=network",
         "--share=ipc",
@@ -19,8 +19,9 @@
             "name": "modularcalculator",
             "buildsystem": "simple",
             "build-commands": [
-                "cp -r modularcalculator /app/bin/modularcalculator",
-                "install -m 0755 modularcalculator-run /app/bin/modularcalculator-run",
+                "pip3 install --no-deps --no-use-pep517 --prefix=${FLATPAK_DEST} .",
+                "ln -snf /app/lib/python3.7/site-packages/modularcalculator/interface/modularcalculatorinterface.py /app/bin/modularcalculator",
+                "chmod 0755 /app/lib/python3.7/site-packages/modularcalculator/interface/modularcalculatorinterface.py",
                 "install modcalc.png /app/bin/modcalc.png",
                 "mkdir -p /app/share/icons/hicolor/",
                 "cp -r icons/* /app/share/icons/hicolor/",
