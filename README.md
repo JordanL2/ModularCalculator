@@ -9,7 +9,7 @@ Also has a Qt interface, allowing it to be used as a desktop app. The supported 
 
 # Requirements
 
-* Linux (other operating systems not tested)
+* Linux
 * Python 3.4+
 * Qt 5.11+
 * PyQt5
@@ -18,6 +18,11 @@ Also has a Qt interface, allowing it to be used as a desktop app. The supported 
 # Installation
 
 sudo ./install
+
+
+# Uninstallation
+
+sudo ./uninstall
 
 
 # Usage
