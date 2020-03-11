@@ -10,9 +10,8 @@ Also has a Qt interface, allowing it to be used as a desktop app. The supported 
 # Requirements
 
 * Linux
-* Python 3.4+
+* Python 3.6+
 * Qt 5.11+
-* PyQt5
 
 
 # Installation
