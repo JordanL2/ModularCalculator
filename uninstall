@@ -6,7 +6,7 @@ if [ $# -lt 1 ]; then
 fi
 
 pip3 uninstall modularcalculator -y
-for r in 64x64 128x128 256x256
+for r in 16x16 24x24 48x48 64x64 128x128 256x256
 do
 	rm $PREFIX/share/icons/hicolor/$r/apps/io.github.jordanl2.ModularCalculator.png
 done
