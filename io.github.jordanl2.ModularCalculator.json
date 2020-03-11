@@ -19,7 +19,7 @@
             "name": "modularcalculator",
             "buildsystem": "simple",
             "build-commands": [
-                "./install /app"
+                "./install $FLATPAK_DEST"
             ],
             "sources": [
                 {
