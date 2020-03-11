@@ -378,16 +378,14 @@ class ModularCalculatorInterface(StatefulApplication):
         FeatureOptionsDialog(self)
 
 
-def main(args=None):
-    if args is None:
-        args = []
+def main():
     clear = False
-    if len(args) >= 2 and args[1] == '--clear':
+    if len(sys.argv) >= 2 and sys.argv[1] == '--clear':
         print("Will not restore state due to --clear flag")
         clear = True
-    app = QApplication(args)
+    app = QApplication(sys.argv)
     calc = ModularCalculatorInterface(clear)
     sys.exit(app.exec_())
 
 if __name__ == '__main__':
-    main(sys.argv)
+    main()

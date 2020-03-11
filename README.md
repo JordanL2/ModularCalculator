@@ -15,10 +15,17 @@ Also has a Qt interface, allowing it to be used as a desktop app. The supported 
 * PyQt5
 
 
+# Installation
+
+sudo ./install
+
+
 # Usage
 
 ## As a Graphical App
-Run the "modularcalculator-run" shell script to launch the interface. This can also be symlinked to, for example from /usr/bin.
+"Modular Calculator" should be available in your desktop environment application menu.
+
+Alternatively, run "modularcalculator" in a terminal.
 
 ## As a Component in a Python App
 Import the ModularCalculator class:

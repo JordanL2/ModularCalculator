@@ -1,7 +1,0 @@
-#!/bin/sh
-
-FILENAME=$0
-DIR=`dirname "$(readlink -f "$FILENAME")"`
-export PYTHONPATH=${DIR}
-cd $DIR
-${DIR}/modularcalculator/interface/modularcalculatorinterface.py $@
