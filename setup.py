@@ -13,6 +13,9 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/JordanL2/ModularCalculator",
     packages=setuptools.find_packages() + setuptools.find_namespace_packages(include=['modularcalculator.*']),
+    install_requires=[
+        'PyQt5',
+    ],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: LGPL-2.1 License",
