@@ -13,6 +13,7 @@ hl = SyntaxHighlighter()
 tests = [
     { 'test': r'14 % 3', 'expected': Decimal('2') },
     { 'test': r'4 \ 3', 'expected': Decimal('1') },
+    { 'test': r'(1000 \ 10) \ 10', 'expected': Decimal('10') },
 
     { 'test': '123 + 456', 'expected': Decimal('579') },
     { 'test': '123-1', 'expected': Decimal('122') },

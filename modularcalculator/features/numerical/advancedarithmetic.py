@@ -51,6 +51,6 @@ class AdvancedArithmeticFeature(Feature):
     def op_number_integer_divide(self, vals, units, refs, flags):
         op = self.ops_list['/']
         division_result = op.call(self, [OperandResult(vals[0], units[0], None), OperandResult(vals[1], units[1], None)], flags)
-        res = OperationResult(math.floor(division_result.value))
+        res = OperationResult(Decimal(math.floor(division_result.value)))
         res.set_unit(division_result.unit)
         return res
