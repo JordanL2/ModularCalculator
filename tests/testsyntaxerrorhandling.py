@@ -64,10 +64,10 @@ tests = [
     { 'test': "[1 step 2]",  'expected': { 'message': r"Parsing error in array",  'pos': 3, 'items': ['[','1',' '] } },
     { 'test': "@mean([",  'expected': { 'message': r"Array missing close symbol",  'pos': 6, 'items': ['@mean','('] } },
 
+    { 'test': "simplefunc = '/mnt/gitrepo/ModularCalculator/examples/simplefunc'\n@simplefunc(@simplefunc(*))",  'expected': { 'message': r"Missing left operands for operator *",  'pos': 90, 'items': ['simplefunc',' ','=',' ',"'/mnt/gitrepo/ModularCalculator/examples/simplefunc'",'\n','@simplefunc','(','@simplefunc','('] } },
+
 #    { 'test': r"", 'expected': { 'exception': ParsingException, 'message': r"", 'pos': 0, 'items': [] } },
 ]
-#tests=[{ 'test': "(1/0) +",  'expected': { 'message': r"Missing right operands for operator +",  'pos': 6, 'items': ['(','1','/','0',')',' '], 'next': '+' } },]
-#tests=[{ 'test': r"1 + (min(1, 2, 3 +))",  'expected': { 'message': r"Missing right operands for operator +", 'pos': 17, 'items': ['1',' ','+',' ','(','min','(','1',',',' ','2',',',' ','3',' '], 'next': '+))' } },]
 
 failed = []
 for num, test in enumerate(tests):
@@ -91,17 +91,17 @@ for num, test in enumerate(tests):
                 continue
             statements = hl.highlight_statements(err.statements)
             count = 0
-            for items in statements:
-                for item in items:
-                    if item[0] != 'default':
-                        count += 1
-                        if count > len(expected['items']):
-                            failed.append({'num': num, 'test': expr, 'stage': 'Exception items', 'expected': expected['items'], 'actual': items})
-                            break
-                        expecteditem = expected['items'][count - 1]
-                        if item[1] != expecteditem:
-                            failed.append({'num': num, 'test': expr, 'stage': 'Exception items', 'expected': expected['items'], 'actual': items})
-                            break
+            items = [item for items in statements for item in items]
+            for item in items:
+                if item[0] != 'default':
+                    count += 1
+                    if count > len(expected['items']):
+                        failed.append({'num': num, 'test': expr, 'stage': 'Exception items', 'expected': expected['items'], 'actual': items})
+                        break
+                    expecteditem = expected['items'][count - 1]
+                    if item[1] != expecteditem:
+                        failed.append({'num': num, 'test': expr, 'stage': 'Exception items', 'expected': expected['items'], 'actual': items})
+                        break
             else:
                 if count != len(expected['items']):
                     failed.append({'num': num, 'test': expr, 'stage': 'Exception items', 'expected': expected['items'], 'actual': items})

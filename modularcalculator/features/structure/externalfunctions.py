@@ -96,11 +96,21 @@ class ExternalFunctionItem(RecursiveOperandItem):
         inputs = []
         itemsi = 2
         for i, arg in enumerate(self.args):
+            old_itemsi = itemsi
             try:
                 argresult = self.calculator.execute(arg, flags)
                 itemsi += len(arg) + 1
                 inputs.append(argresult)
             except ExecuteException as err:
+                self.items = self.items[0:itemsi]
+                self.items.extend(err.items)
+                err.items = self.items
+                self.text = err.truncate(self.text)
+                self.truncated = True
+                raise ExecuteException(err.message, [self], err.next, True)
+            if isinstance(argresult.value, Exception):
+                err = argresult.value
+                itemsi = old_itemsi
                 self.items = self.items[0:itemsi]
                 self.items.extend(err.items)
                 err.items = self.items

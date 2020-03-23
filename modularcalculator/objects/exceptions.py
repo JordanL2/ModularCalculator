@@ -23,7 +23,7 @@ def find_pos(self, text, statements):
     if self.next is not None:
         ii = text.find(self.next, i)
         if ii == -1:
-            raise Exception("Could not find '{0}' in '{1}' after character {2}".format(self.next, text, i))
+            raise Exception("Could not find '{0}' in '{1}' after character {2} [{3}]".format(self.next, text, i, text[i:]))
         i = ii
     return i
 
