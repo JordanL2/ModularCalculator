@@ -50,8 +50,8 @@ class RegexFeature(Feature):
         calculator.funcs['regexget'] = FunctionDefinition(
             'Regular Expression', 
             'regexget', 
-            'Return either all or a specific occurrence of a pattern in a value',
-            ['value', 'pattern', '[group]'],
+            'Return either all or a specific occurrence of a pattern in a string',
+            ['string', 'pattern', '[group]'],
             RegexFeature.func_regexget, 
             2, 
             3)
@@ -62,7 +62,7 @@ class RegexFeature(Feature):
             'Regular Expression', 
             'regexsplit', 
             'Split a string on a regular expression and return as an array',
-            ['splitter', 'string'],
+            ['pattern', 'string'],
             RegexFeature.func_regexsplit, 
             2, 
             2,
@@ -72,7 +72,7 @@ class RegexFeature(Feature):
             'Regular Expression', 
             'regexsub', 
             'Replace all or a specific occurrence of a pattern with a replacement',
-            ['value', 'pattern', 'replacement', '[group]'],
+            ['string', 'pattern', 'replacement', '[group]'],
             RegexFeature.func_regexsub, 
             3, 
             4)
@@ -82,8 +82,8 @@ class RegexFeature(Feature):
         calculator.funcs['regexcount'] = FunctionDefinition(
             'Regular Expression', 
             'regexcount', 
-            'Count the number of times a pattern appears in a value',
-            ['value', 'pattern'],
+            'Count the number of times a pattern appears in a string',
+            ['string', 'pattern'],
             RegexFeature.func_regexcount, 
             2, 
             2)
