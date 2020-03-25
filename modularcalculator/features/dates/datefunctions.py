@@ -16,6 +16,12 @@ datetime_format = 'Human Readable Date + Time Format'
 datetime_padding = 'Human Readable Date + Time Padding'
 datetimehires_format = 'Human Readable Date + Hi Res Time Format'
 datetimehires_padding = 'Human Readable Date + Hi Res Time Padding'
+datetz_format = 'Human Readable Date + Timezone Format'
+datetz_padding = 'Human Readable Date + Timezone Padding'
+datetimetz_format = 'Human Readable Date + Time + Timezone Format'
+datetimetz_padding = 'Human Readable Date + Time + Timezone Padding'
+datetimehirestz_format = 'Human Readable Date + Hi Res Time + Timezone Format'
+datetimehirestz_padding = 'Human Readable Date + Hi Res Time + Timezone Padding'
 
 
 class DateFunctionsFeature(Feature):
@@ -43,21 +49,16 @@ class DateFunctionsFeature(Feature):
             datetime_padding: '',
             datetimehires_format: '%A, %d-%b-%Y at %H:%M:%S.%f',
             datetimehires_padding: '',
+            datetz_format: '%A, %d-%b-%Y (%z)',
+            datetz_padding: '',
+            datetimetz_format: '%A, %d-%b-%Y at %H:%M:%S (%z)',
+            datetimetz_padding: '',
+            datetimehirestz_format: '%A, %d-%b-%Y at %H:%M:%S.%f (%z)',
+            datetimehirestz_padding: '',
         }
 
     @classmethod
     def install(cls, calculator):
-        calculator.funcs['datecreate'] =  FunctionDefinition(
-            'Date', 
-            'datecreate', 
-            'Create a date',
-            ['year', 'month', 'day', '[hour', 'minute', 'second', '[microsecond]]'],
-            DateFunctionsFeature.func_datecreate, 
-            3, 
-            7, 
-            'number')
-        calculator.funcs['datecreate'].units_normalise = False
-
         calculator.funcs['dateformat'] =  FunctionDefinition(
             'Date', 
             'dateformat', 
@@ -117,22 +118,12 @@ class DateFunctionsFeature(Feature):
 
         calculator.feature_options['dates.datefunctions'] = cls.default_options()
 
-    def func_datecreate(self, vals, units, refs, flags):
-        return OperationResult(DatesFeature.date_to_string(self, datetime(*vals)))
-
     def func_dateformat(self, vals, units, refs, flags):
         dt = DatesFeature.string_to_date(self, vals[0])
-        if dt.hour == 0 and dt.minute == 0 and dt.second == 0 and dt.microsecond == 0:
-            return OperationResult(format(
-                dt.strftime(self.feature_options['dates.datefunctions'][date_format]), 
-                self.feature_options['dates.datefunctions'][date_padding]))
-        if dt.microsecond == 0:
-            return OperationResult(format(
-                dt.strftime(self.feature_options['dates.datefunctions'][datetime_format]), 
-                self.feature_options['dates.datefunctions'][datetime_padding]))
+        dt_format, dt_padding = DatesFeature.correct_format_for_date(self, dt)
         return OperationResult(format(
-            dt.strftime(self.feature_options['dates.datefunctions'][datetimehires_format]), 
-            self.feature_options['dates.datefunctions'][datetimehires_padding]))
+            dt.strftime(self.feature_options['dates.datefunctions']['Human Readable ' + dt_format]), 
+            self.feature_options['dates.datefunctions']['Human Readable ' + dt_padding]))
 
     def func_dateadd(self, vals, units, refs, flags):
         dt = DatesFeature.string_to_date(self, vals[0])
@@ -152,7 +143,11 @@ class DateFunctionsFeature(Feature):
         return DateFunctionsFeature.func_dateadd(self, [vals[0], -(vals[1])], units, refs, flags)
 
     def func_datedifference(self, vals, units, refs, flags):
-        td = abs(DatesFeature.string_to_date(self, vals[0]) - DatesFeature.string_to_date(self, vals[1]))
+        date1 = DatesFeature.string_to_date(self, vals[0])
+        date2 = DatesFeature.string_to_date(self, vals[1])
+        if ((date1.utcoffset() is None) != (date2.utcoffset() is None)):
+            raise CalculatorException("Cannot compare dates with timezones and dates without timezones")
+        td = abs(date1 - date2)
 
         seconds = Decimal(td.total_seconds())
         seconds = round(seconds, min(6, getcontext().prec))
