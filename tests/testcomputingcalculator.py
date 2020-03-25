@@ -201,6 +201,11 @@ tests = [
     { 'test': r"regexsub('123ABC456XYZ789', '[A-Z]+', 'defg', 1)", 'expected': '123defg456XYZ789' },
     { 'test': r"regexsub('123456789', '[A-Z]+', 'defg')", 'expected': '123456789' },
     { 'test': r"regexcount('1abc2def3ghi4', '[a-z]{3}')", 'expected': Decimal(3) },
+    { 'test': r"regexsplit('[A-Z]+', '123ABC456XYZ789')", 'expected': ['123', '456', '789'] },
+    { 'test': r"regexsplit('[A-Z]', '123A456XY789')", 'expected': ['123', '456', '', '789'] },
+    { 'test': r"regexsplit('[A-Z]', '123A456XY789Z')", 'expected': ['123', '456', '', '789', ''] },
+    { 'test': r"regexsplit('[A-Z]', 'Z123A456XY789Z')", 'expected': ['', '123', '456', '', '789', ''] },
+    { 'test': r"regexsplit('[A-Z]+', 'Z123A456XY789Z')", 'expected': ['', '123', '456', '789', ''] },
 
     { 'test': r"length('ABCabc')", 'expected': Decimal(6) },
     { 'test': r"lower('ABCabc')", 'expected': 'abcabc' },
@@ -300,7 +305,6 @@ str +$ '*10^' +$ dec""", 'expected': '4*10^-1' },
 
 #    { 'test': r"", 'expected': '' },
 ]
-#tests=[{ 'test': r"mean([4, 0xF])", 'expected': Decimal('10') },]
 
 tester = TestRunner(CalculatorException)
 tester.test(c.calculate, tests)

@@ -58,6 +58,16 @@ class RegexFeature(Feature):
         calculator.funcs['regexget'].add_value_restriction(0, 1, 'string')
         calculator.funcs['regexget'].add_value_restriction(2, 2, 'number')
 
+        calculator.funcs['regexsplit'] = FunctionDefinition(
+            'Regular Expression', 
+            'regexsplit', 
+            'Split a string on a regular expression and return as an array',
+            ['splitter', 'string'],
+            RegexFeature.func_regexsplit, 
+            2, 
+            2,
+            'string')
+
         calculator.funcs['regexsub'] = FunctionDefinition(
             'Regular Expression', 
             'regexsub', 
@@ -90,6 +100,11 @@ class RegexFeature(Feature):
         if len(vals) == 3:
             group = vals[2] - 1
             return OperationResult(found[int(group)])
+        found = [OperandResult(f, None, None) for f in found]
+        return OperationResult(found)
+
+    def func_regexsplit(self, vals, units, refs, flags):
+        found = re.split(StringsFeature.string(self, vals[0]), StringsFeature.string(self, vals[1]))
         found = [OperandResult(f, None, None) for f in found]
         return OperationResult(found)
 
