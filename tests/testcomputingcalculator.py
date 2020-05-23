@@ -228,6 +228,7 @@ tests = [
 
     { 'test': r"join(['ab', 'b', 'c'], '||')", 'expected': 'ab||b||c' },
     { 'test': r"join(['ab', 'b', 2], '||')", 'expected': 'ab||b||2' },
+    { 'test': r"join(['ab', 'b', 2])", 'expected': 'abb2' },
     { 'test': r"split('ab||b||2', '||')", 'expected': ['ab', 'b', '2'] },
     { 'test': r"split(12345367, 3)", 'expected': ['12', '45', '67'] },
 

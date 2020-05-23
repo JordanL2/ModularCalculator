@@ -41,10 +41,10 @@ class StringArrayFunctionsFeature(Feature):
         calculator.funcs['join'] =   FunctionDefinition(
             'String', 
             'join', 
-            'Join an array of strings together, joined by a delimiter',
-            ['strings', 'delimiter'],
+            'Join an array of strings together, joined by an optional delimiter',
+            ['strings', '[delimiter]'],
             StringArrayFunctionsFeature.func_join, 
-            2, 
+            1,
             2)
         calculator.funcs['join'].add_value_restriction(0, 0, 'array[string]')
         calculator.funcs['join'].add_value_restriction(1, 1, 'string')
@@ -56,6 +56,8 @@ class StringArrayFunctionsFeature(Feature):
         return OperationResult(results)
 
     def func_join(self, vals, units, refs, flags):
-        delimiter = vals[1]
+        delimiter = ''
+        if len(vals) > 1:
+            delimiter = vals[1]
         values = [StringsFeature.string(self, v.value) for v in vals[0]]
-        return OperationResult(vals[1].join(values))
+        return OperationResult(delimiter.join(values))
