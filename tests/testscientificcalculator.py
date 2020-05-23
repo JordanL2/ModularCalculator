@@ -136,6 +136,7 @@ tests = [
     { 'test': r"40 TW h / yr to W", 'expected': (Decimal('4563178344.980846058896942898667780082183'), 'watts') },
 
     { 'test': r"1 kW to J/s", 'expected': (Decimal('1000'), 'joules/second') },
+    { 'test': r"kW to J/s", 'expected': (Decimal('1000'), 'joules/second') },
     { 'test': r"1 meters^3 to l", 'expected': (Decimal('1000'), 'liters') },
     { 'test': r"1 kW + 23 J/s", 'expected': (Decimal('1.023'), 'kilowatts') },
     { 'test': r"1 J/h + 2 kW", 'expected': (Decimal('7200001'), 'joules/hour') },

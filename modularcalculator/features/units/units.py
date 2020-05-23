@@ -46,8 +46,9 @@ class UnitsFeature(Feature):
             UnitsFeature.op_unit_conversion, 
             1, 
             1, 
-            ['number with unit', 'unit']), 
+            [['number with unit', 'unit'], 'unit']),
         {'units_normalise': False})
+
         calculator.add_op(OperatorDefinition(
             'Units', 
             'UNIT_ASSIGNMENT', 
@@ -57,6 +58,7 @@ class UnitsFeature(Feature):
             1, 
             ['number', 'unit']), 
         {'units_normalise': False, 'hidden': True})
+
         calculator.add_op(OperatorDefinition(
             'Units', 
             'UNIT_MULTIPLY', 
@@ -66,6 +68,7 @@ class UnitsFeature(Feature):
             1, 
             'unit'), 
         {'units_normalise': False, 'hidden': True})
+
         calculator.add_op(OperatorDefinition(
             'Units', 
             'UNIT_DIVIDE', 
@@ -104,6 +107,9 @@ class UnitsFeature(Feature):
         return None, None, None
 
     def op_unit_conversion(self, vals, units, refs, flags):
+        if isinstance(vals[0], UnitPowerList):
+            units[0] = vals[0]
+            vals[0] = Decimal('1')
         num = vals[0]
         if vals[1] is not None and not isinstance(vals[1], UnitPowerList) and vals[1] != Decimal('1'):
             raise CalculatorException("Second operand must be just a unit")
