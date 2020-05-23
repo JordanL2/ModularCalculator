@@ -62,7 +62,7 @@ class RegexFeature(Feature):
             'Regular Expression', 
             'regexsplit', 
             'Split a string on a regular expression and return as an array',
-            ['pattern', 'string'],
+            ['string', 'pattern'],
             RegexFeature.func_regexsplit, 
             2, 
             2,
@@ -104,7 +104,7 @@ class RegexFeature(Feature):
         return OperationResult(found)
 
     def func_regexsplit(self, vals, units, refs, flags):
-        found = re.split(StringsFeature.string(self, vals[0]), StringsFeature.string(self, vals[1]))
+        found = re.split(StringsFeature.string(self, vals[1]), StringsFeature.string(self, vals[0]))
         found = [OperandResult(f, None, None) for f in found]
         return OperationResult(found)
 

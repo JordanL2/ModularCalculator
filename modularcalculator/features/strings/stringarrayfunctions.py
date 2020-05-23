@@ -31,8 +31,8 @@ class StringArrayFunctionsFeature(Feature):
         calculator.funcs['split'] =  FunctionDefinition(
             'String', 
             'split', 
-            'Split a string on a substring',
-            ['substring','string'],
+            'Split a string on a delimiter',
+            ['string', 'delimiter'],
             StringArrayFunctionsFeature.func_split, 
             2, 
             2, 
@@ -41,20 +41,21 @@ class StringArrayFunctionsFeature(Feature):
         calculator.funcs['join'] =   FunctionDefinition(
             'String', 
             'join', 
-            'Join an array of strings together, joined by a substring',
-            ['substring','strings'],
+            'Join an array of strings together, joined by a delimiter',
+            ['strings', 'delimiter'],
             StringArrayFunctionsFeature.func_join, 
             2, 
             2)
-        calculator.funcs['join'].add_value_restriction(0, 0, 'string')
-        calculator.funcs['join'].add_value_restriction(1, 1, 'array[string]')
+        calculator.funcs['join'].add_value_restriction(0, 0, 'array[string]')
+        calculator.funcs['join'].add_value_restriction(1, 1, 'string')
 
     def func_split(self, vals, units, refs, flags):
-        splitter = StringsFeature.string(self, vals[0])
-        string = StringsFeature.string(self, vals[1])
+        string = StringsFeature.string(self, vals[0])
+        splitter = StringsFeature.string(self, vals[1])
         results = [OperandResult(r, None, None) for r in string.split(splitter)]
         return OperationResult(results)
 
     def func_join(self, vals, units, refs, flags):
-        values = [StringsFeature.string(self, v.value) for v in vals[1]]
-        return OperationResult(vals[0].join(values))
+        delimiter = vals[1]
+        values = [StringsFeature.string(self, v.value) for v in vals[0]]
+        return OperationResult(vals[1].join(values))
