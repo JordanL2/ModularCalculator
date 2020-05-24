@@ -21,7 +21,7 @@ class ArbitraryBaseFeature(Feature):
         return 'Arbitrary-Base Numbers'
 
     def desc():
-        return 'Enables numbers in arbitrary bases (up to 36), eg: 012z89 is 89 in base 12'
+        return 'Enables numbers in arbitrary bases (up to 36), eg: 12z89 is 89 in base 12'
 
     def dependencies():
         return ['numerical.bases']
@@ -40,7 +40,7 @@ class ArbitraryBaseFeature(Feature):
             'number')
         calculator.add_number_caster('arbitrarybase', ArbitraryBaseFeature.number_arbbase)
 
-    arbbase_regex = re.compile(r'(\-?0\d{1,2}z[0-9A-Z]+(\.[0-9A-Z]+)?)', re.IGNORECASE)
+    arbbase_regex = re.compile(r'(\-?\d+z[0-9A-Z]+(\.[0-9A-Z]+)?)', re.IGNORECASE)
 
     def parse_arbbase(self, expr, i, items, flags):
         next = expr[i:]
@@ -59,17 +59,16 @@ class ArbitraryBaseFeature(Feature):
 
     def number_arbbase(self, val):
         if isinstance(val, str) and ArbitraryBaseFeature.arbbase_regex.fullmatch(val):
-            base = val[1:3]
-            if val[0] == '-':
-                base = val[2:4]
-            if base[1].lower() == 'z':
-                base = base[0]
+            split_point = val.lower().index('z')
+            base = val[0:split_point]
+            if base[0] == '-':
+                base = base[1:]
             base = int(base)
-            dec_num = BasesFeature.base_to_dec(self, BasesFeature.number_remove_prefix(self, val, "0{0}z".format(base)), base)
+            dec_num = BasesFeature.base_to_dec(self, BasesFeature.number_remove_prefix(self, val, "{0}z".format(base)), base)
             return dec_num, NumberType(ArbitraryBaseFeature.restore_arbbase, {'base': base})
 
         return None, None
 
     def restore_arbbase(self, val, opts):
         base = opts['base']
-        return BasesFeature.number_add_prefix(self, BasesFeature.dec_to_base(self, val, base), "0{0}z".format(base))
+        return BasesFeature.number_add_prefix(self, BasesFeature.dec_to_base(self, val, base), "{0}z".format(base))
