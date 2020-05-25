@@ -50,8 +50,9 @@ class ArbitraryBaseFeature(Feature):
             if arbbase_match:
                 arbbasenum = arbbase_match.group(1)
                 decnum, num_type = ArbitraryBaseFeature.number_arbbase(self, arbbasenum)
-                clean_arbbasenum = ArbitraryBaseFeature.restore_arbbase(self, decnum, num_type.opts)
-                return [LiteralItem(arbbasenum, clean_arbbasenum)], len(arbbasenum), None
+                if decnum is not None:
+                    clean_arbbasenum = ArbitraryBaseFeature.restore_arbbase(self, decnum, num_type.opts)
+                    return [LiteralItem(arbbasenum, clean_arbbasenum)], len(arbbasenum), None
         return None, None, None
 
     def func_base(self, vals, units, refs, flags):
@@ -59,13 +60,16 @@ class ArbitraryBaseFeature(Feature):
 
     def number_arbbase(self, val):
         if isinstance(val, str) and ArbitraryBaseFeature.arbbase_regex.fullmatch(val):
-            split_point = val.lower().index('z')
-            base = val[0:split_point]
-            if base[0] == '-':
-                base = base[1:]
-            base = int(base)
-            dec_num = BasesFeature.base_to_dec(self, BasesFeature.number_remove_prefix(self, val, "{0}z".format(base)), base)
-            return dec_num, NumberType(ArbitraryBaseFeature.restore_arbbase, {'base': base})
+            try:
+                split_point = val.lower().index('z')
+                base = val[0:split_point]
+                if base[0] == '-':
+                    base = base[1:]
+                base = int(base)
+                dec_num = BasesFeature.base_to_dec(self, BasesFeature.number_remove_prefix(self, val, "{0}z".format(base)), base)
+                return dec_num, NumberType(ArbitraryBaseFeature.restore_arbbase, {'base': base})
+            except CalculatorException:
+                pass
 
         return None, None
 
