@@ -38,6 +38,8 @@ class CalculatorTextEdit(QTextEdit):
         self.historyPos = 0
         self.historySize = 1000
 
+        self.tabSpaces = 4
+
     def setCalculator(self, calculator):
         self.calculator = calculator
 
@@ -98,7 +100,7 @@ class CalculatorTextEdit(QTextEdit):
         if len(self.history) > 0:
             self.history[self.historyPos - 1][1] = self.textCursor().position()
         if e.key() == Qt.Key_Tab:
-            spaces = 4 - (self.textCursor().columnNumber() % 4)
+            spaces = self.tabSpaces - (self.textCursor().columnNumber() % self.tabSpaces)
             self.insert(' ' * spaces)
         elif e.key() == Qt.Key_Z and e.modifiers() & Qt.CTRL:
             self.undo()
