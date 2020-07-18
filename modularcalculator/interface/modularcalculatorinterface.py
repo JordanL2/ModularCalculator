@@ -369,7 +369,7 @@ class ModularCalculatorInterface(StatefulApplication):
         self.entry.insert(unit)
 
     def insertUnitSystem(self):
-        systems = dict([(s, v.name) for s, v in self.calculatormanager.calculator.unit_normaliser.systems.items()])
+        systems = dict([(s, v.name) for s, v in sorted(self.calculatormanager.calculator.unit_normaliser.systems.items(), key=lambda x: x[1].name.lower())])
         SelectionDialog(self, 'Insert Unit System', 'Select unit system to insert', systems, self.selectUnitSystem)
 
     def selectUnitSystem(self, operator):
