@@ -132,13 +132,13 @@ class ModularCalculatorInterface(StatefulApplication):
         self.undoAction.triggered.connect(self.entry.undo)
         editMenu.addAction(self.undoAction)
         self.undoAction.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_Z))
-        self.entry.undoStack.canUndoChanged.connect(lambda b: self.undoAction.setEnabled(b))
+        self.entry.undoStack.canUndoChanged.connect(self.undoAction.setEnabled)
 
         self.redoAction = QAction('Redo', self)
         self.redoAction.triggered.connect(self.entry.redo)
         editMenu.addAction(self.redoAction)
         self.redoAction.setShortcut(QKeySequence(Qt.CTRL + Qt.SHIFT + Qt.Key_Z))
-        self.entry.undoStack.canRedoChanged.connect(lambda b: self.redoAction.setEnabled(b))
+        self.entry.undoStack.canRedoChanged.connect(self.redoAction.setEnabled)
 
         viewMenu = menubar.addMenu('View')
 
