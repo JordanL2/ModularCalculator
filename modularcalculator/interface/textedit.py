@@ -321,7 +321,7 @@ class CalculatorTextEdit(QTextEdit):
         self.undoStack.redo()
 
     def clearContents(self):
-        self.setContents('')
+        self.setContents("\n")
 
     def setOriginal(self, original=None):
         if original is None:
@@ -462,14 +462,15 @@ class CalculatorUndoStack(QObject):
             self.stateChanged()
 
     def push(self, expr):
-        if self.historyPos < len(self.history):
-            del self.history[self.historyPos:]
-        self.history.append([expr, None])
-        if len(self.history) > self.historySize:
-            self.history.pop(0)
-        self.historyPos = len(self.history)
+        if self.historyPos == 0 or expr != self.history[self.historyPos - 1][0]:
+            if self.historyPos < len(self.history):
+                del self.history[self.historyPos:]
+            self.history.append([expr, None])
+            if len(self.history) > self.historySize:
+                self.history.pop(0)
+            self.historyPos = len(self.history)
 
-        self.stateChanged()
+            self.stateChanged()
 
     def keyPressed(self):
         if len(self.history) > 0:
