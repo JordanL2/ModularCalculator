@@ -372,6 +372,8 @@ class CalculatorTextEdit(QTextEdit):
             self.undoStack.history = []
             self.undoStack.historyPos = 0
 
+        self.undoStack.stateChanged()
+
         self.cached_response = None
         self.oldText = None
 
@@ -392,14 +394,19 @@ class CalculatorUndoStack(QObject):
         self.historyPos = 0
         self.historySize = 1000
 
-        self.lastCanUndo = False
-        self.lastCanRedo = False
+        self.lastCanUndo = None
+        self.lastCanRedo = None
+        self.stateChanged()
 
     def canUndo(self):
         return self.historyPos > 1
 
     def canRedo(self):
         return self.historyPos < len(self.history)
+
+    def stateChanged(self):
+        self.checkCanUndo()
+        self.checkCanRedo()
 
     def checkCanUndo(self):
         newCanUndo = self.canUndo()
@@ -433,8 +440,7 @@ class CalculatorUndoStack(QObject):
                 self.parent.setTextCursor(cursor)
             self.parent.verticalScrollBar().setSliderPosition(sliderpos)
 
-            self.checkCanUndo()
-            self.checkCanRedo()
+            self.stateChanged()
 
     def redo(self):
         if self.canRedo():
@@ -453,8 +459,7 @@ class CalculatorUndoStack(QObject):
                 self.parent.setTextCursor(cursor)
             self.parent.verticalScrollBar().setSliderPosition(sliderpos)
 
-            self.checkCanUndo()
-            self.checkCanRedo()
+            self.stateChanged()
 
     def push(self, expr):
         if self.historyPos < len(self.history):
@@ -464,8 +469,7 @@ class CalculatorUndoStack(QObject):
             self.history.pop(0)
         self.historyPos = len(self.history)
 
-        self.checkCanUndo()
-        self.checkCanRedo()
+        self.stateChanged()
 
     def keyPressed(self):
         if len(self.history) > 0:
