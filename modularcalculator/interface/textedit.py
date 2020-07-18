@@ -372,7 +372,7 @@ class CalculatorTextEdit(QTextEdit):
             self.undoStack.history = []
             self.undoStack.historyPos = 0
 
-        self.undoStack.stateChanged()
+        self.undoStack.stateChanged(force=True)
 
         self.cached_response = None
         self.oldText = None
@@ -404,19 +404,19 @@ class CalculatorUndoStack(QObject):
     def canRedo(self):
         return self.historyPos < len(self.history)
 
-    def stateChanged(self):
-        self.checkCanUndo()
-        self.checkCanRedo()
+    def stateChanged(self, force=False):
+        self.checkCanUndo(force)
+        self.checkCanRedo(force)
 
-    def checkCanUndo(self):
+    def checkCanUndo(self, force=False):
         newCanUndo = self.canUndo()
-        if newCanUndo != self.lastCanUndo:
+        if newCanUndo != self.lastCanUndo or force:
             self.canUndoChanged.emit(newCanUndo)
         self.lastCanUndo = newCanUndo
 
-    def checkCanRedo(self):
+    def checkCanRedo(self, force=False):
         newCanRedo = self.canRedo()
-        if newCanRedo != self.lastCanRedo:
+        if newCanRedo != self.lastCanRedo or force:
             self.canRedoChanged.emit(newCanRedo)
         self.lastCanRedo = newCanRedo
 
