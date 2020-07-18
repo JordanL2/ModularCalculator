@@ -117,6 +117,7 @@ class CalculatorTextEdit(QTextEdit):
         self.undoAction = QAction('Undo', self)
         self.undoAction.triggered.connect(self.undo)
         self.undoAction.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_Z))
+        self.undoAction.setEnabled(self.undoStack.canUndo())
         oldUndoAction = menu.actions()[0]
         menu.insertAction(oldUndoAction, self.undoAction)
         menu.removeAction(oldUndoAction)
@@ -124,6 +125,7 @@ class CalculatorTextEdit(QTextEdit):
         self.redoAction = QAction('Redo', self)
         self.redoAction.triggered.connect(self.redo)
         self.redoAction.setShortcut(QKeySequence(Qt.CTRL + Qt.SHIFT + Qt.Key_Z))
+        self.redoAction.setEnabled(self.undoStack.canRedo())
         oldRedoAction = menu.actions()[1]
         menu.insertAction(oldRedoAction, self.redoAction)
         menu.removeAction(oldRedoAction)
@@ -135,7 +137,7 @@ class CalculatorTextEdit(QTextEdit):
             expr = self.getContents()
 
             if not undo and (self.oldText is None or self.oldText != self.getContents()):
-                self.undoStack.newHistory(expr)
+                self.undoStack.push(expr)
 
             if len(expr) > 0 and expr[-1] != "\n":
                 expr += "\n"
@@ -376,17 +378,43 @@ class CalculatorTextEdit(QTextEdit):
         self.refresh()
 
 
-class CalculatorUndoStack():
+class CalculatorUndoStack(QObject):
+
+    canUndoChanged = pyqtSignal(bool)
+    canRedoChanged = pyqtSignal(bool)
 
     def __init__(self, parent):
+        super().__init__()
+
         self.parent = parent
 
         self.history = []
         self.historyPos = 0
         self.historySize = 1000
 
+        self.lastCanUndo = False
+        self.lastCanRedo = False
+
+    def canUndo(self):
+        return self.historyPos > 1
+
+    def canRedo(self):
+        return self.historyPos < len(self.history)
+
+    def checkCanUndo(self):
+        newCanUndo = self.canUndo()
+        if newCanUndo != self.lastCanUndo:
+            self.canUndoChanged.emit(newCanUndo)
+        self.lastCanUndo = newCanUndo
+
+    def checkCanRedo(self):
+        newCanRedo = self.canRedo()
+        if newCanRedo != self.lastCanRedo:
+            self.canRedoChanged.emit(newCanRedo)
+        self.lastCanRedo = newCanRedo
+
     def undo(self):
-        if self.historyPos > 1:
+        if self.canUndo():
             self.parent.cached_response = None
 
             sliderpos = self.parent.verticalScrollBar().sliderPosition()
@@ -405,8 +433,11 @@ class CalculatorUndoStack():
                 self.parent.setTextCursor(cursor)
             self.parent.verticalScrollBar().setSliderPosition(sliderpos)
 
+            self.checkCanUndo()
+            self.checkCanRedo()
+
     def redo(self):
-        if self.historyPos < len(self.history):
+        if self.canRedo():
             self.parent.cached_response = None
 
             sliderpos = self.parent.verticalScrollBar().sliderPosition()
@@ -422,13 +453,19 @@ class CalculatorUndoStack():
                 self.parent.setTextCursor(cursor)
             self.parent.verticalScrollBar().setSliderPosition(sliderpos)
 
-    def newHistory(self, expr):
+            self.checkCanUndo()
+            self.checkCanRedo()
+
+    def push(self, expr):
         if self.historyPos < len(self.history):
             del self.history[self.historyPos:]
         self.history.append([expr, None])
         if len(self.history) > self.historySize:
             self.history.pop(0)
         self.historyPos = len(self.history)
+
+        self.checkCanUndo()
+        self.checkCanRedo()
 
     def keyPressed(self):
         if len(self.history) > 0:
