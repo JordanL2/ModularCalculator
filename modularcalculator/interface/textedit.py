@@ -5,8 +5,8 @@ from modularcalculator.services.syntaxhighlighter import *
 from modularcalculator.interface.guitools import *
 
 from PyQt5.QtCore import Qt, QObject, pyqtSignal, pyqtSlot, QRunnable
-from PyQt5.QtWidgets import QTextEdit
-from PyQt5.QtGui import QFontDatabase, QTextCursor, QTextCharFormat, QGuiApplication, QTextFormat
+from PyQt5.QtWidgets import QTextEdit, QAction
+from PyQt5.QtGui import QFontDatabase, QTextCursor, QTextCharFormat, QGuiApplication, QTextFormat, QKeySequence
 
 import time
 import uuid
@@ -110,6 +110,25 @@ class CalculatorTextEdit(QTextEdit):
     def mouseReleaseEvent(self, e):
         super().mouseReleaseEvent(e)
         self.checkSyntax()
+
+    def contextMenuEvent(self, e):
+        menu = self.createStandardContextMenu()
+
+        self.undoAction = QAction('Undo', self)
+        self.undoAction.triggered.connect(self.undo)
+        self.undoAction.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_Z))
+        oldUndoAction = menu.actions()[0]
+        menu.insertAction(oldUndoAction, self.undoAction)
+        menu.removeAction(oldUndoAction)
+
+        self.redoAction = QAction('Redo', self)
+        self.redoAction.triggered.connect(self.redo)
+        self.redoAction.setShortcut(QKeySequence(Qt.CTRL + Qt.SHIFT + Qt.Key_Z))
+        oldRedoAction = menu.actions()[1]
+        menu.insertAction(oldRedoAction, self.redoAction)
+        menu.removeAction(oldRedoAction)
+        
+        menu.exec(e.globalPos())
 
     def checkSyntax(self, force=False, undo=False):
         if self.calculator is not None and (force or undo or self.oldText is None or self.oldText != self.getContents()):
