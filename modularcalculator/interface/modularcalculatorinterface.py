@@ -170,6 +170,11 @@ class ModularCalculatorInterface(StatefulApplication):
         self.insertUnitAction.setShortcut(QKeySequence(Qt.CTRL + Qt.SHIFT + Qt.Key_U))
         actionMenu.addAction(self.insertUnitAction)
         
+        self.insertUnitSystemAction = QAction('Unit System', self)
+        self.insertUnitSystemAction.triggered.connect(self.insertUnitSystem)
+        self.insertUnitSystemAction.setShortcut(QKeySequence(Qt.CTRL + Qt.SHIFT + Qt.Key_Y))
+        actionMenu.addAction(self.insertUnitSystemAction)
+        
         self.insertOperatorAction = QAction('Operator', self)
         self.insertOperatorAction.triggered.connect(self.insertOperator)
         self.insertOperatorAction.setShortcut(QKeySequence(Qt.CTRL + Qt.SHIFT + Qt.Key_O))
@@ -362,6 +367,13 @@ class ModularCalculatorInterface(StatefulApplication):
 
     def selectUnit(self, unit):
         self.entry.insert(unit)
+
+    def insertUnitSystem(self):
+        systems = dict([(s, v.name) for s, v in self.calculatormanager.calculator.unit_normaliser.systems.items()])
+        SelectionDialog(self, 'Insert Unit System', 'Select unit system to insert', systems, self.selectUnitSystem)
+
+    def selectUnitSystem(self, operator):
+        self.entry.insert(operator)
 
     def openUnitSystemPreference(self):
         SortableListDialog(self, 

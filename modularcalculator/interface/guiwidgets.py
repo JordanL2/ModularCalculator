@@ -3,7 +3,7 @@
 from modularcalculator.interface.guitools import *
 
 from PyQt5.QtCore import Qt, QStringListModel, QSize
-from PyQt5.QtWidgets import QListWidget, QWidgetAction, QSpinBox, QLabel, QHBoxLayout, QVBoxLayout, QWidget, QListView, QDialog, QAbstractItemView, QPushButton, QCalendarWidget, QTimeEdit, QComboBox, QTabBar
+from PyQt5.QtWidgets import QListWidget, QListWidgetItem, QWidgetAction, QSpinBox, QLabel, QHBoxLayout, QVBoxLayout, QWidget, QListView, QDialog, QAbstractItemView, QPushButton, QCalendarWidget, QTimeEdit, QComboBox, QTabBar
 
 
 class SelectionDialog(QDialog):
@@ -19,7 +19,16 @@ class SelectionDialog(QDialog):
         layout.addWidget(labelWidget)
 
         self.list = QListWidget(self)
-        self.list.addItems(items)
+        if isinstance(items, list):
+            for itemText in items:
+                item = QListWidgetItem(itemText, self.list)
+                item.setData(Qt.UserRole, itemText)
+        elif isinstance(items, dict):
+            for itemId, itemText in items.items():
+                item = QListWidgetItem(itemText, self.list)
+                item.setData(Qt.UserRole, itemId)
+        else:
+            raise Exception("Invalid type of items")
         layout.addWidget(self.list)
 
         button = QPushButton("OK", self)
@@ -31,7 +40,7 @@ class SelectionDialog(QDialog):
         self.setVisible(True)
 
     def ok(self):
-        self.okFunction(self.list.currentItem().text())
+        self.okFunction(self.list.currentItem().data(Qt.UserRole))
         self.close()
 
     def sizeHint(self):
