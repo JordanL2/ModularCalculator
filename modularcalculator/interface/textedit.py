@@ -34,11 +34,9 @@ class CalculatorTextEdit(QTextEdit):
 
         self.cached_response = None
 
-        self.history = []
-        self.historyPos = 0
-        self.historySize = 1000
-
         self.tabSpaces = 4
+
+        self.undoStack = CalculatorUndoStack(self)
 
     def setCalculator(self, calculator):
         self.calculator = calculator
@@ -97,14 +95,13 @@ class CalculatorTextEdit(QTextEdit):
         self.css += '</style>'
 
     def keyPressEvent(self, e):
-        if len(self.history) > 0:
-            self.history[self.historyPos - 1][1] = self.textCursor().position()
+        self.undoStack.keyPressed()
         if e.key() == Qt.Key_Tab:
             spaces = self.tabSpaces - (self.textCursor().columnNumber() % self.tabSpaces)
             self.insert(' ' * spaces)
-        elif e.key() == Qt.Key_Z and e.modifiers() & Qt.CTRL:
+        elif e.key() == Qt.Key_Z and e.modifiers() & Qt.CTRL and not e.modifiers() & Qt.SHIFT:
             self.undo()
-        elif e.key() == Qt.Key_Y and e.modifiers() & Qt.CTRL:
+        elif e.key() == Qt.Key_Z and e.modifiers() & Qt.CTRL and e.modifiers() & Qt.SHIFT:
             self.redo()
         else:
             super().keyPressEvent(e)
@@ -119,12 +116,7 @@ class CalculatorTextEdit(QTextEdit):
             expr = self.getContents()
 
             if not undo and (self.oldText is None or self.oldText != self.getContents()):
-                if self.historyPos < len(self.history):
-                    del self.history[self.historyPos:]
-                self.history.append([expr, None])
-                if len(self.history) > self.historySize:
-                    self.history.pop(0)
-                self.historyPos = len(self.history)
+                self.undoStack.newHistory(expr)
 
             if len(expr) > 0 and expr[-1] != "\n":
                 expr += "\n"
@@ -302,41 +294,10 @@ class CalculatorTextEdit(QTextEdit):
         self.checkSyntax(False, undo)
 
     def undo(self):
-        if self.historyPos > 1:
-            self.cached_response = None
-
-            sliderpos = self.verticalScrollBar().sliderPosition()
-            
-            self.historyPos -= 1
-            (expr, cursorpos) = self.history[self.historyPos - 1]
-            if self.historyPos > 1:
-                self.oldText = self.history[self.historyPos - 2]
-            else:
-                self.oldText = None
-            self.setContents(expr, True)
-            
-            if cursorpos is not None:
-                cursor = self.textCursor()
-                cursor.setPosition(cursorpos)
-                self.setTextCursor(cursor)
-            self.verticalScrollBar().setSliderPosition(sliderpos)
+        self.undoStack.undo()
 
     def redo(self):
-        if self.historyPos < len(self.history):
-            self.cached_response = None
-
-            sliderpos = self.verticalScrollBar().sliderPosition()
-            
-            self.historyPos += 1
-            (expr, cursorpos) = self.history[self.historyPos - 1]
-            self.oldText = self.history[self.historyPos - 2]
-            self.setContents(expr, True)
-            
-            if cursorpos is not None:
-                cursor = self.textCursor()
-                cursor.setPosition(cursorpos)
-                self.setTextCursor(cursor)
-            self.verticalScrollBar().setSliderPosition(sliderpos)
+        self.undoStack.redo()
 
     def clearContents(self):
         self.setContents('')
@@ -356,8 +317,8 @@ class CalculatorTextEdit(QTextEdit):
             'cursorSelectionStart': self.textCursor().selectionStart(),
             'cursorSelectionEnd': self.textCursor().selectionEnd(),
             'sliderPosition': self.verticalScrollBar().sliderPosition(),
-            'history': self.history,
-            'historyPos': self.historyPos,
+            'history': self.undoStack.history,
+            'historyPos': self.undoStack.historyPos,
         }
 
     def restoreState(self, state):
@@ -381,19 +342,78 @@ class CalculatorTextEdit(QTextEdit):
             self.verticalScrollBar().setSliderPosition(state['sliderPosition'])
 
         if 'history' in state:
-            self.history = state['history']
+            self.undoStack.history = state['history']
             if 'historyPos' in state:
-                self.historyPos = state['historyPos']
+                self.undoStack.historyPos = state['historyPos']
             else:
                 raise 'history is in state but historyPos isn\'t'
         else:
-            self.history = []
-            self.historyPos = 0
+            self.undoStack.history = []
+            self.undoStack.historyPos = 0
 
         self.cached_response = None
         self.oldText = None
 
         self.refresh()
+
+
+class CalculatorUndoStack():
+
+    def __init__(self, parent):
+        self.parent = parent
+
+        self.history = []
+        self.historyPos = 0
+        self.historySize = 1000
+
+    def undo(self):
+        if self.historyPos > 1:
+            self.parent.cached_response = None
+
+            sliderpos = self.parent.verticalScrollBar().sliderPosition()
+            
+            self.historyPos -= 1
+            (expr, cursorpos) = self.history[self.historyPos - 1]
+            if self.historyPos > 1:
+                self.parent.oldText = self.history[self.historyPos - 2]
+            else:
+                self.parent.oldText = None
+            self.parent.setContents(expr, True)
+            
+            if cursorpos is not None:
+                cursor = self.parent.textCursor()
+                cursor.setPosition(cursorpos)
+                self.parent.setTextCursor(cursor)
+            self.parent.verticalScrollBar().setSliderPosition(sliderpos)
+
+    def redo(self):
+        if self.historyPos < len(self.history):
+            self.parent.cached_response = None
+
+            sliderpos = self.parent.verticalScrollBar().sliderPosition()
+            
+            self.historyPos += 1
+            (expr, cursorpos) = self.history[self.historyPos - 1]
+            self.parent.oldText = self.history[self.historyPos - 2]
+            self.parent.setContents(expr, True)
+            
+            if cursorpos is not None:
+                cursor = self.parent.textCursor()
+                cursor.setPosition(cursorpos)
+                self.parent.setTextCursor(cursor)
+            self.parent.verticalScrollBar().setSliderPosition(sliderpos)
+
+    def newHistory(self, expr):
+        if self.historyPos < len(self.history):
+            del self.history[self.historyPos:]
+        self.history.append([expr, None])
+        if len(self.history) > self.historySize:
+            self.history.pop(0)
+        self.historyPos = len(self.history)
+
+    def keyPressed(self):
+        if len(self.history) > 0:
+            self.history[self.historyPos - 1][1] = self.parent.textCursor().position()
 
 
 class SyntaxHighlighterSignals(QObject):

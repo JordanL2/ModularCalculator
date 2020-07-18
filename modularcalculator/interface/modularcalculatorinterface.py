@@ -136,7 +136,7 @@ class ModularCalculatorInterface(StatefulApplication):
         self.redoAction = QAction('Redo', self)
         self.redoAction.triggered.connect(self.entry.redo)
         editMenu.addAction(self.redoAction)
-        self.redoAction.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_Y))
+        self.redoAction.setShortcut(QKeySequence(Qt.CTRL + Qt.SHIFT + Qt.Key_Z))
 
         viewMenu = menubar.addMenu('View')
 
