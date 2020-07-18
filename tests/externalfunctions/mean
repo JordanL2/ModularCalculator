@@ -1,0 +1,5 @@
+#INPUT array[number]
+
+PARAM1 ||= [1, 2, 3]
+
+mean(PARAM1)

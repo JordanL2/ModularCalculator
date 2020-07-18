@@ -49,8 +49,8 @@ tests = [
 
     { 'test': "(1/0) else",  'expected': { 'message': r"Could not execute operator: else",  'pos': 6, 'items': ['(','1','/','0',')',' '] } },
 
-    { 'test': "f = './examples/does_not_exist'\n@f(1, 2)", 'expected': { 'exception': ParsingException, 'message': r"Could not read file './examples/does_not_exist'", 'pos': 32, 'items': ['f',' ','=',' ',"'./examples/does_not_exist'","\n"] } },
-    { 'test': "f = './examples/ext_func_addition2'\n@f(1, 2)", 'expected': { 'exception': ParsingException, 'message': r"Could not execute operator + with operands: '3', 'None' - Operator + parameter 2 must be of type(s) number", 'pos': 36, 'items': ['f',' ','=',' ',"'./examples/ext_func_addition2'","\n"] } },
+    { 'test': "f = './tests/externalfunctions/does_not_exist'\n@f(1, 2)", 'expected': { 'exception': ParsingException, 'message': r"Could not read file './tests/externalfunctions/does_not_exist'", 'pos': 47, 'items': ['f',' ','=',' ',"'./tests/externalfunctions/does_not_exist'","\n"] } },
+    { 'test': "f = './tests/externalfunctions/ext_func_addition2'\n@f(1, 2)", 'expected': { 'exception': ParsingException, 'message': r"Could not execute operator + with operands: '3', 'None' - Operator + parameter 2 must be of type(s) number", 'pos': 51, 'items': ['f',' ','=',' ',"'./tests/externalfunctions/ext_func_addition2'","\n"] } },
 
     { 'test': "round((+))",  'expected': { 'message': r"Missing left operands for operator +",  'pos': 7, 'items': ['round','(','('] } },
     { 'test': "(1/0) +",  'expected': { 'message': r"Missing right operands for operator +",  'pos': 6, 'items': ['(','1','/','0',')',' '], 'next': '+' } },
@@ -64,7 +64,7 @@ tests = [
     { 'test': "[1 step 2]",  'expected': { 'message': r"Parsing error in array",  'pos': 3, 'items': ['[','1',' '] } },
     { 'test': "@mean([",  'expected': { 'message': r"Array missing close symbol",  'pos': 6, 'items': ['@mean','('] } },
 
-    { 'test': "simplefunc = '/mnt/gitrepo/ModularCalculator/examples/simplefunc'\n@simplefunc(@simplefunc(*))",  'expected': { 'message': r"Missing left operands for operator *",  'pos': 90, 'items': ['simplefunc',' ','=',' ',"'/mnt/gitrepo/ModularCalculator/examples/simplefunc'",'\n','@simplefunc','(','@simplefunc','('] } },
+    { 'test': "simplefunc = './tests/externalfunctions/simplefunc'\n@simplefunc(@simplefunc(*))",  'expected': { 'message': r"Missing left operands for operator *",  'pos': 76, 'items': ['simplefunc',' ','=',' ',"'./tests/externalfunctions/simplefunc'",'\n','@simplefunc','(','@simplefunc','('] } },
 
 #    { 'test': r"", 'expected': { 'exception': ParsingException, 'message': r"", 'pos': 0, 'items': [] } },
 ]
