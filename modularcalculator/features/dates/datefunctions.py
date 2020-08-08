@@ -99,8 +99,8 @@ class DateFunctionsFeature(Feature):
         calculator.funcs['datedifference'] =  FunctionDefinition(
             'Date', 
             'datedifference', 
-            'Determine the length of time between two dates',
-            ['date1', 'date2'],
+            'Determine the length of time between two dates, return answer in the given unit',
+            ['date1', 'date2', 'unit'],
             DateFunctionsFeature.func_datedifference, 
             3, 
             3)
