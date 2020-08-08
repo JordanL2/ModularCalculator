@@ -258,6 +258,7 @@ tests = [
     { 'test': "datedifference('2012-01-02T11:45:56', '2012-01-04T11:45:56', days)", 'expected': (Decimal('2'), 'days') },
     { 'test': "datedifference('2012-01-02T11:45:56', '2012-01-01T11:45:56', hours)", 'expected': (Decimal('24'), 'hours') },
     { 'test': "datedifference('2012-01-02T11:45:56', '2012-01-02T11:45:56.123456', seconds)", 'expected': (Decimal('0.123456'), 'seconds') },
+    { 'test': "datedifference('2012-01-02T11:45:56', '2012-01-02T11:45:56.123456')", 'expected': (Decimal('0.123456'), 'seconds') },
     { 'test': "datedifference('2012-01-02T11:45:56', '2012-01-02T11:45:56.123456', microseconds)", 'expected': (Decimal('123456'), 'microseconds') },
     { 'test': "datedifference('2012-01-02-0200', '2012-01-02T04:00:00+0100', hours)", 'expected': (Decimal('1'), 'hour') },
     { 'test': "datedifference('2012-01-02T11:45:56-0200', '2012-01-02T11:45:56+0100', hours)", 'expected': (Decimal('3'), 'hours') },

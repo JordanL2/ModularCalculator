@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+from modularcalculator.objects.units import *
 from modularcalculator.objects.exceptions import *
 from modularcalculator.features.structure.functions import FunctionDefinition
 from modularcalculator.features.dates.dates import DatesFeature
@@ -100,9 +101,9 @@ class DateFunctionsFeature(Feature):
             'Date', 
             'datedifference', 
             'Determine the length of time between two dates, return answer in the given unit',
-            ['date1', 'date2', 'unit'],
+            ['date1', 'date2', '[unit]'],
             DateFunctionsFeature.func_datedifference, 
-            3, 
+            2, 
             3)
         calculator.funcs['datedifference'].add_value_restriction(0, 1, 'date')
         calculator.funcs['datedifference'].add_value_restriction(2, 2, 'unit')
@@ -151,9 +152,12 @@ class DateFunctionsFeature(Feature):
 
         seconds = Decimal(td.total_seconds())
         seconds = round(seconds, min(6, getcontext().prec))
-        fromunit = self.unit_normaliser.get_unit('seconds')
-        tounit = vals[2]
-        value, tounit = self.unit_normaliser.unit_conversion(seconds, fromunit, tounit, False)
+        fromunit = UnitPowerList.new([self.unit_normaliser.get_unit('seconds'), 1])
+        tounit = UnitPowerList.new([self.unit_normaliser.get_unit('seconds'), 1])
+        value = seconds
+        if len(vals) >= 3:
+            tounit = vals[2]
+            value, tounit = self.unit_normaliser.unit_conversion(seconds, fromunit, tounit, False)
 
         res = OperationResult(value)
         res.set_unit(tounit)
