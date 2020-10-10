@@ -26,7 +26,7 @@ class ModularCalculatorInterface(StatefulApplication):
     def __init__(self, clear):
         super().__init__()
 
-        self.setWindowIcon(QIcon('icons/256x256/apps/io.github.modularcalculator.ModularCalculator.png'))
+        self.setIcon()
 
         self.threadpool = QThreadPool()
         self.threadpool.setMaxThreadCount(1)
@@ -54,6 +54,17 @@ class ModularCalculatorInterface(StatefulApplication):
 
         self.entry.setFocus()
         self.show()
+
+    def setIcon(self):
+        places = [
+            '/usr/share/icons/hicolor/256x256/apps/io.github.jordanl2.ModularCalculator.png',
+            '/app/share/icons/hicolor/256x256/apps/io.github.jordanl2.ModularCalculator.png',
+            'icons/256x256.png'
+            ]
+        for place in places:
+            if os.path.isfile(place):
+                self.setWindowIcon(QIcon(place))
+                return
 
     def initUI(self):
         self.tabbar = MiddleClickCloseableTabBar(self)
