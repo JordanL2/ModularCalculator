@@ -147,25 +147,31 @@ class ExternalFunctionItem(RecursiveOperandItem):
             i = 0
             for value in input_line_regex_match.group(1).split():
 
-                unit = None
+                units = None
                 power = None
 
-                # If type has a comma, first part is value type, second is unit dimension
-                if ',' in value:
-                    value, unit = value.split(',')
-                else:
-                    value, unit = value, None
+                # If type has a colon, first part is value type, second is unit dimensions
+                if ':' in value:
+                    value, units_string = value.split(':')
 
-                # If unit dimension has a power, parse it, otherwise power defaults to 1
-                if unit is not None and '^' in unit:
-                    unit, power = unit.split('^')
+                    # Multiple unit[^power] dimensions can be provided for an input, comma separated
+                    units = []
+                    for unit in units_string.split(','):
+                        # If unit dimension has a power, parse it, otherwise power defaults to 1
+                        if unit is not None and '^' in unit:
+                            unit_unit, unit_power = unit.split('^')
+                            units.append(unit_unit)
+                            units.append(unit_power)
+                        else:
+                            units.append(unit)
+                            units.append(1)
                 else:
-                    unit, power = unit, 1
+                    value, units = value, None
 
                 # Apply value and unit restrictions to the function definition
                 func.add_value_restriction(i, i, [value])
-                if unit is not None:
-                    func.add_unit_restriction(i, i, [unit, power])
+                if units is not None:
+                    func.add_unit_restriction(i, i, units)
                 i += 1
 
         return func.call(self.calculator, inputs, flags)

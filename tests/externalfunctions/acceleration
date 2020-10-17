@@ -1,0 +1,6 @@
+#INPUT number:time number:distance,time^-2
+
+PARAM1 ||= 10s
+PARAM2 ||= 9.8m/s^2
+
+speed = PARAM2 * PARAM1

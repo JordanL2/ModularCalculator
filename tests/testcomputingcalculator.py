@@ -278,6 +278,8 @@ tests = [
     { 'test': "x=1 \nf = './tests/externalfunctions/ext_func_addition'\n@f(5 - 4, 2) \nx", 'expected': Decimal('1') },
     { 'test': "f = './tests/externalfunctions/mean'\n@f([1 .. 10])", 'expected': Decimal('5.5') },
 
+    { 'test': "f = './tests/externalfunctions/acceleration'\n@f(20s, 5m/s^2)", 'expected': (Decimal('100'), 'meters/second') },
+
     { 'test': """#PARAM1 ||= 2^128
 #PARAM1 = 0.0546
 PARAM1 = 4
