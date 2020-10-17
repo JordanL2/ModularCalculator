@@ -147,6 +147,10 @@ class ModularCalculatorInterface(StatefulApplication):
         self.viewSyntaxParsingAutoExecutes.triggered.connect(self.calculatormanager.setAutoExecute)
         viewMenu.addAction(self.viewSyntaxParsingAutoExecutes)
 
+        self.viewLineHighlighting = QAction('Line Highlighting', self, checkable=True)
+        self.viewLineHighlighting.triggered.connect(self.entry.setLineHighlighting)
+        viewMenu.addAction(self.viewLineHighlighting)
+
         self.viewClearOutput = QAction('Clear Output', self)
         self.viewClearOutput.triggered.connect(self.display.clear)
         self.viewClearOutput.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_L))

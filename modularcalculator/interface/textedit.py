@@ -35,6 +35,7 @@ class CalculatorTextEdit(QTextEdit):
         self.cached_response = None
 
         self.tabSpaces = 4
+        self.lineHighlighting = True
 
         self.undoStack = CalculatorUndoStack(self)
 
@@ -268,6 +269,7 @@ class CalculatorTextEdit(QTextEdit):
                 foundFunctional = True
 
         newhtml = self.css
+        
         highlightStatements = self.highlighter.highlight_statements(compactedStatements)
         alternate = True
         p = 0
@@ -282,7 +284,7 @@ class CalculatorTextEdit(QTextEdit):
                 newhtml += makeSpan(htmlSafe(text), style)
                 p += len(text)
 
-            if alternate:
+            if alternate and self.lineHighlighting:
                 highlightPositions.append((p0, p))
 
         if errorExpr != '':
@@ -328,6 +330,12 @@ class CalculatorTextEdit(QTextEdit):
             original = self.getContents()
         self.original = original
 
+    def setLineHighlighting(self, lineHighlighting, refresh=True):
+        self.lineHighlighting = lineHighlighting
+        self.interface.viewLineHighlighting.setChecked(lineHighlighting)
+        if refresh:
+            self.refresh()
+
     def isModified(self):
         return self.getContents() != self.original
 
@@ -340,6 +348,7 @@ class CalculatorTextEdit(QTextEdit):
             'sliderPosition': self.verticalScrollBar().sliderPosition(),
             'history': self.undoStack.history,
             'historyPos': self.undoStack.historyPos,
+            'lineHighlighting': self.lineHighlighting,
         }
 
     def restoreState(self, state):
@@ -371,6 +380,11 @@ class CalculatorTextEdit(QTextEdit):
         else:
             self.undoStack.history = []
             self.undoStack.historyPos = 0
+
+        if 'lineHighlighting' in state:
+            self.setLineHighlighting(state['lineHighlighting'], False)
+        else:
+            self.setLineHighlighting(True, False)
 
         self.undoStack.stateChanged(force=True)
 
