@@ -1,15 +1,15 @@
 #!/usr/bin/python3
 
-from modularcalculator.interface.calculatormanager import *
-from modularcalculator.interface.display import *
-from modularcalculator.interface.featureconfig import *
-from modularcalculator.interface.featureoptions import *
-from modularcalculator.interface.filemanager import *
-from modularcalculator.interface.guiwidgets import *
-from modularcalculator.interface.statefulapplication import *
-from modularcalculator.interface.tabmanager import *
-from modularcalculator.interface.textedit import *
-from modularcalculator.interface.tools import *
+from modularcalculatorinterface.calculatormanager import *
+from modularcalculatorinterface.display import *
+from modularcalculatorinterface.featureconfig import *
+from modularcalculatorinterface.featureoptions import *
+from modularcalculatorinterface.filemanager import *
+from modularcalculatorinterface.guiwidgets import *
+from modularcalculatorinterface.statefulapplication import *
+from modularcalculatorinterface.tabmanager import *
+from modularcalculatorinterface.textedit import *
+from modularcalculatorinterface.tools import *
 
 from PyQt5.QtCore import Qt, QThreadPool, QTimer
 from PyQt5.QtGui import QKeySequence, QCursor, QPalette, QIcon

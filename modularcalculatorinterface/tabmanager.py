@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from modularcalculator.interface.tools import *
+from modularcalculatorinterface.tools import *
 
 
 class TabManager():

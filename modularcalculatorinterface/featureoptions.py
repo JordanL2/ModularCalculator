@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 
 from modularcalculator.modularcalculator import *
-from modularcalculator.interface.guiwidgets import ExpandedListWidget
-from modularcalculator.interface.guitools import *
+from modularcalculatorinterface.guiwidgets import ExpandedListWidget
+from modularcalculatorinterface.guitools import *
 
 from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import QFontDatabase

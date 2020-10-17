@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 from modularcalculator.modularcalculator import *
-from modularcalculator.interface.guitools import *
+from modularcalculatorinterface.guitools import *
 
 from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import QFontDatabase

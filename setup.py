@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="modularcalculator",
+    name="modularcalculatorinterface",
     version="1.0.1-SNAPSHOT",
     author="Jordan Leppert",
     author_email="jordanleppert@gmail.com",
@@ -12,7 +12,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/JordanL2/ModularCalculator",
-    packages=setuptools.find_packages() + setuptools.find_namespace_packages(include=['modularcalculator.*']),
+    packages=setuptools.find_packages() + setuptools.find_namespace_packages(include=['modularcalculator.*', 'modularcalculatorinterface.*']),
     install_requires=[
         'PyQt5',
     ],
@@ -22,5 +22,5 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.6',
-    entry_points = {'console_scripts': ['modularcalculator = modularcalculator.interface.modularcalculatorinterface:main',], },
+    entry_points = {'console_scripts': ['modularcalculator = modularcalculatorinterface.interface:main',], },
 )
