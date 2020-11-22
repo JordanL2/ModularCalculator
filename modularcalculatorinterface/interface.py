@@ -12,7 +12,7 @@ from modularcalculatorinterface.textedit import *
 from modularcalculatorinterface.tools import *
 
 from PyQt5.QtCore import Qt, QThreadPool, QTimer
-from PyQt5.QtGui import QKeySequence, QCursor, QPalette, QIcon
+from PyQt5.QtGui import QKeySequence, QCursor, QPalette, QIcon, QGuiApplication
 from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QSplitter, QAction, QFileDialog, QToolTip, QShortcut, QMessageBox, QScrollArea, QSizePolicy
 
 import os.path
@@ -27,6 +27,7 @@ class ModularCalculatorInterface(StatefulApplication):
         super().__init__()
 
         self.setIcon()
+        QGuiApplication.setDesktopFileName('io.github.jordanl2.ModularCalculator')
 
         self.threadpool = QThreadPool()
         self.threadpool.setMaxThreadCount(1)
