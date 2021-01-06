@@ -21,7 +21,7 @@ class CalculatorTextEdit(QTextEdit):
 
         editFont = QFontDatabase.systemFont(QFontDatabase.FixedFont)
         editFont.setBold(True)
-        editFont.setPointSize(12)
+        editFont.setPointSize(editFont.pointSize() + 2)
         self.setFont(editFont)
 
         self.interface = interface

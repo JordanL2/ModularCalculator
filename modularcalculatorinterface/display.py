@@ -98,14 +98,13 @@ class CalculatorDisplay(QWidget):
     def makeQuestionWidget(self, questionHtml, n):
         questionWidget = DisplayLabel(questionHtml, n, self)
         questionFont = QFontDatabase.systemFont(QFontDatabase.FixedFont)
-        questionFont.setPointSize(10)
         questionWidget.setFont(questionFont)
         return questionWidget
 
     def makeAnswerWidget(self, answerHtml, n):
         answerWidget = DisplayLabel(answerHtml, n, self, CalculatorDisplay.insertAnswer)
         answerFont = QFontDatabase.systemFont(QFontDatabase.FixedFont)
-        answerFont.setPointSize(14)
+        answerFont.setPointSize(answerFont.pointSize() + 4)
         answerFont.setBold(True)
         answerWidget.setFont(answerFont)
         return answerWidget
