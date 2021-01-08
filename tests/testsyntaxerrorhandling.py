@@ -26,6 +26,7 @@ tests = [
     { 'test': r"1 + (min([1, 2, 3 +]))",  'expected': { 'message': r"Missing right operands for operator +",          'pos': 18, 'items': ['1',' ','+',' ','(','min','(','[','1',',',' ','2',',',' ','3',' '], 'next': '+' } },
     { 'test': r"1 + (min([1, 2, 3] +))",  'expected': { 'message': r"Missing right operands for operator +",          'pos': 19, 'items': ['1',' ','+',' ','(','min','(','[','1',',',' ','2',',',' ','3',']',' '], 'next': '+' } },
     { 'test': r"1 + (min([1, 2, (1 2)])", 'expected': { 'message': r"Could not parse: 2)])",                     'pos': 19, 'items': ['1',' ','+',' ','(','min','(','[','1',',',' ','2',',',' ','(','1',' '] } },
+    { 'test': r"sort([1, 2, 3], [4, 5, 6])",         'expected': { 'message': r"Cannot pass multiple arrays to an operation that returns an array",   'pos': 0,  'items': [] } },
 
     { 'test': r"1 / 0",                 'expected': { 'message': r"Could not execute operator / with operands: '1', '0' - Could not execute Operator /",     'pos': 2,  'items': ['1',' '] } },
     { 'test': r"2 + (1 / 0) + 3",       'expected': { 'message': r"Could not execute operator / with operands: '1', '0' - Could not execute Operator /",     'pos': 7,  'items': ['2',' ','+',' ','(','1',' '] } },

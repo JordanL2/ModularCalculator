@@ -284,6 +284,11 @@ tests = [
     { 'test': r"min([1 metre, 40 cm])", 'expected': (Decimal('40'), 'centimeters') },
     { 'test': r"max([40 cm, 1 metre])", 'expected': (Decimal('1'), 'meter') },
 
+    { 'test': r"min([0, 3, 6], [4, 2, 5])", 'expected': [Decimal('0'), Decimal('2'), Decimal('5')] },
+    { 'test': r"min(3, [4, 2, 5])", 'expected': [Decimal('3'), Decimal('2'), Decimal('3')] },
+    { 'test': r"min([0, 3, 6], 4)", 'expected': [Decimal('0'), Decimal('3'), Decimal('4')] },
+    { 'test': r"min([0, 3, 6], [1, 2, 3], [6, 4, 1])", 'expected': [Decimal('0'), Decimal('2'), Decimal('1')] },
+
     #{ 'test': "a = 1\nb = [a]\na += 1\nb", 'expected': [Decimal('2')] },
 
 #    { 'test': r"", 'expected': Decimal('') },

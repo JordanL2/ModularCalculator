@@ -96,6 +96,39 @@ class Operation:
 
             return OperandResult(results, None, None)
 
+        elif (self.maxparams == 1 and self.input_must_be_type(0, 'array') and len(inputs) > 1):
+
+            # Multiple inputs passed to a function that usually takes just one array input.
+            # Step through all arrays, and pass each set of elements as individuals arrays to
+            # the function each time. Put all results into an array.
+
+            # Ensure all arrays are same length
+            lengths = set()
+            for i in range(0, len(inputs)):
+                if type(inputs[i].value) == list:
+                    lengths.add(len(inputs[i].value))
+            if len(lengths) > 1:
+                raise CalculatorException("All array inputs must all be same length")
+            length = lengths.pop()
+
+            # Call operation once for each element in the arrays
+            results = []
+            for i in range(0, length):
+                input_row = []
+                for ii, inp in enumerate(inputs):
+                    if type(inp.value) == list:
+                        # This input is an array, get the element for this iteration
+                        input_row.append(inp.value[i])
+                    else:
+                        # This input is not an array, simply use the fixed value
+                        input_row.append(inp)
+                res = self.call(calculator, [OperandResult(input_row, None, None)], flags)
+                if type(res.value) == list:
+                    raise CalculatorException("Cannot pass multiple arrays to an operation that returns an array")
+                results.append(res)
+
+            return OperandResult(results, None, None)
+
         else:
 
             # If any inputs are an exception, and this operation isn't flagged as allowing them as inputs, then throw the exception
