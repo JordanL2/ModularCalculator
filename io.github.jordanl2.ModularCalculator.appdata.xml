@@ -28,6 +28,6 @@
   </provides>
 
   <releases>
-    <release version="1.0.1" date="2021-01-08"/>
+    <release version="1.0.2-SNAPSHOT" date="2021-01-08"/>
   </releases>
 </component>
