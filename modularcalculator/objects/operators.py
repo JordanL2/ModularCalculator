@@ -99,8 +99,11 @@ class Operation:
         elif (self.maxparams == 1 and self.input_must_be_type(0, 'array') and len(inputs) > 1):
 
             # Multiple inputs passed to a function that usually takes just one array input.
-            # Step through all arrays, and pass each set of elements as individuals arrays to
-            # the function each time. Put all results into an array.
+            # If one or more inputs are arrays:
+            #   Step through all arrays, and pass each set of elements as individuals arrays to
+            #   the function each time. Put all results into an array.
+            # Else:
+            #   Put all inputs into an array, pass to function, return result.
 
             # Ensure all arrays are same length
             lengths = set()
@@ -109,7 +112,11 @@ class Operation:
                     lengths.add(len(inputs[i].value))
             if len(lengths) > 1:
                 raise CalculatorException("All array inputs must all be same length")
-            length = lengths.pop()
+            length = 1
+            array_inputs = False
+            if len(lengths) > 0:
+                length = lengths.pop()
+                array_inputs = True
 
             # Call operation once for each element in the arrays
             results = []
@@ -123,9 +130,12 @@ class Operation:
                         # This input is not an array, simply use the fixed value
                         input_row.append(inp)
                 res = self.call(calculator, [OperandResult(input_row, None, None)], flags)
-                if type(res.value) == list:
-                    raise CalculatorException("Cannot pass multiple arrays to an operation that returns an array")
-                results.append(res)
+                if array_inputs:
+                    if type(res.value) == list:
+                        raise CalculatorException("Cannot pass multiple arrays to an operation that returns an array")
+                    results.append(res)
+                else:
+                    return res
 
             return OperandResult(results, None, None)
 
