@@ -62,6 +62,7 @@ tests = [
     { 'test': "[1 .. (2 / 0) step 2]",  'expected': { 'message': r"Could not execute operator / with operands: '2', '0' - Could not execute Operator /",  'pos': 9, 'items': ['[','1',' ','..',' ','(','2',' '] } },    
     { 'test': "[1 .. 2 step 2 / 0]",  'expected': { 'message': r"Could not execute operator / with operands: '2', '0' - Could not execute Operator /",  'pos': 15, 'items': ['[','1',' ','..',' ','2',' ','step',' ','2',' '] } },
     { 'test': "[1 .. 2 step (2 / 0)]",  'expected': { 'message': r"Could not execute operator / with operands: '2', '0' - Could not execute Operator /",  'pos': 16, 'items': ['[','1',' ','..',' ','2',' ','step',' ','(','2',' '] } },
+    { 'test': "[1 .. 2 step -1]",  'expected': { 'message': r"Can't get from 1 to 2 with step -1",  'pos': 15, 'items': ['[','1',' ','..',' ','2',' ','step',' ','-1'] } },
     { 'test': "[1 step 2]",  'expected': { 'message': r"Parsing error in array",  'pos': 3, 'items': ['[','1',' '] } },
     { 'test': "@mean([",  'expected': { 'message': r"Array missing close symbol",  'pos': 6, 'items': ['@mean','('] } },
 
