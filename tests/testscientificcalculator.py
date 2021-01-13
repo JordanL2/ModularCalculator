@@ -221,6 +221,8 @@ tests = [
     { 'test': r"1 / 10s", 'expected': (Decimal('100'), 'millihertz') },
     { 'test': "a = 1 / 10s\na", 'expected': (Decimal('100'), 'millihertz') },
 
+    { 'test': r"0.002092531754169369520182468769 seconds^-1 * 0", 'expected': (Decimal('0'), 'hertz') },
+
     { 'test': r"1 pint to ml", 'expected': (Decimal('473.176473'), 'milliliters') },
     
     { 'test': "tank = 17100\nthruster = 0.486/s\nformat((tank / (3 thruster)))", 'expected': '3 hours, 15 minutes, 28.395061728395061728395061728395 seconds' },

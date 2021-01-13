@@ -228,13 +228,19 @@ class UnitNormaliser:
                                 elif isinstance(replace_unit, UnitPowerList) and len([d for u in replace_unit.list() for d in self.normalised_dimension(u.unit.dimension)]) >= unitsfound_dimensioncount:
                                     continue
                                 else:
-                                    replace_value = value
-                                    for unitpower in unitsfound:
-                                        replace_value = unitpower.unit.convert(replace_value, -(unitpower.power * multpower), False)
-                                    replace_value = replace_unit.convert(replace_value, (power * multpower), False)
-                                    if closest_value is None or self.get_closeness(replace_value) < self.get_closeness(closest_value):
-                                        closest_unit = replace_unit
-                                        closest_value = replace_value
+                                    if value == 0:
+                                        # Value is 0, so just get the simplest unit possible
+                                        if closest_unit is None or abs(math.log10(replace_unit.unitscale)) < abs(math.log10(closest_unit.unitscale)):
+                                            closest_unit = replace_unit
+                                            closest_value = value
+                                    else:
+                                        replace_value = value
+                                        for unitpower in unitsfound:
+                                            replace_value = unitpower.unit.convert(replace_value, -(unitpower.power * multpower), False)
+                                        replace_value = replace_unit.convert(replace_value, (power * multpower), False)
+                                        if closest_value is None or self.get_closeness(replace_value) < self.get_closeness(closest_value):
+                                            closest_unit = replace_unit
+                                            closest_value = replace_value
                             if closest_unit is not None:
                                 for subunit in unitsfound:
                                     value = unit.removeandconvert(value, subunit.unit, (subunit.power * multpower), False)
