@@ -33,6 +33,8 @@ class MassUnitFeature(AbstractUnitFeature):
         calculator.unit_normaliser.add_unit('mass', UnitDefinitionShortTon())
         calculator.unit_normaliser.add_unit('mass', UnitDefinitionLongTon())
 
+        calculator.unit_normaliser.add_ambiguous_unit(AmbiguousUnitDefinitionTon(), ['short ton', 'long ton'])
+
 
 class UnitDefinitionGram(UnitDefinition):
 
@@ -75,14 +77,18 @@ class UnitDefinitionStone(UnitDefinition):
     unitscale = Decimal('6.35029318')
     systems = ['uk']
 
+class AmbiguousUnitDefinitionTon(AmbiguousUnitDefinition):
+
+    namelist = ['tons','ton']
+
 class UnitDefinitionShortTon(UnitDefinition):
 
-    namelist = ['short tonnes','short tonne']
+    namelist = ['short tons','short ton']
     unitscale = Decimal('907.18474')
     systems = ['us']
 
 class UnitDefinitionLongTon(UnitDefinition):
 
-    namelist = ['long tonnes','long tonne']
+    namelist = ['long tons','long ton']
     unitscale = Decimal('1016.0469088')
     systems = ['uk']
