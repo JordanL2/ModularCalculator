@@ -84,7 +84,7 @@ class GeneralUnitFunctionsFeature(Feature):
                 if last:
                     num_of_unit, unit = GeneralUnitFunctionsFeature.find_first_unit_prefix_at_least_one(self, num, unit, systemunits)
                 else:
-                    num_of_unit = self.floor_number(num)
+                    num_of_unit = self.floor_number(self.round_number(num))
                     num_of_unit, new_unit = GeneralUnitFunctionsFeature.find_first_unit_prefix_at_least_one(self, num_of_unit, unit, systemunits)
                     if new_unit == unit:
                         num -= num_of_unit

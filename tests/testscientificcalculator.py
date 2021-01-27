@@ -254,7 +254,7 @@ tests = [
     { 'test': r"format(1234 MB)", 'expected': '1.234 gigabytes' },
     { 'test': r"format(1234000000 bytes)", 'expected': '1.234 gigabytes' },
     { 'test': r"format(1234005000 bytes)", 'expected': '1.234005 gigabytes' },
-    
+
     { 'test': r"round(2.567s, 2)", 'expected': (Decimal('2.57'), 'seconds') },
     
     { 'test': "x = 1\nreset()\nx", 'expected': None },
