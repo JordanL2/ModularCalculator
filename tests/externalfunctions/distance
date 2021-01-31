@@ -1,0 +1,6 @@
+#INPUT array[number] array[number]
+
+PARAM1 ||= [0, 0]
+PARAM2 ||= [3, 4]
+
+sum(abs(PARAM1 - PARAM2)^2)^0.5

@@ -309,6 +309,8 @@ str +$ '*10^' +$ dec""", 'expected': '4*10^-1' },
     { 'test': "orbitheight = 36000km\nearthmass = 5.97237e24kg\nearthradius = 6378.1km\ngm = G earthmass\norbitradius = earthradius + orbitheight\ntime = 2 pi (orbitradius^\n\n\n3 /\n\n\n\n gm\n\n\n\n\n\n\n\n)^\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n0.5\ntime to hours",
         'expected': (Decimal('24.116847271747239529834702110187'), 'hours') },
 
+    { 'test': "f = './tests/externalfunctions/distance'\n@f([0, 0], [3, 4])", 'expected': Decimal('5') },
+
 #    { 'test': r"", 'expected': '' },
 ]
 
