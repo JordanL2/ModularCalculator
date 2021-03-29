@@ -5,19 +5,19 @@ from modularcalculator.modularcalculator import *
 from modularcalculator.services.syntaxhighlighter import *
 from modularcalculator.objects.exceptions import *
 
-import pprint
+import argparse
 
-
-pp = pprint.PrettyPrinter(indent=4)
 
 print("BasicCalculator tests:")
 c = ModularCalculator('Basic')
 hl = SyntaxHighlighter()
 
-#print("Presets:", c.list_presets(), "\n")
-#print("Features:")
-#pp.pprint(c.list_features())
-#print("\n")
+parser = argparse.ArgumentParser()
+parser.add_argument('-n', dest='times', nargs='?', type=int, default=1, help='number of times to run the tests')
+parser.add_argument('-t', dest='test',  nargs='?', type=int, default=0, help='test to run')
+args = parser.parse_args()
+times = args.times
+test = args.test
 
 tests = [
     { 'test': '123', 'expected': Decimal('123') },
@@ -33,5 +33,7 @@ tests = [
 #    { 'test': r"", 'expected': '' },
 ]
 
+if test != 0:
+    tests = [tests[test - 1]]
 tester = TestRunner(CalculatorException)
 tester.test(c.calculate, tests)

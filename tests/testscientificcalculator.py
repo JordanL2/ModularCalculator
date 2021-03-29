@@ -13,9 +13,11 @@ c = ModularCalculator('Scientific')
 hl = SyntaxHighlighter()
 
 parser = argparse.ArgumentParser()
-parser.add_argument('times', metavar='n', nargs='?', type=int, default=1, help='number of times to run the tests')
+parser.add_argument('-n', dest='times', nargs='?', type=int, default=1, help='number of times to run the tests')
+parser.add_argument('-t', dest='test',  nargs='?', type=int, default=0, help='test to run')
 args = parser.parse_args()
 times = args.times
+test = args.test
 
 tests = [
     { 'test': 'min([1, 2, 3])', 'expected': Decimal('1') },
@@ -184,6 +186,7 @@ tests = [
     { 'test': r"25 kg m / 5 s^2", 'expected': (Decimal('5'), 'newtons') },
     { 'test': r"5 (°C/kg/m)*s^2", 'expected': (Decimal('5'), 'Celsius/newton') },
     { 'test': r"1 m^2/s", 'expected': (Decimal('1'), 'meter^2/second') },
+    { 'test': r"100m/s^2 / (1kN/ 1000000kg)", 'expected': Decimal('100000') },
     
     { 'test': r"10N / 5kg", 'expected': (Decimal('2'), 'meters/second^2') },
     
@@ -307,5 +310,7 @@ tests = [
 #    { 'test': r"", 'expected': Decimal('') },
 ]
 
+if test != 0:
+    tests = [tests[test - 1]]
 tester = TestRunner(CalculatorException)
 tester.test(c.calculate, tests * times)

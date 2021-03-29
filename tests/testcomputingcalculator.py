@@ -5,10 +5,19 @@ from modularcalculator.modularcalculator import *
 from modularcalculator.services.syntaxhighlighter import *
 from modularcalculator.objects.exceptions import *
 
+import argparse
+
 
 print("ComputingCalculator tests:")
 c = ModularCalculator('Computing')
 hl = SyntaxHighlighter()
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-n', dest='times', nargs='?', type=int, default=1, help='number of times to run the tests')
+parser.add_argument('-t', dest='test',  nargs='?', type=int, default=0, help='test to run')
+args = parser.parse_args()
+times = args.times
+test = args.test
 
 tests = [
     { 'test': '123 + 456', 'expected': Decimal(579) },
@@ -314,5 +323,7 @@ str +$ '*10^' +$ dec""", 'expected': '4*10^-1' },
 #    { 'test': r"", 'expected': '' },
 ]
 
+if test != 0:
+    tests = [tests[test - 1]]
 tester = TestRunner(CalculatorException)
 tester.test(c.calculate, tests)

@@ -251,8 +251,36 @@ class UnitNormaliser:
                         break
                 else:
                     break
+        
+        value, unit = self.dedupe(value, unit)
 
         return value, unit.check_empty()
+
+    # Check if any remaining subunits are the same dimension
+    def dedupe(self, value, unit):
+        if len(unit.list()) > 1:
+            # Get list of dimensions and index of subunits
+            dimensions = {}
+            for di in [(u.unit.dimension, i) for i, u in enumerate(unit.list())]:
+                if di[0] not in dimensions:
+                    dimensions[di[0]] = []
+                dimensions[di[0]].append(di[1])
+
+            for dimension in dimensions:
+                units_i = dimensions[dimension]
+                if len(units_i) > 1:
+                    # Need to de-dupe. This code should only happen if the remaining units cancel out completely.
+                    power = sum([unit.list()[i].power for i in units_i])
+                    if power != 0:
+                        raise Exception("simplify_units did not dedupe units")
+
+                    # Remove existing units
+                    units_to_remove = [unit.list()[i] for i in units_i]
+                    for unit_to_remove in units_to_remove:
+                        value = unit.removeandconvert(value, unit_to_remove.unit, unit_to_remove.power, False)
+
+
+        return value, unit
 
     def get_closeness(self, num):
         closeness = abs(math.log10(abs(float(num))) - self.simplify_preferred_magnitude)
