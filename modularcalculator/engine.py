@@ -296,7 +296,9 @@ class Engine:
                 itemtext = None
                 if op_item is not None:
                     itemtext = op_item.text
-                raise ExecuteException("Could not execute operator {0} with operands: {1} - {2}".format(sym, values, err.message), previous_items, itemtext)
+                new_err = ExecuteException("Could not execute operator {0} with operands: {1} - {2}".format(sym, values, err.message), previous_items, itemtext)
+                op_result = OperandResult(new_err, None, None)
+                op_result._INDEX = item_index
 
         # Return the list of items, with the operator and its input replaced with the operator result
         return items[0:input_start] + [op_result] + items[input_end:]

@@ -173,6 +173,7 @@ tests = [
     { 'test': "a = 1\nb = 2\ntrue then a else b = 3\na - b", 'expected': Decimal(1) },
     { 'test': "a = 1\nb = 2\nfalse then a else b = 3\na - b", 'expected': Decimal(-2) },
     { 'test': r"false then (1/0) else 2", 'expected': Decimal(2) },
+    { 'test': r"false then 1/0 else 2", 'expected': Decimal('2') },
     { 'test': r"false and (1/0)", 'expected': False },
     { 'test': r"true or (1/0)", 'expected': True },
 
