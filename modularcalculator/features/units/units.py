@@ -90,7 +90,7 @@ class UnitsFeature(Feature):
 
             name = next_lower[0: length]
             if name in self.unit_normaliser.unitnames:
-                if len(next) == len(name) or not next[len(name)].isalpha():
+                if len(next) == len(name) or not UnitsFeature.unit_char(self, next[len(name)]):
                     unittext = next[0: len(name)]
                     unit_def = self.unit_normaliser.get_unit(unittext)
                     unitobj = UnitPowerList.newfromunit(unit_def)
@@ -99,12 +99,15 @@ class UnitsFeature(Feature):
             if self.unit_symbols_enabled:
                 symbol = next[0: length]
                 if symbol in self.unit_normaliser.unitsymbols:
-                    if len(next) == len(symbol) or not next[len(symbol)].isalpha():
+                    if len(next) == len(symbol) or not UnitsFeature.unit_char(self, next[len(symbol)]):
                         unit_def = self.unit_normaliser.get_unit(symbol)
                         unitobj = UnitPowerList.newfromunit(unit_def)
                         return [UnitItem(symbol, unitobj)], len(symbol), None
             
         return None, None, None
+
+    def unit_char(self, char):
+        return char.isalpha() or char == '_'
 
     def op_unit_conversion(self, vals, units, refs, flags):
         if isinstance(vals[0], UnitPowerList):

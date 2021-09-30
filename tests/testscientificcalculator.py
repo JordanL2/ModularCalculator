@@ -304,6 +304,8 @@ tests = [
     { 'test': r"min([0, 3, 6], [1, 2, 3], [6, 4, 1])", 'expected': [Decimal('0'), Decimal('2'), Decimal('1')] },
     { 'test': r"min(5, 2, 3, 1, 4)", 'expected': Decimal('1') },
     { 'test': r"sort(5, 2, 3, 1, 4)", 'expected': [Decimal('1'), Decimal('2'), Decimal('3'), Decimal('4'), Decimal('5')] },
+    
+    { 'test': r"day_usage = 1", 'expected': Decimal('1') },
 
     #{ 'test': "a = 1\nb = [a]\na += 1\nb", 'expected': [Decimal('2')] },
 
