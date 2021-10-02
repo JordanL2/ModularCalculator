@@ -91,7 +91,10 @@ class Operation:
                     else:
                         # This input is not an array, simply use the fixed value
                         input_row.append(inp)
-                res = self.call(calculator, input_row, flags)
+                try:
+                    res = self.call(calculator, input_row, flags)
+                except CalculatorException as err:
+                    res = OperandResult(err, None, None)
                 results.append(res)
 
             return OperandResult(results, None, None)
