@@ -33,6 +33,9 @@ class CalculatorException(Exception):
     def __init__(self, message):
         self.message = message
 
+    def __str__(self):
+        return "ERROR: " + self.message
+
 
 class CalculatingException(CalculatorException):
 
@@ -88,7 +91,6 @@ class CalculateException(CalculatorException):
     def truncate(self, text):
         i = self.find_pos(text)
         return text[0:i]
-    
 
 class ParseException(CalculateException):
 

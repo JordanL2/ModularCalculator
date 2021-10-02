@@ -146,6 +146,9 @@ class OperandResult:
         self.ref = ref
 
     def __str__(self):
+        value_str = str(self.value)
+        if isinstance(self.value, list):
+            value_str = '[' + ', '.join([str(s) for s in self.value]) + ']'
         if self.unit is not None:
-            return str(self.value) + ' ' + str(self.unit)
-        return str(self.value)
+            return value_str + ' ' + str(self.unit)
+        return value_str
