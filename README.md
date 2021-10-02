@@ -1,37 +1,28 @@
 # Description
 
-A powerful, modular calculator written in Python.
+A powerful, modular calculator engine library written in Python.
 
 Designed to make it easy to add a calculator into another Python application, with the specific features required. Adding custom features is possible.
-
-Also has a Qt interface, allowing it to be used as a desktop app. The supported features are aimed at making a tool useful for scientific, engineering or computing work.
 
 
 # Requirements
 
 * Linux
 * Python 3.6+
-* Qt 5.11+
 
 
 # Installation
 
-sudo ./install
+sudo pip3 install .
 
 
 # Uninstallation
 
-sudo ./uninstall
+sudo pip3 uninstall modularcalculator
 
 
 # Usage
 
-## As a Graphical App
-"Modular Calculator" should be available in your desktop environment application menu.
-
-Alternatively, run "modularcalculator" in a terminal.
-
-## As a Component in a Python App
 Import the ModularCalculator class:
 ```
 from modularcalculator.modularcalculator import ModularCalculator
