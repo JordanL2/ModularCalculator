@@ -184,6 +184,7 @@ tests = [
     { 'test': "true then\n1 + 3\nelse\n2", 'expected': Decimal('4') },
     { 'test': "true then\n1\nelse\n2\n456", 'expected': Decimal('456') },
     { 'test': "a = [0, 1]\n(a > 0) then 1 / a else 0", 'expected': [Decimal('0'), Decimal('1')] },
+    { 'test': "a = [0, 1]\nb = 1 / a\nfilter(b, a > 0)", 'expected': [Decimal('1')] },
 
     { 'test': r"0b10101 & 0b110", 'expected': '0b00100' },
     { 'test': r"0b10101 | 0b110", 'expected': '0b10111' },
