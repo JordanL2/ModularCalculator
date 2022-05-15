@@ -88,6 +88,8 @@ class Number:
 
     def __truediv__(self, other):
         other = Number(other)
+        if other.num % 1 != 0:
+            return Number(self.to_decimal() / other.to_decimal())
         other = Number(other.den, other.num)
         return self.__mul__(other)
 

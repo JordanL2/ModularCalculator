@@ -97,6 +97,16 @@ class TestNumber(unittest.TestCase):
         self.assertEqual(res, Number(8, 3))
         self.assertIsInstance(res, Number)
 
+    def test_truediv_3(self):
+        res = Number(2, 3) / Number(1, 3)
+        self.assertEqual(res, Number(2))
+        self.assertIsInstance(res, Number)
+
+    def test_truediv_4(self):
+        res = Number('2.8') / Number('1.4')
+        self.assertEqual(res, Number(2))
+        self.assertIsInstance(res, Number)
+
     def test_div_mul(self):
         res = Number(10) / Number(3)
         res *= 3
