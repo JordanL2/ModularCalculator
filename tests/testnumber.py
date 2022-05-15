@@ -226,6 +226,17 @@ class TestNumber(unittest.TestCase):
         self.assertEqual(b, Number(123))
         self.assertIsInstance(b, Number)
 
+    def test_str_1(self):
+        a = Number(10, 3)
+        a_str = a.to_string(10)
+        self.assertEqual(a_str, '3.3333333333')
+
+    def test_str_2(self):
+        a = Number(10, 3)
+        a *= 3
+        a_str = a.to_string(10)
+        self.assertEqual(a_str, '10')
+
 
 if __name__ == '__main__':
     unittest.main()

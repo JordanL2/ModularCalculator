@@ -45,12 +45,15 @@ class Number:
         res = self.num / self.den
         return Decimal(res)
 
-    def __str__(self):
-        val = str(self.to_decimal)
-#        val = format(val, 'f')
-#        if val.find('.') > -1:
-#            val = val.rstrip('0')
+    def to_string(self, places):
+        val = Decimal(round(self.to_decimal(), places))
+        val = format(val, 'f')
+        if val.find('.') > -1:
+            val = val.rstrip('0')
+            if val[-1] == '.':
+                val = val[0:-1]
         return val
+
 
     def __repr__(self):
         if self.den != Decimal('1'):
