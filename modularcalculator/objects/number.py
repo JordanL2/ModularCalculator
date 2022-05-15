@@ -38,6 +38,7 @@ class Number:
         self.num = num
         self.den = den
 
+
     def copy(self):
         return Number(self)
 
@@ -53,7 +54,6 @@ class Number:
             if val[-1] == '.':
                 val = val[0:-1]
         return val
-
 
     def __repr__(self):
         if self.den != Decimal('1'):
@@ -77,11 +77,11 @@ class Number:
 
 
     def __add__(self, other):
-        (a_num, b_num, lcm) = Number.normalise(self, other)
+        (lcm, a_num, b_num) = Number.normalise(self, other)
         return Number(a_num + b_num, lcm)
 
     def __sub__(self, other):
-        (a_num, b_num, lcm) = Number.normalise(self, other)
+        (lcm, a_num, b_num) = Number.normalise(self, other)
         return Number(a_num - b_num, lcm)
 
     def __mul__(self, other):
@@ -101,7 +101,7 @@ class Number:
         return res.__floor__()
 
     def __mod__(self, other):
-        (a_num, b_num, lcm) = Number.normalise(self, other)
+        (lcm, a_num, b_num) = Number.normalise(self, other)
         return Number(a_num % b_num, lcm)
 
     def __divmod__(self, other):
@@ -180,8 +180,6 @@ class Number:
     def update_precision(prec):
         getcontext().prec = prec
 
-    def normalise(a, b):
-        lcm = math.lcm(int(a.den), int(b.den))
-        a_mult = lcm / a.den
-        b_mult = lcm / b.den
-        return (a.num * a_mult, b.num * b_mult, lcm)
+    def normalise(*vals):
+        lcm = math.lcm(*[int(v.den) for v in vals])
+        return (lcm, *[v.num * (lcm / v.den) for v in vals])
