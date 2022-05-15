@@ -71,14 +71,30 @@ class TestNumber(unittest.TestCase):
         self.assertEqual(res, Number(23, 15))
         self.assertIsInstance(res, Number)
 
-    def test_mul(self):
+    def test_mul_1(self):
         res = Number(12) * Number(3)
         self.assertEqual(res, Number(36))
         self.assertIsInstance(res, Number)
 
-    def test_truediv(self):
+    def test_mul_2(self):
+        res = Number(1, 2) * Number(1, 4)
+        self.assertEqual(res, Number(1, 8))
+        self.assertIsInstance(res, Number)
+
+    def test_mul_3(self):
+        res = Number(1, 2) * Number(32)
+        self.assertEqual(res, Number(16))
+        self.assertIsInstance(res, Number)
+
+    def test_truediv_1(self):
         res = Number(12) / Number(5)
         self.assertEqual(res, Number('2.4'))
+        self.assertEqual(res, Number(12, 5))
+        self.assertIsInstance(res, Number)
+
+    def test_truediv_2(self):
+        res = Number(16) / Number(6)
+        self.assertEqual(res, Number(8, 3))
         self.assertIsInstance(res, Number)
 
     def test_div_mul(self):
@@ -92,17 +108,26 @@ class TestNumber(unittest.TestCase):
         self.assertEqual(res, Number(2))
         self.assertIsInstance(res, Number)
 
-    def test_mod(self):
+    def test_mod_1(self):
         res = Number(13) % Number(5)
         self.assertEqual(res, Number(3))
         self.assertIsInstance(res, Number)
 
-    def test_divmod(self):
+    def test_mod_2(self):
+        res = Number(5, 2) % Number(2)
+        self.assertEqual(res, Number(1, 2))
+        self.assertIsInstance(res, Number)
+
+    def test_divmod_1(self):
         res = divmod(Number(13), Number(5))
         self.assertEqual(res, (Number(2), Number(3)))
         self.assertIsInstance(res, tuple)
         self.assertIsInstance(res[0], Number)
         self.assertIsInstance(res[1], Number)
+
+    def test_divmod_2(self):
+        res = divmod(Number(5, 2), Number(2))
+        self.assertEqual(res, (Number(1), Number(1, 2)))
 
     def test_pow_1(self):
         res = Number(6) ** Number(2)
@@ -117,6 +142,16 @@ class TestNumber(unittest.TestCase):
     def test_pow_3(self):
         res = pow(Number(6), Number(2), 10)
         self.assertEqual(res, Number(6))
+        self.assertIsInstance(res, Number)
+
+    def test_pow_4(self):
+        res = Number(4) ** Number(1, 2)
+        self.assertEqual(res, Number(2))
+        self.assertIsInstance(res, Number)
+
+    def test_pow_5(self):
+        res = Number(1 / 2) ** Number(2)
+        self.assertEqual(res, Number(1 / 4))
         self.assertIsInstance(res, Number)
 
 
@@ -175,7 +210,7 @@ class TestNumber(unittest.TestCase):
         self.assertEqual(b, Number(123))
         self.assertIsInstance(b, Number)
 
-    def test_pos(self):
+    def test_abs(self):
         a = Number(-123)
         b = abs(a)
         self.assertEqual(b, Number(123))

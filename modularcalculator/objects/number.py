@@ -96,17 +96,16 @@ class Number:
         return res.__floor__()
 
     def __mod__(self, other):
-        #TODO
-        return Number(self.num % Number(other).num)
+        (a_num, b_num, lcm) = Number.normalise(self, other)
+        return Number(a_num % b_num, lcm)
 
     def __divmod__(self, other):
-        #TODO
-        res = divmod(self.num, Number(other).num)
-        return (Number(res[0]), Number(res[1]))
+        div = self // other
+        mod = self % other
+        return (div, mod)
 
     def __pow__(self, other, modulo=None):
-        #TODO
-        return Number(pow(self.num, Number(other).num, modulo))
+        return Number(pow(self.to_decimal(), Number(other).to_decimal(), modulo))
 
 
     def __neg__(self):
