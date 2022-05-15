@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from decimal import Decimal
+from decimal import Decimal, getcontext
 import math
 
 
@@ -23,6 +23,18 @@ class Number:
             num = Decimal(num)
         if not isinstance(den, Decimal):
             den = Decimal(den)
+
+        # Ensure denominator is integer
+        if den % 1 != 0:
+            raise Exception("Denominator must be integer, was given: {}".format(repr(den)))
+
+        # Greatest common divisor
+        if num % 1 == 0:
+            gcd = math.gcd(int(num), int(den))
+            if gcd > 1:
+                num /= gcd
+                den /= gcd
+
         self.num = num
         self.den = den
 
@@ -62,28 +74,38 @@ class Number:
 
 
     def __add__(self, other):
-        return Number(self.num + Number(other).num)
+        (a_num, b_num, lcm) = Number.normalise(self, other)
+        return Number(a_num + b_num, lcm)
 
     def __sub__(self, other):
-        return Number(self.num - Number(other).num)
+        (a_num, b_num, lcm) = Number.normalise(self, other)
+        return Number(a_num - b_num, lcm)
 
     def __mul__(self, other):
-        return Number(self.num * Number(other).num)
+        other = Number(other)
+        res = Number(self.num * other.num, self.den * other.den)
+        return res
 
     def __truediv__(self, other):
-        return Number(self.num / Number(other).num)
+        other = Number(other)
+        other = Number(other.den, other.num)
+        return self.__mul__(other)
 
     def __floordiv__(self, other):
-        return Number(self.num // Number(other).num)
+        res = self.__truediv__(other)
+        return res.__floor__()
 
     def __mod__(self, other):
+        #TODO
         return Number(self.num % Number(other).num)
 
     def __divmod__(self, other):
+        #TODO
         res = divmod(self.num, Number(other).num)
         return (Number(res[0]), Number(res[1]))
 
     def __pow__(self, other, modulo=None):
+        #TODO
         return Number(pow(self.num, Number(other).num, modulo))
 
 
@@ -116,24 +138,16 @@ class Number:
 
 
     def __round__(self, ndigits=0):
-        res = self.copy()
-        res.num = round(res.num)
-        return res
+        return Number(round(self.to_decimal()))
 
     def __trunc__(self):
-        res = self.copy()
-        res.num = math.trunc(res.num)
-        return res
+        return Number(trunc.floor(self.to_decimal()))
 
     def __floor__(self):
-        res = self.copy()
-        res.num = math.floor(res.num)
-        return res
+        return Number(math.floor(self.to_decimal()))
 
     def __ceil__(self):
-        res = self.copy()
-        res.num = math.ceil(res.num)
-        return res
+        return Number(math.ceil(self.to_decimal()))
 
 
     def __lt__(self, other):
@@ -161,3 +175,9 @@ class Number:
 
     def update_precision(prec):
         getcontext().prec = prec
+
+    def normalise(a, b):
+        lcm = math.lcm(int(a.den), int(b.den))
+        a_mult = lcm / a.den
+        b_mult = lcm / b.den
+        return (a.num * a_mult, b.num * b_mult, lcm)

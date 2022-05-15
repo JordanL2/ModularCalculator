@@ -8,6 +8,10 @@ import unittest
 
 class TestNumber(unittest.TestCase):
 
+    def __init__(self, n):
+        super().__init__(n)
+        Number.update_precision(100)
+
     def test_create(self):
         a = Number(123)
         self.assertEqual(a.num, Decimal('123'))
@@ -47,14 +51,24 @@ class TestNumber(unittest.TestCase):
         self.assertIsInstance(f.den, Decimal)
 
 
-    def test_add(self):
+    def test_add_1(self):
         res = Number(12) + Number(34)
         self.assertEqual(res, Number(46))
         self.assertIsInstance(res, Number)
 
-    def test_sub(self):
+    def test_add_2(self):
+        res = Number(11, 6) + Number(3, 10)
+        self.assertEqual(res, Number(32, 15))
+        self.assertIsInstance(res, Number)
+
+    def test_sub_1(self):
         res = Number(12) - Number(34)
         self.assertEqual(res, Number(-22))
+        self.assertIsInstance(res, Number)
+
+    def test_sub_2(self):
+        res = Number(11, 6) - Number(3, 10)
+        self.assertEqual(res, Number(23, 15))
         self.assertIsInstance(res, Number)
 
     def test_mul(self):
@@ -65,6 +79,12 @@ class TestNumber(unittest.TestCase):
     def test_truediv(self):
         res = Number(12) / Number(5)
         self.assertEqual(res, Number('2.4'))
+        self.assertIsInstance(res, Number)
+
+    def test_div_mul(self):
+        res = Number(10) / Number(3)
+        res *= 3
+        self.assertEqual(res, Number(10))
         self.assertIsInstance(res, Number)
 
     def test_floordiv(self):
