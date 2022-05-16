@@ -48,9 +48,11 @@ class Number:
         return Decimal(res)
 
     def __str__(self):
-        val = Decimal(round(self.to_decimal(), NUMBER['decimal_places']))
-        val = format(val, 'f')
-        if val.find('.') > -1:
+        val = str(self.to_decimal())
+        dot_i = val.find('.')
+        if dot_i > -1:
+            if len(val) - dot_i - 1 > NUMBER['decimal_places']:
+                val = val[0: dot_i + 1 + NUMBER['decimal_places']]
             val = val.rstrip('0')
             if val[-1] == '.':
                 val = val[0:-1]
@@ -61,12 +63,6 @@ class Number:
             return "Number({}, {})".format(self.num, self.den)
         return "Number({})".format(self.num)
 
-    def numden(self):
-        return {
-            num: self.num,
-            den: self.den
-        }
-
     def fraction(self):
         whole = self.num % self.den
         num =  self.num // self.den
@@ -75,6 +71,9 @@ class Number:
             num: num,
             den: self.den
         }
+
+    def will_truncate(self):
+        return str(self.to_decimal()) != self.__str__()
 
 
     def __add__(self, other):
@@ -173,7 +172,9 @@ class Number:
 
 
     def __hash__(self):
-        return hash(self.numden())
+        if self.will_truncate():
+            return hash((self.num, self.den))
+        return hash(self.to_decimal())
 
 
     def update_precision(total, decimal_places):

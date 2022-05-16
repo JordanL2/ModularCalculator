@@ -51,6 +51,14 @@ class TestNumber(unittest.TestCase):
         self.assertIsInstance(f.den, Decimal)
 
 
+    def test_will_truncate_1(self):
+        a = Number(10, 3)
+        self.assertTrue(a.will_truncate())
+
+    def test_will_truncate_2(self):
+        a = Number(10, 5)
+        self.assertFalse(a.will_truncate())
+
     def test_add_1(self):
         res = Number(12) + Number(34)
         self.assertEqual(res, Number(46))
@@ -241,6 +249,29 @@ class TestNumber(unittest.TestCase):
         a *= Number(3)
         a_str = str(a)
         self.assertEqual(a_str, '10')
+
+    def test_str_3(self):
+        a = Number(20, 3)
+        a_str = str(a)
+        self.assertEqual(a_str, '6.666666666666666666666666666666')
+
+    def test_hash_1(self):
+        a = Number(1) + Number(122)
+        b = Number('123')
+        self.assertEqual(a, b)
+        self.assertEqual(hash(a), hash(b))
+
+    def test_hash_2(self):
+        a = Number(1, 2)
+        b = Number('0.5')
+        self.assertEqual(a, b)
+        self.assertEqual(hash(a), hash(b))
+
+    def test_hash_3(self):
+        a = Number(10, 3)
+        b = Number('3.333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333')
+        self.assertEqual(a, b)
+        self.assertNotEqual(hash(a), hash(b))
 
 
 if __name__ == '__main__':
