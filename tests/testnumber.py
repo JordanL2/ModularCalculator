@@ -32,7 +32,7 @@ class TestNumber(unittest.TestCase):
         self.assertIsInstance(c.den, Decimal)
 
         d = Number('1.23')
-        self.assertEqual(round(d.num, 10), Decimal('1.23'))
+        self.assertEqual(d.num, Decimal('1.23'))
         self.assertEqual(d.den, 1)
         self.assertIsInstance(d.num, Decimal)
         self.assertIsInstance(d.den, Decimal)
