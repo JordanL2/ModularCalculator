@@ -31,7 +31,7 @@ class TestNumber(unittest.TestCase):
         self.assertIsInstance(c.num, Decimal)
         self.assertIsInstance(c.den, Decimal)
 
-        d = Number(float(1.23))
+        d = Number('1.23')
         self.assertEqual(round(d.num, 10), Decimal('1.23'))
         self.assertEqual(d.den, 1)
         self.assertIsInstance(d.num, Decimal)
@@ -43,7 +43,7 @@ class TestNumber(unittest.TestCase):
         self.assertIsInstance(e.num, Decimal)
         self.assertIsInstance(e.den, Decimal)
 
-        f = Number(e)
+        f = e.copy()
         self.assertEqual(f.num, Decimal('123'))
         self.assertIsNot(e, f)
         self.assertEqual(f.den, 1)
@@ -160,8 +160,13 @@ class TestNumber(unittest.TestCase):
         self.assertIsInstance(res, Number)
 
     def test_pow_5(self):
-        res = Number(1 / 2) ** Number(2)
-        self.assertEqual(res, Number(1 / 4))
+        res = Number('0.5') ** Number(2)
+        self.assertEqual(res, Number(1, 4))
+        self.assertIsInstance(res, Number)
+
+    def test_pow_5(self):
+        res = Number(1, 2) ** Number(2)
+        self.assertEqual(res, Number('0.25'))
         self.assertIsInstance(res, Number)
 
 

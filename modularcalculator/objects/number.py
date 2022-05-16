@@ -13,20 +13,16 @@ class Number:
 
     def __init__(self, num, den=None):
         if num is None:
-            raise Exception("Cannot create Number with arguments: {}, {}".format(repr(num), repr(den)))
-        if isinstance(num, Number):
-            if den is not None:
-                val = num / den
-                num = val.num
-                den = val.den
-            else:
-                den = num.den
-                num = num.num
+            raise Exception("Cannot create Number with arguments: {}, {}".format(type(num), type(den)))
         if den is None:
             den = Decimal('1')
         if not isinstance(num, Decimal):
+            if type(num) not in (str, int):
+                raise Exception("Cannot create Number with arguments: {}, {}".format(type(num), type(den)))
             num = Decimal(num)
         if not isinstance(den, Decimal):
+            if type(den) not in (str, int):
+                raise Exception("Cannot create Number with arguments: {}, {}".format(type(num), type(den)))
             den = Decimal(den)
 
         # Ensure denominator is integer
@@ -45,7 +41,7 @@ class Number:
 
 
     def copy(self):
-        return Number(self)
+        return Number(self.num, self.den)
 
     def to_decimal(self):
         res = self.num / self.den
