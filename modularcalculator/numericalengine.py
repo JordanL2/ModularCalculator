@@ -29,7 +29,7 @@ class NumericalEngine(Engine):
         return self.number_prec
 
     def update_engine_prec(self):
-        Number.update_precision(self.number_size + self.number_prec, self.number_prec)
+        Number.set_precision(self.number_size + self.number_prec, self.number_prec)
 
 #    def number_to_string(self, num):
 #        if isinstance(num, Number):
