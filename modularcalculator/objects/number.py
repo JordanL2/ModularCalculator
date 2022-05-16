@@ -128,10 +128,6 @@ class Number:
         return float(self.to_decimal())
 
 
-    def __index__(self):
-        return self.__int__()
-
-
     def __round__(self, ndigits=0):
         return Number(round(self.to_decimal(), ndigits))
 
