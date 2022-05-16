@@ -51,6 +51,36 @@ class TestNumber(unittest.TestCase):
         self.assertIsInstance(f.den, Decimal)
 
 
+    def test_str_1(self):
+        a = Number(10, 3)
+        a_str = str(a)
+        self.assertEqual(a_str, '3.333333333333333333333333333333')
+
+    def test_str_2(self):
+        a = Number(10, 3)
+        a *= Number(3)
+        a_str = str(a)
+        self.assertEqual(a_str, '10')
+
+    def test_str_3(self):
+        a = Number(20, 3)
+        a_str = str(a)
+        self.assertEqual(a_str, '6.666666666666666666666666666666')
+
+    def test_fraction_1(self):
+        a = Number(20, 3)
+        f = a.fraction()
+        self.assertEqual(f[0], Number(6))
+        self.assertEqual(f[1], Number(2))
+        self.assertEqual(f[2], Number(3))
+
+    def test_fraction_2(self):
+        a = Number(21, 3)
+        f = a.fraction()
+        self.assertEqual(f[0], Number(7))
+        self.assertEqual(f[1], Number(0))
+        self.assertEqual(f[2], Number(1))
+
     def test_will_truncate_1(self):
         a = Number(10, 3)
         self.assertTrue(a.will_truncate())
@@ -58,6 +88,7 @@ class TestNumber(unittest.TestCase):
     def test_will_truncate_2(self):
         a = Number(10, 5)
         self.assertFalse(a.will_truncate())
+
 
     def test_add_1(self):
         res = Number(12) + Number(34)
@@ -239,21 +270,6 @@ class TestNumber(unittest.TestCase):
         self.assertEqual(b, Number(123))
         self.assertIsInstance(b, Number)
 
-    def test_str_1(self):
-        a = Number(10, 3)
-        a_str = str(a)
-        self.assertEqual(a_str, '3.333333333333333333333333333333')
-
-    def test_str_2(self):
-        a = Number(10, 3)
-        a *= Number(3)
-        a_str = str(a)
-        self.assertEqual(a_str, '10')
-
-    def test_str_3(self):
-        a = Number(20, 3)
-        a_str = str(a)
-        self.assertEqual(a_str, '6.666666666666666666666666666666')
 
     def test_hash_1(self):
         a = Number(1) + Number(122)

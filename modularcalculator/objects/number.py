@@ -64,13 +64,8 @@ class Number:
         return "Number({})".format(self.num)
 
     def fraction(self):
-        whole = self.num % self.den
-        num =  self.num // self.den
-        return {
-            whole: whole,
-            num: num,
-            den: self.den
-        }
+        (whole, num) = divmod(self.num, self.den)
+        return (Number(whole), Number(num), Number(self.den))
 
     def will_truncate(self):
         return str(self.to_decimal()) != self.__str__()
