@@ -109,7 +109,7 @@ class TestNumber(unittest.TestCase):
 
     def test_div_mul(self):
         res = Number(10) / Number(3)
-        res *= 3
+        res *= Number(3)
         self.assertEqual(res, Number(10))
         self.assertIsInstance(res, Number)
 
@@ -233,7 +233,7 @@ class TestNumber(unittest.TestCase):
 
     def test_str_2(self):
         a = Number(10, 3)
-        a *= 3
+        a *= Number(3)
         a_str = str(a)
         self.assertEqual(a_str, '10')
 

@@ -90,12 +90,10 @@ class Number:
         return Number(a_num - b_num, lcm)
 
     def __mul__(self, other):
-        other = Number(other)
         res = Number(self.num * other.num, self.den * other.den)
         return res
 
     def __truediv__(self, other):
-        other = Number(other)
         if other.num % 1 != 0:
             return Number(self.to_decimal() / other.to_decimal())
         other = Number(other.den, other.num)
@@ -115,7 +113,7 @@ class Number:
         return (div, mod)
 
     def __pow__(self, other, modulo=None):
-        return Number(pow(self.to_decimal(), Number(other).to_decimal(), modulo))
+        return Number(pow(self.to_decimal(), other.to_decimal(), modulo))
 
 
     def __neg__(self):
@@ -160,22 +158,22 @@ class Number:
 
 
     def __lt__(self, other):
-        return self.to_decimal() < Number(other).to_decimal()
+        return self.to_decimal() < other.to_decimal()
 
     def __le__(self, other):
-        return self.to_decimal() <= Number(other).to_decimal()
+        return self.to_decimal() <= other.to_decimal()
 
     def __eq__(self, other):
-        return self.to_decimal() == Number(other).to_decimal()
+        return self.to_decimal() == other.to_decimal()
 
     def __ne__(self, other):
-        return self.to_decimal() != Number(other).to_decimal()
+        return self.to_decimal() != other.to_decimal()
 
     def __gt__(self, other):
-        return self.to_decimal() > Number(other).to_decimal()
+        return self.to_decimal() > other.to_decimal()
 
     def __ge__(self, other):
-        return self.to_decimal() >= Number(other).to_decimal()
+        return self.to_decimal() >= other.to_decimal()
 
 
     def __hash__(self):
