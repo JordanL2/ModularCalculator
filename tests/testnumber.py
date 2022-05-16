@@ -3,6 +3,7 @@
 from modularcalculator.objects.number import Number
 
 from decimal import Decimal
+import math
 import unittest
 
 
@@ -270,6 +271,52 @@ class TestNumber(unittest.TestCase):
         b = abs(a)
         self.assertEqual(b, Number(123))
         self.assertIsInstance(b, Number)
+
+
+    def test_to_decimal(self):
+        a = Number('123.45')
+        a_dec = a.to_decimal()
+        self.assertIsInstance(a_dec, Decimal)
+        self.assertEqual(a_dec, Decimal('123.45'))
+
+    def test_int(self):
+        a = Number('123.45')
+        a_int = int(a)
+        self.assertIsInstance(a_int, int)
+        self.assertEqual(a_int, int(123))
+
+    def test_float(self):
+        a = Number('123.45')
+        a_float = float(a)
+        self.assertIsInstance(a_float, float)
+        self.assertEqual(a_float, 123.45)
+
+    def test_complex(self):
+        a = Number('123.45')
+        a_complex = complex(a)
+        self.assertIsInstance(a_complex, complex)
+        self.assertEqual(a_complex, complex(123.45))
+
+
+    def test_round_1(self):
+        a = Number('1.3')
+        self.assertEqual(round(a), Number(1))
+
+    def test_round_2(self):
+        a = Number('1.36')
+        self.assertEqual(round(a, 1), Number('1.3'))
+
+    def test_floor(self):
+        a = Number('1.9')
+        self.assertEqual(math.floor(a), Number(1))
+
+    def test_ceil(self):
+        a = Number('1.1')
+        self.assertEqual(math.ceil(a), Number(2))
+
+    def test_trunc(self):
+        a = Number('1.9')
+        self.assertEqual(math.trunc(a), Number(1))
 
 
     def test_hash_1(self):

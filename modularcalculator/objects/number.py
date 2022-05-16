@@ -44,10 +44,6 @@ class Number:
     def copy(self):
         return Number(self.num, self.den)
 
-    def to_decimal(self):
-        res = self.num / self.den
-        return Decimal(res)
-
     def __str__(self):
         val = str(round(self.to_decimal(), NUMBER['decimal_places']))
         if val.find('.') > -1:
@@ -118,6 +114,10 @@ class Number:
         return res
 
 
+    def to_decimal(self):
+        res = self.num / self.den
+        return Decimal(res)
+
     def __complex__(self):
         return complex(self.to_decimal())
 
@@ -133,10 +133,10 @@ class Number:
 
 
     def __round__(self, ndigits=0):
-        return Number(round(self.to_decimal()))
+        return Number(round(self.to_decimal(), ndigits))
 
     def __trunc__(self):
-        return Number(trunc.floor(self.to_decimal()))
+        return Number(math.trunc(self.to_decimal()))
 
     def __floor__(self):
         return Number(math.floor(self.to_decimal()))
