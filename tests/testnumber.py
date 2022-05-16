@@ -14,43 +14,77 @@ class TestNumber(unittest.TestCase):
         Number.set_precision(100, 30)
         Number.set_rounding('ROUND_DOWN')
 
-    def test_create(self):
+    def test_create_1(self):
         a = Number(123)
         self.assertEqual(a.num, Decimal('123'))
         self.assertEqual(a.den, 1)
         self.assertIsInstance(a.num, Decimal)
         self.assertIsInstance(a.den, Decimal)
 
-        b = Number('123')
+    def test_create_2(self):
+        a = Number('123')
+        self.assertEqual(a.num, Decimal('123'))
+        self.assertEqual(a.den, 1)
+        self.assertIsInstance(a.num, Decimal)
+        self.assertIsInstance(a.den, Decimal)
+
+    def test_create_3(self):
+        a = Number(int(123))
+        self.assertEqual(a.num, Decimal('123'))
+        self.assertEqual(a.den, 1)
+        self.assertIsInstance(a.num, Decimal)
+        self.assertIsInstance(a.den, Decimal)
+
+    def test_create_4(self):
+        a = Number('1.23')
+        self.assertEqual(a.num, Decimal('1.23'))
+        self.assertEqual(a.den, 1)
+        self.assertIsInstance(a.num, Decimal)
+        self.assertIsInstance(a.den, Decimal)
+
+    def test_create_5(self):
+        a = Number(Decimal('123'))
+        self.assertEqual(a.num, Decimal('123'))
+        self.assertEqual(a.den, 1)
+        self.assertIsInstance(a.num, Decimal)
+        self.assertIsInstance(a.den, Decimal)
+
+    def test_create_6(self):
+        a = Number(Decimal('123'))
+        b = a.copy()
         self.assertEqual(b.num, Decimal('123'))
+        self.assertIsNot(a, b)
         self.assertEqual(b.den, 1)
         self.assertIsInstance(b.num, Decimal)
         self.assertIsInstance(b.den, Decimal)
 
-        c = Number(int(123))
-        self.assertEqual(c.num, Decimal('123'))
-        self.assertEqual(c.den, 1)
-        self.assertIsInstance(c.num, Decimal)
-        self.assertIsInstance(c.den, Decimal)
+    def test_create_7(self):
+        a = Number(20, 3)
+        self.assertEqual(a.num, Decimal('20'))
+        self.assertEqual(a.den, Decimal('3'))
+        self.assertIsInstance(a.num, Decimal)
+        self.assertIsInstance(a.den, Decimal)
 
-        d = Number('1.23')
-        self.assertEqual(d.num, Decimal('1.23'))
-        self.assertEqual(d.den, 1)
-        self.assertIsInstance(d.num, Decimal)
-        self.assertIsInstance(d.den, Decimal)
+    def test_create_8(self):
+        a = Number(20, '3')
+        self.assertEqual(a.num, Decimal('20'))
+        self.assertEqual(a.den, Decimal('3'))
+        self.assertIsInstance(a.num, Decimal)
+        self.assertIsInstance(a.den, Decimal)
 
-        e = Number(Decimal('123'))
-        self.assertEqual(e.num, Decimal('123'))
-        self.assertEqual(e.den, 1)
-        self.assertIsInstance(e.num, Decimal)
-        self.assertIsInstance(e.den, Decimal)
+    def test_create_9(self):
+        a = Number(20, Decimal('3'))
+        self.assertEqual(a.num, Decimal('20'))
+        self.assertEqual(a.den, Decimal('3'))
+        self.assertIsInstance(a.num, Decimal)
+        self.assertIsInstance(a.den, Decimal)
 
-        f = e.copy()
-        self.assertEqual(f.num, Decimal('123'))
-        self.assertIsNot(e, f)
-        self.assertEqual(f.den, 1)
-        self.assertIsInstance(f.num, Decimal)
-        self.assertIsInstance(f.den, Decimal)
+    def test_create_10(self):
+        a = Number(20, Decimal(5))
+        self.assertEqual(a.num, Decimal(4))
+        self.assertEqual(a.den, Decimal(1))
+        self.assertIsInstance(a.num, Decimal)
+        self.assertIsInstance(a.den, Decimal)
 
 
     def test_str_1(self):
