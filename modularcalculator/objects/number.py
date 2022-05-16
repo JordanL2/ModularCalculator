@@ -4,6 +4,11 @@ from decimal import Decimal, getcontext
 import math
 
 
+NUMBER = {
+    'decimal_places': 10
+}
+
+
 class Number:
 
     def __init__(self, num, den=None):
@@ -46,8 +51,8 @@ class Number:
         res = self.num / self.den
         return Decimal(res)
 
-    def to_string(self, places):
-        val = Decimal(round(self.to_decimal(), places))
+    def __str__(self):
+        val = Decimal(round(self.to_decimal(), NUMBER['decimal_places']))
         val = format(val, 'f')
         if val.find('.') > -1:
             val = val.rstrip('0')
@@ -177,8 +182,9 @@ class Number:
         return hash(self.numden())
 
 
-    def update_precision(prec):
-        getcontext().prec = prec
+    def update_precision(total, decimal_places):
+        getcontext().prec = total
+        NUMBER['decimal_places'] = decimal_places
 
     def normalise(*vals):
         lcm = math.lcm(*[int(v.den) for v in vals])

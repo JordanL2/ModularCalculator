@@ -10,7 +10,7 @@ class TestNumber(unittest.TestCase):
 
     def __init__(self, n):
         super().__init__(n)
-        Number.update_precision(100)
+        Number.update_precision(100, 30)
 
     def test_create(self):
         a = Number(123)
@@ -228,13 +228,13 @@ class TestNumber(unittest.TestCase):
 
     def test_str_1(self):
         a = Number(10, 3)
-        a_str = a.to_string(10)
-        self.assertEqual(a_str, '3.3333333333')
+        a_str = str(a)
+        self.assertEqual(a_str, '3.333333333333333333333333333333')
 
     def test_str_2(self):
         a = Number(10, 3)
         a *= 3
-        a_str = a.to_string(10)
+        a_str = str(a)
         self.assertEqual(a_str, '10')
 
 
