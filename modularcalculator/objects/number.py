@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from decimal import Decimal, getcontext
+from importlib import import_module
 import math
 
 
@@ -48,11 +49,8 @@ class Number:
         return Decimal(res)
 
     def __str__(self):
-        val = str(self.to_decimal())
-        dot_i = val.find('.')
-        if dot_i > -1:
-            if len(val) - dot_i - 1 > NUMBER['decimal_places']:
-                val = val[0: dot_i + 1 + NUMBER['decimal_places']]
+        val = str(round(self.to_decimal(), NUMBER['decimal_places']))
+        if val.find('.') > -1:
             val = val.rstrip('0')
             if val[-1] == '.':
                 val = val[0:-1]
@@ -172,9 +170,12 @@ class Number:
         return hash(self.to_decimal())
 
 
-    def update_precision(total, decimal_places):
+    def set_precision(total, decimal_places):
         getcontext().prec = total
         NUMBER['decimal_places'] = decimal_places
+
+    def set_rounding(rounding):
+        getcontext().rounding = getattr(import_module('decimal'), rounding)
 
     def normalise(*vals):
         lcm = math.lcm(*[int(v.den) for v in vals])
