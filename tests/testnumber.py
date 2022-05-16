@@ -319,6 +319,37 @@ class TestNumber(unittest.TestCase):
         self.assertEqual(math.trunc(a), Number(1))
 
 
+    def test_lt(self):
+        a = Number(3, 4)
+        b = Number(2)
+        self.assertTrue(a < b)
+        self.assertTrue(a <= b)
+        self.assertFalse(a == b)
+        self.assertTrue(a != b)
+        self.assertFalse(a > b)
+        self.assertFalse(a >= b)
+
+    def test_eq(self):
+        a = Number(3, 4)
+        b = Number('0.75')
+        self.assertFalse(a < b)
+        self.assertTrue(a <= b)
+        self.assertTrue(a == b)
+        self.assertFalse(a != b)
+        self.assertFalse(a > b)
+        self.assertTrue(a >= b)
+
+    def test_gt(self):
+        a = Number(3, 4)
+        b = Number(1, 2)
+        self.assertFalse(a < b)
+        self.assertFalse(a <= b)
+        self.assertFalse(a == b)
+        self.assertTrue(a != b)
+        self.assertTrue(a > b)
+        self.assertTrue(a >= b)
+
+
     def test_hash_1(self):
         a = Number(1) + Number(122)
         b = Number('123')
