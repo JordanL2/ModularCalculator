@@ -25,19 +25,25 @@ class Number:
             if type(den) not in (str, int):
                 raise Exception("Cannot create Number with arguments: {}, {}".format(type(num), type(den)))
             den = Decimal(den)
+        if den == 0:
+            raise Exception("Cannot create Number with denominator of 0")
 
         # Try to simplify num/den if possible
         try:
+            if (num / den) % 1 == 0:
+                # Can be simplified to an integer
+                num /= den
+                den = Decimal(1)
+            if num != 0 and (den / num) % 1 == 0:
+                # Can be simplified to 1 / an integer
+                den = (den / num)
+                num = Decimal(1)
             if num % 1 == 0 and den % 1 == 0:
                 # Greatest common divisor
                 gcd = math.gcd(int(num), int(den))
                 if gcd > 1:
                     num /= gcd
                     den /= gcd
-            elif (num / den) % 1 == 0:
-                # Can be simplified to an integer
-                num = num / den
-                den = Decimal(1)
         except InvalidOperation:
             # Run out of precision, need to collapse num/den unfortunately
             num /= den
