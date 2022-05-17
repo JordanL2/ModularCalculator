@@ -141,6 +141,12 @@ class TestNumber(unittest.TestCase):
         self.assertIsInstance(a.num, Decimal)
         self.assertIsInstance(a.den, Decimal)
 
+    def test_create_19(self):
+        a = Number('12916271736726.26126126126126335181', '29414294126102.270270270270275031088')
+        self.assertEqual((a.num, a.den), (Decimal(10465), Decimal(23832)))
+        self.assertIsInstance(a.num, Decimal)
+        self.assertIsInstance(a.den, Decimal)
+
 
     def test_str_1(self):
         a = Number(10, 3)
