@@ -46,6 +46,9 @@ class Number:
         self.num = num
         self.den = den
 
+        # Check if we can cast to string
+        self.__str__()
+
 
     def copy(self):
         return Number(self.num, self.den)
