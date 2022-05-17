@@ -194,10 +194,46 @@ class TestNumber(unittest.TestCase):
         self.assertEqual(res, Number(2))
         self.assertIsInstance(res, Number)
 
-    def test_div_mul(self):
+    def test_div_mul_1(self):
         res = Number(10) / Number(3)
         res *= Number(3)
         self.assertEqual(res, Number(10))
+        self.assertIsInstance(res, Number)
+
+    def test_div_mul_2(self):
+        res = Number(10)
+        res /= Number(3)
+        res *= Number('2.5')
+        res /= Number('2.5')
+        res *= Number(3)
+        self.assertEqual(res, Number(10))
+        self.assertIsInstance(res, Number)
+
+    def test_div_mul_3(self):
+        res = Number(10)
+        res /= Number(3)
+        res *= Number('10000000000.01')
+        res /= Number('10000000000.1')
+        res *= Number('10000000000.02')
+        res /= Number('10000000000.09')
+        res *= Number('10000000000.03')
+        res /= Number('10000000000.08')
+        res *= Number('10000000000.04')
+        res /= Number('10000000000.07')
+        res *= Number('10000000000.05')
+        res /= Number('10000000000.06')
+        res *= Number('10000000000.06')
+        res /= Number('10000000000.05')
+        res *= Number('10000000000.07')
+        res /= Number('10000000000.04')
+        res *= Number('10000000000.08')
+        res /= Number('10000000000.03')
+        res *= Number('10000000000.09')
+        res /= Number('10000000000.02')
+        res *= Number('10000000000.1')
+        res /= Number('10000000000.01')
+        res *= Number(3)
+        self.assertEqual(math.ceil(res), Number(10))
         self.assertIsInstance(res, Number)
 
     def test_floordiv(self):

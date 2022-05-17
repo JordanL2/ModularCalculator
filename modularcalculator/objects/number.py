@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from decimal import Decimal, getcontext
+from decimal import Decimal, getcontext, InvalidOperation
 from importlib import import_module
 import math
 
@@ -16,7 +16,7 @@ class Number:
         if num is None:
             raise Exception("Cannot create Number with arguments: {}, {}".format(type(num), type(den)))
         if den is None:
-            den = Decimal('1')
+            den = Decimal(1)
         if not isinstance(num, Decimal):
             if type(num) not in (str, int):
                 raise Exception("Cannot create Number with arguments: {}, {}".format(type(num), type(den)))
@@ -26,16 +26,16 @@ class Number:
                 raise Exception("Cannot create Number with arguments: {}, {}".format(type(num), type(den)))
             den = Decimal(den)
 
-        # Ensure denominator is integer
-        if den % 1 != 0:
-            raise Exception("Denominator must be integer, was given: {}".format(repr(den)))
-
         # Greatest common divisor
-        if num % 1 == 0:
-            gcd = math.gcd(int(num), int(den))
-            if gcd > 1:
-                num /= gcd
-                den /= gcd
+        try:
+            if num % 1 == 0 and den % 1 == 0:
+                gcd = math.gcd(int(num), int(den))
+                if gcd > 1:
+                    num /= gcd
+                    den /= gcd
+        except InvalidOperation:
+            num = num / den
+            den = Decimal(1)
 
         self.num = num
         self.den = den
@@ -78,8 +78,6 @@ class Number:
         return res
 
     def __truediv__(self, other):
-        if other.num % 1 != 0:
-            return Number(self.to_decimal() / other.to_decimal())
         other = Number(other.den, other.num)
         return self.__mul__(other)
 
