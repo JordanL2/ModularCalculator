@@ -28,26 +28,21 @@ class Number:
         if den == 0:
             raise Exception("Cannot create Number with denominator of 0")
 
-        # Try to simplify num/den if possible
-        try:
-            if (num % 1 != 0):
-                (a, b) = num.as_integer_ratio()
-                num = Decimal(a)
-                den *= b
-            if (den % 1 != 0):
-                (a, b) = den.as_integer_ratio()
-                den = Decimal(a)
-                num *= b
-            if num % 1 == 0 and den % 1 == 0:
-                # Greatest common divisor
-                gcd = math.gcd(int(num), int(den))
-                if gcd > 1:
-                    num /= gcd
-                    den /= gcd
-        except InvalidOperation:
-            # Run out of precision, need to collapse num/den unfortunately
-            num /= den
-            den = Decimal(1)
+        # Make numerator an integer if it isn't already
+        if (num % 1 != 0):
+            (a, b) = num.as_integer_ratio()
+            num = Decimal(a)
+            den *= b
+        # Make denominator an integer if it isn't already
+        if (den % 1 != 0):
+            (a, b) = den.as_integer_ratio()
+            den = Decimal(a)
+            num *= b
+        # Reduce num/den by dividing by greatest common divisor
+        gcd = math.gcd(int(num), int(den))
+        if gcd > 1:
+            num /= gcd
+            den /= gcd
 
         self.num = num
         self.den = den
