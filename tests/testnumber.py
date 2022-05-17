@@ -435,10 +435,19 @@ class TestNumber(unittest.TestCase):
         self.assertEqual(res, Number(1, 4))
         self.assertIsInstance(res, Number)
 
-    def test_pow_5(self):
+    def test_pow_6(self):
         res = Number(1, 2) ** Number(2)
         self.assertEqual(res, Number('0.25'))
         self.assertIsInstance(res, Number)
+
+    def test_pow_7(self):
+        Number.set_rounding('ROUND_HALF_UP')
+        res = Number(10)
+        res **= Number(1, 4)
+        res **= Number(4)
+        self.assertEqual(res, Number(10))
+        self.assertIsInstance(res, Number)
+        Number.set_rounding('ROUND_DOWN')
 
     def test_mul_div_pow_1(self):
         res = Number(10, 3)
