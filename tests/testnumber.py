@@ -37,8 +37,9 @@ class TestNumber(unittest.TestCase):
 
     def test_create_4(self):
         a = Number('1.23')
-        self.assertEqual(a.num, Decimal('1.23'))
-        self.assertEqual(a.den, 1)
+        self.assertEqual(a.to_decimal(), Decimal('1.23'))
+        self.assertEqual(a.num, Decimal('123'))
+        self.assertEqual(a.den, Decimal('100'))
         self.assertIsInstance(a.num, Decimal)
         self.assertIsInstance(a.den, Decimal)
 
@@ -105,8 +106,8 @@ class TestNumber(unittest.TestCase):
         self.assertIsInstance(a.den, Decimal)
 
     def test_create_14(self):
-        a = Number('1.5', 2)
-        self.assertEqual((a.num, a.den), (Decimal(3), Decimal(4)))
+        a = Number('0.625', 2)
+        self.assertEqual((a.num, a.den), (Decimal(5), Decimal(16)))
         self.assertIsInstance(a.num, Decimal)
         self.assertIsInstance(a.den, Decimal)
 
@@ -119,6 +120,24 @@ class TestNumber(unittest.TestCase):
     def test_create_16(self):
         a = Number('3.3', '4.4')
         self.assertEqual((a.num, a.den), (Decimal(4), Decimal(3)))
+        self.assertIsInstance(a.num, Decimal)
+        self.assertIsInstance(a.den, Decimal)
+
+    def test_create_16(self):
+        a = Number('3.3', '7.7')
+        self.assertEqual((a.num, a.den), (Decimal(3), Decimal(7)))
+        self.assertIsInstance(a.num, Decimal)
+        self.assertIsInstance(a.den, Decimal)
+
+    def test_create_17(self):
+        a = Number('20000000000000000.2', '30000000000000000.3')
+        self.assertEqual((a.num, a.den), (Decimal(2), Decimal(3)))
+        self.assertIsInstance(a.num, Decimal)
+        self.assertIsInstance(a.den, Decimal)
+
+    def test_create_18(self):
+        a = Number('2468470470.468468468468468468868', '3702705705.702702702702702703302')
+        self.assertEqual((a.num, a.den), (Decimal(2), Decimal(3)))
         self.assertIsInstance(a.num, Decimal)
         self.assertIsInstance(a.den, Decimal)
 
@@ -260,7 +279,7 @@ class TestNumber(unittest.TestCase):
         res /= Number('10000000000.01')
         res *= Number(3)
         # Within limit of precision
-        self.assertEqual(str(res), '10')
+        self.assertEqual(res, Number(10))
         self.assertIsInstance(res, Number)
 
     def test_div_mul_4(self):
@@ -287,8 +306,7 @@ class TestNumber(unittest.TestCase):
         res *= Number('10000000000.1')
         res /= Number('10000000000.01')
         res *= Number(3)
-        # Hits limit of precision
-        self.assertEqual(str(res), '9.999999999999999999999999999999')
+        self.assertEqual(res, Number(10))
         self.assertIsInstance(res, Number)
 
     def test_div_mul_5(self):

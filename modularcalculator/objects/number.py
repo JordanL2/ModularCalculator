@@ -30,14 +30,14 @@ class Number:
 
         # Try to simplify num/den if possible
         try:
-            if (num / den) % 1 == 0:
-                # Can be simplified to an integer
-                num /= den
-                den = Decimal(1)
-            if num != 0 and (den / num) % 1 == 0:
-                # Can be simplified to 1 / an integer
-                den = (den / num)
-                num = Decimal(1)
+            if (num % 1 != 0):
+                (a, b) = num.as_integer_ratio()
+                num = Decimal(a)
+                den *= b
+            if (den % 1 != 0):
+                (a, b) = den.as_integer_ratio()
+                den = Decimal(a)
+                num *= b
             if num % 1 == 0 and den % 1 == 0:
                 # Greatest common divisor
                 gcd = math.gcd(int(num), int(den))
