@@ -213,6 +213,24 @@ class TestNumber(unittest.TestCase):
         res = Number(10)
         res /= Number(3)
         res *= Number('10000000000.01')
+        res /= Number('10000000000.05')
+        res *= Number('10000000000.02')
+        res /= Number('10000000000.04')
+        res *= Number('10000000000.03')
+        res /= Number('10000000000.03')
+        res *= Number('10000000000.04')
+        res /= Number('10000000000.02')
+        res *= Number('10000000000.05')
+        res /= Number('10000000000.01')
+        res *= Number(3)
+        # Within limit of precision
+        self.assertEqual(str(res), '10')
+        self.assertIsInstance(res, Number)
+
+    def test_div_mul_4(self):
+        res = Number(10)
+        res /= Number(3)
+        res *= Number('10000000000.01')
         res /= Number('10000000000.1')
         res *= Number('10000000000.02')
         res /= Number('10000000000.09')
@@ -233,7 +251,8 @@ class TestNumber(unittest.TestCase):
         res *= Number('10000000000.1')
         res /= Number('10000000000.01')
         res *= Number(3)
-        self.assertEqual(math.ceil(res), Number(10))
+        # Hits limit of precision
+        self.assertEqual(str(res), '9.999999999999999999999999999999')
         self.assertIsInstance(res, Number)
 
     def test_floordiv(self):
