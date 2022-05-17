@@ -110,7 +110,10 @@ class Number:
         return (div, mod)
 
     def __pow__(self, other, modulo=None):
-        return Number(pow(self.to_decimal(), other.to_decimal(), modulo))
+        res = Number(pow(self.num, other.to_decimal()), pow(self.den, other.to_decimal()))
+        if modulo is None:
+            return res
+        return res % modulo
 
 
     def __neg__(self):

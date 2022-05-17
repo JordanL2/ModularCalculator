@@ -421,7 +421,7 @@ class TestNumber(unittest.TestCase):
         self.assertIsInstance(res, Number)
 
     def test_pow_3(self):
-        res = pow(Number(6), Number(2), 10)
+        res = pow(Number(6), Number(2), Number(10))
         self.assertEqual(res, Number(6))
         self.assertIsInstance(res, Number)
 
@@ -438,6 +438,14 @@ class TestNumber(unittest.TestCase):
     def test_pow_5(self):
         res = Number(1, 2) ** Number(2)
         self.assertEqual(res, Number('0.25'))
+        self.assertIsInstance(res, Number)
+
+    def test_mul_div_pow_1(self):
+        res = Number(10, 3)
+        res **= Number(2)
+        res **= Number(1, 2)
+        res *= Number(3)
+        self.assertEqual(res, Number(10))
         self.assertIsInstance(res, Number)
 
 
