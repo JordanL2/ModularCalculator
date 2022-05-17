@@ -39,6 +39,10 @@ class Number:
                 (a, b) = den.as_integer_ratio()
                 den = Decimal(a)
                 num *= b
+            # Make sure denominator is positive
+            if den < 0:
+                den = -den
+                num = -num
             # Reduce num/den by dividing by greatest common divisor
             gcd = math.gcd(int(num), int(den))
             if gcd > 1:

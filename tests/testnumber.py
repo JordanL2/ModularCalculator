@@ -153,6 +153,24 @@ class TestNumber(unittest.TestCase):
         self.assertIsInstance(a.num, Decimal)
         self.assertIsInstance(a.den, Decimal)
 
+    def test_create_21(self):
+        a = Number('-2.5', 2)
+        self.assertEqual((a.num, a.den), (Decimal(-5), Decimal(4)))
+        self.assertIsInstance(a.num, Decimal)
+        self.assertIsInstance(a.den, Decimal)
+
+    def test_create_22(self):
+        a = Number('2.5', -2)
+        self.assertEqual((a.num, a.den), (Decimal(-5), Decimal(4)))
+        self.assertIsInstance(a.num, Decimal)
+        self.assertIsInstance(a.den, Decimal)
+
+    def test_create_23(self):
+        a = Number('-2.5', -2)
+        self.assertEqual((a.num, a.den), (Decimal(5), Decimal(4)))
+        self.assertIsInstance(a.num, Decimal)
+        self.assertIsInstance(a.den, Decimal)
+
 
     def test_str_1(self):
         a = Number(10, 3)
