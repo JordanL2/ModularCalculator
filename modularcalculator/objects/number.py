@@ -53,8 +53,8 @@ class Number:
             num /= den
             den = Decimal(1)
 
-        self.num = num
-        self.den = den
+        self.num = num.to_integral_exact()
+        self.den = den.to_integral_exact()
 
         # Check if we can cast to string
         self.__str__()
