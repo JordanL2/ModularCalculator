@@ -26,19 +26,15 @@ class Number:
                 raise Exception("Cannot create Number with arguments: {}, {}".format(type(num), type(den)))
             den = Decimal(den)
 
-        try:
-            # Try to simplify num/den if possible
-            if num % 1 == 0 and den % 1 == 0:
-                # Greatest common divisor
-                gcd = math.gcd(int(num), int(den))
-                if gcd > 1:
-                    num /= gcd
-                    den /= gcd
-            elif (num / den) % 1 == 0:
-                # Can be simplified to an integer
-                num = num / den
-                den = Decimal(1)
-        except InvalidOperation:
+        # Try to simplify num/den if possible
+        if num % 1 == 0 and den % 1 == 0:
+            # Greatest common divisor
+            gcd = math.gcd(int(num), int(den))
+            if gcd > 1:
+                num /= gcd
+                den /= gcd
+        elif (num / den) % 1 == 0:
+            # Can be simplified to an integer
             num = num / den
             den = Decimal(1)
 
@@ -79,8 +75,11 @@ class Number:
         return Number(a_num - b_num, lcm)
 
     def __mul__(self, other):
-        res = Number(self.num * other.num, self.den * other.den)
-        return res
+        try:
+            return Number(self.num * other.num, self.den * other.den)
+        except InvalidOperation:
+            # Run out of precision, need to collapse num/den unfortunately
+            return Number(self.num / self.den * other.num / other.den)
 
     def __truediv__(self, other):
         other = Number(other.den, other.num)
