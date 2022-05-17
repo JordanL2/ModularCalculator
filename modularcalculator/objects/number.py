@@ -80,9 +80,6 @@ class Number:
         (whole, num) = divmod(self.num, self.den)
         return (Number(whole), Number(num), Number(self.den))
 
-    def is_rational(self):
-        return Number.is_rational(self.to_decimal())
-
 
     def __add__(self, other):
         (lcm, a_num, b_num) = Number.normalise(self, other)
@@ -177,8 +174,6 @@ class Number:
 
 
     def __hash__(self):
-        if self.is_rational():
-            return hash(self.to_decimal())
         return hash((self.num, self.den))
 
 
@@ -192,9 +187,6 @@ class Number:
     def normalise(*vals):
         lcm = math.lcm(*[int(v.den) for v in vals])
         return (lcm, *[v.num * (lcm / v.den) for v in vals])
-
-    def is_rational(n):
-        return n == round(n, NUMBER['decimal_places'])
 
     def is_integer(n):
         return math.floor(n) == n

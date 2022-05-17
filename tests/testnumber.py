@@ -214,14 +214,6 @@ class TestNumber(unittest.TestCase):
         self.assertEqual(f[1], Number(0))
         self.assertEqual(f[2], Number(1))
 
-    def test_is_rational_1(self):
-        a = Number(10, 3)
-        self.assertFalse(a.is_rational())
-
-    def test_is_rational_2(self):
-        a = Number(10, 5)
-        self.assertTrue(a.is_rational())
-
 
     def test_add_1(self):
         res = Number(12) + Number(34)
