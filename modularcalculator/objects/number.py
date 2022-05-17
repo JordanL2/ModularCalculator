@@ -76,8 +76,8 @@ class Number:
         (whole, num) = divmod(self.num, self.den)
         return (Number(whole), Number(num), Number(self.den))
 
-    def will_truncate(self):
-        return str(self.to_decimal()) != self.__str__()
+    def is_rational(self):
+        return Number.is_rational(self.to_decimal())
 
 
     def __add__(self, other):
@@ -173,9 +173,9 @@ class Number:
 
 
     def __hash__(self):
-        if self.will_truncate():
-            return hash((self.num, self.den))
-        return hash(self.to_decimal())
+        if self.is_rational():
+            return hash(self.to_decimal())
+        return hash((self.num, self.den))
 
 
     def set_precision(total, decimal_places):
@@ -188,3 +188,6 @@ class Number:
     def normalise(*vals):
         lcm = math.lcm(*[int(v.den) for v in vals])
         return (lcm, *[v.num * (lcm / v.den) for v in vals])
+
+    def is_rational(n):
+        return n == round(n, NUMBER['decimal_places'])

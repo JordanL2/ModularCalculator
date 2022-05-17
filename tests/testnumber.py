@@ -165,13 +165,13 @@ class TestNumber(unittest.TestCase):
         self.assertEqual(f[1], Number(0))
         self.assertEqual(f[2], Number(1))
 
-    def test_will_truncate_1(self):
+    def test_is_rational_1(self):
         a = Number(10, 3)
-        self.assertTrue(a.will_truncate())
+        self.assertFalse(a.is_rational())
 
-    def test_will_truncate_2(self):
+    def test_is_rational_2(self):
         a = Number(10, 5)
-        self.assertFalse(a.will_truncate())
+        self.assertTrue(a.is_rational())
 
 
     def test_add_1(self):
