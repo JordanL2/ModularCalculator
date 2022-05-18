@@ -204,7 +204,7 @@ class BooleansFeature(Feature):
         return None, None
 
     def restore_boolean(self, val, opts=None):
-        return val != 0
+        return val != Number(0)
 
     def validate_boolean(self, value, unit, ref):
         try:

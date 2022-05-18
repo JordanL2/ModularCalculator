@@ -155,7 +155,8 @@ tests = [
     { 'test': r"'a' >$ 'b'", 'expected': False },
     { 'test': r"123 < 14", 'expected': False },
     { 'test': r"123 <$ 14", 'expected': True },
-    { 'test': r"true * true", 'expected': Number('1') },
+    { 'test': r"true * true", 'expected': True },
+    { 'test': r"true * false", 'expected': False },
 
     { 'test': r"not true", 'expected': False },
     { 'test': r"not false", 'expected': True },
