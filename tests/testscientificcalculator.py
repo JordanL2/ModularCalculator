@@ -5,6 +5,7 @@ from modularcalculator.modularcalculator import *
 from modularcalculator.services.syntaxhighlighter import *
 from modularcalculator.objects.exceptions import *
 from modularcalculator.objects.number import *
+from modularcalculator.objects.units import *
 
 import argparse
 
@@ -111,7 +112,7 @@ tests = [
     { 'test': r"1K + 1°C", 'expected': (Number('2'), 'kelvin') },
     { 'test': r"1°C + 1K", 'expected': (Number('2'), 'Celsius') },
 
-    { 'test': r"meters * meters", 'expected': 'meters^2' },
+    { 'test': r"meters * meters", 'expected': UnitPowerList([UnitPower(c.unit_normaliser.get_unit('metre'), 2)]) },
     { 'test': r"2 meters * 3 meters", 'expected': (Number('6'), 'meters^2') },
     { 'test': r"20 meters / 5 meters", 'expected': Number('4') },
     { 'test': r"20 meters \ 5 meters", 'expected': Number('4') },
