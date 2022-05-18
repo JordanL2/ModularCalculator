@@ -249,12 +249,12 @@ class ArrayElement():
                 right_element.value = values[1]
                 right_element.unit = units[1]
 
-        if ((end_element_result.value - element_result.value) * step_result.value) < 0:
+        if ((end_element_result.value - element_result.value) * step_result.value) < Number(0):
             raise ExecuteException("Can't get from {0} to {1} with step {2}".format(element_result.value, end_element_result.value, step_result.value), [], None)
 
         array = []
         n = element_result.value
-        while (step_result.value > 0 and n <= end_element_result.value) or (step_result.value < 0 and n >= end_element_result.value):
+        while (step_result.value > Number(0) and n <= end_element_result.value) or (step_result.value < Number(0) and n >= end_element_result.value):
             array.append(OperandResult(n, element_result.unit, None))
             n += step_result.value
         return array

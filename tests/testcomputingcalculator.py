@@ -24,7 +24,7 @@ tests = [
     { 'test': '123 + 456', 'expected': Number(579) },
     { 'test': '123 + (1 * 3) - 456', 'expected': Number(-330) },
     { 'test': '2 + 3 * 4', 'expected': Number(14) },
-    { 'test': '2+-3/4', 'expected': Number(1.25) },
+    { 'test': '2+-3/4', 'expected': Number('1.25') },
     { 'test': '2 + 3^3', 'expected': Number(29) },
     { 'test': '4 * (2 + (3)) - 3', 'expected': Number(17) },
     { 'test': '14 % 3', 'expected': Number(2) },
