@@ -77,6 +77,9 @@ class Number:
         (whole, num) = divmod(self.num, self.den)
         return (Number(whole), Number(num), Number(self.den))
 
+    def is_integer(self):
+        return Number.is_integer(self.to_decimal())
+
 
     def __add__(self, other):
         (lcm, a_num, b_num) = Number.normalise(self, other)

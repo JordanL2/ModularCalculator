@@ -91,12 +91,12 @@ class BasicArithmeticFeature(Feature):
 
     def op_number_power(self, vals, units, refs, flags):
         power_numtype = self.number(vals[1])
-        power = int(power_numtype[0])
+        power = power_numtype[0]
         num_type = power_numtype[1]
         if isinstance(vals[0], UnitPowerList):
             unit = vals[0].power(power)
             return OperationResult(unit)
-        num_res = vals[0] ** Number(power)
+        num_res = vals[0] ** power
         restored_number = self.restore_number_type(num_res, num_type)
         res = OperationResult(restored_number)
         if units[1] is not None:

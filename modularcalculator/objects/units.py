@@ -133,7 +133,12 @@ class AbstractPower:
         return type(self)(getattr(self, self.keyfield), self.power)
 
     def multiply(self, power):
-        return type(self)(getattr(self, self.keyfield), self.power * power)
+        if not isinstance(power, Number):
+            power = Number(power)
+        new_power = Number(self.power) * power
+        if not new_power.is_integer():
+            raise Exception("Power is not an integer after multiplying {} and {}".format(self.power, power))
+        return type(self)(getattr(self, self.keyfield), int(new_power))
 
     def key(self):
         raise Exception("Must overrride this method")

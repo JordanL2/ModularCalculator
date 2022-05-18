@@ -127,7 +127,7 @@ tests = [
     { 'test': r"2 m/s to miles/hour", 'expected': (Number(6250, 1397), 'miles/hour') },
     { 'test': r"2 m^2", 'expected': (Number('2'), 'meters^2') },
     { 'test': r"2 m^3", 'expected': (Number('2'), 'meters^3') },
-    { 'test': r"2 m^2 to feet^2", 'expected': (Number('21.5278208334194446166670111118'), 'feet^2') },
+    { 'test': r"2 m^2 to feet^2", 'expected': (Number(3125000, 145161), 'feet^2') },
 
     { 'test': r"40 * (meters*meters) / (seconds*seconds) * 2 meters", 'expected': (Number('80'), 'meters^3/second^2') },
     { 'test': r"12 meters °C / s", 'expected': (Number('12'), 'meter Celsius/second') },
