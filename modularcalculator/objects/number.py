@@ -56,9 +56,6 @@ class Number:
         self.num = num.to_integral_exact()
         self.den = den.to_integral_exact()
 
-        # Check if we can cast to string
-        self.__str__()
-
 
     def __str__(self):
         val = str(round(self.to_decimal(), NUMBER['decimal_places']))
