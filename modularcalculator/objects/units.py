@@ -117,7 +117,7 @@ class AbstractPower:
             raise Exception("power must be of type Number")
         if round(power, getcontext().prec - 2) != round(power):
             raise CalculatorException("Non-integer power {0}".format(power))
-        self.power = Number(round(power))
+        self.power = round(power)
 
     def __eq__(self, other):
         return getattr(self, self.keyfield) == getattr(other, self.keyfield) and self.power == other.power
@@ -201,7 +201,7 @@ class AbstractPowerList:
     def add(self, key, power):
         existing = self.find(key)
         if existing is None:
-            self._add(self.keyclass(key, Number(power)))
+            self._add(self.keyclass(key, power))
         else:
             existing.power += power
             if existing.power == 0:
@@ -259,7 +259,7 @@ class UnitPowerList(AbstractPowerList):
         unitpowerlist = UnitPowerList()
         for i in range(0, int(len(unitpowers) / 2)):
             unit = unitpowers[i * 2]
-            power = Number(unitpowers[i * 2 + 1])
+            power = unitpowers[i * 2 + 1]
             unitpowerlist.addall(unit, power)
         return unitpowerlist.check_empty()
 

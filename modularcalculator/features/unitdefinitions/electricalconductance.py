@@ -19,8 +19,12 @@ class ElectricalConductanceUnitFeature(AbstractUnitFeature):
 
     @classmethod
     def install(cls, calculator):
-        calculator.unit_normaliser.add_dimension('electricalconductance', 'Electrical Conductance', ['time', 3, 'electriccurrent', 2, 'mass', -1, 'distance', -2])
-    	
+        calculator.unit_normaliser.add_dimension('electricalconductance', 'Electrical Conductance',
+            ['time', Number(3),
+             'electriccurrent', Number(2),
+             'mass', Number(-1),
+             'distance', Number(-2)])
+
         calculator.unit_normaliser.add_prefixed_unit('electricalconductance', UnitDefinitionSiemens)
 
 

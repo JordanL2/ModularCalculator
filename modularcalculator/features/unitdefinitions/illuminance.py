@@ -19,8 +19,11 @@ class IlluminanceUnitFeature(AbstractUnitFeature):
 
     @classmethod
     def install(cls, calculator):
-        calculator.unit_normaliser.add_dimension('illuminance', 'Illuminance', ['luminousintensity', 1,'solidangle', 1, 'distance', -2])
-        
+        calculator.unit_normaliser.add_dimension('illuminance', 'Illuminance',
+            ['luminousintensity', Number(1),
+             'solidangle', Number(1),
+             'distance', Number(-2)])
+
         calculator.unit_normaliser.add_prefixed_unit('illuminance', UnitDefinitionLux)
 
 

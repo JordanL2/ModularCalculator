@@ -19,8 +19,9 @@ class FrequencyUnitFeature(AbstractUnitFeature):
 
     @classmethod
     def install(cls, calculator):
-        calculator.unit_normaliser.add_dimension('frequency', 'Frequency', ['time', -1])
-        
+        calculator.unit_normaliser.add_dimension('frequency', 'Frequency',
+            ['time', Number(-1)])
+
         calculator.unit_normaliser.add_prefixed_unit('frequency', UnitDefinitionHertz)
 
 

@@ -371,7 +371,7 @@ class UnitNormaliser:
         dimensions = []
         for i in range(0, int(len(relationship) / 2)):
             dimension = relationship[i * 2]
-            power = Number(relationship[i * 2 + 1])
+            power = relationship[i * 2 + 1]
             if dimension not in self.dimensions:
                 raise Exception("Dimension not found: {0}".format(dimension))
             dimensions.append(DimensionPower(dimension, power))

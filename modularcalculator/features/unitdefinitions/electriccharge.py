@@ -19,8 +19,10 @@ class ElectricChargeUnitFeature(AbstractUnitFeature):
 
     @classmethod
     def install(cls, calculator):
-        calculator.unit_normaliser.add_dimension('electriccharge', 'Electric Charge', ['electriccurrent', 1, 'time', 1])
-    	
+        calculator.unit_normaliser.add_dimension('electriccharge', 'Electric Charge',
+            ['electriccurrent', Number(1),
+             'time', Number(1)])
+
         calculator.unit_normaliser.add_prefixed_unit('electriccharge', UnitDefinitionCoulomb)
 
 

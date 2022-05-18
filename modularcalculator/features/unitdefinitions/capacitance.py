@@ -19,8 +19,12 @@ class CapacitanceUnitFeature(AbstractUnitFeature):
 
     @classmethod
     def install(cls, calculator):
-        calculator.unit_normaliser.add_dimension('capacitance', 'Capacitance', ['electriccurrent', 2, 'time', 4, 'mass', -1, 'distance', -2])
-    	
+        calculator.unit_normaliser.add_dimension('capacitance', 'Capacitance',
+            ['electriccurrent', Number(2),
+             'time', Number(4),
+             'mass', Number(-1),
+             'distance', Number(-2)])
+
         calculator.unit_normaliser.add_prefixed_unit('capacitance', UnitDefinitionFarad)
 
 

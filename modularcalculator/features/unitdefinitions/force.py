@@ -19,8 +19,11 @@ class ForceUnitFeature(AbstractUnitFeature):
 
     @classmethod
     def install(cls, calculator):
-        calculator.unit_normaliser.add_dimension('force', 'Force', ['mass', 1, 'distance', 1, 'time', -2])
-        
+        calculator.unit_normaliser.add_dimension('force', 'Force',
+            ['mass', Number(1),
+             'distance', Number(1),
+             'time', Number(-2)])
+
         calculator.unit_normaliser.add_prefixed_unit('force', UnitDefinitionNewton)
 
 

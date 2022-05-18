@@ -19,8 +19,12 @@ class InductanceUnitFeature(AbstractUnitFeature):
 
     @classmethod
     def install(cls, calculator):
-        calculator.unit_normaliser.add_dimension('inductance', 'Inductance', ['mass', 1, 'distance', 2, 'time', -2, 'electriccurrent', -2])
-    	
+        calculator.unit_normaliser.add_dimension('inductance', 'Inductance',
+            ['mass', Number(1),
+             'distance', Number(2),
+             'time', Number(-2),
+             'electriccurrent', Number(-2)])
+
         calculator.unit_normaliser.add_prefixed_unit('inductance', UnitDefinitionHenry)
 
 

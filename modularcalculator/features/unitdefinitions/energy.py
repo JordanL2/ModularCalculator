@@ -19,8 +19,11 @@ class EnergyUnitFeature(AbstractUnitFeature):
 
     @classmethod
     def install(cls, calculator):
-        calculator.unit_normaliser.add_dimension('energy', 'Energy', ['mass', 1, 'distance', 2, 'time', -2])
-        
+        calculator.unit_normaliser.add_dimension('energy', 'Energy',
+            ['mass', Number(1),
+             'distance', Number(2),
+             'time', Number(-2)])
+
         calculator.unit_normaliser.add_prefixed_unit('energy', UnitDefinitionJoule)
 
 

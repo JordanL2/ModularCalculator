@@ -19,11 +19,15 @@ class VelocityUnitFeature(AbstractUnitFeature):
 
     @classmethod
     def install(cls, calculator):
-        calculator.unit_normaliser.add_dimension('velocity', 'Velocity', ['distance', 1, 'time', -1])
+        calculator.unit_normaliser.add_dimension('velocity', 'Velocity',
+            ['distance', Number(1),
+             'time', Number(-1)])
 
         calculator.unit_normaliser.add_unit('velocity', UnitDefinitionKnot())
 
-        calculator.unit_normaliser.add_multiunit('velocity', ['meter', 1, 'second', -1])
+        calculator.unit_normaliser.add_multiunit('velocity',
+            ['meter', Number(1),
+             'second', Number(-1)])
 
 
 class UnitDefinitionKnot(UnitDefinition):

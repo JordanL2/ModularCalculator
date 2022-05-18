@@ -19,7 +19,10 @@ class PressureUnitFeature(AbstractUnitFeature):
 
     @classmethod
     def install(cls, calculator):
-        calculator.unit_normaliser.add_dimension('pressure', 'Pressure', ['mass', 1, 'distance', -1, 'time', -2])
+        calculator.unit_normaliser.add_dimension('pressure', 'Pressure',
+            ['mass', Number(1),
+             'distance', Number(-1),
+             'time', Number(-2)])
 
         calculator.unit_normaliser.add_prefixed_unit('pressure', UnitDefinitionPascal)
 

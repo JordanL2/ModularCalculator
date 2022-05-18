@@ -19,8 +19,9 @@ class RadioactivityUnitFeature(AbstractUnitFeature):
 
     @classmethod
     def install(cls, calculator):
-        calculator.unit_normaliser.add_dimension('radioactivity', 'Radioactivity', ['time', -1])
-        
+        calculator.unit_normaliser.add_dimension('radioactivity', 'Radioactivity',
+            ['time', Number(-1)])
+
         calculator.unit_normaliser.add_prefixed_unit('radioactivity', UnitDefinitionBecquerel)
 
 
