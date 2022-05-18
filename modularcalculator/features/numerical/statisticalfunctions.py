@@ -101,7 +101,10 @@ class StatisticalFunctionsFeature(Feature):
 
     def func_sum(self, vals, units, refs, flags):
         values = [v.value for v in vals[0]]
-        return OperationResult(sum(values))
+        total = Number(0)
+        for v in values:
+            total += v
+        return OperationResult(total)
 
     def func_min(self, vals, units, refs, flags):
         min_val = min(vals[0], key=lambda x: x.value)
