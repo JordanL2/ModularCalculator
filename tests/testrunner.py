@@ -37,7 +37,7 @@ class TestRunner:
                 if unit is None:
                     actual = value
                 else:
-                    if value == Number(1):
+                    if isinstance(value, Number) and value == Number(1):
                         actual = (value, unit.singular())
                     else:
                         actual = (value, unit.plural())
@@ -52,8 +52,8 @@ class TestRunner:
             except Exception as err:
                 print("Failed on test", num + 1, " - ", question)
                 raise err
-            if actual != expected:
-                failed.append({ 'num': num, 'test': question, 'expected': expected, 'actual': actual })
+            if type(actual) != type(expected) or actual != expected:
+                failed.append({ 'num': num, 'test': question, 'expected': repr(expected), 'actual': repr(actual) })
 
         if len(failed) > 0:
             print("*** FAILED ***")
