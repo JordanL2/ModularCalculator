@@ -95,7 +95,7 @@ class BitwiseOperatorsFeature(Feature):
     def op_bitwise_not(self, vals, units, refs, flags):
         dec_num, num_type = self.number(vals[0])
 
-        if dec_num < 0 or dec_num % 1 != 0:
+        if dec_num < Number(0) or dec_num % Number(1) != Number(0):
             raise CalculatorException('Operator requires positive integers')
 
         int_val = int(dec_num)
@@ -104,7 +104,7 @@ class BitwiseOperatorsFeature(Feature):
         else:
             mask_val = 2**math.ceil(math.log(int_val, 2)) - 1
         flipped_val = ~int_val
-        masked_flipped_val = flipped_val & mask_val
+        masked_flipped_val = Number(flipped_val & mask_val)
 
         if num_type:
             return OperationResult(num_type.restore(self, masked_flipped_val))
