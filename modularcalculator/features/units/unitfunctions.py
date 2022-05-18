@@ -83,7 +83,7 @@ class GeneralUnitFunctionsFeature(Feature):
                 if last:
                     num_of_unit, unit = GeneralUnitFunctionsFeature.find_first_unit_prefix_at_least_one(self, num, unit, systemunits)
                 else:
-                    num_of_unit = self.floor_number(self.round_number(num))
+                    num_of_unit = math.floor(num)
                     num_of_unit, new_unit = GeneralUnitFunctionsFeature.find_first_unit_prefix_at_least_one(self, num_of_unit, unit, systemunits)
                     if new_unit == unit:
                         num -= num_of_unit
@@ -92,9 +92,8 @@ class GeneralUnitFunctionsFeature(Feature):
                         num = new_unit.convertto(num, False)
                         num -= num_of_unit
                         unit = new_unit
-                num_of_unit = self.round_number(num_of_unit)
                 if num_of_unit != Number(0):
-                    parts.append("{0} {1}".format(self.number_to_string(num_of_unit), unit.get_name(num_of_unit)))
+                    parts.append("{0} {1}".format(str(num_of_unit), unit.get_name(num_of_unit)))
 
         res = OperationResult(str.join(', ', parts))
         res.set_unit(None)
@@ -105,7 +104,7 @@ class GeneralUnitFunctionsFeature(Feature):
         old_num = unit.convertfrom(num, False)
         for prefixedunit in prefixedunitsofsametype:
             new_num = prefixedunit.convertto(old_num, False)
-            if self.round_number(new_num) >= Number(1) or prefixedunit == systemunits[-1]:
+            if new_num >= Number(1) or prefixedunit == systemunits[-1]:
                 return new_num, prefixedunit
 
     def func_compact(self, vals, units, refs, flags):
