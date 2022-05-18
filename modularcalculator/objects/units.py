@@ -1,8 +1,7 @@
 #!usr/bin/python3
 
 from modularcalculator.objects.exceptions import *
-
-from decimal import *
+from modularcalculator.objects.number import *
 
 
 class AbstractUnitDefinition:
@@ -24,7 +23,7 @@ class AbstractUnitDefinition:
         return (name.lower() in [n.lower() for n in self.names()] or name in self.symbols())
 
     def get_name(self, num):
-        if num == Decimal('1'):
+        if num == Number(1):
             return self.singular()
         return self.plural()
 
@@ -72,7 +71,7 @@ class AmbiguousUnitDefinition(AbstractUnitDefinition):
 class UnitDefinition(AbstractUnitDefinition):
 
     dimension = None
-    unitscale = Decimal('1')
+    unitscale = Number(1)
     systems = []
     relevant_to_systems = []
     use = True
@@ -86,7 +85,7 @@ class UnitDefinition(AbstractUnitDefinition):
         self.relevant_to_systems = self.relevant_to_systems.copy()
 
     def list(self):
-        return [UnitPower(self, Decimal('1'))]
+        return [UnitPower(self, Number(1))]
 
     def convert(self, num, power, relative):
         if power > 0:
@@ -113,12 +112,12 @@ class AbstractPower:
         if not isinstance(obj, self.keyclass):
             raise Exception("object must be of type {0}".format(self.keyclass.__name__))
         setattr(self, self.keyfield, obj)
-        
-        if not isinstance(power, Decimal):
-            raise Exception("power must be of type Decimal")
+
+        if not isinstance(power, Number):
+            raise Exception("power must be of type Number")
         if round(power, getcontext().prec - 2) != round(power):
             raise CalculatorException("Non-integer power {0}".format(power))
-        self.power = Decimal(round(power))
+        self.power = Number(round(power))
 
     def __eq__(self, other):
         return getattr(self, self.keyfield) == getattr(other, self.keyfield) and self.power == other.power
@@ -134,7 +133,7 @@ class AbstractPower:
 
     def copy(self):
         return type(self)(getattr(self, self.keyfield), self.power)
-    
+
     def multiply(self, power):
         return type(self)(getattr(self, self.keyfield), self.power * power)
 
@@ -202,12 +201,12 @@ class AbstractPowerList:
     def add(self, key, power):
         existing = self.find(key)
         if existing is None:
-            self._add(self.keyclass(key, Decimal(power)))
+            self._add(self.keyclass(key, Number(power)))
         else:
             existing.power += power
             if existing.power == 0:
                 self._del(existing)
-    
+
     def remove(self, key, power):
         self.add(key, -power)
 
@@ -260,7 +259,7 @@ class UnitPowerList(AbstractPowerList):
         unitpowerlist = UnitPowerList()
         for i in range(0, int(len(unitpowers) / 2)):
             unit = unitpowers[i * 2]
-            power = Decimal(unitpowers[i * 2 + 1])
+            power = Number(unitpowers[i * 2 + 1])
             unitpowerlist.addall(unit, power)
         return unitpowerlist.check_empty()
 
@@ -275,7 +274,7 @@ class UnitPowerList(AbstractPowerList):
         return unitpowerlist
 
     def get_name(self, num, string_result=True):
-        if num == Decimal('1'):
+        if num == Number(1):
             return self.singular(False, string_result)
         return self.plural(False, string_result)
 
@@ -304,7 +303,7 @@ class UnitPowerList(AbstractPowerList):
                 mults.append(unitpower)
         if len(mults) == 0:
             negative_powers = True
-        
+
         multstrings = []
         for i, mult in enumerate(mults):
             last = i == len(mults) - 1

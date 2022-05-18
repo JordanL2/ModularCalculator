@@ -9,8 +9,7 @@ import unittest
 
 class TestNumber(unittest.TestCase):
 
-    def __init__(self, n):
-        super().__init__(n)
+    def setUp(self):
         Number.set_precision(100, 30)
         Number.set_rounding('ROUND_DOWN')
 

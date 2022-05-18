@@ -3,7 +3,7 @@
 from modularcalculator.engine import Engine
 from modularcalculator.objects.exceptions import *
 from modularcalculator.objects.items import *
-from modularcalculator.objects.number import Number
+from modularcalculator.objects.number import *
 
 #import math
 
@@ -59,6 +59,8 @@ class NumericalEngine(Engine):
         for caster in self.number_casters:
             num, num_type = caster['ref'](self, val)
             if num is not None:
+                if isinstance(num, Number):
+                    return num, num_type
                 #num = self.clean_number(num)
                 return Number(num), num_type
         raise CalculatorException("Can't cast to number: {0}".format(str(val)))

@@ -2,6 +2,7 @@
 
 from modularcalculator.objects.items import *
 from modularcalculator.objects.exceptions import *
+from modularcalculator.objects.number import *
 
 import re
 
@@ -42,7 +43,7 @@ class Operation:
         self.unit_restrictions = []
         if objtypes is not None:
             self.add_value_restriction(0, None, objtypes)
-        
+
         self.units_relative = False
         self.units_multi = False
         self.units_normalise = True
@@ -205,7 +206,7 @@ class Operation:
                 result_value = result.value
 
                 # Convert the number type of the result
-                if self.auto_convert_numerical_result and isinstance(result_value, Decimal) and num_type:
+                if self.auto_convert_numerical_result and isinstance(result_value, Number) and num_type:
                     result_value = calculator.restore_number_type(result_value, num_type)
 
                 # If result is an array, restore each element back to its original value and unit
@@ -232,7 +233,7 @@ class Operation:
         # Check if we're been given at least the minimum number of params
         if self.minparams is not None and len(values) < self.minparams:
             raise CalculatorException("{0} requires at least {1} params, only given {2}".format(self.name, self.minparams, len(values)))
-        
+
         # Check we've not been given more than the maximum
         if self.maxparams is not None and len(values) > self.maxparams:
             raise CalculatorException("{0} requires at most {1} params, was given {2}".format(self.name, self.maxparams, len(values)))
@@ -347,13 +348,13 @@ class OperatorDefinition(Operation):
 
     def __init__(self, category, name, description, ref, linputs, rinputs, objtypes):
         self.symbol = name
-        
+
         if linputs == 0:
             linputs = []
         elif linputs == 1:
             linputs = [1]
         self.linputs = linputs
-        
+
         if rinputs == 0:
             rinputs = []
         elif rinputs == 1:

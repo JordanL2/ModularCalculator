@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
-from decimal import *
 import statistics
+
 
 class TestRunner:
 
@@ -9,7 +9,7 @@ class TestRunner:
 
     def __init__(self, exception=None):
         self.exception = exception
-    
+
     def test(self, call, tests):
         failed = []
         timings = {}
@@ -29,7 +29,7 @@ class TestRunner:
                         if v.unit is None:
                             new_value.append(v.value)
                         else:
-                            if v.value == Decimal('1'):
+                            if v.value == Number(1):
                                 new_value.append((v.value, v.unit.singular()))
                             else:
                                 new_value.append((v.value, v.unit.plural()))
@@ -37,7 +37,7 @@ class TestRunner:
                 if unit is None:
                     actual = value
                 else:
-                    if value == Decimal('1'):
+                    if value == Number(1):
                         actual = (value, unit.singular())
                     else:
                         actual = (value, unit.plural())

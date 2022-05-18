@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from modularcalculator.engine import *
+from modularcalculator.objects.number import *
 from modularcalculator.objects.units import *
 
 import math
@@ -13,10 +14,10 @@ class UnitNormaliser:
 
         self.systems = {}
         self.systems_preference = []
-        
+
         self.dimensions = {}
         self.relationships = {}
-        
+
         self.units = {}
         self.ambiguous_units = []
         self.multiunits = {}
@@ -99,7 +100,7 @@ class UnitNormaliser:
                 for unit in self.units[this_dimension]:
                     if system in unit.systems and unit.use:
                         units.append(unit)
-        return sorted(units, key=lambda u: u.convertfrom(Decimal('1'), False), reverse=True)
+        return sorted(units, key=lambda u: u.convertfrom(Number(1), False), reverse=True)
 
     def get_preferred_system(self, systems):
         for system in self.systems_preference:
@@ -157,7 +158,7 @@ class UnitNormaliser:
         for dimensionlist, unit in unitdimensions.items():
             for power in (1, -1):
                 dimensions = dimensionlist.multiply(power)
-                
+
                 unitlist2 = [u for u in self.get_subunit_list(unit2) if u.unit not in unitdimensions.values()]
                 unitsfound = self.find_units_matching_dimensions([dimensions], unitlist2)[0]
                 while len(unitsfound) > 0:
@@ -190,7 +191,7 @@ class UnitNormaliser:
         if len(unit.list()) > 1 or (len(unit.list()) == 1 and unit.list()[0].power < 0):
             unit = unit.copy()
             dimensions_list = list(self.units.keys())
-            powerlist = [Decimal('1'), Decimal('-1'), Decimal('2'), Decimal('-2')]
+            powerlist = [Number(1), Number(-1), Number(2), Number(-2)]
             replacedimensions_list = [self.normalised_dimension(d).multiply(p) for d in dimensions_list for p in powerlist]
 
             while True:
@@ -205,7 +206,7 @@ class UnitNormaliser:
                         units = units.copy()
                         units.extend(self.multiunits[dimension])
                     power = powerlist[i % len(powerlist)]
-                    
+
                     found = False
                     for unitsfound in unitsfound_list:
                         multpower = min([unit.find(u.unit).power / u.power for u in unitsfound])
@@ -251,7 +252,7 @@ class UnitNormaliser:
                         break
                 else:
                     break
-        
+
         value, unit = self.dedupe(value, unit)
 
         return value, unit.check_empty()
@@ -297,7 +298,7 @@ class UnitNormaliser:
                 break
         else:
             return [[] for d in range(0, len(dimension_lists))]
-        
+
         dimensionlist_map = {}
         for dimension in dimension_lists_dimensions + unit_dimensionlist:
             if dimension.dimension not in dimensionlist_map:
@@ -319,23 +320,23 @@ class UnitNormaliser:
                 unitlist_min.append(0)
                 unitlist_max.append(int(unit.power))
         unitlist_counter = unitlist_min.copy()
-        
+
         found = [[] for d in range(0, len(dimension_lists))]
         stop = False
         while not stop:
-            
+
             thisgoal = [0] * len(dimensionlist_map)
             for i in range(0, len(unitlist_counter)):
                 n = unitlist_counter[i]
                 for dimension in unitlist[i].dimensions:
                     thisgoal[dimensionlist_map[dimension.dimension]] += (n * dimension.power)
-            
+
             for j, goal in enumerate(goals):
                 if goal == thisgoal:
                     returnlist = []
                     for i in range(0, len(unitlist_counter)):
                         if unitlist_counter[i] != 0:
-                            returnlist.append(UnitPower(unitlist[i].unit, Decimal(unitlist_counter[i])))
+                            returnlist.append(UnitPower(unitlist[i].unit, Number(unitlist_counter[i])))
                     found[j].append(returnlist)
 
             unitlist_counter[-1] += 1
@@ -358,7 +359,7 @@ class UnitNormaliser:
     def normalised_dimension(self, dimension):
         if dimension in self.relationships:
             return self.relationships[dimension]
-        return DimensionPowerList([DimensionPower(dimension, Decimal('1'))])
+        return DimensionPowerList([DimensionPower(dimension, Number(1))])
 
     def get_units_by_dimension(self, unit):
         dimensiontounit = {}
@@ -370,7 +371,7 @@ class UnitNormaliser:
         dimensions = []
         for i in range(0, int(len(relationship) / 2)):
             dimension = relationship[i * 2]
-            power = Decimal(relationship[i * 2 + 1])
+            power = Number(relationship[i * 2 + 1])
             if dimension not in self.dimensions:
                 raise Exception("Dimension not found: {0}".format(dimension))
             dimensions.append(DimensionPower(dimension, power))

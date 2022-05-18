@@ -4,6 +4,7 @@ from testrunner import *
 from modularcalculator.modularcalculator import *
 from modularcalculator.services.syntaxhighlighter import *
 from modularcalculator.objects.exceptions import *
+from modularcalculator.objects.number import *
 
 import argparse
 
@@ -20,16 +21,16 @@ times = args.times
 test = args.test
 
 tests = [
-    { 'test': '123', 'expected': Decimal('123') },
-    { 'test': '123+456', 'expected': Decimal('579') },
-    { 'test': '123-1', 'expected': Decimal('122') },
-    { 'test': '2+3*4', 'expected': Decimal('14') },
-    { 'test': '2+-3/4', 'expected': Decimal('1.25') },
-    { 'test': '2+3^3', 'expected': Decimal('29') },
-    { 'test': '1+2*3-4', 'expected': Decimal('3') },
-    { 'test': '10/5*2', 'expected': Decimal('4') },
-    { 'test': r"10/3", 'expected': Decimal('3.333333333333333333333333333333') },
-    { 'test': r"10/3*3", 'expected': Decimal('10') },
+    { 'test': '123', 'expected': Number(123) },
+    { 'test': '123+456', 'expected': Number(579) },
+    { 'test': '123-1', 'expected': Number(122) },
+    { 'test': '2+3*4', 'expected': Number(14) },
+    { 'test': '2+-3/4', 'expected': Number('1.25') },
+    { 'test': '2+3^3', 'expected': Number(29) },
+    { 'test': '1+2*3-4', 'expected': Number(3) },
+    { 'test': '10/5*2', 'expected': Number(4) },
+    { 'test': r"10/3", 'expected': Number(10, 3) },
+    { 'test': r"10/3*3", 'expected': Number(10) },
 #    { 'test': r"", 'expected': '' },
 ]
 

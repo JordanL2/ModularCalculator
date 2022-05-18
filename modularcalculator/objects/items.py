@@ -2,8 +2,6 @@
 
 from modularcalculator.objects.exceptions import *
 
-from decimal import *
-
 
 def previous_functional_item(items, i=None):
     if i is None:
@@ -26,7 +24,7 @@ def items_text(items):
 
 
 class Item:
-    
+
     def __init__(self, text):
         self.text = text
         self.truncated = False
@@ -71,7 +69,7 @@ class OperatorItem(Item):
 class OperandItem(Item):
 
     unit = None
-    
+
     def __init__(self,  text):
         super().__init__(text)
 
