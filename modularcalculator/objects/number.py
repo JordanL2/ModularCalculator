@@ -73,7 +73,7 @@ class Number:
             return "Number({0:f}, {1:f})".format(self.num, self.den)
         return "Number({0:f})".format(self.num)
 
-    def fraction(self):
+    def as_fraction(self):
         (whole, num) = divmod(self.num, self.den)
         return (Number(whole), Number(num), Number(self.den))
 

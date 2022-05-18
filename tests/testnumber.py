@@ -195,16 +195,16 @@ class TestNumber(unittest.TestCase):
         a = Number(10, 2)
         self.assertEqual(repr(a), 'Number(5)')
 
-    def test_fraction_1(self):
+    def test_as_fraction_1(self):
         a = Number(20, 3)
-        f = a.fraction()
+        f = a.as_fraction()
         self.assertEqual(f[0], Number(6))
         self.assertEqual(f[1], Number(2))
         self.assertEqual(f[2], Number(3))
 
-    def test_fraction_2(self):
+    def test_as_fraction_2(self):
         a = Number(21, 3)
-        f = a.fraction()
+        f = a.as_fraction()
         self.assertEqual(f[0], Number(7))
         self.assertEqual(f[1], Number(0))
         self.assertEqual(f[2], Number(1))
