@@ -61,8 +61,10 @@ class BasesFeature(Feature):
         return ''.join(split_num)
 
     def base_to_dec(self, val, base):
-        if val == 0:
-            return 0
+        if val == '0':
+            return Number(0)
+        if not isinstance(base, int):
+            raise Exception("Base must be type int, was given {}".format(type(base)))
         if base == 10:
             return Number(val)
         if base < 2 or base > 36:
@@ -86,34 +88,36 @@ class BasesFeature(Feature):
             c_val = BasesFeature.digits.find(c)
             if c_val == -1 or c_val > base - 1:
                 raise CalculatorException("Illegal digit: {0}".format(c))
-            dec += Number(c_val * (base ** power))
+            dec += Number(c_val) * Number(int(base ** power))
             power -= 1
 
         if negative:
             dec = -dec
-        return self.clean_number(dec)
+        return dec
 
     def dec_to_base(self, val, base):
         if val == Number(0):
             return '0'
-        if base == Number(10):
+        if not isinstance(base, int):
+            raise Exception("Base must be type int, was given {}".format(type(base)))
+        if base == 10:
             return self.number_to_string(val)
         if base < 2 or base > 36:
             raise CalculatorException("Base must be between 2 and 36")
 
-        negative = val < 0
+        negative = val < Number(0)
         val = abs(val)
 
-        power = Number(0)
-        while (base ** (power + Number(1))) <= val:
-            power += Number(1)
+        power = 0
+        while Number(base ** (power + 1)) <= val:
+            power += 1
 
         str = ''
-        while power >= 0 or (val > 0 and len(str) < 28):
+        while power >= 0 or (val > Number(0) and len(str) < 28):
             if power == -1:
                 str += '.'
-            c_val = int(val / (base ** power))
-            val -= Number(c_val) * (base ** power)
+            c_val = int(val / Number(base ** power))
+            val -= Number(c_val * (base ** power))
             str += BasesFeature.digits[c_val]
             power -= 1
 

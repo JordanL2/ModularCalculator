@@ -30,13 +30,13 @@ class BinaryNumbersFeature(Feature):
     def install(cls, calculator):
         calculator.add_parser('number_bin', BinaryNumbersFeature.parse_bin)
         calculator.funcs['bin'] = FunctionDefinition(
-            'Bases', 
-            'bin', 
+            'Bases',
+            'bin',
             'Convert a number into binary',
             ['number'],
-            BinaryNumbersFeature.func_bin, 
-            1, 
-            1, 
+            BinaryNumbersFeature.func_bin,
+            1,
+            1,
             'number')
         calculator.add_number_caster('binary', BinaryNumbersFeature.number_bin)
 
@@ -62,7 +62,7 @@ class BinaryNumbersFeature(Feature):
             dec_num = BinaryNumbersFeature.bin_to_dec(self, val)
             width = BasesFeature.get_number_width(self, val, BinaryNumbersFeature.bin_prefix)
             return dec_num, NumberType(BinaryNumbersFeature.restore_bin, {'width': width})
-        
+
         return None, None
 
     def restore_bin(self, val, opts=None):
