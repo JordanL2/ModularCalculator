@@ -60,9 +60,6 @@ class Number:
         self.__str__()
 
 
-    def copy(self):
-        return Number(self.num, self.den)
-
     def __str__(self):
         val = str(round(self.to_decimal(), NUMBER['decimal_places']))
         if val.find('.') > -1:
@@ -117,17 +114,13 @@ class Number:
 
 
     def __neg__(self):
-        res = self.copy()
-        res.num = -res.num
-        return res
+        return Number(-self.num, self.den)
 
     def __pos__(self):
         return self
 
     def __abs__(self):
-        res = self.copy()
-        res.num = abs(res.num)
-        return res
+        return Number(abs(self.num), self.den)
 
 
     def to_decimal(self):

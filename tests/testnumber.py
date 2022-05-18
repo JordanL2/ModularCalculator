@@ -49,15 +49,6 @@ class TestNumber(unittest.TestCase):
         self.assertIsInstance(a.num, Decimal)
         self.assertIsInstance(a.den, Decimal)
 
-    def test_create_6(self):
-        a = Number(Decimal('123'))
-        b = a.copy()
-        self.assertEqual(b.num, Decimal('123'))
-        self.assertIsNot(a, b)
-        self.assertEqual(b.den, 1)
-        self.assertIsInstance(b.num, Decimal)
-        self.assertIsInstance(b.den, Decimal)
-
     def test_create_7(self):
         a = Number(20, 3)
         self.assertEqual(a.num, Decimal('20'))
