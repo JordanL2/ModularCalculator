@@ -30,13 +30,13 @@ class ArbitraryBaseFeature(Feature):
     def install(cls, calculator):
         calculator.add_parser('number_arbbase', ArbitraryBaseFeature.parse_arbbase)
         calculator.funcs['base'] = FunctionDefinition(
-            'Bases', 
-            'base', 
+            'Bases',
+            'base',
             'Convert a base-10 number into any base',
             ['number', 'base'],
-            ArbitraryBaseFeature.func_base, 
-            2, 
-            2, 
+            ArbitraryBaseFeature.func_base,
+            2,
+            2,
             'number')
         calculator.add_number_caster('arbitrarybase', ArbitraryBaseFeature.number_arbbase)
 
@@ -56,7 +56,7 @@ class ArbitraryBaseFeature(Feature):
         return None, None, None
 
     def func_base(self, vals, units, refs, flags):
-        return OperationResult(ArbitraryBaseFeature.restore_arbbase(self, vals[0], {'base': vals[1]}))
+        return OperationResult(ArbitraryBaseFeature.restore_arbbase(self, vals[0], {'base': int(vals[1])}))
 
     def number_arbbase(self, val):
         if isinstance(val, str) and ArbitraryBaseFeature.arbbase_regex.fullmatch(val):
