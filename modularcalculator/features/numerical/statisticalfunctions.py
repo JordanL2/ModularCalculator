@@ -118,17 +118,17 @@ class StatisticalFunctionsFeature(Feature):
         return res
 
     def func_mean(self, vals, units, refs, flags):
-        values = [v.value for v in vals[0]]
-        return OperationResult(statistics.mean(values))
+        values = [v.value.to_decimal() for v in vals[0]]
+        return OperationResult(Number(statistics.mean(values)))
 
     def func_median(self, vals, units, refs, flags):
-        values = [v.value for v in vals[0]]
-        return OperationResult(statistics.median(values))
+        values = [v.value.to_decimal() for v in vals[0]]
+        return OperationResult(Number(statistics.median(values)))
 
     def func_mode(self, vals, units, refs, flags):
-        values = [v.value for v in vals[0]]
-        return OperationResult(statistics.mode(values))
+        values = [v.value.to_decimal() for v in vals[0]]
+        return OperationResult(Number(statistics.mode(values)))
 
     def func_stdev(self, vals, units, refs, flags):
-        values = [v.value for v in vals[0]]
-        return OperationResult(statistics.stdev(values))
+        values = [v.value.to_decimal() for v in vals[0]]
+        return OperationResult(Number(statistics.stdev(values)))
