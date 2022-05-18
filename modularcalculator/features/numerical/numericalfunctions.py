@@ -136,10 +136,8 @@ class NumericalFunctionsFeature(Feature):
     def func_log(self, vals, units, refs, flags):
         num = vals[0]
         if len(vals) == 1:
-            res = OperationResult(math.log(num))
+            res = OperationResult(num.log())
         else:
-            base = int(vals[1])
-            result = math.log(num, base)
-            res = OperationResult(result)
+            res = OperationResult(num.log(vals[1]))
         res.set_unit(units[0])
         return res

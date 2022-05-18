@@ -122,6 +122,11 @@ class Number:
     def __abs__(self):
         return Number(abs(self.num), self.den)
 
+    def log(self, base=None):
+        if base is None:
+            return Number(self.to_decimal().ln())
+        return Number(self.to_decimal().ln() / base.to_decimal().ln())
+
 
     def to_decimal(self):
         res = self.num / self.den
