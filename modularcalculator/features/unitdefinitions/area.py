@@ -20,7 +20,7 @@ class AreaUnitFeature(AbstractUnitFeature):
     @classmethod
     def install(cls, calculator):
         calculator.unit_normaliser.add_dimension('area', 'Area',
-            ['distance', Number(2)])
+            ['distance', 2])
 
         calculator.unit_normaliser.add_unit('area', UnitDefinitionAcre())
         calculator.unit_normaliser.add_unit('area', UnitDefinitionHectare())

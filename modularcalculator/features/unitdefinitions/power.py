@@ -20,9 +20,9 @@ class PowerUnitFeature(AbstractUnitFeature):
     @classmethod
     def install(cls, calculator):
         calculator.unit_normaliser.add_dimension('power', 'Power',
-            ['mass', Number(1),
-             'distance', Number(2),
-             'time', Number(-3)])
+            ['mass', 1,
+             'distance', 2,
+             'time', -3])
 
         calculator.unit_normaliser.add_prefixed_unit('power', UnitDefinitionWatt)
 

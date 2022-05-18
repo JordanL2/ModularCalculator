@@ -20,9 +20,9 @@ class MagneticFluxDensityFeature(AbstractUnitFeature):
     @classmethod
     def install(cls, calculator):
         calculator.unit_normaliser.add_dimension('magneticfluxdensity', 'Magnetic Flux Density',
-            ['mass', Number(1),
-             'time', Number(-2),
-             'electriccurrent', Number(-1)])
+            ['mass', 1,
+             'time', -2,
+             'electriccurrent', -1])
 
         calculator.unit_normaliser.add_prefixed_unit('magneticfluxdensity', UnitDefinitionTelsa)
 

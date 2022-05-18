@@ -20,7 +20,7 @@ class VolumeUnitFeature(AbstractUnitFeature):
     @classmethod
     def install(cls, calculator):
         calculator.unit_normaliser.add_dimension('volume', 'Volume',
-            ['distance', Number(3)])
+            ['distance', 3])
 
         calculator.unit_normaliser.add_prefixed_unit('volume', UnitDefinitionLiter, None, Number('1'))
         calculator.unit_normaliser.add_unit('volume', UnitDefinitionLiter(('centi', 'c', Number('0.01'))))

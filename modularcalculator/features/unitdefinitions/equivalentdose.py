@@ -20,8 +20,8 @@ class EquivalentDoseUnitFeature(AbstractUnitFeature):
     @classmethod
     def install(cls, calculator):
         calculator.unit_normaliser.add_dimension('equivalentdose', 'Equivalent Dose',
-            ['distance', Number(2),
-             'time', Number(-2)])
+            ['distance', 2,
+             'time', -2])
 
         calculator.unit_normaliser.add_prefixed_unit('equivalentdose', UnitDefinitionSievert)
 

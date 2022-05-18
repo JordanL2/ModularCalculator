@@ -30,7 +30,7 @@ class UnitNormaliser:
 
         self.simplify_allow_prefixed_units = True
         self.simplify_preferred_magnitude = 1
-        self.simplify_penalise_below = 0.1
+        self.simplify_penalise_below = Number('0.1')
         self.simplify_penalty = 1000
 
     def list_units(self):
@@ -191,7 +191,7 @@ class UnitNormaliser:
         if len(unit.list()) > 1 or (len(unit.list()) == 1 and unit.list()[0].power < 0):
             unit = unit.copy()
             dimensions_list = list(self.units.keys())
-            powerlist = [Number(1), Number(-1), Number(2), Number(-2)]
+            powerlist = [1, -1, 2, -2]
             replacedimensions_list = [self.normalised_dimension(d).multiply(p) for d in dimensions_list for p in powerlist]
 
             while True:
@@ -229,7 +229,7 @@ class UnitNormaliser:
                                 elif isinstance(replace_unit, UnitPowerList) and len([d for u in replace_unit.list() for d in self.normalised_dimension(u.unit.dimension)]) >= unitsfound_dimensioncount:
                                     continue
                                 else:
-                                    if value == 0:
+                                    if value == Number(0):
                                         # Value is 0, so just get the simplest unit possible
                                         if closest_unit is None or abs(math.log10(replace_unit.unitscale)) < abs(math.log10(closest_unit.unitscale)):
                                             closest_unit = replace_unit
@@ -244,8 +244,8 @@ class UnitNormaliser:
                                             closest_value = replace_value
                             if closest_unit is not None:
                                 for subunit in unitsfound:
-                                    value = unit.removeandconvert(value, subunit.unit, (subunit.power * multpower), False)
-                                value = unit.addandconvert(value, closest_unit, (power * multpower), False)
+                                    value = unit.removeandconvert(value, subunit.unit, int(subunit.power * multpower), False)
+                                value = unit.addandconvert(value, closest_unit, int(power * multpower), False)
                                 found = True
                                 break
                     if found:
@@ -336,7 +336,7 @@ class UnitNormaliser:
                     returnlist = []
                     for i in range(0, len(unitlist_counter)):
                         if unitlist_counter[i] != 0:
-                            returnlist.append(UnitPower(unitlist[i].unit, Number(unitlist_counter[i])))
+                            returnlist.append(UnitPower(unitlist[i].unit, unitlist_counter[i]))
                     found[j].append(returnlist)
 
             unitlist_counter[-1] += 1
@@ -359,7 +359,7 @@ class UnitNormaliser:
     def normalised_dimension(self, dimension):
         if dimension in self.relationships:
             return self.relationships[dimension]
-        return DimensionPowerList([DimensionPower(dimension, Number(1))])
+        return DimensionPowerList([DimensionPower(dimension, 1)])
 
     def get_units_by_dimension(self, unit):
         dimensiontounit = {}

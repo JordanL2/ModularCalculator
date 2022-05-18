@@ -85,7 +85,7 @@ class UnitDefinition(AbstractUnitDefinition):
         self.relevant_to_systems = self.relevant_to_systems.copy()
 
     def list(self):
-        return [UnitPower(self, Number(1))]
+        return [UnitPower(self, 1)]
 
     def convert(self, num, power, relative):
         if power > 0:
@@ -113,11 +113,9 @@ class AbstractPower:
             raise Exception("object must be of type {0}".format(self.keyclass.__name__))
         setattr(self, self.keyfield, obj)
 
-        if not isinstance(power, Number):
-            raise Exception("power must be of type Number")
-        if round(power, getcontext().prec - 2) != round(power):
-            raise CalculatorException("Non-integer power {0}".format(power))
-        self.power = round(power)
+        if not isinstance(power, int):
+            raise Exception("power must be of type int, was given {}".format(type(power)))
+        self.power = power
 
     def __eq__(self, other):
         return getattr(self, self.keyfield) == getattr(other, self.keyfield) and self.power == other.power

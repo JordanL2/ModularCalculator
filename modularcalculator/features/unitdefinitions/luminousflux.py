@@ -20,8 +20,8 @@ class LuminousFluxUnitFeature(AbstractUnitFeature):
     @classmethod
     def install(cls, calculator):
         calculator.unit_normaliser.add_dimension('luminousflux', 'Luminous Flux',
-            ['luminousintensity', Number(1),
-             'solidangle', Number(1)])
+            ['luminousintensity', 1,
+             'solidangle', 1])
 
         calculator.unit_normaliser.add_prefixed_unit('luminousflux', UnitDefinitionLumen)
 

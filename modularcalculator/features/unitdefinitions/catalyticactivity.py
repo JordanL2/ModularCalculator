@@ -20,8 +20,8 @@ class CatalyticActivityUnitFeature(AbstractUnitFeature):
     @classmethod
     def install(cls, calculator):
         calculator.unit_normaliser.add_dimension('catalyticactivity', 'Catalytic Activity',
-            ['substance', Number(1),
-             'time', Number(-1)])
+            ['substance', 1,
+             'time', -1])
 
         calculator.unit_normaliser.add_prefixed_unit('catalyticactivity', UnitDefinitionKatal)
 

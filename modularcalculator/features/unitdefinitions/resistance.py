@@ -20,10 +20,10 @@ class ResistanceUnitFeature(AbstractUnitFeature):
     @classmethod
     def install(cls, calculator):
         calculator.unit_normaliser.add_dimension('resistance', 'Resistance',
-            ['mass', Number(1),
-             'distance', Number(2),
-             'time', Number(-3),
-             'electriccurrent', Number(-2)])
+            ['mass', 1,
+             'distance', 2,
+             'time', -3,
+             'electriccurrent', -2])
 
         calculator.unit_normaliser.add_prefixed_unit('resistance', UnitDefinitionOhm)
 

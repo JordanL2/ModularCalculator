@@ -20,14 +20,14 @@ class AccelerationUnitFeature(AbstractUnitFeature):
     @classmethod
     def install(cls, calculator):
         calculator.unit_normaliser.add_dimension('acceleration', 'Acceleration',
-            ['distance', Number(1),
-             'time', Number(-2)])
+            ['distance', 1,
+             'time', -2])
 
         calculator.unit_normaliser.add_unit('acceleration', UnitDefinitionGee())
 
         calculator.unit_normaliser.add_multiunit('acceleration',
-            ['meter', Number(1),
-             'second', Number(-2)])
+            ['meter', 1,
+             'second', -2])
 
 
 class UnitDefinitionGee(UnitDefinition):
