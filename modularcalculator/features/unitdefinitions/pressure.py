@@ -20,7 +20,7 @@ class PressureUnitFeature(AbstractUnitFeature):
     @classmethod
     def install(cls, calculator):
         calculator.unit_normaliser.add_dimension('pressure', 'Pressure', ['mass', 1, 'distance', -1, 'time', -2])
-        
+
         calculator.unit_normaliser.add_prefixed_unit('pressure', UnitDefinitionPascal)
 
         calculator.unit_normaliser.add_unit('pressure', UnitDefinitionAtmosphere())
@@ -37,11 +37,11 @@ class UnitDefinitionAtmosphere(UnitDefinition):
 
     namelist = ['atmospheres','atmosphere']
     symbollist = ['atm']
-    unitscale = Decimal('101325')
+    unitscale = Number('101325')
 
 class UnitDefinitionPSI(UnitDefinition):
 
     namelist = ['pound-force per square inch','pound-force per square inch']
     symbollist = ['psi']
-    unitscale = Decimal('6894.757')
+    unitscale = Number('6894.757')
     systems = ['us', 'uk']

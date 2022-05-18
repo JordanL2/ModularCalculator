@@ -2,6 +2,7 @@
 
 from modularcalculator.features.feature import MetaFeature
 
+
 class AllUnitDefinitionsMetaFeature(MetaFeature):
 
     def id():

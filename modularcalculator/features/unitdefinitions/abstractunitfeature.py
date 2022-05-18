@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 
-from modularcalculator.objects.units import *
 from modularcalculator.features.feature import Feature
+from modularcalculator.objects.number import *
+from modularcalculator.objects.units import *
 
 
 class AbstractUnitFeature(Feature):

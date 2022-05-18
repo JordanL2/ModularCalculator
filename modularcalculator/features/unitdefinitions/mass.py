@@ -2,8 +2,6 @@
 
 from modularcalculator.features.unitdefinitions.abstractunitfeature import *
 
-from decimal import *
-
 
 class MassUnitFeature(AbstractUnitFeature):
 
@@ -23,8 +21,8 @@ class MassUnitFeature(AbstractUnitFeature):
     def install(cls, calculator):
         calculator.unit_normaliser.add_dimension('mass', 'Mass')
 
-        calculator.unit_normaliser.add_prefixed_unit('mass', UnitDefinitionGram, None, Decimal('1000'))
-        calculator.unit_normaliser.add_prefixed_unit('mass', UnitDefinitionTonne, Decimal('1'))
+        calculator.unit_normaliser.add_prefixed_unit('mass', UnitDefinitionGram, None, Number('1000'))
+        calculator.unit_normaliser.add_prefixed_unit('mass', UnitDefinitionTonne, Number('1'))
 
         calculator.unit_normaliser.add_unit('mass', UnitDefinitionGrain())
         calculator.unit_normaliser.add_unit('mass', UnitDefinitionOunce())
@@ -40,41 +38,41 @@ class UnitDefinitionGram(UnitDefinition):
 
     namelist = ['grams','gram']
     symbollist = ['g']
-    unitscale = Decimal('0.001')
+    unitscale = Number('0.001')
     systems = ['si']
 
 class UnitDefinitionTonne(UnitDefinition):
 
     namelist = ['tonnes','tonne']
-    unitscale = Decimal('1000')
+    unitscale = Number('1000')
     systems = ['si']
 
 class UnitDefinitionGrain(UnitDefinition):
 
     namelist = ['grains','grain']
     symbollist = ['gr']
-    unitscale = Decimal('0.00006479891')
+    unitscale = Number('0.00006479891')
     systems = ['us', 'uk']
 
 class UnitDefinitionOunce(UnitDefinition):
 
     namelist = ['ounces','ounce']
     symbollist = ['oz']
-    unitscale = Decimal('0.028349523125')
+    unitscale = Number('0.028349523125')
     systems = ['us', 'uk']
 
 class UnitDefinitionPound(UnitDefinition):
 
     namelist = ['pounds','pound']
     symbollist = ['lb']
-    unitscale = Decimal('0.45359237')
+    unitscale = Number('0.45359237')
     systems = ['us', 'uk']
 
 class UnitDefinitionStone(UnitDefinition):
 
     namelist = ['stone','stone']
     symbollist = ['st']
-    unitscale = Decimal('6.35029318')
+    unitscale = Number('6.35029318')
     systems = ['uk']
 
 class AmbiguousUnitDefinitionTon(AmbiguousUnitDefinition):
@@ -84,11 +82,11 @@ class AmbiguousUnitDefinitionTon(AmbiguousUnitDefinition):
 class UnitDefinitionShortTon(UnitDefinition):
 
     namelist = ['short tons','short ton']
-    unitscale = Decimal('907.18474')
+    unitscale = Number('907.18474')
     systems = ['us']
 
 class UnitDefinitionLongTon(UnitDefinition):
 
     namelist = ['long tons','long ton']
-    unitscale = Decimal('1016.0469088')
+    unitscale = Number('1016.0469088')
     systems = ['uk']

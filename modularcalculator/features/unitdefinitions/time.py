@@ -2,8 +2,6 @@
 
 from modularcalculator.features.unitdefinitions.abstractunitfeature import *
 
-from decimal import *
-
 
 class TimeUnitFeature(AbstractUnitFeature):
 
@@ -23,7 +21,7 @@ class TimeUnitFeature(AbstractUnitFeature):
     def install(cls, calculator):
         calculator.unit_normaliser.add_dimension('time', 'Time')
 
-        calculator.unit_normaliser.add_prefixed_unit('time', UnitDefinitionSecond, None, Decimal('1'))
+        calculator.unit_normaliser.add_prefixed_unit('time', UnitDefinitionSecond, None, Number('1'))
         for unit in [
                 UnitDefinitionMinute(),
                 UnitDefinitionHour(),
@@ -44,39 +42,39 @@ class UnitDefinitionSecond(UnitDefinition):
 class UnitDefinitionMinute(UnitDefinition):
 
     namelist = ['minutes','minute']
-    unitscale = Decimal('60')
+    unitscale = Number('60')
     systems = ['gregorian']
 
 class UnitDefinitionHour(UnitDefinition):
 
     namelist = ['hours','hour']
     symbollist = ['h']
-    unitscale = Decimal('3600')
+    unitscale = Number('3600')
     systems = ['gregorian']
     relevant_to_systems = ['us', 'uk', 'nautical']
 
 class UnitDefinitionDay(UnitDefinition):
 
     namelist = ['days','day']
-    unitscale = Decimal('86400')
+    unitscale = Number('86400')
     systems = ['gregorian']
 
 class UnitDefinitionWeek(UnitDefinition):
 
     namelist = ['weeks','week']
-    unitscale = Decimal('604800')
+    unitscale = Number('604800')
     systems = ['gregorian']
     use = False
 
 class UnitDefinitionMonth(UnitDefinition):
 
     namelist = ['months','month']
-    unitscale = Decimal('2629746')
+    unitscale = Number('2629746')
     systems = ['gregorian']
 
 class UnitDefinitionYear(UnitDefinition):
 
     namelist = ['years','year']
     symbollist = ['yr']
-    unitscale = Decimal('31556952')
+    unitscale = Number('31556952')
     systems = ['gregorian']

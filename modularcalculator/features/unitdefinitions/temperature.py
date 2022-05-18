@@ -22,8 +22,8 @@ class TemperatureUnitFeature(AbstractUnitFeature):
         calculator.unit_normaliser.add_dimension('temperature', 'Temperature')
 
         calculator.unit_normaliser.add_prefixed_unit('temperature', UnitDefinitionKelvin)
-        for unit in [ 
-                UnitDefinitionCelsius(), 
+        for unit in [
+                UnitDefinitionCelsius(),
                 UnitDefinitionFahrenheit(),
             ]:
             calculator.unit_normaliser.add_unit('temperature', unit)
@@ -37,7 +37,7 @@ class UnitDefinitionKelvin(UnitDefinition):
 
 
 class UnitDefinitionCelsius(UnitDefinition):
-    
+
     namelist = ['Celsius','Celsius','deg C']
     symbollist = ['°C']
     systems = ['si']
@@ -45,12 +45,12 @@ class UnitDefinitionCelsius(UnitDefinition):
     def convertfrom(self, num, relative):
         if relative:
             return num
-        return num + Decimal('273.15')
+        return num + Number('273.15')
 
     def convertto(self, num, relative):
         if relative:
             return num
-        return num - Decimal('273.15')
+        return num - Number('273.15')
 
 
 class UnitDefinitionFahrenheit(UnitDefinition):
@@ -61,10 +61,10 @@ class UnitDefinitionFahrenheit(UnitDefinition):
 
     def convertfrom(self, num, relative):
         if relative:
-            return num * Decimal('5') / Decimal('9')
-        return (num + Decimal('459.67')) * Decimal('5') / Decimal('9')
+            return num * Number('5') / Number('9')
+        return (num + Number('459.67')) * Number('5') / Number('9')
 
     def convertto(self, num, relative):
         if relative:
-            return num * Decimal('9') / Decimal('5')
-        return (num * Decimal('9') / Decimal('5')) - Decimal('459.67')
+            return num * Number('9') / Number('5')
+        return (num * Number('9') / Number('5')) - Number('459.67')
