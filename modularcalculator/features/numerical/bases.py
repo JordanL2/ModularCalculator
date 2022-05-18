@@ -88,7 +88,7 @@ class BasesFeature(Feature):
             c_val = BasesFeature.digits.find(c)
             if c_val == -1 or c_val > base - 1:
                 raise CalculatorException("Illegal digit: {0}".format(c))
-            dec += Number(c_val) * Number(int(base ** power))
+            dec += Number(c_val) * (Number(base) ** Number(power))
             power -= 1
 
         if negative:
@@ -116,8 +116,9 @@ class BasesFeature(Feature):
         while power >= 0 or (val > Number(0) and len(str) < 28):
             if power == -1:
                 str += '.'
-            c_val = int(val / Number(base ** power))
-            val -= Number(c_val * (base ** power))
+            base_power = Number(base) ** Number(power)
+            c_val = int(val / base_power)
+            val -= Number(c_val) * base_power
             str += BasesFeature.digits[c_val]
             power -= 1
 
