@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+from modularcalculator.features.numerical.numericalconstants import NumericalConstantsFeature
 from modularcalculator.features.unitdefinitions.abstractunitfeature import *
 
 
@@ -35,5 +36,5 @@ class UnitDefinitionDegree(UnitDefinition):
 
     namelist = ['degrees','degree']
     symbollist = ['°','deg']
-    unitscale = Number('0.01745329251994329576923690768488612713442871888541727777777777777777777777777777777777777777777777778')
+    unitscale = Number(NumericalConstantsFeature.tau, 360)
     systems = ['si']
