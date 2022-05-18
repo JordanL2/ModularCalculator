@@ -68,6 +68,9 @@ class Number:
                 val = val[0:-1]
         return val
 
+    def __format__(self, format_spec):
+        return self.to_decimal().__format__(format_spec)
+
     def __repr__(self):
         if self.den != Decimal('1'):
             return "Number({}, {})".format(self.num, self.den)
