@@ -55,7 +55,7 @@ class TestRunner:
                 print("Failed on test", num + 1, " - ", question)
                 raise err
             if type(actual) != type(expected) or actual != expected:
-                failed.append({ 'num': num, 'test': question, 'expected': repr(expected), 'actual': repr(actual) })
+                failed.append({ 'num': num, 'test': question, 'expected': expected, 'actual': actual })
 
         if len(failed) > 0:
             print("*** FAILED ***")
@@ -63,8 +63,8 @@ class TestRunner:
                 print()
                 print("        # {0}".format(test['num'] + 1))
                 print("    Test: '{0}'".format(test['test']))
-                print("Expected: {0}".format(repr(test['expected'])))
-                print("  Actual: {0}".format(repr(test['actual'])))
+                print("Expected: {0} [{1}]".format(str(test['expected']), repr(test['expected'])))
+                print("  Actual: {0} [{1}]".format(str(test['actual']), repr(test['actual'])))
             print()
             print("{0} / {1} tests passed".format(len(tests) - len(failed), len(tests)))
         else:
