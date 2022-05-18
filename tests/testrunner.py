@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 
+from modularcalculator.objects.number import *
+
 import statistics
 
 
