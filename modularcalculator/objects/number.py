@@ -58,7 +58,7 @@ class Number:
 
 
     def __str__(self):
-        val = str(round(self.to_decimal(), NUMBER['decimal_places']))
+        val = "{0:f}".format(round(self.to_decimal(), NUMBER['decimal_places']))
         if val.find('.') > -1:
             val = val.rstrip('0')
             if val[-1] == '.':

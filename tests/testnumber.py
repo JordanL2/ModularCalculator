@@ -178,6 +178,11 @@ class TestNumber(unittest.TestCase):
         a_str = str(a)
         self.assertEqual(a_str, '6.666666666666666666666666666666')
 
+    def test_str_4(self):
+        a = Number(0)
+        a_str = str(a)
+        self.assertEqual(a_str, '0')
+
     def test_repr_1(self):
         a = Number(10)
         self.assertEqual(repr(a), 'Number(10)')
