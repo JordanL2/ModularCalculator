@@ -156,7 +156,7 @@ tests = [
     { 'test': r"(1l) / (10cm °C)", 'expected': (Number('100'), 'centimeters^2/Celsius') },
     { 'test': r"1 hectare * 1 cm", 'expected': (Number('100000'), 'liters') },
     { 'test': r"10 W s / 2J", 'expected': Number('5') },
-    { 'test': r"100 mi / 2 knots", 'expected': (Number(55880000000000000000000000000000000000000000000000000000000000, 1286111111111111111111111111111111111111111111111111111111111), 'hours') },
+    { 'test': r"100 mi / 2 knots", 'expected': (Number(100584, 2315), 'hours') },
     { 'test': r"100 nmi / 2 knots", 'expected': (Number('50'), 'hours') },
     { 'test': r"0 nmi / 2 knots", 'expected': (Number('0'), 'hours') },
     { 'test': r"(100 mi) / (2 mi/h)", 'expected': (Number('50'), 'hours') },

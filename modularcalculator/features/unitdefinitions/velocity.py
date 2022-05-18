@@ -34,5 +34,5 @@ class UnitDefinitionKnot(UnitDefinition):
 
     namelist = ['knots','knot']
     symbollist = ['kn','kt']
-    unitscale = Number('0.5144444444444444444444444444444444444444444444444444444444444')
+    unitscale = Number(1852, 3600)
     systems = ['nautical']
