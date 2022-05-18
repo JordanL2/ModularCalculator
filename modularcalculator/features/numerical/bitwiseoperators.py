@@ -108,7 +108,7 @@ class BitwiseOperatorsFeature(Feature):
 
         if num_type:
             return OperationResult(num_type.restore(self, masked_flipped_val))
-        return OperationResult(Number(masked_flipped_val))
+        return OperationResult(masked_flipped_val)
 
     def op_bitwise_lshift(self, vals, units, refs, flags):
         return OperationResult(Number(int(vals[0]) << int(vals[1])))
