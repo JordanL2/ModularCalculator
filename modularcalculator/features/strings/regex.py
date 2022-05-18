@@ -98,7 +98,7 @@ class RegexFeature(Feature):
     def func_regexget(self, vals, units, refs, flags):
         found = re.findall(StringsFeature.string(self, vals[1]), StringsFeature.string(self, vals[0]))
         if len(vals) == 3:
-            group = vals[2] - 1
+            group = int(vals[2]) - 1
             return OperationResult(found[int(group)])
         found = [OperandResult(f, None, None) for f in found]
         return OperationResult(found)
