@@ -6,8 +6,6 @@ from modularcalculator.features.strings.strings import StringsFeature
 from modularcalculator.features.structure.functions import FunctionDefinition
 from modularcalculator.features.feature import Feature
 
-from decimal import *
-
 
 class StringArrayFunctionsFeature(Feature):
 
@@ -29,21 +27,21 @@ class StringArrayFunctionsFeature(Feature):
     @classmethod
     def install(cls, calculator):
         calculator.funcs['split'] =  FunctionDefinition(
-            'String', 
-            'split', 
+            'String',
+            'split',
             'Split a string on a delimiter',
             ['string', 'delimiter'],
-            StringArrayFunctionsFeature.func_split, 
-            2, 
-            2, 
+            StringArrayFunctionsFeature.func_split,
+            2,
+            2,
             'string')
 
         calculator.funcs['join'] =   FunctionDefinition(
-            'String', 
-            'join', 
+            'String',
+            'join',
             'Join an array of strings together, joined by an optional delimiter',
             ['strings', '[delimiter]'],
-            StringArrayFunctionsFeature.func_join, 
+            StringArrayFunctionsFeature.func_join,
             1,
             2)
         calculator.funcs['join'].add_value_restriction(0, 0, 'array[string]')
