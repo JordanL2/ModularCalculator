@@ -42,7 +42,7 @@ class ExternalFunctionsFeature(Feature):
     def parse_ext_function(self, expr, i, items, flags):
         symbol = self.feature_options['structure.externalfunctions']['Symbol']
         ext_func_invoke_regex = re.compile(re.escape(symbol) + r'([a-zA-Z_][a-zA-Z0-9_]*)\(')
-        
+
         next = expr[i:]
         ext_func_match = ext_func_invoke_regex.match(next)
         if ext_func_match:
@@ -80,18 +80,18 @@ class ExternalFunctionItem(RecursiveOperandItem):
         super().__init__(text, items, calculator)
         self.name = name
         self.args = args
-    
+
     def desc(self):
         return 'ext_function'
 
     def value(self, flags):
         if self.name not in self.calculator.vars:
             raise ExecuteException("Variable {} not found".format(self.name), [self], '', True)
-        
+
         # Path of function file
         path = self.calculator.vars[self.name][0]
         path = os.path.expanduser(path)
-        
+
         # Execute the items for each argument, put the results in a list of inputs
         inputs = []
         itemsi = 2
@@ -128,8 +128,8 @@ class ExternalFunctionItem(RecursiveOperandItem):
 
         # External function definition to execute
         func = FunctionDefinition(
-            'EXTERNAL', 
-            'external function', 
+            'EXTERNAL',
+            'external function',
             path,
             [],
             ExternalFunctionItem.do_function)
@@ -161,7 +161,7 @@ class ExternalFunctionItem(RecursiveOperandItem):
                         if unit is not None and '^' in unit:
                             unit_unit, unit_power = unit.split('^')
                             units.append(unit_unit)
-                            units.append(unit_power)
+                            units.append(int(unit_power))
                         else:
                             units.append(unit)
                             units.append(1)
@@ -184,7 +184,7 @@ class ExternalFunctionItem(RecursiveOperandItem):
         # Back up the calculator state, then clear it
         backup_vars = self.vars
         self.vars = {}
-        
+
         # For each input, set it in the calculator state as a variable called "PARAM" + n
         for i in range(0, len(vals)):
             self.vars["PARAM{}".format(i + 1)] = (vals[i], units[i])
