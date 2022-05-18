@@ -2,6 +2,7 @@
 
 from modularcalculator.objects.items import *
 from modularcalculator.objects.exceptions import *
+from modularcalculator.objects.number import *
 from modularcalculator.features.feature import Feature
 from modularcalculator.features.structure.functions import *
 
@@ -26,33 +27,33 @@ class ArrayFunctionsFeature(Feature):
     @classmethod
     def install(cls, calculator):
         calculator.funcs['concat'] = FunctionDefinition(
-            'Arrays', 
-            'concat', 
+            'Arrays',
+            'concat',
             'Concatenate two arrays',
             ['array', 'array'],
-            ArrayFunctionsFeature.func_array_concat, 
-            2, 
-            2, 
+            ArrayFunctionsFeature.func_array_concat,
+            2,
+            2,
             'array')
 
         calculator.funcs['element'] = FunctionDefinition(
-            'Arrays', 
-            'element', 
+            'Arrays',
+            'element',
             'Fetch a single element from an array',
             ['array', 'number'],
-            ArrayFunctionsFeature.func_array_element, 
-            2, 
+            ArrayFunctionsFeature.func_array_element,
+            2,
             2)
         calculator.funcs['element'].add_value_restriction(0, 0, ['array'])
         calculator.funcs['element'].add_value_restriction(1, 1, ['number'])
 
         calculator.funcs['filter'] = FunctionDefinition(
-            'Arrays', 
-            'filter', 
+            'Arrays',
+            'filter',
             'Filter an array based on a second array of booleans',
             ['array', 'array[boolean]'],
-            ArrayFunctionsFeature.func_array_filter, 
-            2, 
+            ArrayFunctionsFeature.func_array_filter,
+            2,
             2)
         calculator.funcs['filter'].add_value_restriction(0, 0, ['array'])
         calculator.funcs['filter'].add_value_restriction(1, 1, ['array[boolean]'])
@@ -110,7 +111,7 @@ class ArrayFunctionsFeature(Feature):
         return res
 
     def func_array_count(self, vals, units, refs, flags):
-        res =  OperationResult(Decimal(len(vals[0])))
+        res =  OperationResult(Number(len(vals[0])))
         return res
 
     def func_array_sort(self, vals, units, refs, flags):

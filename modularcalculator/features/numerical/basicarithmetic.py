@@ -26,63 +26,63 @@ class BasicArithmeticFeature(Feature):
     @classmethod
     def install(cls, calculator):
         calculator.add_op(OperatorDefinition(
-            'Numerical', 
-            '^', 
+            'Numerical',
+            '^',
             'Power',
-            BasicArithmeticFeature.op_number_power, 
-            1, 
-            1, 
+            BasicArithmeticFeature.op_number_power,
+            1,
+            1,
             [['number', 'unit'], 'number']),
         {'units_normalise': False})
 
         calculator.add_op(OperatorDefinition(
-            'Numerical', 
-            '*', 
+            'Numerical',
+            '*',
             'Multiply',
-            BasicArithmeticFeature.op_number_multiply, 
-            1, 
-            1, 
-            [['number', 'unit'], ['number', 'unit']]), 
+            BasicArithmeticFeature.op_number_multiply,
+            1,
+            1,
+            [['number', 'unit'], ['number', 'unit']]),
         {'units_relative': True, 'units_multi': True})
 
         calculator.add_op(OperatorDefinition(
-            'Numerical', 
-            '/', 
+            'Numerical',
+            '/',
             'Divide',
-            BasicArithmeticFeature.op_number_divide, 
-            1, 
-            1, 
-            [['number', 'unit'], ['number', 'unit']]), 
+            BasicArithmeticFeature.op_number_divide,
+            1,
+            1,
+            [['number', 'unit'], ['number', 'unit']]),
         {'units_relative': True, 'units_multi': True})
 
         calculator.add_op(OperatorDefinition(
-            'Numerical', 
-            '+', 
+            'Numerical',
+            '+',
             'Add',
-            BasicArithmeticFeature.op_number_add, 
-            1, 
-            1, 
-            'number'), 
+            BasicArithmeticFeature.op_number_add,
+            1,
+            1,
+            'number'),
         {'units_relative': True})
 
         calculator.add_op(OperatorDefinition(
-            'Numerical', 
-            '-', 
+            'Numerical',
+            '-',
             'Subtract',
-            BasicArithmeticFeature.op_number_subtract, 
-            1, 
-            1, 
-            'number'), 
+            BasicArithmeticFeature.op_number_subtract,
+            1,
+            1,
+            'number'),
         {'units_relative': True})
 
         calculator.add_op(OperatorDefinition(
-            'Numerical', 
-            'IMPLICIT_MULTIPLY', 
+            'Numerical',
+            'IMPLICIT_MULTIPLY',
             'Implicitly multiply two values next to each other',
-            BasicArithmeticFeature.op_number_multiply, 
-            1, 
-            1, 
-            'number'), 
+            BasicArithmeticFeature.op_number_multiply,
+            1,
+            1,
+            'number'),
         {'units_relative': True, 'units_multi': True, 'hidden': True})
 
         calculator.implicit_multiply_op = 'IMPLICIT_MULTIPLY'
@@ -113,8 +113,8 @@ class BasicArithmeticFeature(Feature):
         for i in range(0, len(vals)):
             if isinstance(vals[i], UnitPowerList):
                 units[i] = vals[i]
-                vals[i] = Decimal('1')
-        
+                vals[i] = Number(1)
+
         num_type = self.number(vals[0])[1]
         val0 = self.number(vals[0])[0]
         val1 = self.number(vals[1])[0]
@@ -138,7 +138,7 @@ class BasicArithmeticFeature(Feature):
         for i in range(0, len(vals)):
             if isinstance(vals[i], UnitPowerList):
                 units[i] = vals[i]
-                vals[i] = Decimal('1')
+                vals[i] = Number(1)
 
         num_type = self.number(vals[0])[1]
         val0 = self.number(vals[0])[0]

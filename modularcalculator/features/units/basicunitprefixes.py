@@ -1,8 +1,7 @@
 #!/usr/bin/python3
 
 from modularcalculator.features.feature import Feature
-
-from decimal import *
+from modularcalculator.objects.number import *
 
 
 class BasicUnitPrefixesFeature(Feature):
@@ -25,8 +24,8 @@ class BasicUnitPrefixesFeature(Feature):
     @classmethod
     def install(cls, calculator):
         calculator.unit_normaliser.prefixes.extend([
-            ('micro', 'µ', Decimal('0.000001')),
-            ('milli', 'm', Decimal('0.001')),
-            ('kilo',  'k', Decimal('1000')),
-            ('mega',  'M', Decimal('1000000')),
+            ('micro', 'µ', Number('0.000001')),
+            ('milli', 'm', Number('0.001')),
+            ('kilo',  'k', Number('1000')),
+            ('mega',  'M', Number('1000000')),
         ])

@@ -1,8 +1,7 @@
 #!/usr/bin/python3
 
 from modularcalculator.features.feature import Feature
-
-from decimal import *
+from modularcalculator.objects.number import *
 
 
 class AdvancedUnitPrefixesFeature(Feature):
@@ -25,12 +24,12 @@ class AdvancedUnitPrefixesFeature(Feature):
     @classmethod
     def install(cls, calculator):
         calculator.unit_normaliser.prefixes.extend([
-            ('atto',  'a', Decimal('0.000000000000000001')),
-            ('femto', 'f', Decimal('0.000000000000001')),
-            ('pico',  'p', Decimal('0.000000000001')),
-            ('nano',  'n', Decimal('0.000000001')),
-            ('giga',  'G', Decimal('1000000000')),
-            ('tera',  'T', Decimal('1000000000000')),
-            ('peta',  'P', Decimal('1000000000000000')),
-            ('exa',   'E', Decimal('1000000000000000000')),
+            ('atto',  'a', Number('0.000000000000000001')),
+            ('femto', 'f', Number('0.000000000000001')),
+            ('pico',  'p', Number('0.000000000001')),
+            ('nano',  'n', Number('0.000000001')),
+            ('giga',  'G', Number('1000000000')),
+            ('tera',  'T', Number('1000000000000')),
+            ('peta',  'P', Number('1000000000000000')),
+            ('exa',   'E', Number('1000000000000000000')),
         ])

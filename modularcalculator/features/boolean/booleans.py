@@ -2,11 +2,11 @@
 
 from modularcalculator.objects.exceptions import *
 from modularcalculator.objects.items import *
+from modularcalculator.objects.number import *
 from modularcalculator.objects.operators import OperationResult, OperatorDefinition
 from modularcalculator.features.feature import Feature
 from modularcalculator.numericalengine import NumberType
 
-from decimal import *
 import re
 
 
@@ -30,109 +30,109 @@ class BooleansFeature(Feature):
     @classmethod
     def install(cls, calculator):
         calculator.add_parser('boolean', BooleansFeature.parse_boolean)
-      
+
         calculator.add_op(OperatorDefinition(
-            'Boolean', 
-            'not', 
+            'Boolean',
+            'not',
             'Not',
-            BooleansFeature.op_boolean_not, 
-            0, 
-            1, 
+            BooleansFeature.op_boolean_not,
+            0,
+            1,
             'boolean'),
         {'rtl': True})
 
         calculator.add_op(OperatorDefinition(
-            'Numerical', 
+            'Numerical',
             '<',
             'Less than',
-            BooleansFeature.op_number_lessthan, 
-            1, 
-            1, 
+            BooleansFeature.op_number_lessthan,
+            1,
+            1,
             'number'))
 
         calculator.add_op(OperatorDefinition(
-            'Numerical', 
-            '>', 
+            'Numerical',
+            '>',
             'More than',
-            BooleansFeature.op_number_morethan, 
-            1, 
-            1, 
+            BooleansFeature.op_number_morethan,
+            1,
+            1,
             'number'))
 
         calculator.add_op(OperatorDefinition(
-            'Numerical', 
-            '<=', 
+            'Numerical',
+            '<=',
             'Less than or equal to',
-            BooleansFeature.op_number_lessthanequal, 
-            1, 
-            1, 
+            BooleansFeature.op_number_lessthanequal,
+            1,
+            1,
             'number'))
 
         calculator.add_op(OperatorDefinition(
-            'Numerical', 
-            '>=', 
+            'Numerical',
+            '>=',
             'More than or equal to',
-            BooleansFeature.op_number_morethanequal, 
-            1, 
-            1, 
+            BooleansFeature.op_number_morethanequal,
+            1,
+            1,
             'number'))
 
         calculator.add_op(OperatorDefinition(
-            'Numerical', 
-            '==', 
+            'Numerical',
+            '==',
             'Equal to',
-            BooleansFeature.op_number_equals, 
-            1, 
-            1, 
+            BooleansFeature.op_number_equals,
+            1,
+            1,
             'number'))
 
         calculator.add_op(OperatorDefinition(
-            'Numerical', 
-            '!=', 
+            'Numerical',
+            '!=',
             'Not equal to',
-            BooleansFeature.op_number_notequals, 
-            1, 
-            1, 
+            BooleansFeature.op_number_notequals,
+            1,
+            1,
             'number'))
 
         calculator.add_op(OperatorDefinition(
-            'Boolean', 
-            'and', 
+            'Boolean',
+            'and',
             'And',
-            BooleansFeature.op_boolean_and, 
-            1, 
-            1, 
+            BooleansFeature.op_boolean_and,
+            1,
+            1,
             ['boolean', ['boolean', 'exception']]),
         {'inputs_can_be_exceptions': True})
 
         calculator.add_op(OperatorDefinition(
-            'Boolean', 
-            'or', 
+            'Boolean',
+            'or',
             'Or',
-            BooleansFeature.op_boolean_or, 
-            1, 
-            1, 
-            ['boolean', ['boolean', 'exception']]), 
+            BooleansFeature.op_boolean_or,
+            1,
+            1,
+            ['boolean', ['boolean', 'exception']]),
         {'inputs_can_be_exceptions': True})
 
         calculator.add_op(OperatorDefinition(
-            'Boolean', 
-            'xor', 
+            'Boolean',
+            'xor',
             'XOR',
-            BooleansFeature.op_boolean_xor, 
-            1, 
-            1, 
-            ['boolean', ['boolean', 'exception']]), 
+            BooleansFeature.op_boolean_xor,
+            1,
+            1,
+            ['boolean', ['boolean', 'exception']]),
         {'inputs_can_be_exceptions': True})
 
         calculator.add_op(OperatorDefinition(
-            'Boolean', 
-            'then', 
+            'Boolean',
+            'then',
             'Ternary - If A is true, then B, else C',
-            BooleansFeature.op_boolean_conditional, 
-            1, 
-            [1, 'else', 1], 
-            ['boolean', None, None]), 
+            BooleansFeature.op_boolean_conditional,
+            1,
+            [1, 'else', 1],
+            ['boolean', None, None]),
         {'units_normalise': False, 'inputs_can_be_exceptions': True})
 
         calculator.add_number_caster('boolean', BooleansFeature.number_bool)
@@ -198,9 +198,9 @@ class BooleansFeature(Feature):
     def number_bool(self, val):
         if isinstance(val, bool):
             if val:
-                return Decimal(1), NumberType(BooleansFeature.restore_boolean)
+                return Number(1), NumberType(BooleansFeature.restore_boolean)
             else:
-                return Decimal(0), NumberType(BooleansFeature.restore_boolean)
+                return Number(0), NumberType(BooleansFeature.restore_boolean)
         return None, None
 
     def restore_boolean(self, val, opts=None):

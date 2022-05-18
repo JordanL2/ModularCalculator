@@ -1,8 +1,7 @@
 #!/usr/bin/python3
 
 from modularcalculator.features.feature import Feature
-
-from decimal import *
+from modularcalculator.objects.number import *
 
 
 class UnitConstantsFeature(Feature):
@@ -24,7 +23,7 @@ class UnitConstantsFeature(Feature):
 
     @classmethod
     def install(cls, calculator):
-        calculator.constants['G'] = (Decimal('0.0000000000667408'), calculator.unit_normaliser.make_multiunit(['meter', 3, 'kilogram', -1, 'second', -2]))
-        calculator.constants['earthgravity'] = (Decimal('9.80665'), calculator.unit_normaliser.make_multiunit(['meter', 1, 'second', -2]))
-        calculator.constants['speedoflight'] = (Decimal('299792458'), calculator.unit_normaliser.make_multiunit(['meter', 1, 'second', -1]))
-        calculator.constants['Planck'] = (Decimal('0.000000000000000000000000000000000662607015'), calculator.unit_normaliser.make_multiunit(['joule', 1, 'second', 1]))
+        calculator.constants['G'] = (Number('0.0000000000667408'), calculator.unit_normaliser.make_multiunit(['meter', 3, 'kilogram', -1, 'second', -2]))
+        calculator.constants['earthgravity'] = (Number('9.80665'), calculator.unit_normaliser.make_multiunit(['meter', 1, 'second', -2]))
+        calculator.constants['speedoflight'] = (Number('299792458'), calculator.unit_normaliser.make_multiunit(['meter', 1, 'second', -1]))
+        calculator.constants['Planck'] = (Number('0.000000000000000000000000000000000662607015'), calculator.unit_normaliser.make_multiunit(['joule', 1, 'second', 1]))

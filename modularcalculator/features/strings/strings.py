@@ -1,9 +1,10 @@
 #!/usr/bin/python3
 
+from modularcalculator.features.feature import Feature
 from modularcalculator.objects.exceptions import *
 from modularcalculator.objects.items import *
+from modularcalculator.objects.number import *
 from modularcalculator.objects.operators import OperationResult, OperatorDefinition
-from modularcalculator.features.feature import Feature
 
 
 class StringsFeature(Feature):
@@ -34,23 +35,23 @@ class StringsFeature(Feature):
         calculator.add_parser('string', StringsFeature.parse_string)
 
         calculator.add_op(OperatorDefinition(
-            'String', 
-            '+$', 
+            'String',
+            '+$',
             'Concatenate two strings',
-            StringsFeature.op_string_add, 
-            1, 
-            1, 
+            StringsFeature.op_string_add,
+            1,
+            1,
             'string'))
         string_mult = OperatorDefinition(
-            'String', 
-            '*$', 
+            'String',
+            '*$',
             'Multiply a string a number of times',
-            StringsFeature.op_string_multiply, 
-            1, 
-            1, 
+            StringsFeature.op_string_multiply,
+            1,
+            1,
             ['string', 'number'])
         calculator.add_op(string_mult)
-        
+
         calculator.validators['string'] = StringsFeature.validate_string
 
         calculator.feature_options['strings.strings'] = cls.default_options()
@@ -83,10 +84,10 @@ class StringsFeature(Feature):
 
     def op_string_multiply(self, vals, units, refs, flags):
         return OperationResult(StringsFeature.string(self, vals[0]) * int(vals[1]))
-        
+
     def string(self, val):
-        if isinstance(val, Decimal):
-            return self.number_to_string(self.round_number(val))
+        if isinstance(val, Number):
+            return str(val)
         return str(val)
 
     def validate_string(self, value, unit, ref):

@@ -1,10 +1,11 @@
 #!/usr/bin/python3
 
+from modularcalculator.features.feature import Feature
 from modularcalculator.features.numerical.basicarithmetic import BasicArithmeticFeature
 from modularcalculator.objects.items import *
+from modularcalculator.objects.number import *
 from modularcalculator.objects.operators import OperationResult, OperatorDefinition
 from modularcalculator.objects.units import *
-from modularcalculator.features.feature import Feature
 
 
 class UnitsFeature(Feature):
@@ -29,54 +30,54 @@ class UnitsFeature(Feature):
         calculator.enable_units()
         calculator.unit_simplification = True
         calculator.unit_normaliser.prefixes = [
-            (None, None, Decimal('1')),
+            (None, None, Number(1)),
         ]
         calculator.unit_symbols_enabled = False
 
         calculator.add_parser('units', UnitsFeature.parse_units)
-        
+
         calculator.unit_assignment_op = 'UNIT_ASSIGNMENT'
         calculator.unit_multiply_op = 'UNIT_MULTIPLY'
         calculator.unit_divide_op = 'UNIT_DIVIDE'
 
         calculator.add_op(OperatorDefinition(
-            'Units', 
-            'to', 
+            'Units',
+            'to',
             'Convert a value with a unit to another unit',
-            UnitsFeature.op_unit_conversion, 
-            1, 
-            1, 
+            UnitsFeature.op_unit_conversion,
+            1,
+            1,
             [['number with unit', 'unit'], 'unit']),
         {'units_normalise': False})
 
         calculator.add_op(OperatorDefinition(
-            'Units', 
-            'UNIT_ASSIGNMENT', 
+            'Units',
+            'UNIT_ASSIGNMENT',
             'Assign a unit to a value',
-            BasicArithmeticFeature.op_number_multiply, 
-            1, 
-            1, 
-            ['number', 'unit']), 
+            BasicArithmeticFeature.op_number_multiply,
+            1,
+            1,
+            ['number', 'unit']),
         {'units_normalise': False, 'hidden': True})
 
         calculator.add_op(OperatorDefinition(
-            'Units', 
-            'UNIT_MULTIPLY', 
+            'Units',
+            'UNIT_MULTIPLY',
             'Multiply two units',
-            BasicArithmeticFeature.op_number_multiply, 
-            1, 
-            1, 
-            'unit'), 
+            BasicArithmeticFeature.op_number_multiply,
+            1,
+            1,
+            'unit'),
         {'units_normalise': False, 'hidden': True})
 
         calculator.add_op(OperatorDefinition(
-            'Units', 
-            'UNIT_DIVIDE', 
+            'Units',
+            'UNIT_DIVIDE',
             'Divide two units',
-            BasicArithmeticFeature.op_number_divide, 
-            1, 
-            1, 
-            'unit'), 
+            BasicArithmeticFeature.op_number_divide,
+            1,
+            1,
+            'unit'),
         {'units_normalise': False, 'hidden': True})
 
         calculator.validators['unit'] = UnitsFeature.validate_unit
@@ -85,7 +86,7 @@ class UnitsFeature(Feature):
     def parse_units(self, expr, i, items, flags):
         next = expr[i:]
         next_lower = next.lower()
-        
+
         for length in range(min(self.unit_normaliser.unitnamesmaxlength, len(next)), 0, -1):
 
             name = next_lower[0: length]
@@ -95,7 +96,7 @@ class UnitsFeature(Feature):
                     unit_def = self.unit_normaliser.get_unit(unittext)
                     unitobj = UnitPowerList.newfromunit(unit_def)
                     return [UnitItem(unittext, unitobj)], len(unittext), None
-            
+
             if self.unit_symbols_enabled:
                 symbol = next[0: length]
                 if symbol in self.unit_normaliser.unitsymbols:
@@ -103,7 +104,7 @@ class UnitsFeature(Feature):
                         unit_def = self.unit_normaliser.get_unit(symbol)
                         unitobj = UnitPowerList.newfromunit(unit_def)
                         return [UnitItem(symbol, unitobj)], len(symbol), None
-            
+
         return None, None, None
 
     def unit_char(self, char):
@@ -112,9 +113,9 @@ class UnitsFeature(Feature):
     def op_unit_conversion(self, vals, units, refs, flags):
         if isinstance(vals[0], UnitPowerList):
             units[0] = vals[0]
-            vals[0] = Decimal('1')
+            vals[0] = Number(1)
         num = vals[0]
-        if vals[1] is not None and not isinstance(vals[1], UnitPowerList) and vals[1] != Decimal('1'):
+        if vals[1] is not None and not isinstance(vals[1], UnitPowerList) and vals[1] != Number(1):
             raise CalculatorException("Second operand must be just a unit")
         fromunit = units[0]
         tounit = vals[1]

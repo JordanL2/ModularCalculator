@@ -1,12 +1,11 @@
 #!/usr/bin/python3
 
-from modularcalculator.objects.exceptions import *
-from modularcalculator.objects.units import *
-from modularcalculator.features.structure.functions import FunctionDefinition
-from modularcalculator.objects.operators import OperationResult
 from modularcalculator.features.feature import Feature
-
-from decimal import *
+from modularcalculator.features.structure.functions import FunctionDefinition
+from modularcalculator.objects.exceptions import *
+from modularcalculator.objects.number import *
+from modularcalculator.objects.operators import OperationResult
+from modularcalculator.objects.units import *
 
 
 class GeneralUnitFunctionsFeature(Feature):
@@ -29,24 +28,24 @@ class GeneralUnitFunctionsFeature(Feature):
     @classmethod
     def install(cls, calculator):
         calculator.funcs['format'] = FunctionDefinition(
-            'Units', 
-            'format', 
+            'Units',
+            'format',
             'Nicely format a value with a unit, optionally specify the unit system to use',
             ['value', '[system]'],
-            GeneralUnitFunctionsFeature.func_format, 
-            1, 
+            GeneralUnitFunctionsFeature.func_format,
+            1,
             2)
         calculator.funcs['format'].add_value_restriction(0, 0, 'number with unit')
         calculator.funcs['format'].add_value_restriction(1, 1, 'unitsystem')
         calculator.funcs['format'].units_normalise = False
-        
+
         calculator.funcs['compact'] = FunctionDefinition(
-            'Units', 
-            'compact', 
+            'Units',
+            'compact',
             'Explicitly simplify the units for a value',
             ['value'],
-            GeneralUnitFunctionsFeature.func_compact, 
-            1, 
+            GeneralUnitFunctionsFeature.func_compact,
+            1,
             1)
         calculator.funcs['compact'].add_value_restriction(0, 0, 'number with unit')
 
@@ -60,7 +59,7 @@ class GeneralUnitFunctionsFeature(Feature):
         power = unit.list()[0].power
         if power != 1:
             raise CalculatorException("Unit must have power of 1")
-        
+
         singleunit = unit.list()[0].unit
         if len(vals) >= 2:
             system = vals[1]
@@ -68,7 +67,7 @@ class GeneralUnitFunctionsFeature(Feature):
             if singleunit.systems is None or len(singleunit.systems) == 0:
                 raise CalculatorException("Unit is not part of a measuring system")
             system = self.unit_normaliser.get_preferred_system(singleunit.systems)
-        
+
         systemunits = self.unit_normaliser.get_system(system, singleunit.dimension)
         if len(systemunits) == 0:
             raise CalculatorException("No units in system {0} found for dimension {1}".format(system, singleunit.dimension))
@@ -80,7 +79,7 @@ class GeneralUnitFunctionsFeature(Feature):
             num = systemunit.convertto(num, False)
             unit = systemunit
             last = (systemunit == nonprefixedsystemunits[-1])
-            if num >= Decimal('1') or last:
+            if num >= Number(1) or last:
                 if last:
                     num_of_unit, unit = GeneralUnitFunctionsFeature.find_first_unit_prefix_at_least_one(self, num, unit, systemunits)
                 else:
@@ -94,7 +93,7 @@ class GeneralUnitFunctionsFeature(Feature):
                         num -= num_of_unit
                         unit = new_unit
                 num_of_unit = self.round_number(num_of_unit)
-                if num_of_unit != Decimal('0'):
+                if num_of_unit != Number(0):
                     parts.append("{0} {1}".format(self.number_to_string(num_of_unit), unit.get_name(num_of_unit)))
 
         res = OperationResult(str.join(', ', parts))
@@ -106,7 +105,7 @@ class GeneralUnitFunctionsFeature(Feature):
         old_num = unit.convertfrom(num, False)
         for prefixedunit in prefixedunitsofsametype:
             new_num = prefixedunit.convertto(old_num, False)
-            if self.round_number(new_num) >= Decimal('1') or prefixedunit == systemunits[-1]:
+            if self.round_number(new_num) >= Number(1) or prefixedunit == systemunits[-1]:
                 return new_num, prefixedunit
 
     def func_compact(self, vals, units, refs, flags):

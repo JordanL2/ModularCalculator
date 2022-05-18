@@ -2,12 +2,12 @@
 
 from modularcalculator.objects.items import *
 from modularcalculator.objects.exceptions import *
+from modularcalculator.objects.number import *
 from modularcalculator.features.feature import Feature
 from modularcalculator.features.structure.functions import *
 from modularcalculator.numericalengine import NumberType
 
 import re
-from decimal import *
 
 
 class ExpNumbersFeature(Feature):
@@ -32,13 +32,13 @@ class ExpNumbersFeature(Feature):
         calculator.add_parser('numberexp', ExpNumbersFeature.parse_numberexp)
 
         calculator.funcs['scientific'] = FunctionDefinition(
-            'Numerical', 
-            'scientific', 
+            'Numerical',
+            'scientific',
             'Format number in scientific notation',
             ['number', '[places]'],
-            ExpNumbersFeature.func_scientific, 
-            1, 
-            2, 
+            ExpNumbersFeature.func_scientific,
+            1,
+            2,
             'number')
         calculator.funcs['scientific'].units_normalise = False
 
@@ -89,11 +89,11 @@ class ExpNumbersFeature(Feature):
         if isinstance(val, str) and ExpNumbersFeature.numexp_regex.fullmatch(val):
             numexp_match = ExpNumbersFeature.numexp_regex.match(val)
             numexp = numexp_match.group(1)
-            num = Decimal(numexp[0:numexp.lower().find('e')])
-            exp = Decimal(numexp[numexp.lower().find('e') + 1:])
+            num = Number(numexp[0:numexp.lower().find('e')])
+            exp = Number(numexp[numexp.lower().find('e') + 1:])
             num *= (10 ** exp)
             return num, NumberType(ExpNumbersFeature.restore_exp)
-        
+
         return None, None
 
     def restore_exp(self, val, opts=None):

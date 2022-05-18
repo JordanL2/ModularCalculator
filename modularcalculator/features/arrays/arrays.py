@@ -2,6 +2,7 @@
 
 from modularcalculator.objects.items import *
 from modularcalculator.objects.exceptions import *
+from modularcalculator.objects.number import *
 from modularcalculator.features.feature import Feature
 
 
@@ -226,9 +227,9 @@ class ArrayElement():
         else:
             return [element_result]
 
-        step_result = OperandResult(Decimal('1'), element_result.unit, None)
+        step_result = OperandResult(Number(1), element_result.unit, None)
         if end_element_result is not None and end_element_result.value < element_result.value:
-            step_result = OperandResult(Decimal('-1'), element_result.unit, None)
+            step_result = OperandResult(Number(-1), element_result.unit, None)
         if self.step is not None:
             state['items'] += 1
             step_result = calculator.execute(self.step, flags)
@@ -252,10 +253,10 @@ class ArrayElement():
             raise ExecuteException("Can't get from {0} to {1} with step {2}".format(element_result.value, end_element_result.value, step_result.value), [], None)
 
         array = []
-        n = Decimal(element_result.value)
-        while (step_result.value > 0 and n <= Decimal(end_element_result.value)) or (step_result.value < 0 and n >= Decimal(end_element_result.value)):
+        n = element_result.value
+        while (step_result.value > 0 and n <= end_element_result.value) or (step_result.value < 0 and n >= end_element_result.value):
             array.append(OperandResult(n, element_result.unit, None))
-            n += Decimal(step_result.value)
+            n += step_result.value
         return array
 
 

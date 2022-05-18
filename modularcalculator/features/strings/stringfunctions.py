@@ -1,12 +1,11 @@
 #!/usr/bin/python3
 
-from modularcalculator.objects.exceptions import *
-from modularcalculator.objects.operators import OperationResult
+from modularcalculator.features.feature import Feature
 from modularcalculator.features.strings.strings import StringsFeature
 from modularcalculator.features.structure.functions import FunctionDefinition
-from modularcalculator.features.feature import Feature
-
-from decimal import *
+from modularcalculator.objects.exceptions import *
+from modularcalculator.objects.number import *
+from modularcalculator.objects.operators import OperationResult
 
 
 class StringFunctionsFeature(Feature):
@@ -29,98 +28,98 @@ class StringFunctionsFeature(Feature):
     @classmethod
     def install(cls, calculator):
         calculator.funcs['length'] =  FunctionDefinition(
-            'String', 
-            'length', 
+            'String',
+            'length',
             'Length of string',
             ['string'],
-            StringFunctionsFeature.func_length, 
-            1, 
-            1, 
+            StringFunctionsFeature.func_length,
+            1,
+            1,
             'string')
 
         calculator.funcs['lower'] =   FunctionDefinition(
-            'String', 
-            'lower', 
+            'String',
+            'lower',
             'Lower-case a string',
             ['string'],
-            StringFunctionsFeature.func_lower, 
-            1, 
-            1, 
+            StringFunctionsFeature.func_lower,
+            1,
+            1,
             'string')
 
         calculator.funcs['upper'] =   FunctionDefinition(
-            'String', 
-            'upper', 
+            'String',
+            'upper',
             'Upper-case a string',
             ['string'],
-            StringFunctionsFeature.func_upper, 
-            1, 
-            1, 
+            StringFunctionsFeature.func_upper,
+            1,
+            1,
             'string')
 
         calculator.funcs['lstrip'] =  FunctionDefinition(
-            'String', 
-            'lstrip', 
+            'String',
+            'lstrip',
             'Remove all occurrences of a character from the left',
             ['string', 'character'],
-            StringFunctionsFeature.func_lstrip, 
-            2, 
-            2, 
+            StringFunctionsFeature.func_lstrip,
+            2,
+            2,
             'string')
 
         calculator.funcs['rstrip'] =  FunctionDefinition(
-            'String', 
-            'rstrip', 
+            'String',
+            'rstrip',
             'Remove all occurrences of a character from the right',
             ['string', 'character'],
-            StringFunctionsFeature.func_rstrip, 
-            2, 
-            2, 
+            StringFunctionsFeature.func_rstrip,
+            2,
+            2,
             'string')
 
         calculator.funcs['strip'] =   FunctionDefinition(
-            'String', 
-            'strip', 
+            'String',
+            'strip',
             'Remove all occurrences of a character from both ends',
             ['string', 'character'],
-            StringFunctionsFeature.func_strip, 
-            2, 
-            2, 
+            StringFunctionsFeature.func_strip,
+            2,
+            2,
             'string')
 
         calculator.funcs['find'] =    FunctionDefinition(
-            'String', 
-            'find', 
+            'String',
+            'find',
             'Return position of a substring in a string',
             ['string', 'substring'],
-            StringFunctionsFeature.func_find, 
-            2, 
-            2, 
+            StringFunctionsFeature.func_find,
+            2,
+            2,
             'string')
 
         calculator.funcs['replace'] = FunctionDefinition(
-            'String', 
-            'replace', 
+            'String',
+            'replace',
             'Replace all occurrences of substring with replacement',
             ['string', 'substring', 'replacement'],
-            StringFunctionsFeature.func_replace, 
-            3, 
-            3, 
+            StringFunctionsFeature.func_replace,
+            3,
+            3,
             'string')
-        
+
         calculator.funcs['substr'] =  FunctionDefinition(
-            'String', 
-            'substr', 
+            'String',
+            'substr',
             'Return characters in a string from start position, optionally to end position',
             ['string', 'start', 'end'],
-            StringFunctionsFeature.func_substr, 
-            2, 
+            StringFunctionsFeature.func_substr,
+            2,
             3)
         calculator.funcs['substr'].add_value_restriction(0, 0, 'string')
         calculator.funcs['substr'].add_value_restriction(1, 2, 'number')
 
     def func_length(self, vals, units, refs, flags):
-        return OperationResult(Decimal(len(StringsFeature.string(self, vals[0]))))
+        return OperationResult(Number(len(StringsFeature.string(self, vals[0]))))
 
     def func_lower(self, vals, units, refs, flags):
         return OperationResult(StringsFeature.string(self, vals[0]).lower())
@@ -138,7 +137,7 @@ class StringFunctionsFeature(Feature):
         return OperationResult(StringsFeature.string(self, vals[0]).strip(StringsFeature.string(self, vals[1])))
 
     def func_find(self, vals, units, refs, flags):
-        return OperationResult(Decimal(StringsFeature.string(self, vals[0]).find(StringsFeature.string(self, vals[1]))))
+        return OperationResult(Number(StringsFeature.string(self, vals[0]).find(StringsFeature.string(self, vals[1]))))
 
     def func_replace(self, vals, units, refs, flags):
         return OperationResult(StringsFeature.string(self, vals[0]).replace(StringsFeature.string(self, vals[1]), StringsFeature.string(self, vals[2])))

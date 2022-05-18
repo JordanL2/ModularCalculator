@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from modularcalculator.objects.exceptions import *
+from modularcalculator.objects.number import *
 from modularcalculator.features.structure.functions import *
 from modularcalculator.features.feature import Feature
 
@@ -63,7 +64,7 @@ class BasesFeature(Feature):
         if val == 0:
             return 0
         if base == 10:
-            return Decimal(val)
+            return Number(val)
         if base < 2 or base > 36:
             raise CalculatorException("Base must be between 2 and 36")
 
@@ -77,7 +78,7 @@ class BasesFeature(Feature):
         if dot_index > -1:
             power = dot_index - 1
 
-        dec = Decimal(0)
+        dec = Number(0)
         val = val.upper()
         for c in val:
             if c == '.':
@@ -85,7 +86,7 @@ class BasesFeature(Feature):
             c_val = BasesFeature.digits.find(c)
             if c_val == -1 or c_val > base - 1:
                 raise CalculatorException("Illegal digit: {0}".format(c))
-            dec += Decimal(c_val * (base ** power))
+            dec += Number(c_val * (base ** power))
             power -= 1
 
         if negative:
@@ -93,26 +94,26 @@ class BasesFeature(Feature):
         return self.clean_number(dec)
 
     def dec_to_base(self, val, base):
-        if val == 0:
+        if val == Number(0):
             return '0'
-        if base == 10:
+        if base == Number(10):
             return self.number_to_string(val)
         if base < 2 or base > 36:
             raise CalculatorException("Base must be between 2 and 36")
-        
+
         negative = val < 0
         val = abs(val)
 
-        power = 0
-        while (base ** (power + 1)) <= val:
-            power += 1
+        power = Number(0)
+        while (base ** (power + Number(1))) <= val:
+            power += Number(1)
 
         str = ''
         while power >= 0 or (val > 0 and len(str) < 28):
             if power == -1:
                 str += '.'
-            c_val = int(val / Decimal(base ** power))
-            val -= Decimal(c_val * (base ** power))
+            c_val = int(val / (base ** power))
+            val -= Number(c_val) * (base ** power)
             str += BasesFeature.digits[c_val]
             power -= 1
 

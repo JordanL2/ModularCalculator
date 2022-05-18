@@ -4,10 +4,10 @@ from modularcalculator.objects.units import *
 from modularcalculator.objects.exceptions import *
 from modularcalculator.features.structure.functions import FunctionDefinition
 from modularcalculator.features.dates.dates import DatesFeature
+from modularcalculator.objects.number import *
 from modularcalculator.objects.operators import OperationResult
 from modularcalculator.features.feature import Feature
 
-from decimal import *
 from datetime import *
 
 
@@ -61,60 +61,60 @@ class DateFunctionsFeature(Feature):
     @classmethod
     def install(cls, calculator):
         calculator.funcs['dateformat'] =  FunctionDefinition(
-            'Date', 
-            'dateformat', 
+            'Date',
+            'dateformat',
             'Nicely format a date for easy reading',
             ['date'],
-            DateFunctionsFeature.func_dateformat, 
-            1, 
-            1, 
+            DateFunctionsFeature.func_dateformat,
+            1,
+            1,
             'date')
         calculator.funcs['dateformat'].units_normalise = False
-        
+
         calculator.funcs['dateadd'] =  FunctionDefinition(
-            'Date', 
-            'dateadd', 
+            'Date',
+            'dateadd',
             'Add a time period to a date',
             ['date', 'time'],
-            DateFunctionsFeature.func_dateadd, 
-            2, 
+            DateFunctionsFeature.func_dateadd,
+            2,
             2)
         calculator.funcs['dateadd'].add_value_restriction(0, 0, 'date')
         calculator.funcs['dateadd'].add_value_restriction(1, 1, 'number')
         calculator.funcs['dateadd'].add_unit_restriction(1, 1, ['time', 1])
         calculator.funcs['dateadd'].units_normalise = False
-        
+
         calculator.funcs['datesubtract'] =  FunctionDefinition(
-            'Date', 
-            'datesubtract', 
+            'Date',
+            'datesubtract',
             'Subtract a time period from a date',
             ['date', 'time'],
-            DateFunctionsFeature.func_datesubtract, 
-            2, 
+            DateFunctionsFeature.func_datesubtract,
+            2,
             2)
         calculator.funcs['datesubtract'].add_value_restriction(0, 0, 'date')
         calculator.funcs['datesubtract'].add_value_restriction(1, 1, 'number')
         calculator.funcs['datesubtract'].add_unit_restriction(1, 1, ['time', 1])
         calculator.funcs['datesubtract'].units_normalise = False
-        
+
         calculator.funcs['datedifference'] =  FunctionDefinition(
-            'Date', 
-            'datedifference', 
+            'Date',
+            'datedifference',
             'Determine the length of time between two dates, return answer in the given unit',
             ['date1', 'date2', '[unit]'],
-            DateFunctionsFeature.func_datedifference, 
-            2, 
+            DateFunctionsFeature.func_datedifference,
+            2,
             3)
         calculator.funcs['datedifference'].add_value_restriction(0, 1, 'date')
         calculator.funcs['datedifference'].add_value_restriction(2, 2, 'unit')
-        
+
         calculator.funcs['now'] =  FunctionDefinition(
-            'Date', 
-            'now', 
+            'Date',
+            'now',
             'Return the current date and time',
             [],
-            DateFunctionsFeature.func_now, 
-            0, 
+            DateFunctionsFeature.func_now,
+            0,
             0)
 
         calculator.feature_options['dates.datefunctions'] = cls.default_options()
@@ -123,7 +123,7 @@ class DateFunctionsFeature(Feature):
         dt = DatesFeature.string_to_date(self, vals[0])
         dt_format, dt_padding = DatesFeature.correct_format_for_date(self, dt)
         return OperationResult(format(
-            dt.strftime(self.feature_options['dates.datefunctions']['Human Readable ' + dt_format]), 
+            dt.strftime(self.feature_options['dates.datefunctions']['Human Readable ' + dt_format]),
             self.feature_options['dates.datefunctions']['Human Readable ' + dt_padding]))
 
     def func_dateadd(self, vals, units, refs, flags):
@@ -150,7 +150,7 @@ class DateFunctionsFeature(Feature):
             raise CalculatorException("Cannot compare dates with timezones and dates without timezones")
         td = abs(date1 - date2)
 
-        seconds = Decimal(td.total_seconds())
+        seconds = Number(str(td.total_seconds()))
         seconds = round(seconds, min(6, getcontext().prec))
         fromunit = UnitPowerList.new([self.unit_normaliser.get_unit('seconds'), 1])
         tounit = UnitPowerList.new([self.unit_normaliser.get_unit('seconds'), 1])
