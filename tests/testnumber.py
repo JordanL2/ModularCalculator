@@ -198,16 +198,16 @@ class TestNumber(unittest.TestCase):
     def test_as_fraction_1(self):
         a = Number(20, 3)
         f = a.as_fraction()
-        self.assertEqual(f[0], Number(6))
-        self.assertEqual(f[1], Number(2))
-        self.assertEqual(f[2], Number(3))
+        self.assertEqual(f[0], Decimal(6))
+        self.assertEqual(f[1], Decimal(2))
+        self.assertEqual(f[2], Decimal(3))
 
     def test_as_fraction_2(self):
         a = Number(21, 3)
         f = a.as_fraction()
-        self.assertEqual(f[0], Number(7))
-        self.assertEqual(f[1], Number(0))
-        self.assertEqual(f[2], Number(1))
+        self.assertEqual(f[0], Decimal(7))
+        self.assertEqual(f[1], Decimal(0))
+        self.assertEqual(f[2], Decimal(1))
 
 
     def test_add_1(self):

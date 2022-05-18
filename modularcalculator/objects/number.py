@@ -75,7 +75,7 @@ class Number:
 
     def as_fraction(self):
         (whole, num) = divmod(self.num, self.den)
-        return (Number(whole), Number(num), Number(self.den))
+        return (whole, num, self.den)
 
     def is_integer(self):
         return Number.is_integer(self.to_decimal())
