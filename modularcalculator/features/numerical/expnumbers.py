@@ -91,7 +91,7 @@ class ExpNumbersFeature(Feature):
             numexp = numexp_match.group(1)
             num = Number(numexp[0:numexp.lower().find('e')])
             exp = Number(numexp[numexp.lower().find('e') + 1:])
-            num *= (10 ** exp)
+            num *= (Number(10) ** exp)
             return num, NumberType(ExpNumbersFeature.restore_exp)
 
         return None, None
