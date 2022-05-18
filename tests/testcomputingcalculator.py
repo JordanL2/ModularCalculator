@@ -28,7 +28,7 @@ tests = [
     { 'test': '2 + 3^3', 'expected': Number(29) },
     { 'test': '4 * (2 + (3)) - 3', 'expected': Number(17) },
     { 'test': '14 % 3', 'expected': Number(2) },
-    { 'test': r"stdev([1, 2, 3, 4])", 'expected': Number('1.290994448735805628393088466594') },
+    { 'test': r"stdev([1, 2, 3, 4])", 'expected': Number('645497224367902814196544233297066601805486950881931804431262294352247181989496505586547896143112253', '500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000') },
     { 'test': "'hello' +$ 'goodbye'", 'expected': 'hellogoodbye' },
     { 'test': r"'hello' +$ 'good\'bye\\'", 'expected': "hellogood'bye\\" },
     { 'test': r"123 +$ 'abc'", 'expected': '123abc' },
@@ -253,7 +253,7 @@ tests = [
     { 'test': r"false then 1m else 2cm", 'expected': (Number('2'), 'centimeters') },
 
     { 'test': "orbitheight = 36000km\nearthmass = 5.97237e24kg\nearthradius = 6378.1km\ngm = G earthmass\norbitradius = earthradius + orbitheight\ntime = 2 pi (orbitradius^3 / gm)^0.5\ntime to hours",
-        'expected': (Number('24.116847271747239529834702110187'), 'hours') },
+        'expected': (Number(24224627632301628480899537366063915829476650214457110900687610652121970296857515944613469683003093000, 1004469089982613651157596952472639188035748634295889087727188244396625333452077251111878745939773897), 'hours') },
     { 'test': r"gm = G * 5.97237e24kg", 'expected': (Number('398600751696000'), 'meters^3/second^2') },
 
     { 'test': "dateformat('2012-01-02')", 'expected': 'Monday, 02-Jan-2012' },
@@ -320,7 +320,7 @@ dec = decfound then
 str +$ '*10^' +$ dec""", 'expected': '4*10^-1' },
 
     { 'test': "orbitheight = 36000km\nearthmass = 5.97237e24kg\nearthradius = 6378.1km\ngm = G earthmass\norbitradius = earthradius + orbitheight\ntime = 2 pi (orbitradius^\n\n\n3 /\n\n\n\n gm\n\n\n\n\n\n\n\n)^\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n0.5\ntime to hours",
-        'expected': (Number('24.116847271747239529834702110187'), 'hours') },
+        'expected': (Number(24224627632301628480899537366063915829476650214457110900687610652121970296857515944613469683003093000, 1004469089982613651157596952472639188035748634295889087727188244396625333452077251111878745939773897), 'hours') },
 
     { 'test': "f = './tests/externalfunctions/distance'\n@f([0, 0], [3, 4])", 'expected': Number('5') },
 

@@ -70,8 +70,8 @@ class Number:
 
     def __repr__(self):
         if self.den != Decimal('1'):
-            return "Number({}, {})".format(self.num, self.den)
-        return "Number({})".format(self.num)
+            return "Number({0:f}, {1:f})".format(self.num, self.den)
+        return "Number({0:f})".format(self.num)
 
     def fraction(self):
         (whole, num) = divmod(self.num, self.den)
