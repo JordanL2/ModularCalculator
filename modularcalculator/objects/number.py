@@ -12,49 +12,51 @@ NUMBER = {
 
 class Number:
 
-    def __init__(self, num, den=None):
-        if num is None:
-            raise Exception("Cannot create Number with arguments: {}, {}".format(type(num), type(den)))
-        if den is None:
-            den = Decimal(1)
-        if not isinstance(num, Decimal):
-            if type(num) not in (str, int):
-                raise Exception("Cannot create Number with arguments: {}, {}".format(type(num), type(den)))
-            num = Decimal(num)
-        if not isinstance(den, Decimal):
-            if type(den) not in (str, int):
-                raise Exception("Cannot create Number with arguments: {}, {}".format(type(num), type(den)))
-            den = Decimal(den)
-        if den == 0:
-            raise Exception("Cannot create Number with denominator of 0")
+    def __init__(self, num, den=None, skip_checks=False):
+        if skip_checks:
+            self.num = num
+            self.den = den
+        else:
+            if den is None:
+                den = Decimal(1)
+            if not isinstance(num, Decimal):
+                if type(num) not in (str, int):
+                    raise Exception("Cannot create Number with arguments: {}, {}".format(type(num), type(den)))
+                num = Decimal(num)
+            if not isinstance(den, Decimal):
+                if type(den) not in (str, int):
+                    raise Exception("Cannot create Number with arguments: {}, {}".format(type(num), type(den)))
+                den = Decimal(den)
+            if den == 0:
+                raise Exception("Cannot create Number with denominator of 0")
 
-        try:
-            # Make numerator an integer if it isn't already
-            if not Number.is_integer(num):
-                (a, b) = num.as_integer_ratio()
-                num = Decimal(a)
-                den *= b
-            # Make denominator an integer if it isn't already
-            if not Number.is_integer(den):
-                (a, b) = den.as_integer_ratio()
-                den = Decimal(a)
-                num *= b
-            # Make sure denominator is positive
-            if den < 0:
-                den = -den
-                num = -num
-            # Reduce num/den by dividing by greatest common divisor
-            gcd = math.gcd(int(num), int(den))
-            if gcd > 1:
-                num /= gcd
-                den /= gcd
-        except InvalidOperation:
-            # Run out of precision, need to collapse num/den unfortunately
-            num /= den
-            den = Decimal(1)
+            try:
+                # Make numerator an integer if it isn't already
+                if not Number.is_integer(num):
+                    (a, b) = num.as_integer_ratio()
+                    num = Decimal(a)
+                    den *= b
+                # Make denominator an integer if it isn't already
+                if not Number.is_integer(den):
+                    (a, b) = den.as_integer_ratio()
+                    den = Decimal(a)
+                    num *= b
+                # Make sure denominator is positive
+                if den < 0:
+                    den = -den
+                    num = -num
+                # Reduce num/den by dividing by greatest common divisor
+                gcd = math.gcd(int(num), int(den))
+                if gcd > 1:
+                    num /= gcd
+                    den /= gcd
+            except InvalidOperation:
+                # Run out of precision, need to collapse num/den unfortunately
+                num /= den
+                den = Decimal(1)
 
-        self.num = num.to_integral_exact()
-        self.den = den.to_integral_exact()
+            self.num = num.to_integral_exact()
+            self.den = den.to_integral_exact()
 
 
     def __str__(self):
@@ -93,8 +95,7 @@ class Number:
         return Number(self.num * other.num, self.den * other.den)
 
     def __truediv__(self, other):
-        other = Number(other.den, other.num)
-        return self.__mul__(other)
+        return Number(self.num * other.den, self.den * other.num)
 
     def __floordiv__(self, other):
         res = self.__truediv__(other)
@@ -117,13 +118,13 @@ class Number:
 
 
     def __neg__(self):
-        return Number(-self.num, self.den)
+        return Number(-self.num, self.den, skip_checks=True)
 
     def __pos__(self):
         return self
 
     def __abs__(self):
-        return Number(abs(self.num), self.den)
+        return Number(abs(self.num), self.den, skip_checks=True)
 
     def log(self, base=None):
         if base is None:
@@ -132,8 +133,7 @@ class Number:
 
 
     def to_decimal(self):
-        res = self.num / self.den
-        return Decimal(res)
+        return self.num / self.den
 
     def __complex__(self):
         return complex(self.to_decimal())
@@ -149,13 +149,13 @@ class Number:
         return Number(round(self.to_decimal(), ndigits))
 
     def __trunc__(self):
-        return Number(math.trunc(self.to_decimal()))
+        return Number(Decimal(math.trunc(self.to_decimal())), Decimal(1), skip_checks=True)
 
     def __floor__(self):
-        return Number(math.floor(self.to_decimal()))
+        return Number(Decimal(math.floor(self.to_decimal())), Decimal(1), skip_checks=True)
 
     def __ceil__(self):
-        return Number(math.ceil(self.to_decimal()))
+        return Number(Decimal(math.ceil(self.to_decimal())), Decimal(1), skip_checks=True)
 
 
     def __lt__(self, other):
