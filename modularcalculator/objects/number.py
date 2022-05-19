@@ -188,9 +188,9 @@ class Number:
     def set_rounding(rounding):
         getcontext().rounding = getattr(import_module('decimal'), rounding)
 
-    def normalise(*vals):
-        lcm = math.lcm(*[int(v.den) for v in vals])
-        return (lcm, *[v.num * (lcm / v.den) for v in vals])
+    def normalise(a, b):
+        lcm = math.lcm(int(a.den), int(b.den))
+        return (lcm, a.num * lcm / a.den, b.num * lcm / b.den)
 
     def is_integer(n):
         return math.floor(n) == n
