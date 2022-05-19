@@ -128,7 +128,7 @@ class Number:
     def log(self, base=None):
         if base is None:
             return Number(self.to_decimal().ln())
-        return Number(self.to_decimal().ln() / base.to_decimal().ln())
+        return Number(self.to_decimal().ln() / Decimal(base).ln())
 
 
     def to_decimal(self):

@@ -231,7 +231,7 @@ class UnitNormaliser:
                                 else:
                                     if value == Number(0):
                                         # Value is 0, so just get the simplest unit possible
-                                        if closest_unit is None or abs(math.log10(replace_unit.unitscale)) < abs(math.log10(closest_unit.unitscale)):
+                                        if closest_unit is None or abs(replace_unit.unitscale.log(10)) < abs(closest_unit.unitscale.log(10)):
                                             closest_unit = replace_unit
                                             closest_value = value
                                     else:
