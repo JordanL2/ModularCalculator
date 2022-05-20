@@ -30,30 +30,25 @@ class Number:
             if den == 0:
                 raise Exception("Cannot create Number with denominator of 0")
 
-            try:
-                # Make numerator an integer if it isn't already
-                if not Number.is_integer(num):
-                    (a, b) = num.as_integer_ratio()
-                    num = Decimal(a)
-                    den *= b
-                # Make denominator an integer if it isn't already
-                if not Number.is_integer(den):
-                    (a, b) = den.as_integer_ratio()
-                    den = Decimal(a)
-                    num *= b
-                # Make sure denominator is positive
-                if den < 0:
-                    den = -den
-                    num = -num
-                # Reduce num/den by dividing by greatest common divisor
-                gcd = math.gcd(int(num), int(den))
-                if gcd > 1:
-                    num /= gcd
-                    den /= gcd
-            except InvalidOperation:
-                # Run out of precision, need to collapse num/den unfortunately
-                num /= den
-                den = Decimal(1)
+            # Make numerator an integer if it isn't already
+            if not Number.is_integer(num):
+                (a, b) = num.as_integer_ratio()
+                num = Decimal(a)
+                den *= b
+            # Make denominator an integer if it isn't already
+            if not Number.is_integer(den):
+                (a, b) = den.as_integer_ratio()
+                den = Decimal(a)
+                num *= b
+            # Make sure denominator is positive
+            if den < 0:
+                den = -den
+                num = -num
+            # Reduce num/den by dividing by greatest common divisor
+            gcd = math.gcd(int(num), int(den))
+            if gcd > 1:
+                num /= gcd
+                den /= gcd
 
             self.num = num.to_integral_exact()
             self.den = den.to_integral_exact()
@@ -127,9 +122,10 @@ class Number:
         return Number(abs(self.num), self.den, skip_checks=True)
 
     def log(self, base=None):
+        log = self.num.ln() - self.den.ln()
         if base is None:
-            return Number(self.to_decimal().ln())
-        return Number(self.to_decimal().ln() / Decimal(base).ln())
+            return Number(log)
+        return Number(log / Decimal(base).ln())
 
 
     def to_decimal(self):
