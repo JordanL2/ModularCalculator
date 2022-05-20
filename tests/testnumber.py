@@ -209,6 +209,14 @@ class TestNumber(unittest.TestCase):
         self.assertEqual(f[1], Decimal(0))
         self.assertEqual(f[2], Decimal(1))
 
+    def test_is_integer_1(self):
+        a = Number(20, 3)
+        self.assertFalse(a.is_integer())
+
+    def test_is_integer_2(self):
+        a = Number(21, 3)
+        self.assertTrue(a.is_integer())
+
 
     def test_add_1(self):
         res = Number(12) + Number(34)

@@ -75,7 +75,7 @@ class Number:
         return (whole, num, self.den)
 
     def is_integer(self):
-        return Number.is_integer(self.to_decimal())
+        return self.den == Decimal(1)
 
 
     def __add__(self, other):
