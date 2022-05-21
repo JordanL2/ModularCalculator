@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="modularcalculator",
-    version="1.2.1",
+    version="1.2.1.999",
     author="Jordan Leppert",
     author_email="jordanleppert@gmail.com",
     description="A library to add a heavily customisable calculator to your application",
@@ -18,5 +18,5 @@ setuptools.setup(
         "License :: OSI Approved :: LGPL-2.1 License",
         "Operating System :: OS Independent",
     ],
-    python_requires='>=3.6',
+    python_requires='>=3.9',
 )
