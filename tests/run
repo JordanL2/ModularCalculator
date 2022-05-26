@@ -1,9 +1,0 @@
-#!/bin/sh
-
-cd "$(dirname "$0/")/.."
-export PYTHONPATH=.
-./tests/testbasiccalculator.py
-./tests/testadvancedcalculator.py
-./tests/testscientificcalculator.py
-./tests/testcomputingcalculator.py
-./tests/testsyntaxerrorhandling.py

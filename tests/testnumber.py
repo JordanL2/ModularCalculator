@@ -13,6 +13,9 @@ class TestNumber(unittest.TestCase):
         Number.set_precision(100, 30)
         Number.set_rounding('ROUND_DOWN')
 
+    def tearDown(self):
+        Number.set_rounding('ROUND_HALF_UP')
+
     def test_create_1(self):
         a = Number(123)
         self.assertEqual(a.num, Decimal('123'))
@@ -450,7 +453,6 @@ class TestNumber(unittest.TestCase):
         res **= Number(4)
         self.assertEqual(res, Number(10))
         self.assertIsInstance(res, Number)
-        Number.set_rounding('ROUND_DOWN')
 
     def test_mul_div_pow_1(self):
         res = Number(10, 3)

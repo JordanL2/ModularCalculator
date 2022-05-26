@@ -1,27 +1,25 @@
 #!/usr/bin/python3
 
+from modularcalculator.objects.exceptions import *
 from modularcalculator.objects.number import *
 
 import statistics
+import unittest
 
 
-class TestRunner:
+TEST_STATS = {}
 
-    exception = None
 
-    def __init__(self, exception=None):
-        self.exception = exception
+class CalculatorTestCase(unittest.TestCase):
 
-    def test(self, call, tests):
-        failed = []
-        timings = {}
-        for num, test in enumerate(tests):
-            question = test['test']
-            expected = test['expected']
-            actual = None
-            try:
-                response = call(question)
-                #TODO this logic shouldn't be in here, pass in an answer resolution method
+    def generate_test(test):
+        def do_test(self):
+            expr = test['test']
+            response = None
+
+            if 'expected' in test:
+                expected = test['expected']
+                response = self.c.calculate(expr)
                 last_result = [r for r in response.results if r.has_result()][-1]
                 value = last_result.value
                 unit = last_result.unit
@@ -43,47 +41,72 @@ class TestRunner:
                         actual = (value, unit.singular())
                     else:
                         actual = (value, unit.plural())
+                self.assertEqual(type(actual), type(expected), msg=expr)
+                self.assertEqual(actual, expected, msg=expr)
+
+            elif 'expected_exception' in test:
+                expected = test['expected_exception']
+                try:
+                    with self.assertRaises(CalculatorException, msg=expr):
+                        response = self.c.calculate(expr)
+                except CalculatorException as err:
+                    if 'exception' in expected:
+                        self.assertEqual(type(err), expected['exception'], expr)
+                    if 'message' in expected:
+                        self.assertEqual(err.message, expected['message'], expr)
+                    if 'next' in expected:
+                        self.assertEqual(err.next, expected['next'], expr)
+                    if 'pos' in expected:
+                        i = err.find_pos(expr)
+                        self.assertEqual(i, expected['pos'], expr)
+                    if 'items' in expected:
+                        statements = self.hl.highlight_statements(err.statements)
+                        items = [item[1] for items in statements for item in items if item[0] != 'default']
+                        self.assertEqual(items, expected['items'], expr)
+
+            if response is not None:
+                if 'timings' not in TEST_STATS:
+                    TEST_STATS['timings'] = {}
+                testcase_name = type(self).__name__
+                if testcase_name not in TEST_STATS['timings']:
+                    TEST_STATS['timings'][testcase_name] = {}
                 for result in response.results:
                     for stage in result.timings.keys():
-                        if stage not in timings:
-                            timings[stage] = {}
-                        timings[stage][result.expression] = result.timings[stage]
-            except self.exception as err:
-                failed.append({ 'num': num, 'test': question, 'expected': expected, 'actual': 'Exception: ' + err.message })
-                continue
-            except Exception as err:
-                print("Failed on test", num + 1, " - ", question)
-                raise err
-            if type(actual) != type(expected) or actual != expected:
-                failed.append({ 'num': num, 'test': question, 'expected': expected, 'actual': actual })
+                        if stage not in TEST_STATS['timings'][testcase_name]:
+                            TEST_STATS['timings'][testcase_name][stage] = {}
+                        TEST_STATS['timings'][testcase_name][stage][result.expression] = result.timings[stage]
 
-        if len(failed) > 0:
-            print("*** FAILED ***")
-            for test in failed:
-                print()
-                print("        # {0}".format(test['num'] + 1))
-                print("    Test: '{0}'".format(test['test']))
-                print("Expected: {0} [{1}]".format(str(test['expected']), repr(test['expected'])))
-                print("  Actual: {0} [{1}]".format(str(test['actual']), repr(test['actual'])))
+        return do_test
+
+    @classmethod
+    def prepare_tests(test_class):
+        for i, test in enumerate(test_class.tests):
+            test_name = "test_{}".format(str(i))
+            test_call = CalculatorTestCase.generate_test(test)
+            setattr(test_class, test_name, test_call)
+
+
+def execute_tests():
+    unittest.main(exit=False)
+
+    if 'timings' in TEST_STATS:
+        for testcase in TEST_STATS['timings']:
             print()
-            print("{0} / {1} tests passed".format(len(tests) - len(failed), len(tests)))
-        else:
-            print("All tests passed.")
+            print(testcase)
+            timings = TEST_STATS['timings'][testcase]
+            total_avgtime = 0
+            for stage in timings.keys():
+                avgtime = statistics.mean(timings[stage].values())
+                total_avgtime += avgtime
+                avgtime = format_timing(statistics.mean(timings[stage].values()))
+                maxtime = max(timings[stage].values())
+                maxexpr = [expr for expr, t in timings[stage].items() if t == maxtime][0]
+                maxtime = format_timing(maxtime)
+                print("Stage: {0:9} Average Time: {1:12} Longest Time: {2:12} Longest Expression: {3}".format(stage, avgtime, maxtime, format_test(maxexpr)))
+            print("Total:           Average Time: {0:12}".format(format_timing(total_avgtime)))
 
-        total_avgtime = 0
-        for stage in timings.keys():
-            avgtime = statistics.mean(timings[stage].values())
-            total_avgtime += avgtime
-            avgtime = self.format_timing(statistics.mean(timings[stage].values()))
-            maxtime = max(timings[stage].values())
-            maxexpr = [expr for expr, t in timings[stage].items() if t == maxtime][0]
-            maxtime = self.format_timing(maxtime)
-            print("Stage: {0:9} Average Time: {1:12} Longest Time: {2:12} Longest Expression: {3}".format(stage, avgtime, maxtime, self.format_test(maxexpr)))
-        print("Total:           Average Time: {0:12}".format(self.format_timing(total_avgtime)))
-        print()
+def format_timing(timing):
+    return "{0} ms".format(round(timing * 1000, 3))
 
-    def format_timing(self, timing):
-        return "{0} ms".format(round(timing * 1000, 3))
-
-    def format_test(self, test):
-        return test.replace("\n", "\\n")
+def format_test(test):
+    return test.replace("\n", "\\n")
