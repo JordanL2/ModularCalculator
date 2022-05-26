@@ -120,8 +120,8 @@ class ExternalFunctionItem(RecursiveOperandItem):
 
         # Extract the content of the external function file, add to the end of the argument list
         try:
-            fh = open(path, 'r')
-            func_content = str.join("", fh.readlines())
+            with open(path, 'r') as fh:
+                func_content = str.join("", fh.readlines())
         except:
             raise ExecuteException("Could not read file '{}'".format(path), [], None)
         inputs.append(OperandResult(func_content, None, None))
