@@ -1,9 +1,6 @@
 #!/usr/bin/python3
 
 
-from modularcalculator.objects.items import *
-
-
 def find_pos(self, text, statements):
     i = 0
     prev_item = None
@@ -58,7 +55,7 @@ class CalculatingException(CalculatorException):
 
     def set_response(self, response):
         self.response = response
-    
+
     def has_response(self):
         return hasattr(self, 'response')
 
@@ -69,7 +66,7 @@ class ParsingException(CalculatingException):
 
 
 class ExecutionException(CalculatingException):
-  
+
     pass
 
 
@@ -77,10 +74,6 @@ class CalculateException(CalculatorException):
 
     def __init__(self, message, items, next, truncated=False):
         self.message = message
-        if items is not None:
-            for i in items:
-                if not isinstance(i, Item):
-                    raise Exception("Created CalculateException with non-Items in items field")
         self.items = items
         self.next = next
         self.truncated = truncated
@@ -98,5 +91,5 @@ class ParseException(CalculateException):
 
 
 class ExecuteException(CalculateException):
-  
+
     pass

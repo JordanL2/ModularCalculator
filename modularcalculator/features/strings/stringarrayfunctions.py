@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from modularcalculator.objects.exceptions import *
+from modularcalculator.objects.items import *
 from modularcalculator.objects.operators import OperationResult
 from modularcalculator.features.strings.strings import StringsFeature
 from modularcalculator.features.structure.functions import FunctionDefinition

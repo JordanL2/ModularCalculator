@@ -4,6 +4,7 @@ from modularcalculator.features.feature import Feature
 from modularcalculator.features.strings.strings import StringsFeature
 from modularcalculator.features.structure.functions import FunctionDefinition
 from modularcalculator.objects.exceptions import *
+from modularcalculator.objects.items import *
 from modularcalculator.objects.number import *
 from modularcalculator.objects.operators import OperationResult, OperatorDefinition
 
