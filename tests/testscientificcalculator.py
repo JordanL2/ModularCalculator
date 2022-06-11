@@ -63,6 +63,8 @@ class TestScientificCalculator(CalculatorTestCase):
         { 'test': r"1.23e2 + 1.2e1", 'expected': '1.35E2' },
         { 'test': r"1.23e2kg + 1.2e1kg", 'expected': ('1.35E2', 'kilograms') },
         { 'test': r"dec(1.23e2 + 1.2e1)", 'expected': Number('135') },
+        { 'test': r"10E0 * 1", 'expected': '1E1' },
+        { 'test': r"0E0 * 1", 'expected': '0E0' },
         { 'test': r"1E9 * 1", 'expected': '1E9' },
         { 'test': r"1 * 1E9", 'expected': Number('1000000000') },
         { 'test': r"dec(1E9)", 'expected': Number('1000000000') },

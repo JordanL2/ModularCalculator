@@ -81,7 +81,9 @@ class ExpNumbersFeature(Feature):
             parts[0] = parts[0].rstrip('0')
         if parts[0][-1] == '.':
             parts[0] = parts[0][0 : -1]
-        formattednumber = "{}E{}".format(parts[0].rstrip('0'), parts[1])
+        if parts[0] != '0':
+            parts[0] = parts[0].rstrip('0')
+        formattednumber = "{}E{}".format(parts[0], parts[1])
 
         return formattednumber
 
