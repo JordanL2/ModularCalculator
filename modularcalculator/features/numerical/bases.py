@@ -112,18 +112,21 @@ class BasesFeature(Feature):
         while Number(base ** (power + 1)) <= val:
             power += 1
 
-        str = ''
-        while power >= 0 or (val > Number(0) and len(str) < 28):
+        string = ''
+        places = 0
+        while power >= 0 or (val > Number(0) and places < self.number_prec):
             if power == -1:
-                str += '.'
+                string += '.'
             base_power = Number(base) ** Number(power)
             c_val = int(val / base_power)
             val -= Number(c_val) * base_power
-            str += BasesFeature.digits[c_val]
+            string += BasesFeature.digits[c_val]
+            if power < 0:
+                places += 1
             power -= 1
 
         if negative:
-            str = '-' + str
-        if str.find('.') > -1:
-            str = str.rstrip('0')
-        return str
+            string = '-' + string
+        if string.find('.') > -1:
+            string = string.rstrip('0')
+        return string

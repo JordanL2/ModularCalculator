@@ -53,9 +53,12 @@ class TestComputingCalculator(CalculatorTestCase):
         { 'test': r"bin(0b10 * 0b10)", 'expected': '0b100' },
         { 'test': r"bin(0b10 * -0B10)", 'expected': '-0b100' },
         { 'test': r"dec(bin(0b10 * -0B10))", 'expected': Number('-4') },
+        { 'test': r"bin(0.5)", 'expected': '0b0.1' },
         { 'test': r"bin(3.5)", 'expected': '0b11.1' },
         { 'test': r"bin(-3.5)", 'expected': '-0b11.1' },
         { 'test': r"bin(0)", 'expected': '0b0' },
+        { 'test': r"0b10 / 0b11", 'expected': '0b00.10101010101010101010101010101' },
+        { 'test': r"0b1 / 0b10", 'expected': '0b0.1' },
 
         { 'test': r"oct(63)", 'expected': '0o77' },
         { 'test': r"dec(oct(63))", 'expected': Number('63') },
@@ -83,6 +86,8 @@ class TestComputingCalculator(CalculatorTestCase):
         { 'test': r"hex(0)", 'expected': '0x0' },
         { 'test': r"0xF + 4", 'expected': '0x13' },
         { 'test': r"4 + 0xF", 'expected': Number('19') },
+        { 'test': r"0x1 / 0x2", 'expected': '0x0.8' },
+        { 'test': r"0x2 / 0x3", 'expected': '0x0.AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' },
 
         { 'test': r"base(71, 36)", 'expected': '36z1Z' },
         { 'test': r"base(0, 36)", 'expected': '36z0' },
