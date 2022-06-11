@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="modularcalculator",
-    version="1.2.2",
+    version="1.2.999",
     author="Jordan Leppert",
     author_email="jordanleppert@gmail.com",
     description="A library to add a heavily customisable calculator to your application",
