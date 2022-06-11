@@ -64,6 +64,7 @@ class TestScientificCalculator(CalculatorTestCase):
         { 'test': r"1.23e2kg + 1.2e1kg", 'expected': ('1.35E2', 'kilograms') },
         { 'test': r"dec(1.23e2 + 1.2e1)", 'expected': Number('135') },
         { 'test': r"10E0 * 1", 'expected': '1E1' },
+        { 'test': r"0E0", 'expected': '0E0' },
         { 'test': r"0E0 * 1", 'expected': '0E0' },
         { 'test': r"1E9 * 1", 'expected': '1E9' },
         { 'test': r"1 * 1E9", 'expected': Number('1000000000') },
@@ -71,6 +72,7 @@ class TestScientificCalculator(CalculatorTestCase):
         { 'test': r"1E9 m", 'expected': ('1E9', 'meters') },
         { 'test': r"dec(1E9 m)", 'expected': (Number('1000000000'), 'meters') },
         { 'test': r"dec(1E9) m", 'expected': (Number('1000000000'), 'meters') },
+        { 'test': r"2e0 / 3", 'expected': '6.666666666666666666666666666667E-1' },
 
         { 'test': r"scientific(123.456789)", 'expected': '1.23456789E2' },
         { 'test': r"scientific(123.45678900000)", 'expected': '1.23456789E2' },

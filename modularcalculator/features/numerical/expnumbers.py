@@ -68,8 +68,10 @@ class ExpNumbersFeature(Feature):
         return res
 
     def dec_to_exp(self, num, places=None):
+        if num == Number(0):
+            return '0E0'
         if places is None:
-            places = ''
+            places = '.' + str(self.number_prec)
         else:
             places = '.' + str(places)
         scientificformat = '{0:' + places + 'E}'
