@@ -53,7 +53,8 @@ class ExpNumbersFeature(Feature):
             numexp_match = ExpNumbersFeature.numexp_regex.match(next)
             if (numexp_match):
                 numexp = numexp_match.group(1)
-                return [LiteralItem(numexp, numexp)], len(numexp), None
+                decnum = ExpNumbersFeature.number_exp(self, numexp)
+                return [LiteralItem(numexp, decnum)], len(numexp), None
         return None, None, None
 
     def func_scientific(self, vals, units, refs, flags):
@@ -96,9 +97,10 @@ class ExpNumbersFeature(Feature):
             num = Number(numexp[0:numexp.lower().find('e')])
             exp = Number(numexp[numexp.lower().find('e') + 1:])
             num *= (Number(10) ** exp)
-            return num, NumberType(ExpNumbersFeature.restore_exp)
+            num.number_cast = {'ref': ExpNumbersFeature.restore_exp, 'args': [self]}
+            return num
 
-        return None, None
+        return None
 
     def restore_exp(self, val, opts=None):
         return ExpNumbersFeature.dec_to_exp(self, val)

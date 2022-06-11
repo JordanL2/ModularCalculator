@@ -124,7 +124,7 @@ class NumericalFunctionsFeature(Feature):
         return res
 
     def func_fact(self, vals, units, refs, flags):
-        res =  OperationResult(Number(math.factorial(int(vals[0]))))
+        res =  OperationResult(Number(math.factorial(int(vals[0])), number_cast=vals[0].number_cast))
         res.set_unit(units[0])
         return res
 

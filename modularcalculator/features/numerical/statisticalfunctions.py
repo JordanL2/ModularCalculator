@@ -122,16 +122,26 @@ class StatisticalFunctionsFeature(Feature):
 
     def func_mean(self, vals, units, refs, flags):
         values = [v.value.to_decimal() for v in vals[0]]
-        return OperationResult(Number(statistics.mean(values)))
+        number_cast = StatisticalFunctionsFeature.find_number_cast(vals[0])
+        return OperationResult(Number(statistics.mean(values), number_cast=number_cast))
 
     def func_median(self, vals, units, refs, flags):
         values = [v.value.to_decimal() for v in vals[0]]
-        return OperationResult(Number(statistics.median(values)))
+        number_cast = StatisticalFunctionsFeature.find_number_cast(vals[0])
+        return OperationResult(Number(statistics.median(values), number_cast=number_cast))
 
     def func_mode(self, vals, units, refs, flags):
         values = [v.value.to_decimal() for v in vals[0]]
-        return OperationResult(Number(statistics.mode(values)))
+        number_cast = StatisticalFunctionsFeature.find_number_cast(vals[0])
+        return OperationResult(Number(statistics.mode(values), number_cast=number_cast))
 
     def func_stdev(self, vals, units, refs, flags):
         values = [v.value.to_decimal() for v in vals[0]]
-        return OperationResult(Number(statistics.stdev(values)))
+        number_cast = StatisticalFunctionsFeature.find_number_cast(vals[0])
+        return OperationResult(Number(statistics.stdev(values), number_cast=number_cast))
+
+    def find_number_cast(vals):
+        for v in vals:
+            if isinstance(v.value, Number):
+                return  v.value.number_cast
+        return None

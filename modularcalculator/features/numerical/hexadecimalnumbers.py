@@ -50,8 +50,8 @@ class HexadecimalNumbersFeature(Feature):
             hex_match = HexadecimalNumbersFeature.hex_regex.match(next)
             if hex_match:
                 hexnum = hex_match.group(1)
-                clean_hexnum = HexadecimalNumbersFeature.restore_hex(self, HexadecimalNumbersFeature.hex_to_dec(self, hexnum))
-                return [LiteralItem(hexnum, clean_hexnum)], len(hexnum), None
+                decnum = HexadecimalNumbersFeature.number_hex(self, hexnum)
+                return [LiteralItem(hexnum, decnum)], len(hexnum), None
         return None, None, None
 
     def func_hex(self, vals, units, refs, flags):
@@ -60,8 +60,9 @@ class HexadecimalNumbersFeature(Feature):
     def number_hex(self, val):
         if isinstance(val, str) and HexadecimalNumbersFeature.hex_regex.fullmatch(val):
             dec_num = HexadecimalNumbersFeature.hex_to_dec(self, val)
-            return dec_num, NumberType(HexadecimalNumbersFeature.restore_hex)
-        return None, None
+            dec_num.number_cast = {'ref': HexadecimalNumbersFeature.restore_hex, 'args': [self]}
+            return dec_num
+        return None
 
     def restore_hex(self, val, opts=None):
         return BasesFeature.number_add_prefix(self, BasesFeature.dec_to_base(self, val, 16), HexadecimalNumbersFeature.hex_prefix)

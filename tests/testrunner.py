@@ -34,6 +34,8 @@ class CalculatorTestCase(unittest.TestCase):
                             else:
                                 new_value.append((v.value, v.unit.plural()))
                     value = new_value
+                elif 'cast' in test:
+                    value = test['cast'](value)
                 if unit is None:
                     actual = value
                 else:

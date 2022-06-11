@@ -159,9 +159,9 @@ class Operation:
 
             # Auto-convert all numbers into decimal numbers. Store the original number type of the first input, this will be used
             # for the result.
-            result_value, result_unit, result_ref, num_type = None, None, None, None
+            result_value, result_unit, result_ref = None, None, None
             if self.auto_convert_numerical_inputs:
-                values, num_type = self.convert_numbers(calculator, values)
+                values = self.convert_numbers(calculator, values)
 
             # Normalise the units of all inputs if units_normalise flag is set
             if len([i for i in range(0, len(values)) if not self.input_can_be_type(i, 'number') or not calculator.validate_number(values[i])]) == 0:
@@ -181,11 +181,8 @@ class Operation:
                         # Normalise all elements to be decimal
                         this_values = [v.value for v in values[i]]
                         for ii in range(0, len(values[i])):
-                            num, num_type_res = calculator.number(this_values[ii])
+                            num = calculator.number(this_values[ii])
                             this_values[ii] = num
-                            if num_type is None:
-                                # Take the first number type we get as the one we should use for the final result
-                                num_type = num_type_res
 
                         # Normalise all elements to be the same unit
                         this_units = [v.unit for v in values[i]]
@@ -204,10 +201,6 @@ class Operation:
             try:
                 result = self.ref(calculator, values, units, refs, flags.copy())
                 result_value = result.value
-
-                # Convert the number type of the result
-                if self.auto_convert_numerical_result and isinstance(result_value, Number) and num_type:
-                    result_value = calculator.restore_number_type(result_value, num_type)
 
                 # If result is an array, restore each element back to its original value and unit
                 if type(result_value) == list:
@@ -321,9 +314,8 @@ class Operation:
 
     def convert_numbers(self, calculator, values):
         new_values = values.copy()
-        num_type = None
 
-        # If an input is declared it can be a number, and it contains a numerical value, convert it to decimal
+        # If an input is declared it can be a number, and it contains a numerical value, convert it to a number
         for restriction in self.value_restrictions:
             objtypes = restriction['objtypes']
             if 'number' in objtypes:
@@ -335,13 +327,10 @@ class Operation:
                     if i < len(values):
                         # This input is declared it can be a number, check it contains a number
                         if calculator.validate_number(values[i]):
-                            num, num_type_res = calculator.number(values[i])
+                            num = calculator.number(values[i])
                             new_values[i] = num
-                            if num_type is None:
-                                # Take the first number type we get as the one we should use for the final result
-                                num_type = num_type_res
 
-        return new_values, num_type
+        return new_values
 
 
 class OperatorDefinition(Operation):

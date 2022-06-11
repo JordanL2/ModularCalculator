@@ -84,34 +84,37 @@ class BitwiseOperatorsFeature(Feature):
             'number'))
 
     def op_bitwise_and(self, vals, units, refs, flags):
-        return OperationResult(Number(int(vals[0]) & int(vals[1])))
+        return OperationResult(Number(int(vals[0]) & int(vals[1]), number_cast=vals[0].number_cast))
 
     def op_bitwise_or(self, vals, units, refs, flags):
-        return OperationResult(Number(int(vals[0]) | int(vals[1])))
+        return OperationResult(Number(int(vals[0]) | int(vals[1]), number_cast=vals[0].number_cast))
 
     def op_bitwise_xor(self, vals, units, refs, flags):
-        return OperationResult(Number(int(vals[0]) ^ int(vals[1])))
+        return OperationResult(Number(int(vals[0]) ^ int(vals[1]), number_cast=vals[0].number_cast))
 
     def op_bitwise_not(self, vals, units, refs, flags):
-        dec_num, num_type = self.number(vals[0])
+        dec_num = self.number(vals[0])
 
         if dec_num < Number(0) or dec_num % Number(1) != Number(0):
             raise CalculatorException('Operator requires positive integers')
 
         int_val = int(dec_num)
-        if num_type and 'width' in num_type.opts:
-            mask_val = 2**num_type.opts['width'] - 1
+        opts = None
+        if dec_num.number_cast is not None and len(dec_num.number_cast['args']) > 1:
+            opts = dec_num.number_cast['args'][1]
+        if opts and 'width' in opts:
+            mask_val = 2**opts['width'] - 1
         else:
             mask_val = 2**math.ceil(math.log(int_val, 2)) - 1
         flipped_val = ~int_val
-        masked_flipped_val = Number(flipped_val & mask_val)
+        masked_flipped_val = Number(flipped_val & mask_val, number_cast=vals[0].number_cast)
 
-        if num_type:
-            return OperationResult(num_type.restore(self, masked_flipped_val))
+        #if num_type:
+        #    return OperationResult(num_type.restore(self, masked_flipped_val))
         return OperationResult(masked_flipped_val)
 
     def op_bitwise_lshift(self, vals, units, refs, flags):
-        return OperationResult(Number(int(vals[0]) << int(vals[1])))
+        return OperationResult(Number(int(vals[0]) << int(vals[1]), number_cast=vals[0].number_cast))
 
     def op_bitwise_rshift(self, vals, units, refs, flags):
-        return OperationResult(Number(int(vals[0]) >> int(vals[1])))
+        return OperationResult(Number(int(vals[0]) >> int(vals[1]), number_cast=vals[0].number_cast))

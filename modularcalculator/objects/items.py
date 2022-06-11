@@ -90,9 +90,10 @@ class OperandItem(Item):
 
 class LiteralItem(OperandItem):
 
-    def __init__(self, text, val):
+    def __init__(self, text, val, number_type=None):
         super().__init__(text)
         self.val = val
+        self.number_type = number_type
 
     def desc(self):
         return 'literal'

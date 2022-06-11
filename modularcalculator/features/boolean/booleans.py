@@ -198,10 +198,10 @@ class BooleansFeature(Feature):
     def number_bool(self, val):
         if isinstance(val, bool):
             if val:
-                return Number(1), NumberType(BooleansFeature.restore_boolean)
+                return Number(1)
             else:
-                return Number(0), NumberType(BooleansFeature.restore_boolean)
-        return None, None
+                return Number(0)
+        return None
 
     def restore_boolean(self, val, opts=None):
         return val != Number(0)

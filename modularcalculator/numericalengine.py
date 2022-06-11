@@ -30,15 +30,10 @@ class NumericalEngine(Engine):
 
     def number(self, val):
         for caster in self.number_casters:
-            num, num_type = caster['ref'](self, val)
+            num = caster['ref'](self, val)
             if num is not None:
-                return num, num_type
+                return num
         raise CalculatorException("Can't cast to number: {0}".format(str(val)))
-
-    def restore_number_type(self, num, num_type):
-        if not num_type:
-            return num
-        return num_type.restore(self, num)
 
     def validate_number(self, value, unit=None, ref=None):
         try:

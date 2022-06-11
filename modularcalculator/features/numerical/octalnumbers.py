@@ -50,8 +50,8 @@ class OctalNumbersFeature(Feature):
             oct_match = OctalNumbersFeature.oct_regex.match(next)
             if oct_match:
                 octnum = oct_match.group(1)
-                clean_octnum = OctalNumbersFeature.restore_oct(self, OctalNumbersFeature.oct_to_dec(self, octnum))
-                return [LiteralItem(octnum, clean_octnum)], len(octnum), None
+                decnum = OctalNumbersFeature.number_oct(self, octnum)
+                return [LiteralItem(octnum, decnum)], len(octnum), None
         return None, None, None
 
     def func_oct(self, vals, units, refs, flags):
@@ -60,9 +60,9 @@ class OctalNumbersFeature(Feature):
     def number_oct(self, val):
         if isinstance(val, str) and OctalNumbersFeature.oct_regex.fullmatch(val):
             dec_num = OctalNumbersFeature.oct_to_dec(self, val)
-            return dec_num, NumberType(OctalNumbersFeature.restore_oct)
-
-        return None, None
+            dec_num.number_cast = {'ref': OctalNumbersFeature.restore_oct, 'args': [self]}
+            return dec_num
+        return None
 
     def restore_oct(self, val, opts=None):
         return BasesFeature.number_add_prefix(self, BasesFeature.dec_to_base(self, val, 8), OctalNumbersFeature.oct_prefix)

@@ -12,7 +12,8 @@ NUMBER = {
 
 class Number:
 
-    def __init__(self, num, den=None, skip_checks=False):
+    def __init__(self, num, den=None, skip_checks=False, number_cast=None):
+        self.number_cast = number_cast
         if skip_checks:
             self.num = num
             self.den = den
@@ -55,6 +56,8 @@ class Number:
 
 
     def __str__(self):
+        if hasattr(self, 'number_cast') and self.number_cast is not None:
+            return self.number_cast['ref'](self.number_cast['args'][0], self, *self.number_cast['args'][1:])
         val = "{0:f}".format(round(self.to_decimal(), NUMBER['decimal_places']))
         if val.find('.') > -1:
             val = val.rstrip('0')
@@ -80,17 +83,17 @@ class Number:
 
     def __add__(self, other):
         (lcm, a_num, b_num) = Number.normalise(self, other)
-        return Number(a_num + b_num, lcm)
+        return Number(a_num + b_num, lcm, number_cast=self.number_cast)
 
     def __sub__(self, other):
         (lcm, a_num, b_num) = Number.normalise(self, other)
-        return Number(a_num - b_num, lcm)
+        return Number(a_num - b_num, lcm, number_cast=self.number_cast)
 
     def __mul__(self, other):
-        return Number(self.num * other.num, self.den * other.den)
+        return Number(self.num * other.num, self.den * other.den, number_cast=self.number_cast)
 
     def __truediv__(self, other):
-        return Number(self.num * other.den, self.den * other.num)
+        return Number(self.num * other.den, self.den * other.num, number_cast=self.number_cast)
 
     def __floordiv__(self, other):
         res = self.__truediv__(other)
@@ -98,7 +101,7 @@ class Number:
 
     def __mod__(self, other):
         (lcm, a_num, b_num) = Number.normalise(self, other)
-        return Number(a_num % b_num, lcm)
+        return Number(a_num % b_num, lcm, number_cast=self.number_cast)
 
     def __divmod__(self, other):
         div = self // other
@@ -106,26 +109,26 @@ class Number:
         return (div, mod)
 
     def __pow__(self, other, modulo=None):
-        res = Number(pow(self.num, other.to_decimal()), pow(self.den, other.to_decimal()))
+        res = Number(pow(self.num, other.to_decimal()), pow(self.den, other.to_decimal()), number_cast=self.number_cast)
         if modulo is None:
             return res
         return res % modulo
 
 
     def __neg__(self):
-        return Number(-self.num, self.den, skip_checks=True)
+        return Number(-self.num, self.den, skip_checks=True, number_cast=self.number_cast)
 
     def __pos__(self):
         return self
 
     def __abs__(self):
-        return Number(abs(self.num), self.den, skip_checks=True)
+        return Number(abs(self.num), self.den, skip_checks=True, number_cast=self.number_cast)
 
     def log(self, base=None):
         log = self.num.ln() - self.den.ln()
         if base is None:
-            return Number(log)
-        return Number(log / Decimal(base).ln())
+            return Number(log, number_cast=self.number_cast)
+        return Number(log / Decimal(base).ln(), number_cast=self.number_cast)
 
 
     def to_decimal(self):
@@ -142,16 +145,16 @@ class Number:
 
 
     def __round__(self, ndigits=0):
-        return Number(round(self.to_decimal(), ndigits))
+        return Number(round(self.to_decimal(), ndigits), number_cast=self.number_cast)
 
     def __trunc__(self):
-        return Number(Decimal(math.trunc(self.to_decimal())), Decimal(1), skip_checks=True)
+        return Number(Decimal(math.trunc(self.to_decimal())), Decimal(1), skip_checks=True, number_cast=self.number_cast)
 
     def __floor__(self):
-        return Number(Decimal(math.floor(self.to_decimal())), Decimal(1), skip_checks=True)
+        return Number(Decimal(math.floor(self.to_decimal())), Decimal(1), skip_checks=True, number_cast=self.number_cast)
 
     def __ceil__(self):
-        return Number(Decimal(math.ceil(self.to_decimal())), Decimal(1), skip_checks=True)
+        return Number(Decimal(math.ceil(self.to_decimal())), Decimal(1), skip_checks=True, number_cast=self.number_cast)
 
 
     def __lt__(self, other):
