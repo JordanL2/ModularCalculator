@@ -80,6 +80,9 @@ class Number:
     def is_integer(self):
         return self.den == Decimal(1)
 
+    def copy(self):
+        return Number(self.num, self.den, number_cast=self.number_cast, skip_checks=True)
+
 
     def __add__(self, other):
         (lcm, a_num, b_num) = Number.normalise(self, other)

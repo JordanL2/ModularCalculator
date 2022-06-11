@@ -27,7 +27,7 @@ class DecimalNumbersFeature(Feature):
     @classmethod
     def install(cls, calculator):
         calculator.add_parser('number', DecimalNumbersFeature.parse_number)
-        calculator.add_number_caster('decimal', 'Decimal', DecimalNumbersFeature.number_decimal, None)
+        calculator.add_number_caster('decimal', 'Decimal', DecimalNumbersFeature.number_decimal, DecimalNumbersFeature.force_decimal)
 
     num_pattern = r'(\-?\d+(\.\d+)?)'
     num_regex = re.compile(num_pattern)
@@ -48,4 +48,11 @@ class DecimalNumbersFeature(Feature):
             return val
         if isinstance(val, str) and DecimalNumbersFeature.num_is_regex.match(val):
             return Number(val)
+        return None
+
+    def force_decimal(self, val):
+        if isinstance(val, Number):
+            val = val.copy()
+            val.number_cast = None
+            return val
         return None
