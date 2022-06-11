@@ -42,7 +42,7 @@ class ExpNumbersFeature(Feature):
             'number')
         calculator.funcs['scientific'].units_normalise = False
 
-        calculator.add_number_caster('exp', ExpNumbersFeature.number_exp)
+        calculator.add_number_caster('exp', 'Scientific Notation', ExpNumbersFeature.number_exp, ExpNumbersFeature.restore_exp)
 
     numexp_regex = re.compile(r'(\-?\d+(\.\d+)?e\-?\d+)', re.IGNORECASE)
 

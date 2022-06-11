@@ -30,15 +30,15 @@ class OctalNumbersFeature(Feature):
     def install(cls, calculator):
         calculator.add_parser('number_oct', OctalNumbersFeature.parse_oct)
         calculator.funcs['oct'] = FunctionDefinition(
-            'Bases', 
-            'oct', 
+            'Bases',
+            'oct',
             'Convert a number into octal',
             ['number'],
-            OctalNumbersFeature.func_oct, 
-            1, 
-            1, 
+            OctalNumbersFeature.func_oct,
+            1,
+            1,
             'number')
-        calculator.add_number_caster('octal', OctalNumbersFeature.number_oct)
+        calculator.add_number_caster('octal', 'Octal', OctalNumbersFeature.number_oct, OctalNumbersFeature.restore_oct)
 
     oct_prefix = '0o'
     oct_regex = re.compile(r'(\-?' + oct_prefix + r'[0-7]+(\.[0-7]+)?)', re.IGNORECASE)

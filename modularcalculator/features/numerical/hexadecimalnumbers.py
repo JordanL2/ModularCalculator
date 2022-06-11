@@ -30,15 +30,15 @@ class HexadecimalNumbersFeature(Feature):
     def install(cls, calculator):
         calculator.add_parser('number_hex', HexadecimalNumbersFeature.parse_hex)
         calculator.funcs['hex'] = FunctionDefinition(
-            'Bases', 
-            'hex', 
+            'Bases',
+            'hex',
             'Convert a number into hexadecimal',
             ['number'],
-            HexadecimalNumbersFeature.func_hex, 
-            1, 
-            1, 
+            HexadecimalNumbersFeature.func_hex,
+            1,
+            1,
             'number')
-        calculator.add_number_caster('hexadecimal', HexadecimalNumbersFeature.number_hex)
+        calculator.add_number_caster('hexadecimal', 'Hexadecimal', HexadecimalNumbersFeature.number_hex, HexadecimalNumbersFeature.restore_hex)
 
     hex_prefix = '0x'
     hex_regex = re.compile(r'(\-?' + hex_prefix + r'[0-9A-F]+(\.[0-9A-F]+)?)', re.IGNORECASE)

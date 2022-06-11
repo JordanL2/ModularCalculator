@@ -38,7 +38,7 @@ class BinaryNumbersFeature(Feature):
             1,
             1,
             'number')
-        calculator.add_number_caster('binary', BinaryNumbersFeature.number_bin)
+        calculator.add_number_caster('binary', 'Binary', BinaryNumbersFeature.number_bin, BinaryNumbersFeature.restore_bin)
 
     bin_prefix = '0b'
     bin_regex = re.compile(r'(\-?' + bin_prefix + r'[01]+(\.[01]+)?)', re.IGNORECASE)

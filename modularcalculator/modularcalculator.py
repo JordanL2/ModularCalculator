@@ -87,10 +87,10 @@ class ModularCalculator(NumericalEngine):
                 elif debug:
                     print("!!! Skipping {} as it is not found !!!".format(name))
             names = new_names
-        
+
         for name in names:
             self.add_feature_to_be_installed(name)
-        
+
         if debug:
             print("Installing {0} features".format(len(names)))
         for name in names:
@@ -168,9 +168,9 @@ class ModularCalculator(NumericalEngine):
                     return
         self.ops.append({sym: op})
 
-    def add_number_caster(self, name, ref):
+    def add_number_caster(self, name, title, ref, reverter):
         if self.number_caster_map is None:
             raise CalculatorException('Can\'t add number caster before setting number_caster_map')
-        self.number_casters.append({'name': name, 'ref': ref})
+        self.number_casters.append({'name': name, 'title': title, 'ref': ref, 'reverter': reverter})
         caster_names = dict([(c['name'], c) for c in self.number_casters])
         self.number_casters = [caster_names[c] for c in self.number_caster_map if c in caster_names]

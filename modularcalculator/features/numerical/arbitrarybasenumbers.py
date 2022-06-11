@@ -38,7 +38,7 @@ class ArbitraryBaseFeature(Feature):
             2,
             2,
             'number')
-        calculator.add_number_caster('arbitrarybase', ArbitraryBaseFeature.number_arbbase)
+        calculator.add_number_caster('arbitrarybase', 'Arbitrary Base', ArbitraryBaseFeature.number_arbbase, ArbitraryBaseFeature.restore_arbbase)
 
     arbbase_regex = re.compile(r'(\-?\d+z[0-9A-Z]+(\.[0-9A-Z]+)?)', re.IGNORECASE)
 

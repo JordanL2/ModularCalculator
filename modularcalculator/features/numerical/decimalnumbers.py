@@ -27,7 +27,7 @@ class DecimalNumbersFeature(Feature):
     @classmethod
     def install(cls, calculator):
         calculator.add_parser('number', DecimalNumbersFeature.parse_number)
-        calculator.add_number_caster('decimal', DecimalNumbersFeature.number_decimal)
+        calculator.add_number_caster('decimal', 'Decimal', DecimalNumbersFeature.number_decimal, None)
 
     num_pattern = r'(\-?\d+(\.\d+)?)'
     num_regex = re.compile(num_pattern)
