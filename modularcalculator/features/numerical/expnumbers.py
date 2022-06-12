@@ -69,8 +69,11 @@ class ExpNumbersFeature(Feature):
         if len(vals) == 2:
             places = vals[1]
 
-        formattednumber = ExpNumbersFeature.dec_to_exp(self, vals[0], places)
-        number = self.number(formattednumber)
+        if places is None:
+            number = ExpNumbersFeature.force_exp(self, vals[0])
+        else:
+            formattednumber = ExpNumbersFeature.dec_to_exp(self, vals[0], places)
+            number = self.number(formattednumber)
 
         res = OperationResult(number)
         res.set_unit(units[0])
