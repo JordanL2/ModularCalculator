@@ -4,6 +4,12 @@ A powerful, modular calculator engine library written in Python.
 
 Designed to make it easy to add a calculator into another Python application, with the specific features required. Adding custom features is possible.
 
+For syntax and other topics for the default feature set, see the [modularcalculator wiki](https://github.com/JordanL2/ModularCalculator/wiki).
+
+[Licence](LICENSE)
+
+[Changelog](CHANGELOG.md)
+
 
 # Requirements
 
