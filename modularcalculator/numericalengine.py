@@ -28,6 +28,9 @@ class NumericalEngine(Engine):
     def update_engine_prec(self):
         Number.set_precision(self.number_size, self.number_prec)
 
+    def number_set_rounding(self, rounding):
+        Number.set_rounding(rounding)
+
     def number(self, val):
         for caster in self.number_casters:
             num = caster['ref'](self, val)
