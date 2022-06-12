@@ -57,6 +57,7 @@ class TestComputingCalculator(CalculatorTestCase):
         { 'test': r"bin(3.5)", 'cast': str, 'expected': '0b11.1' },
         { 'test': r"bin(-3.5)", 'cast': str, 'expected': '-0b11.1' },
         { 'test': r"bin(0)", 'cast': str, 'expected': '0b0' },
+        { 'test': r"bin(0x1A)", 'cast': str, 'expected': '0b11010' },
         { 'test': r"0b10 / 0b11", 'cast': str, 'expected': '0b00.10101010101010101010101010101' },
         { 'test': r"0b1 / 0b10", 'cast': str, 'expected': '0b0.1' },
         { 'test': "a = (0b10 / 0b11)\na * 0b11", 'cast': str, 'expected': '0b10' },
@@ -74,6 +75,7 @@ class TestComputingCalculator(CalculatorTestCase):
         { 'test': r"oct(63.5)", 'cast': str, 'expected': '0o77.4' },
         { 'test': r"oct(-63.5)", 'cast': str, 'expected': '-0o77.4' },
         { 'test': r"oct(0)", 'cast': str, 'expected': '0o0' },
+        { 'test': r"oct(0b10101)", 'cast': str, 'expected': '0o25' },
 
         { 'test': r"hex(255)", 'cast': str, 'expected': '0xFF' },
         { 'test': r"dec(hex(255))", 'expected': Number('255') },
@@ -85,6 +87,7 @@ class TestComputingCalculator(CalculatorTestCase):
         { 'test': r"dec(0xf.88)", 'expected': Number('15.53125') },
         { 'test': r"0xff + 0XFF", 'cast': str, 'expected': '0x1FE' },
         { 'test': r"hex(15.125)", 'cast': str, 'expected': '0xF.2' },
+        { 'test': r"hex(0b10101)", 'cast': str, 'expected': '0x15' },
         { 'test': r"hex(-15.125)", 'cast': str, 'expected': '-0xF.2' },
         { 'test': r"hex(0)", 'cast': str, 'expected': '0x0' },
         { 'test': r"0xF + 4", 'cast': str, 'expected': '0x13' },

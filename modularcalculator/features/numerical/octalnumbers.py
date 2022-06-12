@@ -38,6 +38,7 @@ class OctalNumbersFeature(Feature):
             1,
             1,
             'number')
+        calculator.funcs['oct'].auto_convert_numerical_result = False
         calculator.add_number_caster('octal', 'Octal', OctalNumbersFeature.number_oct, OctalNumbersFeature.restore_oct)
 
     oct_prefix = '0o'
@@ -55,12 +56,12 @@ class OctalNumbersFeature(Feature):
         return None, None, None
 
     def func_oct(self, vals, units, refs, flags):
-        return OperationResult(OctalNumbersFeature.restore_oct(self, vals[0]))
+        return OperationResult(OctalNumbersFeature.force_oct(self, vals[0]))
 
     def number_oct(self, val):
         if isinstance(val, str) and OctalNumbersFeature.oct_regex.fullmatch(val):
             dec_num = OctalNumbersFeature.oct_to_dec(self, val)
-            dec_num.number_cast = {'ref': OctalNumbersFeature.restore_oct, 'args': [self]}
+            dec_num = OctalNumbersFeature.force_oct(self, dec_num)
             return dec_num
         return None
 
@@ -69,3 +70,10 @@ class OctalNumbersFeature(Feature):
 
     def oct_to_dec(self, val):
         return BasesFeature.base_to_dec(self, BasesFeature.number_remove_prefix(self, val, OctalNumbersFeature.oct_prefix), 8)
+
+    def force_oct(self, val):
+        if isinstance(val, Number):
+            val = val.copy()
+            val.number_cast = {'ref': OctalNumbersFeature.restore_oct, 'args': [self]}
+            return val
+        return None

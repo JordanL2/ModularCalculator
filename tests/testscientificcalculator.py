@@ -69,6 +69,7 @@ class TestScientificCalculator(CalculatorTestCase):
         { 'test': r"1E9 * 1", 'cast': str, 'expected': '1E9' },
         { 'test': r"1 * 1E9", 'expected': Number('1000000000') },
         { 'test': r"dec(1E9)", 'expected': Number('1000000000') },
+        { 'test': r"dec(1E9)", 'cast': str, 'expected': '1000000000' },
         { 'test': r"1E9 m", 'cast': str, 'expected': ('1E9', 'meters') },
         { 'test': r"dec(1E9 m)", 'expected': (Number('1000000000'), 'meters') },
         { 'test': r"dec(1E9) m", 'expected': (Number('1000000000'), 'meters') },

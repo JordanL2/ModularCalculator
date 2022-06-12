@@ -38,6 +38,7 @@ class HexadecimalNumbersFeature(Feature):
             1,
             1,
             'number')
+        calculator.funcs['hex'].auto_convert_numerical_result = False
         calculator.add_number_caster('hexadecimal', 'Hexadecimal', HexadecimalNumbersFeature.number_hex, HexadecimalNumbersFeature.restore_hex)
 
     hex_prefix = '0x'
@@ -55,12 +56,12 @@ class HexadecimalNumbersFeature(Feature):
         return None, None, None
 
     def func_hex(self, vals, units, refs, flags):
-        return OperationResult(HexadecimalNumbersFeature.restore_hex(self, vals[0]))
+        return OperationResult(HexadecimalNumbersFeature.force_hex(self, vals[0]))
 
     def number_hex(self, val):
         if isinstance(val, str) and HexadecimalNumbersFeature.hex_regex.fullmatch(val):
             dec_num = HexadecimalNumbersFeature.hex_to_dec(self, val)
-            dec_num.number_cast = {'ref': HexadecimalNumbersFeature.restore_hex, 'args': [self]}
+            dec_num = HexadecimalNumbersFeature.force_hex(self, dec_num)
             return dec_num
         return None
 
@@ -69,3 +70,10 @@ class HexadecimalNumbersFeature(Feature):
 
     def hex_to_dec(self, val):
         return BasesFeature.base_to_dec(self, BasesFeature.number_remove_prefix(self, val, HexadecimalNumbersFeature.hex_prefix), 16)
+
+    def force_hex(self, val):
+        if isinstance(val, Number):
+            val = val.copy()
+            val.number_cast = {'ref': HexadecimalNumbersFeature.restore_hex, 'args': [self]}
+            return val
+        return None

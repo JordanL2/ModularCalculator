@@ -38,6 +38,7 @@ class ArbitraryBaseFeature(Feature):
             2,
             2,
             'number')
+        calculator.funcs['base'].auto_convert_numerical_result = False
         calculator.add_number_caster('arbitrarybase', 'Arbitrary Base', ArbitraryBaseFeature.number_arbbase, ArbitraryBaseFeature.restore_arbbase)
 
     arbbase_regex = re.compile(r'(\-?\d+z[0-9A-Z]+(\.[0-9A-Z]+)?)', re.IGNORECASE)
@@ -66,7 +67,7 @@ class ArbitraryBaseFeature(Feature):
                     base = base[1:]
                 base = int(base)
                 dec_num = BasesFeature.base_to_dec(self, BasesFeature.number_remove_prefix(self, val, "{0}z".format(base)), base)
-                dec_num.number_cast = {'ref': ArbitraryBaseFeature.restore_arbbase, 'args': [self, {'base': base}]}
+                dec_num = ArbitraryBaseFeature.force_arbbase(self, dec_num, base)
                 return dec_num
             except CalculatorException:
                 pass
@@ -76,3 +77,10 @@ class ArbitraryBaseFeature(Feature):
     def restore_arbbase(self, val, opts):
         base = opts['base']
         return BasesFeature.number_add_prefix(self, BasesFeature.dec_to_base(self, val, base), "{0}z".format(base))
+
+    def force_arbbase(self, val, base):
+        if isinstance(val, Number):
+            val = val.copy()
+            val.number_cast = {'ref': ArbitraryBaseFeature.restore_arbbase, 'args': [self, {'base': base}]}
+            return val
+        return None

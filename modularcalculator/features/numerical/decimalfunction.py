@@ -3,6 +3,7 @@
 from modularcalculator.objects.exceptions import *
 from modularcalculator.features.structure.functions import *
 from modularcalculator.features.feature import Feature
+from modularcalculator.features.numerical.decimalnumbers import DecimalNumbersFeature
 
 
 class DecimalFunctionFeature(Feature):
@@ -25,15 +26,16 @@ class DecimalFunctionFeature(Feature):
     @classmethod
     def install(cls, calculator):
         calculator.funcs['dec'] = FunctionDefinition(
-            'Bases', 
-            'dec', 
+            'Bases',
+            'dec',
             'Convert a number from any base to base-10',
             ['number'],
-            DecimalFunctionFeature.func_dec, 
-            1, 
-            1, 
+            DecimalFunctionFeature.func_dec,
+            1,
+            1,
             'number')
         calculator.funcs['dec'].auto_convert_numerical_result = False
 
     def func_dec(self, vals, units, refs, flags):
-        return OperationResult(vals[0])
+        res = DecimalNumbersFeature.force_decimal(self, vals[0])
+        return OperationResult(res)

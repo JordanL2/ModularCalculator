@@ -38,6 +38,7 @@ class BinaryNumbersFeature(Feature):
             1,
             1,
             'number')
+        calculator.funcs['bin'].auto_convert_numerical_result = False
         calculator.add_number_caster('binary', 'Binary', BinaryNumbersFeature.number_bin, BinaryNumbersFeature.restore_bin)
 
     bin_prefix = '0b'
@@ -55,7 +56,7 @@ class BinaryNumbersFeature(Feature):
         return None, None, None
 
     def func_bin(self, vals, units, refs, flags):
-        return OperationResult(BinaryNumbersFeature.restore_bin(self, vals[0]))
+        return OperationResult(BinaryNumbersFeature.force_bin(self, vals[0]))
 
     def number_bin(self, val):
         if isinstance(val, str) and BinaryNumbersFeature.bin_regex.fullmatch(val):
@@ -74,6 +75,9 @@ class BinaryNumbersFeature(Feature):
     def bin_to_dec(self, val):
         return BasesFeature.base_to_dec(self, BasesFeature.number_remove_prefix(self, val, BinaryNumbersFeature.bin_prefix), 2)
 
-    def clean_bin(self, val):
-        dec_num, num_type = BinaryNumbersFeature.number_bin(self, val)
-        return num_type.restore(self, dec_num)
+    def force_bin(self, val):
+        if isinstance(val, Number):
+            val = val.copy()
+            val.number_cast = {'ref': BinaryNumbersFeature.restore_bin, 'args': [self]}
+            return val
+        return None

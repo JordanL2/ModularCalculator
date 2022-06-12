@@ -46,6 +46,7 @@ class ExpNumbersFeature(Feature):
             2,
             'number')
         calculator.funcs['scientific'].units_normalise = False
+        calculator.funcs['scientific'].auto_convert_numerical_result = False
 
         calculator.add_number_caster('exp', 'Scientific E Notation', ExpNumbersFeature.number_exp, ExpNumbersFeature.restore_exp)
 
@@ -107,7 +108,7 @@ class ExpNumbersFeature(Feature):
             num = Number(numexp[0:numexp.lower().find(symbol)])
             exp = Number(numexp[numexp.lower().find(symbol) + len(symbol):])
             num *= (Number(10) ** exp)
-            num.number_cast = {'ref': ExpNumbersFeature.restore_exp, 'args': [self]}
+            num = ExpNumbersFeature.force_exp(self, num)
             return num
 
         return None
@@ -117,3 +118,10 @@ class ExpNumbersFeature(Feature):
 
     def compile_regex(self):
         return re.compile(r'(\-?\d+(\.\d+)?' + self.feature_options['numerical.expnumbers']['Symbol'] + '\-?\d+)', re.IGNORECASE)
+
+    def force_exp(self, val):
+        if isinstance(val, Number):
+            val = val.copy()
+            val.number_cast = {'ref': ExpNumbersFeature.restore_exp, 'args': [self]}
+            return val
+        return None
