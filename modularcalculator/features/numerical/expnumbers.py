@@ -70,8 +70,9 @@ class ExpNumbersFeature(Feature):
             places = vals[1]
 
         formattednumber = ExpNumbersFeature.dec_to_exp(self, vals[0], places)
+        number = self.number(formattednumber)
 
-        res = OperationResult(formattednumber)
+        res = OperationResult(number)
         res.set_unit(units[0])
         return res
 
