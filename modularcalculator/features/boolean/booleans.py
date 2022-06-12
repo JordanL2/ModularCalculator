@@ -135,7 +135,7 @@ class BooleansFeature(Feature):
             ['boolean', None, None]),
         {'units_normalise': False, 'inputs_can_be_exceptions': True})
 
-        calculator.add_number_caster('boolean', 'Boolean', BooleansFeature.number_bool, BooleansFeature.restore_boolean)
+        calculator.add_number_caster('boolean', 'Boolean', BooleansFeature.number_bool, None)
 
         calculator.validators['boolean'] = BooleansFeature.validate_boolean
 
@@ -202,9 +202,6 @@ class BooleansFeature(Feature):
             else:
                 return Number(0)
         return None
-
-    def restore_boolean(self, val, opts=None):
-        return val != Number(0)
 
     def validate_boolean(self, value, unit, ref):
         try:
