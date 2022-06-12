@@ -56,14 +56,20 @@ class Number:
 
 
     def __str__(self):
-        if hasattr(self, 'number_cast') and self.number_cast is not None:
-            return self.number_cast['ref'](self.number_cast['args'][0], self, *self.number_cast['args'][1:])
+        cast_number = self.do_number_cast()
+        if cast_number is not None:
+            return cast_number
         val = "{0:f}".format(round(self.to_decimal(), NUMBER['decimal_places']))
         if val.find('.') > -1:
             val = val.rstrip('0')
             if val[-1] == '.':
                 val = val[0:-1]
         return val
+
+    def do_number_cast(self):
+        if hasattr(self, 'number_cast') and self.number_cast is not None:
+            return self.number_cast['ref'](self.number_cast['args'][0], self, *self.number_cast['args'][1:])
+        return None
 
     def __format__(self, format_spec):
         return self.to_decimal().__format__(format_spec)

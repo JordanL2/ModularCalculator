@@ -84,13 +84,13 @@ class BitwiseOperatorsFeature(Feature):
             'number'))
 
     def op_bitwise_and(self, vals, units, refs, flags):
-        return OperationResult(Number(int(vals[0]) & int(vals[1]), number_cast=vals[0].number_cast))
+        return OperationResult(Number(int(vals[0]) & int(vals[1])))
 
     def op_bitwise_or(self, vals, units, refs, flags):
-        return OperationResult(Number(int(vals[0]) | int(vals[1]), number_cast=vals[0].number_cast))
+        return OperationResult(Number(int(vals[0]) | int(vals[1])))
 
     def op_bitwise_xor(self, vals, units, refs, flags):
-        return OperationResult(Number(int(vals[0]) ^ int(vals[1]), number_cast=vals[0].number_cast))
+        return OperationResult(Number(int(vals[0]) ^ int(vals[1])))
 
     def op_bitwise_not(self, vals, units, refs, flags):
         dec_num = self.number(vals[0])
@@ -109,12 +109,10 @@ class BitwiseOperatorsFeature(Feature):
         flipped_val = ~int_val
         masked_flipped_val = Number(flipped_val & mask_val, number_cast=vals[0].number_cast)
 
-        #if num_type:
-        #    return OperationResult(num_type.restore(self, masked_flipped_val))
         return OperationResult(masked_flipped_val)
 
     def op_bitwise_lshift(self, vals, units, refs, flags):
-        return OperationResult(Number(int(vals[0]) << int(vals[1]), number_cast=vals[0].number_cast))
+        return OperationResult(Number(int(vals[0]) << int(vals[1])))
 
     def op_bitwise_rshift(self, vals, units, refs, flags):
-        return OperationResult(Number(int(vals[0]) >> int(vals[1]), number_cast=vals[0].number_cast))
+        return OperationResult(Number(int(vals[0]) >> int(vals[1])))

@@ -159,9 +159,9 @@ class Operation:
 
             # Auto-convert all numbers into decimal numbers. Store the original number type of the first input, this will be used
             # for the result.
-            result_value, result_unit, result_ref = None, None, None
+            result_value, result_unit, result_ref, number_cast = None, None, None, None
             if self.auto_convert_numerical_inputs:
-                values = self.convert_numbers(calculator, values)
+                values, number_cast = self.convert_numbers(calculator, values)
 
             # Normalise the units of all inputs if units_normalise flag is set
             if len([i for i in range(0, len(values)) if not self.input_can_be_type(i, 'number') or not calculator.validate_number(values[i])]) == 0:
@@ -183,6 +183,9 @@ class Operation:
                         for ii in range(0, len(values[i])):
                             num = calculator.number(this_values[ii])
                             this_values[ii] = num
+                            if number_cast is None:
+                                # Take the first number type we get as the one we should use for the final result
+                                number_cast = num.number_cast
 
                         # Normalise all elements to be the same unit
                         this_units = [v.unit for v in values[i]]
@@ -201,6 +204,10 @@ class Operation:
             try:
                 result = self.ref(calculator, values, units, refs, flags.copy())
                 result_value = result.value
+
+                # Convert the number type of the result
+                if self.auto_convert_numerical_result and isinstance(result_value, Number) and number_cast:
+                    result_value.number_cast = number_cast
 
                 # If result is an array, restore each element back to its original value and unit
                 if type(result_value) == list:
@@ -314,6 +321,7 @@ class Operation:
 
     def convert_numbers(self, calculator, values):
         new_values = values.copy()
+        number_cast = None
 
         # If an input is declared it can be a number, and it contains a numerical value, convert it to a number
         for restriction in self.value_restrictions:
@@ -328,9 +336,11 @@ class Operation:
                         # This input is declared it can be a number, check it contains a number
                         if calculator.validate_number(values[i]):
                             num = calculator.number(values[i])
+                            if number_cast is None:
+                                number_cast = num.number_cast
                             new_values[i] = num
 
-        return new_values
+        return new_values, number_cast
 
 
 class OperatorDefinition(Operation):
