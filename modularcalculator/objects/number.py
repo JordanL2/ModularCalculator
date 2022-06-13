@@ -59,20 +59,18 @@ class Number:
         raise Exception("Use to_string(calculator)")
 
     def to_string(self, calculator=None):
-        cast_number = self.do_number_cast(calculator)
-        if cast_number is not None:
-            return cast_number
-        val = "{0:f}".format(round(self.to_decimal(), NUMBER['decimal_places']))
+        if hasattr(self, 'number_cast') and self.number_cast is not None:
+            return self.number_cast['ref'](calculator, self, *self.number_cast['args'])
+        dec_num = self.to_decimal()
+        if dec_num == 0:
+            # This is to avoid getting '-0'
+            dec_num = 0
+        val = "{0:f}".format(round(dec_num, NUMBER['decimal_places']))
         if val.find('.') > -1:
             val = val.rstrip('0')
             if val[-1] == '.':
                 val = val[0:-1]
         return val
-
-    def do_number_cast(self, calculator):
-        if hasattr(self, 'number_cast') and self.number_cast is not None:
-            return self.number_cast['ref'](calculator, self, *self.number_cast['args'])
-        return None
 
     def __format__(self, format_spec):
         return self.to_decimal().__format__(format_spec)

@@ -186,6 +186,11 @@ class TestNumber(unittest.TestCase):
         a_str = a.to_string()
         self.assertEqual(a_str, '0')
 
+    def test_str_5(self):
+        a = round(Number('-0.4'))
+        a_str = a.to_string()
+        self.assertEqual(a_str, '0')
+
     def test_repr_1(self):
         a = Number(10)
         self.assertEqual(repr(a), 'Number(10)')
