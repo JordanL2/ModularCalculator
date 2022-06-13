@@ -101,7 +101,7 @@ class BasesFeature(Feature):
         if not isinstance(base, int):
             raise Exception("Base must be type int, was given {}".format(type(base)))
         if base == 10:
-            return self.number_to_string(val)
+            return str(val)
         if base < 2 or base > 36:
             raise CalculatorException("Base must be between 2 and 36")
 

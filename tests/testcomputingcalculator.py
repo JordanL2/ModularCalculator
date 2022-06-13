@@ -97,6 +97,7 @@ class TestComputingCalculator(CalculatorTestCase):
 
         { 'test': r"base(71, 36)", 'cast': str, 'expected': '36z1Z' },
         { 'test': r"base(0, 36)", 'cast': str, 'expected': '36z0' },
+        { 'test': r"base(7, 10)", 'cast': str, 'expected': '10z7' },
         { 'test': r"dec(base(71, 36))", 'expected': Number('71') },
         { 'test': r"36z1Z", 'cast': str, 'expected': '36z1Z' },
         { 'test': r"-36z1Z", 'cast': str, 'expected': '-36z1Z' },
