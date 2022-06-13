@@ -35,7 +35,10 @@ class CalculatorTestCase(unittest.TestCase):
                                 new_value.append((v.value, v.unit.plural()))
                     value = new_value
                 elif 'cast' in test:
-                    value = test['cast'](value)
+                    if test['cast'] == str and isinstance(value, Number):
+                        value = value.to_string(self.c)
+                    else:
+                        value = test['cast'](value)
                 if unit is None:
                     actual = value
                 else:

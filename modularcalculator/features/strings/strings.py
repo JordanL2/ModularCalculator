@@ -87,12 +87,15 @@ class StringsFeature(Feature):
 
     def string(self, val):
         if isinstance(val, Number):
-            return str(val)
+            return val.to_string(self)
         return str(val)
 
     def validate_string(self, value, unit, ref):
         try:
-            str(value)
+            if isinstance(value, Number):
+                value.to_string(self)
+            else:
+                str(value)
             return True
         except Exception:
             return False

@@ -87,10 +87,10 @@ class ExpNumbersFeature(Feature):
         if places is None:
             places = '.' + str(self.number_prec)
         else:
-            places = '.' + str(places)
+            places = '.' + str(places.to_string())
         scientificformat = '{0:' + places + 'E}'
 
-        formattednumber = scientificformat.format(num)
+        formattednumber = scientificformat.format(num.to_decimal())
         formattednumber = formattednumber.replace('+', '')
         parts = formattednumber.split('E')
         if '.' in parts[0]:
@@ -126,6 +126,6 @@ class ExpNumbersFeature(Feature):
     def force_exp(self, val):
         if isinstance(val, Number):
             val = val.copy()
-            val.number_cast = {'ref': ExpNumbersFeature.restore_exp, 'args': [self]}
+            val.number_cast = {'ref': ExpNumbersFeature.restore_exp, 'args': []}
             return val
         return None

@@ -100,8 +100,8 @@ class BitwiseOperatorsFeature(Feature):
 
         int_val = int(dec_num)
         opts = None
-        if dec_num.number_cast is not None and len(dec_num.number_cast['args']) > 1:
-            opts = dec_num.number_cast['args'][1]
+        if dec_num.number_cast is not None and len(dec_num.number_cast['args']) > 0:
+            opts = dec_num.number_cast['args'][0]
         if opts and 'width' in opts:
             mask_val = 2**opts['width'] - 1
         else:

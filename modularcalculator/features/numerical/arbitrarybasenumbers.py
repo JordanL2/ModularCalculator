@@ -81,6 +81,6 @@ class ArbitraryBaseFeature(Feature):
     def force_arbbase(self, val, base):
         if isinstance(val, Number):
             val = val.copy()
-            val.number_cast = {'ref': ArbitraryBaseFeature.restore_arbbase, 'args': [self, {'base': base}]}
+            val.number_cast = {'ref': ArbitraryBaseFeature.restore_arbbase, 'args': [{'base': base}]}
             return val
         return None

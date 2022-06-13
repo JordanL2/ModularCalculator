@@ -167,23 +167,23 @@ class TestNumber(unittest.TestCase):
 
     def test_str_1(self):
         a = Number(10, 3)
-        a_str = str(a)
+        a_str = a.to_string()
         self.assertEqual(a_str, '3.333333333333333333333333333333')
 
     def test_str_2(self):
         a = Number(10, 3)
         a *= Number(3)
-        a_str = str(a)
+        a_str = a.to_string()
         self.assertEqual(a_str, '10')
 
     def test_str_3(self):
         a = Number(20, 3)
-        a_str = str(a)
+        a_str = a.to_string()
         self.assertEqual(a_str, '6.666666666666666666666666666666')
 
     def test_str_4(self):
         a = Number(0)
-        a_str = str(a)
+        a_str = a.to_string()
         self.assertEqual(a_str, '0')
 
     def test_repr_1(self):
@@ -387,7 +387,7 @@ class TestNumber(unittest.TestCase):
         res /= Number('2325323525.63734')
         res *= Number(3)
         # Out of precision
-        self.assertEqual(str(res), '9.999999999999999999999999999999')
+        self.assertEqual(res.to_string(), '9.999999999999999999999999999999')
         self.assertIsInstance(res, Number)
 
     def test_floordiv(self):

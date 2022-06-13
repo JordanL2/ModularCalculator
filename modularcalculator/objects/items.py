@@ -1,6 +1,7 @@
 #!usr/bin/python3
 
 from modularcalculator.objects.exceptions import *
+from modularcalculator.objects.number import *
 
 
 def previous_functional_item(items, i=None):
@@ -145,7 +146,10 @@ class OperandResult:
         self.ref = ref
 
     def __str__(self):
-        value_str = str(self.value)
+        if isinstance(self.value, Number):
+            value_str = repr(self.value)
+        else:
+            value_str = str(self.value)
         if isinstance(self.value, list):
             value_str = '[' + ', '.join([str(s) for s in self.value]) + ']'
         if self.unit is not None:

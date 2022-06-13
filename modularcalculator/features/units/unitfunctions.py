@@ -93,7 +93,7 @@ class GeneralUnitFunctionsFeature(Feature):
                         num -= num_of_unit
                         unit = new_unit
                 if num_of_unit != Number(0):
-                    parts.append("{0} {1}".format(str(num_of_unit), unit.get_name(num_of_unit)))
+                    parts.append("{0} {1}".format(num_of_unit.to_string(self), unit.get_name(num_of_unit)))
 
         res = OperationResult(str.join(', ', parts))
         res.set_unit(None)

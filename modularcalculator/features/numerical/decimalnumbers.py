@@ -55,11 +55,11 @@ class DecimalNumbersFeature(Feature):
     def restore_decimal(self, val, opts=None):
         val = val.copy()
         val.number_cast = None
-        return str(val)
+        return val.to_string()
 
     def force_decimal(self, val):
         if isinstance(val, Number):
             val = val.copy()
-            val.number_cast = {'ref': DecimalNumbersFeature.restore_decimal, 'args': [self]}
+            val.number_cast = {'ref': DecimalNumbersFeature.restore_decimal, 'args': []}
             return val
         return None
