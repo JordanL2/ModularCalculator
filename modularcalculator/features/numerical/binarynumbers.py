@@ -61,15 +61,16 @@ class BinaryNumbersFeature(Feature):
     def number_bin(self, val):
         if isinstance(val, str) and BinaryNumbersFeature.bin_regex.fullmatch(val):
             dec_num = BinaryNumbersFeature.bin_to_dec(self, val)
+            dec_num.number_cast = {'ref': BinaryNumbersFeature.restore_bin, 'args': [], 'base': 2}
             width = BasesFeature.get_number_width(self, val, BinaryNumbersFeature.bin_prefix)
-            dec_num.number_cast = {'ref': BinaryNumbersFeature.restore_bin, 'args': [{'width': width}], 'base': 2}
+            dec_num.binary_number_width = width
             return dec_num
         return None
 
     def restore_bin(self, val, opts=None):
         binnum = BasesFeature.dec_to_base(self, val, 2)
-        if opts is not None and 'width' in opts:
-            binnum = BasesFeature.force_number_width(self, binnum, opts['width'])
+        if hasattr(val, 'binary_number_width'):
+            binnum = BasesFeature.force_number_width(self, binnum, val.binary_number_width)
         return BasesFeature.number_add_prefix(self, binnum, BinaryNumbersFeature.bin_prefix)
 
     def bin_to_dec(self, val):
