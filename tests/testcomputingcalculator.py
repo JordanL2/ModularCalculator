@@ -66,6 +66,8 @@ class TestComputingCalculator(CalculatorTestCase):
         { 'test': r"round(0b101.10101)", 'cast': str, 'expected': '0b110' },
         { 'test': r"round(0b101.10101, 2)", 'cast': str, 'expected': '0b101.11' },
         { 'test': r"round(0b101.10101, 3)", 'cast': str, 'expected': '0b101.101' },
+        { 'test': r"floor(0b101.10111, 2)", 'cast': str, 'expected': '0b101.1' },
+        { 'test': r"ceil(0b101.10001, 3)", 'cast': str, 'expected': '0b101.101' },
 
         { 'test': r"oct(63)", 'cast': str, 'expected': '0o77' },
         { 'test': r"dec(oct(63))", 'expected': Number('63') },
@@ -81,6 +83,8 @@ class TestComputingCalculator(CalculatorTestCase):
         { 'test': r"oct(0b10101)", 'cast': str, 'expected': '0o25' },
         { 'test': r"round(0o12.334, 2)", 'cast': str, 'expected': '0o12.34' },
         { 'test': r"round(0o12.334, 1)", 'cast': str, 'expected': '0o12.3' },
+        { 'test': r"floor(0o12.337, 2)", 'cast': str, 'expected': '0o12.33' },
+        { 'test': r"ceil(0o12.301, 1)", 'cast': str, 'expected': '0o12.4' },
 
         { 'test': r"hex(255)", 'cast': str, 'expected': '0xFF' },
         { 'test': r"dec(hex(255))", 'expected': Number('255') },
@@ -101,6 +105,8 @@ class TestComputingCalculator(CalculatorTestCase):
         { 'test': r"0x2 / 0x3", 'cast': str, 'expected': '0x0.AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' },
         { 'test': r"round(0x10F.348, 2)", 'cast': str, 'expected': '0x10F.35' },
         { 'test': r"round(0x10F.347, 2)", 'cast': str, 'expected': '0x10F.34' },
+        { 'test': r"floor(0x10F.348, 2)", 'cast': str, 'expected': '0x10F.34' },
+        { 'test': r"ceil(0x10F.347, 2)", 'cast': str, 'expected': '0x10F.35' },
 
         { 'test': r"base(71, 36)", 'cast': str, 'expected': '36z1Z' },
         { 'test': r"base(0, 36)", 'cast': str, 'expected': '36z0' },
@@ -122,6 +128,10 @@ class TestComputingCalculator(CalculatorTestCase):
         { 'test': r"dec(36Z1z)", 'expected': Number('71') },
         { 'test': r"dec(2z100)", 'expected': Number('4') },
         { 'test': r"dec(2Z100)", 'expected': Number('4') },
+        { 'test': r"round(36z1Z.12I, 2)", 'cast': str, 'expected': '36z1Z.13' },
+        { 'test': r"round(36z1Z.12H, 2)", 'cast': str, 'expected': '36z1Z.12' },
+        { 'test': r"floor(36z1Z.12I, 2)", 'cast': str, 'expected': '36z1Z.12' },
+        { 'test': r"ceil(36z1Z.12H, 2)", 'cast': str, 'expected': '36z1Z.13' },
 
         { 'test': r"true", 'expected': True },
         { 'test': r"false", 'expected': False },

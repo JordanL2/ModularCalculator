@@ -41,27 +41,29 @@ class NumericalFunctionsFeature(Feature):
         calculator.funcs['floor'] = FunctionDefinition(
             'Numerical',
             'floor',
-            'Round downwards to nearest integer',
-            ['number'],
+            'Round downwards to nearest integer or number of places',
+            ['number', '[places]'],
             NumericalFunctionsFeature.func_floor,
             1,
-            1,
+            2,
             'number')
+        calculator.funcs['floor'].units_normalise = False
 
         calculator.funcs['ceil'] = FunctionDefinition(
             'Numerical',
             'ceil',
-            'Round upwards to nearest integer',
-            ['number'],
+            'Round upwards to nearest integer or number of places',
+            ['number', '[places]'],
             NumericalFunctionsFeature.func_ceil,
             1,
-            1,
+            2,
             'number')
+        calculator.funcs['ceil'].units_normalise = False
 
         calculator.funcs['round'] = FunctionDefinition(
             'Numerical',
             'round',
-            'Round to nearest integer or number of decimal places',
+            'Round to nearest integer or number of places',
             ['number', '[places]'],
             NumericalFunctionsFeature.func_round,
             1,
@@ -106,12 +108,34 @@ class NumericalFunctionsFeature(Feature):
         return res
 
     def func_floor(self, vals, units, refs, flags):
-        res =  OperationResult(math.floor(vals[0]))
+        if len(vals) == 1:
+            res = OperationResult(math.floor(vals[0]))
+        else:
+            if vals[0].number_cast is not None and 'base' in vals[0].number_cast:
+                base = vals[0].number_cast['base']
+                base_mult = Number(base) ** vals[1]
+                val = vals[0] * base_mult
+                val = math.floor(val)
+                val = val / base_mult
+                res = OperationResult(val)
+            else:
+                res = OperationResult(math.floor(vals[0], int(vals[1])))
         res.set_unit(units[0])
         return res
 
     def func_ceil(self, vals, units, refs, flags):
-        res =  OperationResult(math.ceil(vals[0]))
+        if len(vals) == 1:
+            res = OperationResult(math.ceil(vals[0]))
+        else:
+            if vals[0].number_cast is not None and 'base' in vals[0].number_cast:
+                base = vals[0].number_cast['base']
+                base_mult = Number(base) ** vals[1]
+                val = vals[0] * base_mult
+                val = math.ceil(val)
+                val = val / base_mult
+                res = OperationResult(val)
+            else:
+                res = OperationResult(math.ceil(vals[0], int(vals[1])))
         res.set_unit(units[0])
         return res
 
