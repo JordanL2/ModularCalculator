@@ -74,6 +74,6 @@ class HexadecimalNumbersFeature(Feature):
     def force_hex(self, val):
         if isinstance(val, Number):
             val = val.copy()
-            val.number_cast = {'ref': HexadecimalNumbersFeature.restore_hex, 'args': []}
+            val.number_cast = {'ref': HexadecimalNumbersFeature.restore_hex, 'args': [], 'base': 16}
             return val
         return None

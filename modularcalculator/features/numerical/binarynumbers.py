@@ -62,7 +62,7 @@ class BinaryNumbersFeature(Feature):
         if isinstance(val, str) and BinaryNumbersFeature.bin_regex.fullmatch(val):
             dec_num = BinaryNumbersFeature.bin_to_dec(self, val)
             width = BasesFeature.get_number_width(self, val, BinaryNumbersFeature.bin_prefix)
-            dec_num.number_cast = {'ref': BinaryNumbersFeature.restore_bin, 'args': [{'width': width}]}
+            dec_num.number_cast = {'ref': BinaryNumbersFeature.restore_bin, 'args': [{'width': width}], 'base': 2}
             return dec_num
         return None
 
@@ -78,6 +78,6 @@ class BinaryNumbersFeature(Feature):
     def force_bin(self, val):
         if isinstance(val, Number):
             val = val.copy()
-            val.number_cast = {'ref': BinaryNumbersFeature.restore_bin, 'args': []}
+            val.number_cast = {'ref': BinaryNumbersFeature.restore_bin, 'args': [], 'base': 2}
             return val
         return None

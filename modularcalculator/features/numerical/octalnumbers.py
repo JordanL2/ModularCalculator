@@ -74,6 +74,6 @@ class OctalNumbersFeature(Feature):
     def force_oct(self, val):
         if isinstance(val, Number):
             val = val.copy()
-            val.number_cast = {'ref': OctalNumbersFeature.restore_oct, 'args': []}
+            val.number_cast = {'ref': OctalNumbersFeature.restore_oct, 'args': [], 'base': 8}
             return val
         return None

@@ -14,6 +14,7 @@ class NumericalEngine(Engine):
         self.number_size = 100
         self.number_prec = 30
         self.update_engine_prec()
+        self.number_set_rounding('ROUND_HALF_UP')
 
         self.number_casters = []
         self.validators['number'] = NumericalEngine.validate_number

@@ -119,7 +119,15 @@ class NumericalFunctionsFeature(Feature):
         if len(vals) == 1:
             res = OperationResult(round(vals[0]))
         else:
-            res = OperationResult(round(vals[0], int(vals[1])))
+            if vals[0].number_cast is not None and 'base' in vals[0].number_cast:
+                base = vals[0].number_cast['base']
+                base_mult = Number(base) ** vals[1]
+                val = vals[0] * base_mult
+                val = round(val)
+                val = val / base_mult
+                res = OperationResult(val)
+            else:
+                res = OperationResult(round(vals[0], int(vals[1])))
         res.set_unit(units[0])
         return res
 

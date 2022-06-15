@@ -63,6 +63,9 @@ class TestComputingCalculator(CalculatorTestCase):
         { 'test': "a = (0b10 / 0b11)\na * 0b11", 'cast': str, 'expected': '0b10' },
         { 'test': r"((0b10 / 0b11) * 0b11)", 'cast': str, 'expected': '0b10' },
         { 'test': r"fact(0b101)", 'cast': str, 'expected': '0b1111000' },
+        { 'test': r"round(0b101.10101)", 'cast': str, 'expected': '0b110' },
+        { 'test': r"round(0b101.10101, 2)", 'cast': str, 'expected': '0b101.11' },
+        { 'test': r"round(0b101.10101, 3)", 'cast': str, 'expected': '0b101.101' },
 
         { 'test': r"oct(63)", 'cast': str, 'expected': '0o77' },
         { 'test': r"dec(oct(63))", 'expected': Number('63') },
@@ -76,6 +79,8 @@ class TestComputingCalculator(CalculatorTestCase):
         { 'test': r"oct(-63.5)", 'cast': str, 'expected': '-0o77.4' },
         { 'test': r"oct(0)", 'cast': str, 'expected': '0o0' },
         { 'test': r"oct(0b10101)", 'cast': str, 'expected': '0o25' },
+        { 'test': r"round(0o12.334, 2)", 'cast': str, 'expected': '0o12.34' },
+        { 'test': r"round(0o12.334, 1)", 'cast': str, 'expected': '0o12.3' },
 
         { 'test': r"hex(255)", 'cast': str, 'expected': '0xFF' },
         { 'test': r"dec(hex(255))", 'expected': Number('255') },
@@ -94,6 +99,8 @@ class TestComputingCalculator(CalculatorTestCase):
         { 'test': r"4 + 0xF", 'expected': Number('19') },
         { 'test': r"0x1 / 0x2", 'cast': str, 'expected': '0x0.8' },
         { 'test': r"0x2 / 0x3", 'cast': str, 'expected': '0x0.AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' },
+        { 'test': r"round(0x10F.348, 2)", 'cast': str, 'expected': '0x10F.35' },
+        { 'test': r"round(0x10F.347, 2)", 'cast': str, 'expected': '0x10F.34' },
 
         { 'test': r"base(71, 36)", 'cast': str, 'expected': '36z1Z' },
         { 'test': r"base(0, 36)", 'cast': str, 'expected': '36z0' },
@@ -256,7 +263,8 @@ class TestComputingCalculator(CalculatorTestCase):
         { 'test': r"false then 1m else 2cm", 'expected': (Number('2'), 'centimeters') },
 
         { 'test': "orbitheight = 36000km\nearthmass = 5.97237e24kg\nearthradius = 6378.1km\ngm = G earthmass\norbitradius = earthradius + orbitheight\ntime = 2 pi (orbitradius^3 / gm)^0.5\ntime to hours",
-            'expected': (Number(24224627632301628480899537366063915829476650214457110900687610652121970296857515944613469683003093000, 1004469089982613651157596952472639188035748634295889087727188244396625333452077251111878745939773897), 'hours') },
+            'cast': str,
+            'expected': ('2.411684727174723952983470211019E1', 'hours') },
         { 'test': r"gm = G * 5.97237e24kg", 'expected': (Number('398600751696000'), 'meters^3/second^2') },
 
         { 'test': "dateformat('2012-01-02')", 'expected': 'Monday, 02-Jan-2012' },
@@ -323,7 +331,8 @@ class TestComputingCalculator(CalculatorTestCase):
     str +$ '*10^' +$ dec""", 'expected': '4*10^-1' },
 
         { 'test': "orbitheight = 36000km\nearthmass = 5.97237e24kg\nearthradius = 6378.1km\ngm = G earthmass\norbitradius = earthradius + orbitheight\ntime = 2 pi (orbitradius^\n\n\n3 /\n\n\n\n gm\n\n\n\n\n\n\n\n)^\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n0.5\ntime to hours",
-            'expected': (Number(24224627632301628480899537366063915829476650214457110900687610652121970296857515944613469683003093000, 1004469089982613651157596952472639188035748634295889087727188244396625333452077251111878745939773897), 'hours') },
+            'cast': str,
+            'expected': ('2.411684727174723952983470211019E1', 'hours') },
 
         { 'test': "f = './tests/externalfunctions/distance'\n@f([0, 0], [3, 4])", 'expected': Number('5') },
 
