@@ -44,8 +44,6 @@ class DecimalNumbersFeature(Feature):
         return None, None, None
 
     def number_decimal(self, val):
-        if isinstance(val, Number):
-            return val
         if isinstance(val, str) and DecimalNumbersFeature.num_is_regex.match(val):
             dec_num = Number(val)
             dec_num = DecimalNumbersFeature.force_decimal(self, dec_num)

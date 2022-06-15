@@ -32,6 +32,8 @@ class NumericalEngine(Engine):
         Number.set_rounding(rounding)
 
     def number(self, val):
+        if isinstance(val, Number):
+            return val
         for caster in self.number_casters:
             num = caster['ref'](self, val)
             if num is not None:
