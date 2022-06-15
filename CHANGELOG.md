@@ -3,6 +3,7 @@
 ## 1.3.0
 - Ceil and floor functions now also have an optional places parameter.
 - Numerical Engine has `number_set_rounding` function to set rounding mode, use names of `decimal` rounding modes.
+- Numerical Engine has `number_size_set` function to set the maximum size of numbers (before decimal point).
 - Number casters now includes a reference to the function to reverse the casting to Number.
 - Various improvements for alternative-base numbers and scientific notation numbers:
 	- Converting a number to an alternative-base number, or scientific notation number, respects the calculator's precision option.

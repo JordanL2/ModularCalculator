@@ -19,6 +19,13 @@ class NumericalEngine(Engine):
         self.number_casters = []
         self.validators['number'] = NumericalEngine.validate_number
 
+    def number_size_set(self, size):
+        self.number_size = size
+        self.update_engine_prec()
+
+    def number_size_get(self):
+        return self.number_size
+
     def number_prec_set(self, prec):
         self.number_prec = prec
         self.update_engine_prec()
