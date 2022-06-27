@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.3.1
+- Fixed displaying units - divisor in brackets now used closed bracket properly.
+
 ## 1.3.0
 - Ceil and floor functions now also have an optional places parameter.
 - Numerical Engine has `number_set_rounding` function to set rounding mode, use names of `decimal` rounding modes.

@@ -345,7 +345,7 @@ class UnitPowerList(AbstractPowerList):
         if len(divstrings) > 0:
             divstrings.pop(0)
         if len(mults) > 0 and len(divs) > 1 and not negative_powers:
-            divstrings = [('(', 'inner_expr_start')] + divstrings + [('(', 'inner_expr_end')]
+            divstrings = [('(', 'inner_expr_start')] + divstrings + [(')', 'inner_expr_end')]
 
         finalstrings = []
         if len(mults) > 0 and len(divs) > 0:

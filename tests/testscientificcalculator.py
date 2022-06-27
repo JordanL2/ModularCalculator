@@ -164,6 +164,7 @@ class TestScientificCalculator(CalculatorTestCase):
         { 'test': r"10 kg m^2/s^3 to J/s", 'expected': (Number('10'), 'joules/second') },
         { 'test': r"10 kg m^2/s^3", 'expected': (Number('10'), 'kilogram meters^2/second^3') },
         { 'test': r"20 kg m^2 / 2s^3", 'expected': (Number('10'), 'watts') },
+        { 'test': r"10 kg m^2/s^3/W^2", 'expected': (Number('10'), 'kilogram meters^2/(second^3 watt^2)') },
 
         { 'test': r"1 kW / 100 J/s", 'expected': Number('10') },
         { 'test': r"1 GRAM to kg", 'expected': (Number('0.001'), 'kilograms') },
