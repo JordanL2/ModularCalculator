@@ -26,8 +26,8 @@ class AccelerationUnitFeature(AbstractUnitFeature):
         calculator.unit_normaliser.add_unit('acceleration', UnitDefinitionGee())
 
         calculator.unit_normaliser.add_multiunit('acceleration',
-            ['meter', 1,
-             'second', -2])
+            ['meter', Number(1),
+             'second', Number(-2)])
 
 
 class UnitDefinitionGee(UnitDefinition):

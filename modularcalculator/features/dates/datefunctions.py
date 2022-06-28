@@ -152,8 +152,8 @@ class DateFunctionsFeature(Feature):
 
         seconds = Number(str(td.total_seconds()))
         seconds = round(seconds, min(6, getcontext().prec))
-        fromunit = UnitPowerList.new([self.unit_normaliser.get_unit('seconds'), 1])
-        tounit = UnitPowerList.new([self.unit_normaliser.get_unit('seconds'), 1])
+        fromunit = UnitPowerList.new([self.unit_normaliser.get_unit('seconds'), Number(1)])
+        tounit = UnitPowerList.new([self.unit_normaliser.get_unit('seconds'), Number(1)])
         value = seconds
         if len(vals) >= 3:
             tounit = vals[2]

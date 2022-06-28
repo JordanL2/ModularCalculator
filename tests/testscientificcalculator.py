@@ -108,7 +108,7 @@ class TestScientificCalculator(CalculatorTestCase):
         { 'test': r"1K + 1°C", 'expected': (Number('2'), 'kelvin') },
         { 'test': r"1°C + 1K", 'expected': (Number('2'), 'Celsius') },
 
-        { 'test': r"meters * meters", 'expected': UnitPowerList([UnitPower(c.unit_normaliser.get_unit('metre'), 2)]) },
+        { 'test': r"meters * meters", 'expected': UnitPowerList([UnitPower(c.unit_normaliser.get_unit('metre'), Number(2))]) },
         { 'test': r"2 meters * 3 meters", 'expected': (Number('6'), 'meters^2') },
         { 'test': r"20 meters / 5 meters", 'expected': Number('4') },
         { 'test': r"20 meters \ 5 meters", 'expected': Number('4') },
@@ -240,6 +240,7 @@ class TestScientificCalculator(CalculatorTestCase):
                      a * n^2 / volume^2""",
              'cast': str,
              'expected': ('6.132100516412516904893858164421', 'kilopascals') },
+        { 'test': "(0.001m^3) ^ (7/5)", 'cast': str, 'expected': ('0.000063095734448019324943436014', 'meters^4.2') },
 
         { 'test': r"format(1 hour + 23 minutes + 45 seconds)", 'expected': '1 hour, 23 minutes, 45 seconds' },
         { 'test': r"format(61s)", 'expected': '1 minute, 1 second' },

@@ -3,6 +3,7 @@
 ## 1.3.1
 - Fixed displaying units - divisor in brackets now used closed bracket properly.
 - Fixed potential infinite loop when simplifying units. This has slightly reduced the kind of simplification that can be done.
+- Unit powers can now be non-integers.
 
 ## 1.3.0
 - Ceil and floor functions now also have an optional places parameter.

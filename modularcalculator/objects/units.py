@@ -85,10 +85,10 @@ class UnitDefinition(AbstractUnitDefinition):
         self.relevant_to_systems = self.relevant_to_systems.copy()
 
     def list(self):
-        return [UnitPower(self, 1)]
+        return [UnitPower(self, Number(1))]
 
     def convert(self, num, power, relative):
-        if power > 0:
+        if power > Number(0):
             for n in range(0, int(power)):
                 num = self.convertto(num, relative)
         else:
@@ -113,8 +113,8 @@ class AbstractPower:
             raise Exception("object must be of type {0}".format(self.keyclass.__name__))
         setattr(self, self.keyfield, obj)
 
-        if not isinstance(power, int):
-            raise Exception("power must be of type int, was given {}".format(type(power)))
+        if not isinstance(power, Number):
+            raise Exception("power must be of type Number, was given {}".format(type(power)))
         self.power = power
 
     def __eq__(self, other):
@@ -127,7 +127,7 @@ class AbstractPower:
         return hash(str(self))
 
     def __str__(self):
-        return str(getattr(self, self.keyfield)) + '^' + str(self.power)
+        return str(getattr(self, self.keyfield)) + '^' + str(self.power.to_decimal())
 
     def copy(self):
         return type(self)(getattr(self, self.keyfield), self.power)
@@ -135,10 +135,8 @@ class AbstractPower:
     def multiply(self, power):
         if not isinstance(power, Number):
             power = Number(power)
-        new_power = Number(self.power) * power
-        if not new_power.is_integer():
-            raise Exception("Power is not an integer after multiplying {} and {}".format(self.power, power))
-        return type(self)(getattr(self, self.keyfield), int(new_power))
+        new_power = self.power * power
+        return type(self)(getattr(self, self.keyfield), new_power)
 
     def key(self):
         raise Exception("Must overrride this method")
@@ -207,7 +205,7 @@ class AbstractPowerList:
             self._add(self.keyclass(key, power))
         else:
             existing.power += power
-            if existing.power == 0:
+            if existing.power == Number(0):
                 self._del(existing)
 
     def remove(self, key, power):
@@ -235,7 +233,7 @@ class AbstractPowerList:
         return newlist.remove_zeros()
 
     def remove_zeros(self):
-        return type(self)([o.copy() for o in self.list() if o.power != 0])
+        return type(self)([o.copy() for o in self.list() if o.power != Number(0)])
 
     def check_empty(self):
         if len(self.list()) == 0:
@@ -268,7 +266,7 @@ class UnitPowerList(AbstractPowerList):
 
     def newfromunit(unit):
         unitpowerlist = UnitPowerList()
-        unitpowerlist.add(unit, 1)
+        unitpowerlist.add(unit, Number(1))
         return unitpowerlist
 
     def copy(self):
@@ -300,7 +298,7 @@ class UnitPowerList(AbstractPowerList):
         mults = []
         divs = []
         for unitpower in self.list():
-            if unitpower.power < 0:
+            if unitpower.power < Number(0):
                 divs.append(unitpower)
             else:
                 mults.append(unitpower)
@@ -316,10 +314,10 @@ class UnitPowerList(AbstractPowerList):
             elif plural and last:
                 unitname = mult.unit.plural()
             multstrings.append((' ', 'space'))
-            if mult.power > 1:
+            if mult.power > Number(1):
                 multstrings.append((unitname, 'unit'))
                 multstrings.append(('^', 'op'))
-                multstrings.append((str(mult.power), 'literal'))
+                multstrings.append((str(mult.power.to_decimal()), 'literal'))
             else:
                 multstrings.append((unitname, 'unit'))
         if len(multstrings) > 0:
@@ -333,13 +331,13 @@ class UnitPowerList(AbstractPowerList):
             elif negative_powers:
                 unitname = div.unit.plural()
             divstrings.append((' ', 'space'))
-            if div.power < -1 or negative_powers:
+            if div.power < Number(-1) or negative_powers:
                 divstrings.append((unitname, 'unit'))
                 divstrings.append(('^', 'op'))
                 if negative_powers:
-                    divstrings.append((str(div.power), 'literal'))
+                    divstrings.append((str(div.power.to_decimal()), 'literal'))
                 else:
-                    divstrings.append((str(-div.power), 'literal'))
+                    divstrings.append((str(-div.power.to_decimal()), 'literal'))
             else:
                 divstrings.append((unitname, 'unit'))
         if len(divstrings) > 0:
@@ -366,10 +364,10 @@ class UnitPowerList(AbstractPowerList):
         return num
 
     def convertfrom(self, num, relative):
-        return self.convert(num, -1, relative)
+        return self.convert(num, Number(-1), relative)
 
     def convertto(self, num, relative):
-        return self.convert(num, 1, relative)
+        return self.convert(num, Number(1), relative)
 
     def addall(self, unitlist, power):
         for unitpower in unitlist.list():

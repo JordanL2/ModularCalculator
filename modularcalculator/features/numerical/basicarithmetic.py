@@ -104,7 +104,7 @@ class BasicArithmeticFeature(Feature):
 
     def op_number_multiply(self, vals, units, refs, flags):
         if isinstance(vals[0], UnitPowerList) and isinstance(vals[1], UnitPowerList):
-            unit = UnitPowerList.new([vals[0], 1, vals[1], 1])
+            unit = UnitPowerList.new([vals[0], Number(1), vals[1], Number(1)])
             unit.no_simplify = True
             return OperationResult(unit)
         for i in range(0, len(vals)):
@@ -115,7 +115,7 @@ class BasicArithmeticFeature(Feature):
         res = OperationResult(vals[0] * vals[1])
 
         if units[0] is not None and units[1] is not None:
-            unit = UnitPowerList.new([units[0], 1, units[1], 1])
+            unit = UnitPowerList.new([units[0], Number(1), units[1], Number(1)])
             res.set_unit(unit)
         elif units[0] is not None:
             res.set_unit(units[0])
@@ -125,7 +125,7 @@ class BasicArithmeticFeature(Feature):
 
     def op_number_divide(self, vals, units, refs, flags):
         if isinstance(vals[0], UnitPowerList) and isinstance(vals[1], UnitPowerList):
-            unit = UnitPowerList.new([vals[0], 1, vals[1], -1])
+            unit = UnitPowerList.new([vals[0], Number(1), vals[1], Number(-1)])
             unit.no_simplify = True
             return OperationResult(unit)
         for i in range(0, len(vals)):
@@ -136,7 +136,7 @@ class BasicArithmeticFeature(Feature):
         res = OperationResult(vals[0] / vals[1])
 
         if units[0] is not None and units[1] is not None:
-            unit = UnitPowerList.new([units[0], 1, units[1], -1])
+            unit = UnitPowerList.new([units[0], Number(1), units[1], Number(-1)])
             res.set_unit(unit)
         elif units[0] is not None and units[1] is None:
             res.set_unit(units[0])

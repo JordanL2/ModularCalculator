@@ -57,7 +57,7 @@ class GeneralUnitFunctionsFeature(Feature):
         if len(unit.list()) != 1:
             raise CalculatorException("Can only format single units")
         power = unit.list()[0].power
-        if power != 1:
+        if power != Number(1):
             raise CalculatorException("Unit must have power of 1")
 
         singleunit = unit.list()[0].unit

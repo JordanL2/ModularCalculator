@@ -26,8 +26,8 @@ class VelocityUnitFeature(AbstractUnitFeature):
         calculator.unit_normaliser.add_unit('velocity', UnitDefinitionKnot())
 
         calculator.unit_normaliser.add_multiunit('velocity',
-            ['meter', 1,
-             'second', -1])
+            ['meter', Number(1),
+             'second', Number(-1)])
 
 
 class UnitDefinitionKnot(UnitDefinition):

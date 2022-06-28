@@ -156,7 +156,7 @@ class UnitNormaliser:
     def normalise_from_left(self, value1, unit1, value2, unit2, relative):
         unitdimensions = self.get_units_by_dimension(unit1)
         for dimensionlist, unit in unitdimensions.items():
-            for power in (1, -1):
+            for power in (Number(1), Number(-1)):
                 dimensions = dimensionlist.multiply(power)
 
                 unitlist2 = [u for u in self.get_subunit_list(unit2) if u.unit not in unitdimensions.values()]
@@ -175,7 +175,7 @@ class UnitNormaliser:
         unitlist1 = self.get_subunit_list(unit1)
         unitdimensions2 = self.get_units_by_dimension(unit2)
         for dimensionlist, unit in unitdimensions2.items():
-            for power in (1, -1):
+            for power in (Number(1), Number(-1)):
                 dimensions = dimensionlist.multiply(power)
                 unitsfound = self.find_units_matching_dimensions([dimensions], unitlist1)[0]
                 if len(unitsfound) > 0:
@@ -188,10 +188,10 @@ class UnitNormaliser:
         return value1, unit1.check_empty(), value2, unit2.check_empty()
 
     def simplify_units(self, value, unit):
-        if len(unit.list()) > 1 or (len(unit.list()) == 1 and unit.list()[0].power < 0):
+        if len(unit.list()) > 1 or (len(unit.list()) == 1 and unit.list()[0].power < Number(0)):
             unit = unit.copy()
             dimensions_list = list(self.units.keys())
-            powerlist = [1, -1]
+            powerlist = [Number(1), Number(-1)]
             replacedimensions_list = [self.normalised_dimension(d).multiply(p) for d in dimensions_list for p in powerlist]
 
             while True:
@@ -210,7 +210,7 @@ class UnitNormaliser:
                     found = False
                     for unitsfound in unitsfound_list:
                         multpower = min([unit.find(u.unit).power / u.power for u in unitsfound])
-                        if (len(unitsfound) > 1) or (len(unit.list()) == 1 and unit.list()[0].power < 0 and unit.list()[0].power == -(power * multpower)):
+                        if (len(unitsfound) > 1) or (len(unit.list()) == 1 and unit.list()[0].power < Number(0) and unit.list()[0].power == -(power * multpower)):
                             closest_unit = None
                             closest_value = None
                             unitsfound_dimensioncount = len([d for u in unitsfound for d in self.normalised_dimension(u.unit.dimension)])
@@ -244,8 +244,8 @@ class UnitNormaliser:
                                             closest_value = replace_value
                             if closest_unit is not None:
                                 for subunit in unitsfound:
-                                    value = unit.removeandconvert(value, subunit.unit, int(subunit.power * multpower), False)
-                                value = unit.addandconvert(value, closest_unit, int(power * multpower), False)
+                                    value = unit.removeandconvert(value, subunit.unit, subunit.power * multpower, False)
+                                value = unit.addandconvert(value, closest_unit, power * multpower, False)
                                 found = True
                                 break
                     if found:
@@ -271,8 +271,10 @@ class UnitNormaliser:
                 units_i = dimensions[dimension]
                 if len(units_i) > 1:
                     # Need to de-dupe. This code should only happen if the remaining units cancel out completely.
-                    power = sum([unit.list()[i].power for i in units_i])
-                    if power != 0:
+                    power = Number(0)
+                    for i in units_i:
+                        power += unit.list()[i].power
+                    if power != Number(0):
                         raise Exception("simplify_units did not dedupe units")
 
                     # Remove existing units
@@ -306,26 +308,26 @@ class UnitNormaliser:
 
         goals = []
         for dimensions in dimension_lists:
-            goals.append([0] * len(dimensionlist_map))
+            goals.append([Number(0)] * len(dimensionlist_map))
             for dimension in dimensions:
                 goals[-1][dimensionlist_map[dimension.dimension]] = dimension.power
 
         unitlist_max = []
         unitlist_min = []
         for unit in unitlist:
-            if unit.power < 0:
-                unitlist_min.append(int(unit.power))
-                unitlist_max.append(0)
+            if unit.power < Number(0):
+                unitlist_min.append(unit.power)
+                unitlist_max.append(Number(0))
             else:
-                unitlist_min.append(0)
-                unitlist_max.append(int(unit.power))
+                unitlist_min.append(Number(0))
+                unitlist_max.append(unit.power)
         unitlist_counter = unitlist_min.copy()
 
         found = [[] for d in range(0, len(dimension_lists))]
         stop = False
         while not stop:
 
-            thisgoal = [0] * len(dimensionlist_map)
+            thisgoal = [Number(0)] * len(dimensionlist_map)
             for i in range(0, len(unitlist_counter)):
                 n = unitlist_counter[i]
                 for dimension in unitlist[i].dimensions:
@@ -335,18 +337,18 @@ class UnitNormaliser:
                 if goal == thisgoal:
                     returnlist = []
                     for i in range(0, len(unitlist_counter)):
-                        if unitlist_counter[i] != 0:
+                        if unitlist_counter[i] != Number(0):
                             returnlist.append(UnitPower(unitlist[i].unit, unitlist_counter[i]))
                     found[j].append(returnlist)
 
-            unitlist_counter[-1] += 1
+            unitlist_counter[-1] += Number(1)
             for i in range(len(unitlist_counter) - 1, -1, -1):
                 if unitlist_counter[i] > unitlist_max[i]:
                     if i == 0:
                         stop = True
                         break
                     unitlist_counter[i] = unitlist_min[i]
-                    unitlist_counter[i - 1] += 1
+                    unitlist_counter[i - 1] += Number(1)
 
         return found
 
@@ -359,7 +361,7 @@ class UnitNormaliser:
     def normalised_dimension(self, dimension):
         if dimension in self.relationships:
             return self.relationships[dimension]
-        return DimensionPowerList([DimensionPower(dimension, 1)])
+        return DimensionPowerList([DimensionPower(dimension, Number(1))])
 
     def get_units_by_dimension(self, unit):
         dimensiontounit = {}
@@ -374,7 +376,7 @@ class UnitNormaliser:
             power = relationship[i * 2 + 1]
             if dimension not in self.dimensions:
                 raise Exception("Dimension not found: {0}".format(dimension))
-            dimensions.append(DimensionPower(dimension, power))
+            dimensions.append(DimensionPower(dimension, Number(power)))
         return DimensionPowerList(dimensions)
 
     def unit_to_relationship(self, unit):
