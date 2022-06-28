@@ -44,6 +44,8 @@ class TestAdvancedCalculator(CalculatorTestCase):
         { 'test': "x = 15\nx %= 4\nx", 'expected': Number('3') },
         { 'test': "x = 5\nx \\= 2\nx", 'expected': Number('2') },
 
+        { 'test': "x = 5\nx *= 2", 'expected': Number('10') },
+
     #    { 'test': r"", 'expected': Number('') },
     ]
 

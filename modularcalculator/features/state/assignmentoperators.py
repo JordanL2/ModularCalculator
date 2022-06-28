@@ -142,8 +142,8 @@ class AssignmentOperatorsFeature(Feature):
                 op = self.ops_list[sym]
                 op_result = op.call(self, [OperandResult(var[0], var[1], None), OperandResult(vals[1], units[1], refs[1])], flags)
                 self.vars[varname] = (op_result.value, op_result.unit)
-            res = OperationResult(vals[1])
-            res.set_unit(units[1])
+            res = OperationResult(self.vars[varname][0])
+            res.set_unit(self.vars[varname][1])
             return res
         else:
             raise ExecuteException("Expecting variable, received".format(refs[0].desc()), [], None)
