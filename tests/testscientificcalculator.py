@@ -140,7 +140,6 @@ class TestScientificCalculator(CalculatorTestCase):
         { 'test': r"1 meters^3 to l", 'expected': (Number('1000'), 'liters') },
         { 'test': r"1 kW + 23 J/s", 'expected': (Number('1.023'), 'kilowatts') },
         { 'test': r"1 J/h + 2 kW", 'expected': (Number('7200001'), 'joules/hour') },
-        { 'test': r"1l / 10cm", 'expected': (Number('100'), 'centimeters^2') },
         { 'test': r"1l / 10cm^2", 'expected': (Number('1'), 'meter') },
         { 'test': r"1 km J/h + 2 m kW", 'expected': (Number('7201'), 'kilometer joules/hour') },
         { 'test': r"1 km W + 2 m W", 'expected': (Number('1.002'), 'kilometer watts') },
@@ -149,7 +148,6 @@ class TestScientificCalculator(CalculatorTestCase):
         { 'test': r"100J / 2W", 'expected': (Number('50'), 'seconds') },
         { 'test': r"(100 W h) / (10 J/s)", 'expected': (Number('10'), 'hours') },
         { 'test': r"1000000 liters / 1 hectare", 'expected': (Number('10'), 'centimeters') },
-        { 'test': r"(1l) / (10cm °C)", 'expected': (Number('100'), 'centimeters^2/Celsius') },
         { 'test': r"1 hectare * 1 cm", 'expected': (Number('100000'), 'liters') },
         { 'test': r"10 W s / 2J", 'expected': Number('5') },
         { 'test': r"100 mi / 2 knots", 'expected': (Number(100584, 2315), 'hours') },
@@ -193,8 +191,6 @@ class TestScientificCalculator(CalculatorTestCase):
         { 'test': r"1 / (80 mi/UK gallon)", 'expected': (Number('0.0125'), 'UK gallons/mile') },
         { 'test': r"1 / (80 mi/UK gallon) * 100 miles", 'expected': (Number('1.25'), 'UK gallons') },
         { 'test': r"10km/l", 'expected': (Number('10'), 'kilometers/liter') },
-        { 'test': r"10km / 1l", 'expected': (Number('10'), 'millimeters^-2') },
-        { 'test': r"1 / (10cm / 1l)", 'expected': (Number('100'), 'centimeters^2') },
         { 'test': r"10kg^20", 'expected': (Number('10'), 'kilograms^20') },
 
         { 'test': r"6 / 2s", 'expected': (Number('3'), 'hertz') },
@@ -230,7 +226,20 @@ class TestScientificCalculator(CalculatorTestCase):
         { 'test': "tank = 17100\nthruster = 0.486/s\nformat((tank / (3 thruster)))", 'expected': '3 hours, 15 minutes, 28.395061728395061728395061728395 seconds' },
 
         { 'test': "x = 2 T m^2\nx", 'expected': (Number('2'), 'tesla meters^2') },
-        #{ 'test': r"1m/s + 2", 'expected': (Number('3'), 'meters') }, # This should throw error
+        { 'test': r"1m/s + 2", 'expected_exception': {
+                                                'exception': ExecutionException,
+                                                'message': r"Could not execute operator + with operands: 'Number(1) meters^1, seconds^-1', 'Number(2)' - From unit is not set" } },
+        { 'test': """R = 8.31446261815324 J / (Kelvin * moles)
+                     volume = 1m^3
+                     critical_temp = 33.2K
+                     critical_pressure = 1290000 Pa
+                     mass = 1kg
+                     molar_mass = 0.00100794*2 kg/mol
+                     n = (mass / molar_mass)
+                     a = (27/64) * (R^2 * critical_temp^2 / critical_pressure)
+                     a * n^2 / volume^2""",
+             'cast': str,
+             'expected': ('6.132100516412516904893858164421', 'kilopascals') },
 
         { 'test': r"format(1 hour + 23 minutes + 45 seconds)", 'expected': '1 hour, 23 minutes, 45 seconds' },
         { 'test': r"format(61s)", 'expected': '1 minute, 1 second' },
@@ -306,7 +315,10 @@ class TestScientificCalculator(CalculatorTestCase):
 
         { 'test': r"day_usage = 1", 'expected': Number('1') },
 
-        #{ 'test': "a = 1\nb = [a]\na += 1\nb", 'expected': [Number('2')] },
+        #{ 'test': r"1l / 10cm", 'expected': (Number('100'), 'centimeters^2') },
+        #{ 'test': r"(1l) / (10cm °C)", 'expected': (Number('100'), 'centimeters^2/Celsius') },
+        #{ 'test': r"10km / 1l", 'expected': (Number('10'), 'millimeters^-2') },
+        #{ 'test': r"1 / (10cm / 1l)", 'expected': (Number('100'), 'centimeters^2') },
 
     #    { 'test': r"", 'expected': Number('') },
     ]

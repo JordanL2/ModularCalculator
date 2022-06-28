@@ -52,6 +52,7 @@ class CalculatorTestCase(unittest.TestCase):
             elif 'expected_exception' in test:
                 expected = test['expected_exception']
                 try:
+                    response = self.c.calculate(expr)
                     with self.assertRaises(CalculatorException, msg=expr):
                         response = self.c.calculate(expr)
                 except CalculatorException as err:

@@ -16,11 +16,11 @@ class Engine:
         self.ops = []
         self.finalizers = []
         self.validators = {'exception': Engine.validate_exception}
-        
+
         self.multiply_op = None
         self.divide_op = None
         self.implicit_multiply_op = None
-        
+
         self.unit_normaliser = None
         self.unit_simplification = False
         self.unit_assignment_op = None
@@ -172,7 +172,7 @@ class Engine:
                     # Some operator precedence levels needs to evaluate items from right to left
                     if self.ops_list[list(prec)[0]].rtl:
                         item_order = reversed(item_order)
-                    
+
                     for i in item_order:
                         # Gather information about the current, previous, and next items
                         item = items[i]
@@ -222,7 +222,7 @@ class Engine:
                 raise ExecuteException("Not one item left: {0}".format([str(item) for item in items]), original_items[0:item_index], None)
             if not isinstance(items[0], OperandResult):
                 raise ExecuteException("Not a value: \"{0}\"".format(str(items[0])), original_items[0:items[0]._INDEX], None)
-            
+
             if isinstance(items[0].value, Exception):
                 items[0].value = self.restore_non_functional_items(items[0].value, original_items, very_original_items)
             return items[0]

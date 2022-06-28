@@ -191,7 +191,7 @@ class UnitNormaliser:
         if len(unit.list()) > 1 or (len(unit.list()) == 1 and unit.list()[0].power < 0):
             unit = unit.copy()
             dimensions_list = list(self.units.keys())
-            powerlist = [1, -1, 2, -2]
+            powerlist = [1, -1]
             replacedimensions_list = [self.normalised_dimension(d).multiply(p) for d in dimensions_list for p in powerlist]
 
             while True:
