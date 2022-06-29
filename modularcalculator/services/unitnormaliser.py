@@ -270,17 +270,23 @@ class UnitNormaliser:
             for dimension in dimensions:
                 units_i = dimensions[dimension]
                 if len(units_i) > 1:
-                    # Need to de-dupe. This code should only happen if the remaining units cancel out completely.
+                    # Need to de-dupe
                     power = Number(0)
                     for i in units_i:
                         power += unit.list()[i].power
                     if power != Number(0):
-                        raise Exception("simplify_units did not dedupe units")
-
-                    # Remove existing units
-                    units_to_remove = [unit.list()[i] for i in units_i]
-                    for unit_to_remove in units_to_remove:
-                        value = unit.removeandconvert(value, unit_to_remove.unit, unit_to_remove.power, False)
+                        # Multiple units for the same dimension, choose one and replace the others
+                        replace_all_with_unit = unit.list()[0].unit
+                        for i in units_i:
+                            if unit.list()[i].unit != replace_all_with_unit:
+                                power = unit.list()[i].power
+                                value = unit.removeandconvert(value, unit.list()[i].unit, power, False)
+                                value = unit.addandconvert(value, replace_all_with_unit, power, False)
+                    else:
+                        # Units cancel out
+                        units_to_remove = [unit.list()[i] for i in units_i]
+                        for unit_to_remove in units_to_remove:
+                            value = unit.removeandconvert(value, unit_to_remove.unit, unit_to_remove.power, False)
 
 
         return value, unit
