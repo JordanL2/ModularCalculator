@@ -119,7 +119,10 @@ class Number:
         return (div, mod)
 
     def __pow__(self, other, modulo=None):
-        res = Number(pow(self.num, other.to_decimal()), pow(self.den, other.to_decimal()), number_cast=self.number_cast)
+        if other.to_decimal() < 0:
+            res = Number(pow(self.den, -other.to_decimal()), pow(self.num, -other.to_decimal()), number_cast=self.number_cast)
+        else:
+            res = Number(pow(self.num, other.to_decimal()), pow(self.den, other.to_decimal()), number_cast=self.number_cast)
         if modulo is None:
             return res
         return res % modulo
