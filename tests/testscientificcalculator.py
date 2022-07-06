@@ -241,8 +241,8 @@ class TestScientificCalculator(CalculatorTestCase):
              'cast': str,
              'expected': ('6.132100516412516904893858164421', 'kilopascals') },
         { 'test': "(0.001m^3) ^ (7/5)", 'cast': str, 'expected': ('0.000063095734448019324943436014', 'meters^4.2') },
-        { 'test': "1g^0.5 * 1kg^0.5", 'expected': (Number('1'), 'gram') },
-        { 'test': "2g^1.5 * 4kg^1.5", 'expected': (Number('8000'), 'grams^3') },
+        { 'test': "1g^0.5 * 1kg^0.5", 'cast': str, 'expected': ('31.622776601683793319988935444327', 'grams') },
+        { 'test': "2g^1.5 * 4kg^1.5", 'cast': str, 'expected': ('252982.212813470346559911483554617483', 'grams^3') },
 
         { 'test': r"format(1 hour + 23 minutes + 45 seconds)", 'expected': '1 hour, 23 minutes, 45 seconds' },
         { 'test': r"format(61s)", 'expected': '1 minute, 1 second' },

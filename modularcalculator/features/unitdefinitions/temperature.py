@@ -42,15 +42,14 @@ class UnitDefinitionCelsius(UnitDefinition):
     symbollist = ['°C']
     systems = ['si']
 
-    def convertfrom(self, num, relative):
+    def convert(self, num, power, relative):
         if relative:
             return num
-        return num + Number('273.15')
-
-    def convertto(self, num, relative):
-        if relative:
-            return num
-        return num - Number('273.15')
+        if power.to_decimal() == -1:
+            return num + Number('273.15')
+        if power.to_decimal() == 1:
+            return num - Number('273.15')
+        raise Exception("Can't perform absolute conversion with a power other than 1")
 
 
 class UnitDefinitionFahrenheit(UnitDefinition):
@@ -59,12 +58,11 @@ class UnitDefinitionFahrenheit(UnitDefinition):
     symbollist = ['°F']
     systems = ['us', 'uk']
 
-    def convertfrom(self, num, relative):
+    def convert(self, num, power, relative):
         if relative:
-            return num * Number('5') / Number('9')
-        return (num + Number('459.67')) * Number('5') / Number('9')
-
-    def convertto(self, num, relative):
-        if relative:
-            return num * Number('9') / Number('5')
-        return (num * Number('9') / Number('5')) - Number('459.67')
+            return num / (Number(5, 9) ** power)
+        if power.to_decimal() == -1:
+            return (num + Number('459.67')) * Number(5, 9)
+        if power.to_decimal() == 1:
+            return (num * Number(9, 5)) - Number('459.67')
+        raise Exception("Can't perform absolute conversion with a power other than 1")

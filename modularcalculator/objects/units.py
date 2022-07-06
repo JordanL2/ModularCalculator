@@ -88,19 +88,13 @@ class UnitDefinition(AbstractUnitDefinition):
         return [UnitPower(self, Number(1))]
 
     def convert(self, num, power, relative):
-        if power > Number(0):
-            for n in range(0, int(power)):
-                num = self.convertto(num, relative)
-        else:
-            for n in range(0, abs(int(power))):
-                num = self.convertfrom(num, relative)
-        return num
+        return num / (self.unitscale ** power)
 
     def convertfrom(self, num, relative):
-        return num * self.unitscale
+        return self.convert(num, Number(-1), relative)
 
     def convertto(self, num, relative):
-        return num / self.unitscale
+        return self.convert(num, Number(1), relative)
 
 
 class AbstractPower:
