@@ -103,7 +103,7 @@ class BitwiseOperatorsFeature(Feature):
     def op_bitwise_not(self, vals, units, refs, flags):
         dec_num = self.number(vals[0])
 
-        if dec_num < Number(0) or dec_num % Number(1) != Number(0):
+        if dec_num.to_decimal() < 0 or (dec_num % Number(1)).to_decimal() != 0:
             raise CalculatorException('Operator requires positive integers')
 
         int_val = int(dec_num)

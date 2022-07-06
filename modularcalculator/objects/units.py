@@ -23,7 +23,7 @@ class AbstractUnitDefinition:
         return (name.lower() in [n.lower() for n in self.names()] or name in self.symbols())
 
     def get_name(self, num):
-        if num == Number(1):
+        if num.to_decimal() == 1:
             return self.singular()
         return self.plural()
 
@@ -199,7 +199,7 @@ class AbstractPowerList:
             self._add(self.keyclass(key, power))
         else:
             existing.power += power
-            if existing.power == Number(0):
+            if existing.power.to_decimal() == 0:
                 self._del(existing)
 
     def remove(self, key, power):
@@ -227,7 +227,7 @@ class AbstractPowerList:
         return newlist.remove_zeros()
 
     def remove_zeros(self):
-        return type(self)([o.copy() for o in self.list() if o.power != Number(0)])
+        return type(self)([o.copy() for o in self.list() if o.power.to_decimal() != 0])
 
     def check_empty(self):
         if len(self.list()) == 0:
@@ -269,7 +269,7 @@ class UnitPowerList(AbstractPowerList):
         return unitpowerlist
 
     def get_name(self, num, string_result=True):
-        if num == Number(1):
+        if num.to_decimal() == 1:
             return self.singular(False, string_result)
         return self.plural(False, string_result)
 
@@ -292,7 +292,7 @@ class UnitPowerList(AbstractPowerList):
         mults = []
         divs = []
         for unitpower in self.list():
-            if unitpower.power < Number(0):
+            if unitpower.power.to_decimal() < 0:
                 divs.append(unitpower)
             else:
                 mults.append(unitpower)
@@ -308,7 +308,7 @@ class UnitPowerList(AbstractPowerList):
             elif plural and last:
                 unitname = mult.unit.plural()
             multstrings.append((' ', 'space'))
-            if mult.power != Number(1):
+            if mult.power.to_decimal() != 1:
                 multstrings.append((unitname, 'unit'))
                 multstrings.append(('^', 'op'))
                 multstrings.append((str(mult.power.to_decimal()), 'literal'))

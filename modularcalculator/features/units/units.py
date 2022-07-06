@@ -115,7 +115,7 @@ class UnitsFeature(Feature):
             units[0] = vals[0]
             vals[0] = Number(1)
         num = vals[0]
-        if vals[1] is not None and not isinstance(vals[1], UnitPowerList) and vals[1] != Number(1):
+        if vals[1] is not None and not isinstance(vals[1], UnitPowerList) and vals[1].to_decimal() != 1:
             raise CalculatorException("Second operand must be just a unit")
         fromunit = units[0]
         tounit = vals[1]

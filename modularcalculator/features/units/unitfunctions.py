@@ -57,7 +57,7 @@ class GeneralUnitFunctionsFeature(Feature):
         if len(unit.list()) != 1:
             raise CalculatorException("Can only format single units")
         power = unit.list()[0].power
-        if power != Number(1):
+        if power.to_decimal() != 1:
             raise CalculatorException("Unit must have power of 1")
 
         singleunit = unit.list()[0].unit
@@ -79,7 +79,7 @@ class GeneralUnitFunctionsFeature(Feature):
             num = systemunit.convertto(num, False)
             unit = systemunit
             last = (systemunit == nonprefixedsystemunits[-1])
-            if num >= Number(1) or last:
+            if num.to_decimal() >= 1 or last:
                 if last:
                     num_of_unit, unit = GeneralUnitFunctionsFeature.find_first_unit_prefix_at_least_one(self, num, unit, systemunits)
                 else:
@@ -92,7 +92,7 @@ class GeneralUnitFunctionsFeature(Feature):
                         num = new_unit.convertto(num, False)
                         num -= num_of_unit
                         unit = new_unit
-                if num_of_unit != Number(0):
+                if num_of_unit.to_decimal() != 0:
                     parts.append("{0} {1}".format(num_of_unit.to_string(self), unit.get_name(num_of_unit)))
 
         res = OperationResult(str.join(', ', parts))
@@ -104,7 +104,7 @@ class GeneralUnitFunctionsFeature(Feature):
         old_num = unit.convertfrom(num, False)
         for prefixedunit in prefixedunitsofsametype:
             new_num = prefixedunit.convertto(old_num, False)
-            if new_num >= Number(1) or prefixedunit == systemunits[-1]:
+            if new_num.to_decimal() >= 1 or prefixedunit == systemunits[-1]:
                 return new_num, prefixedunit
 
     def func_compact(self, vals, units, refs, flags):

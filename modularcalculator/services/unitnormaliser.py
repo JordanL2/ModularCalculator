@@ -188,7 +188,7 @@ class UnitNormaliser:
         return value1, unit1.check_empty(), value2, unit2.check_empty()
 
     def simplify_units(self, value, unit):
-        if len(unit.list()) > 1 or (len(unit.list()) == 1 and unit.list()[0].power < Number(0)):
+        if len(unit.list()) > 1 or (len(unit.list()) == 1 and unit.list()[0].power.to_decimal() < 0):
             unit = unit.copy()
             dimensions_list = list(self.units.keys())
             powerlist = [Number(1), Number(-1)]
@@ -210,7 +210,7 @@ class UnitNormaliser:
                     found = False
                     for unitsfound in unitsfound_list:
                         multpower = min([unit.find(u.unit).power / u.power for u in unitsfound])
-                        if (len(unitsfound) > 1) or (len(unit.list()) == 1 and unit.list()[0].power < Number(0) and unit.list()[0].power == -(power * multpower)):
+                        if (len(unitsfound) > 1) or (len(unit.list()) == 1 and unit.list()[0].power.to_decimal() < 0 and unit.list()[0].power == -(power * multpower)):
                             closest_unit = None
                             closest_value = None
                             unitsfound_dimensioncount = len([d for u in unitsfound for d in self.normalised_dimension(u.unit.dimension)])
@@ -229,7 +229,7 @@ class UnitNormaliser:
                                 elif isinstance(replace_unit, UnitPowerList) and len([d for u in replace_unit.list() for d in self.normalised_dimension(u.unit.dimension)]) >= unitsfound_dimensioncount:
                                     continue
                                 else:
-                                    if value == Number(0):
+                                    if value.to_decimal() == 0:
                                         # Value is 0, so just get the simplest unit possible
                                         if closest_unit is None or abs(replace_unit.unitscale.log(10)) < abs(closest_unit.unitscale.log(10)):
                                             closest_unit = replace_unit
@@ -274,7 +274,7 @@ class UnitNormaliser:
                     power = Number(0)
                     for i in units_i:
                         power += unit.list()[i].power
-                    if power != Number(0):
+                    if power.to_decimal() != 0:
                         # Multiple units for the same dimension, choose one and replace the others
                         replace_all_with_unit = unit.list()[0].unit
                         for i in units_i:
@@ -321,7 +321,7 @@ class UnitNormaliser:
         unitlist_max = []
         unitlist_min = []
         for unit in unitlist:
-            if unit.power < Number(0):
+            if unit.power.to_decimal() < 0:
                 unitlist_min.append(unit.power)
                 unitlist_max.append(Number(0))
             else:
@@ -343,7 +343,7 @@ class UnitNormaliser:
                 if goal == thisgoal:
                     returnlist = []
                     for i in range(0, len(unitlist_counter)):
-                        if unitlist_counter[i] != Number(0):
+                        if unitlist_counter[i].to_decimal() != 0:
                             returnlist.append(UnitPower(unitlist[i].unit, unitlist_counter[i]))
                     found[j].append(returnlist)
 

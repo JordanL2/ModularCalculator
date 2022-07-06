@@ -82,7 +82,7 @@ class ExpNumbersFeature(Feature):
     def dec_to_exp(self, num, places=None):
         symbol = self.feature_options['numerical.expnumbers']['Symbol']
 
-        if num == Number(0):
+        if num.to_decimal() == 0:
             return "0{}0".format(symbol)
         if places is None:
             places = '.' + str(self.number_prec)

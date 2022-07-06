@@ -96,7 +96,7 @@ class BasesFeature(Feature):
         return dec
 
     def dec_to_base(self, val, base):
-        if val == Number(0):
+        if val.to_decimal() == 0:
             return '0'
         if not isinstance(base, int):
             raise Exception("Base must be type int, was given {}".format(type(base)))
@@ -105,7 +105,7 @@ class BasesFeature(Feature):
         if base < 2 or base > 36:
             raise CalculatorException("Base must be between 2 and 36")
 
-        negative = val < Number(0)
+        negative = val.to_decimal() < 0
         val = abs(val)
 
         power = 0
@@ -114,7 +114,7 @@ class BasesFeature(Feature):
 
         string = ''
         places = 0
-        while power >= 0 or (val > Number(0) and places < self.number_prec):
+        while power >= 0 or (val.to_decimal() > 0 and places < self.number_prec):
             if power == -1:
                 string += '.'
             base_power = Number(base) ** Number(power)
