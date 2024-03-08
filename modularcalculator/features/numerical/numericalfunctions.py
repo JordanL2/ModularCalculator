@@ -101,9 +101,29 @@ class NumericalFunctionsFeature(Feature):
             2,
             'number')
 
+        calculator.funcs['lcm'] = FunctionDefinition(
+            'Numerical',
+            'lcm',
+            'Lowest common multiple',
+            ['number', 'number'],
+            NumericalFunctionsFeature.func_lcm,
+            2,
+            2,
+            'number')
+
+        calculator.funcs['gcd'] = FunctionDefinition(
+            'Numerical',
+            'gcd',
+            'Greatest common divisor, or highest common factor',
+            ['number', 'number'],
+            NumericalFunctionsFeature.func_gcd,
+            2,
+            2,
+            'number')
+
 
     def func_abs(self, vals, units, refs, flags):
-        res =  OperationResult(abs(vals[0]))
+        res = OperationResult(abs(vals[0]))
         res.set_unit(units[0])
         return res
 
@@ -156,12 +176,12 @@ class NumericalFunctionsFeature(Feature):
         return res
 
     def func_fact(self, vals, units, refs, flags):
-        res =  OperationResult(Number(math.factorial(int(vals[0]))))
+        res = OperationResult(Number(math.factorial(int(vals[0]))))
         res.set_unit(units[0])
         return res
 
     def func_exp(self, vals, units, refs, flags):
-        res =  OperationResult(math.exp(vals[0]))
+        res = OperationResult(math.exp(vals[0]))
         res.set_unit(units[0])
         return res
 
@@ -171,5 +191,15 @@ class NumericalFunctionsFeature(Feature):
             res = OperationResult(num.log())
         else:
             res = OperationResult(num.log(int(vals[1])))
+        res.set_unit(units[0])
+        return res
+
+    def func_lcm(self, vals, units, refs, flags):
+        res = OperationResult(Number(math.lcm(int(vals[0]), int(vals[1]))))
+        res.set_unit(units[0])
+        return res
+
+    def func_gcd(self, vals, units, refs, flags):
+        res = OperationResult(Number(math.gcd(int(vals[0]), int(vals[1]))))
         res.set_unit(units[0])
         return res

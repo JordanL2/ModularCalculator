@@ -52,6 +52,8 @@ class TestScientificCalculator(CalculatorTestCase):
         { 'test': r"round(1.5)", 'expected': Number('2') },
         { 'test': r"round(1.11, 1)", 'expected': Number('1.1') },
         { 'test': r"round(1.16, 1)", 'expected': Number('1.2') },
+        { 'test': r"lcm(4, 5)", 'expected': Number('20') },
+        { 'test': r"gcd(54, 60)", 'expected': Number('6') },
 
         { 'test': r"dec(1.234e1)", 'expected': Number('12.34') },
         { 'test': r"dec(1.234e10)", 'expected': Number('12340000000') },
