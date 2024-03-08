@@ -320,6 +320,8 @@ class TestScientificCalculator(CalculatorTestCase):
 
         { 'test': r"day_usage = 1", 'expected': Number('1') },
 
+        { 'test': r"tau / 2 pi", 'expected': Number('1') },
+
         #{ 'test': r"1l / 10cm", 'expected': (Number('100'), 'centimeters^2') },
         #{ 'test': r"(1l) / (10cm °C)", 'expected': (Number('100'), 'centimeters^2/Celsius') },
         #{ 'test': r"10km / 1l", 'expected': (Number('10'), 'millimeters^-2') },

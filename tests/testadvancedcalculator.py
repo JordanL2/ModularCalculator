@@ -24,7 +24,7 @@ class TestAdvancedCalculator(CalculatorTestCase):
         { 'test': '4 * (2 + (3)) - 3', 'expected': Number('17') },
         { 'test': r"10 / 3", 'expected': Number(10, 3) },
         { 'test': r"(10 / 3) * 3", 'expected': Number('10') },
-        { 'test': r"10 / 3 (3)", 'expected': Number('10') },
+        { 'test': r"10 / 3 (3)", 'expected': Number('10', '9') },
         { 'test': "\n((1 + 3)\n/ 2)\n", 'expected': Number('2') },
 
         { 'test': r"x = 1 + 1", 'expected': Number('2') },
