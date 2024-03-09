@@ -33,7 +33,7 @@ class FunctionsFeature(Feature):
 
         calculator.funcs = {}
 
-    func_regex = re.compile(r'([a-zA-Z_]+)\(')
+    func_regex = re.compile(r'([a-zA-Z_][a-zA-Z0-9_]*)\(')
 
     def parse_function(self, expr, i, items, flags):
         next = expr[i:]
@@ -94,7 +94,7 @@ class FunctionItem(RecursiveOperandItem):
         super().__init__(text, items, calculator)
         self.name = name
         self.args = args
-    
+
     def desc(self):
         return 'function'
 
