@@ -5,17 +5,17 @@ presets = {}
 
 presets['Basic'] = [
     'numerical.basicarithmetic',
-    'numerical.decimalnumbers', 
-    'structure.operators', 
+    'numerical.decimalnumbers',
+    'structure.operators',
 ]
 
 presets['Advanced'] = presets['Basic'] + [
     'nonfunctional.space',
-    'numerical.advancedarithmetic', 
-    'state.assignment', 
-    'state.assignmentoperators', 
-    'structure.innerexpressions', 
-    'structure.terminator', 
+    'numerical.advancedarithmetic',
+    'state.assignment',
+    'state.assignmentoperators',
+    'structure.innerexpressions',
+    'structure.terminator',
 ]
 
 presets['Scientific'] = presets['Advanced'] + [
@@ -25,6 +25,7 @@ presets['Scientific'] = presets['Advanced'] + [
     'numerical.expnumbers',
     'numerical.numericalconstants',
     'numerical.numericalfunctions',
+    'numerical.specialfunctions',
     'numerical.statisticalfunctions',
     'numerical.trigonometryfunctions',
     'state.assignmentfunctions',
