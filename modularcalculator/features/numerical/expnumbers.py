@@ -123,7 +123,10 @@ class ExpNumbersFeature(Feature):
         return ExpNumbersFeature.dec_to_exp(self, val)
 
     def compile_regex(self):
-        return re.compile(r'(\-?\d+(\.\d+)?' + self.feature_options['numerical.expnumbers']['Symbol'] + '\-?\d+)', re.IGNORECASE)
+        if not hasattr(self, 'ExpNumbersFeature_numexp_regex') or not hasattr(self, 'ExpNumbersFeature_numexp_regex_symbol') or self.ExpNumbersFeature_numexp_regex_symbol != self.feature_options['numerical.expnumbers']['Symbol']:
+            self.ExpNumbersFeature_numexp_regex = re.compile(r'(\-?\d+(\.\d+)?' + self.feature_options['numerical.expnumbers']['Symbol'] + '\-?\d+)', re.IGNORECASE)
+            self.ExpNumbersFeature_numexp_regex_symbol = self.feature_options['numerical.expnumbers']['Symbol']
+        return self.ExpNumbersFeature_numexp_regex
 
     def force_exp(self, val):
         if isinstance(val, Number):
