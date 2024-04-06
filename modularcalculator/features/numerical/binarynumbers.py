@@ -4,7 +4,6 @@ from modularcalculator.objects.exceptions import *
 from modularcalculator.features.numerical.bases import BasesFeature
 from modularcalculator.features.structure.functions import *
 from modularcalculator.features.feature import Feature
-from modularcalculator.numericalengine import NumberType
 
 import re
 
@@ -26,6 +25,9 @@ class BinaryNumbersFeature(Feature):
     def dependencies():
         return ['numerical.bases']
 
+    def after():
+        return ['numerical.numericalrepresentation']
+
     @classmethod
     def install(cls, calculator):
         calculator.add_parser('number_bin', BinaryNumbersFeature.parse_bin)
@@ -39,7 +41,7 @@ class BinaryNumbersFeature(Feature):
             1,
             'number')
         calculator.funcs['bin'].auto_convert_numerical_result = False
-        calculator.add_number_caster('binary', 'Binary', BinaryNumbersFeature.number_bin, BinaryNumbersFeature.restore_bin)
+        calculator.add_number_type(BinaryNumericalRepresentation)
 
     bin_prefix = '0b'
     bin_regex = re.compile(r'(\-?' + bin_prefix + r'[01]+(\.[01]+)?)', re.IGNORECASE)
@@ -82,3 +84,22 @@ class BinaryNumbersFeature(Feature):
             val.number_cast = {'ref': BinaryNumbersFeature.restore_bin, 'args': [], 'base': 2}
             return val
         return None
+
+
+class BinaryNumericalRepresentation:
+
+    @staticmethod
+    def name():
+        return 'binary'
+
+    @staticmethod
+    def desc():
+        return 'Binary'
+
+    @staticmethod
+    def convert_to(calculator, val):
+        return BinaryNumbersFeature.force_bin(calculator, val)
+
+    @staticmethod
+    def convert_from(calculator, val):
+        return BinaryNumbersFeature.number_bin(calculator, val)

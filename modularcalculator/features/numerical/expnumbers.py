@@ -5,7 +5,6 @@ from modularcalculator.objects.exceptions import *
 from modularcalculator.objects.number import *
 from modularcalculator.features.feature import Feature
 from modularcalculator.features.structure.functions import *
-from modularcalculator.numericalengine import NumberType
 
 import re
 
@@ -26,6 +25,9 @@ class ExpNumbersFeature(Feature):
 
     def dependencies():
         return ['numerical.decimalnumbers','structure.functions']
+
+    def after():
+        return ['numerical.numericalrepresentation']
 
     def default_options():
         return {
@@ -48,7 +50,7 @@ class ExpNumbersFeature(Feature):
         calculator.funcs['scientific'].units_normalise = False
         calculator.funcs['scientific'].auto_convert_numerical_result = False
 
-        calculator.add_number_caster('exp', 'Scientific E Notation', ExpNumbersFeature.number_exp, ExpNumbersFeature.restore_exp)
+        calculator.add_number_type(ExpNumericalRepresentation)
 
         calculator.feature_options['numerical.expnumbers'] = cls.default_options()
 
@@ -129,3 +131,22 @@ class ExpNumbersFeature(Feature):
             val.number_cast = {'ref': ExpNumbersFeature.restore_exp, 'args': []}
             return val
         return None
+
+
+class ExpNumericalRepresentation:
+
+    @staticmethod
+    def name():
+        return 'scientific'
+
+    @staticmethod
+    def desc():
+        return 'Scientific E Notation'
+
+    @staticmethod
+    def convert_to(calculator, val):
+        return ExpNumbersFeature.force_exp(calculator, val)
+
+    @staticmethod
+    def convert_from(calculator, val):
+        return ExpNumbersFeature.number_exp(calculator, val)

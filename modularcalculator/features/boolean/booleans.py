@@ -5,7 +5,6 @@ from modularcalculator.objects.items import *
 from modularcalculator.objects.number import *
 from modularcalculator.objects.operators import OperationResult, OperatorDefinition
 from modularcalculator.features.feature import Feature
-from modularcalculator.numericalengine import NumberType
 
 import re
 
@@ -135,7 +134,7 @@ class BooleansFeature(Feature):
             ['boolean', None, None]),
         {'units_normalise': False, 'inputs_can_be_exceptions': True})
 
-        calculator.add_number_caster('boolean', 'Boolean', BooleansFeature.number_bool, None)
+        calculator.add_number_type(BooleanNumericalRepresentation)
 
         calculator.validators['boolean'] = BooleansFeature.validate_boolean
 
@@ -209,3 +208,18 @@ class BooleansFeature(Feature):
             return True
         except Exception:
             return False
+
+
+class BooleanNumericalRepresentation:
+
+    @staticmethod
+    def name():
+        return 'boolean'
+
+    @staticmethod
+    def desc():
+        return 'Boolean'
+
+    @staticmethod
+    def convert_from(calculator, val):
+        return BooleansFeature.number_bool(calculator, val)

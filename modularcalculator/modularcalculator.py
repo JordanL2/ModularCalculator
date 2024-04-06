@@ -168,9 +168,10 @@ class ModularCalculator(NumericalEngine):
                     return
         self.ops.append({sym: op})
 
-    def add_number_caster(self, name, title, ref, reverter):
+    def add_number_type(self, number_type):
         if self.number_caster_map is None:
             raise CalculatorException('Can\'t add number caster before setting number_caster_map')
-        self.number_casters.append({'name': name, 'title': title, 'ref': ref, 'reverter': reverter})
-        caster_names = dict([(c['name'], c) for c in self.number_casters])
+        self.number_casters.append(number_type)
+        self.number_casters_dict[number_type.name()] = number_type
+        caster_names = dict([(c.name(), c) for c in self.number_casters])
         self.number_casters = [caster_names[c] for c in self.number_caster_map if c in caster_names]

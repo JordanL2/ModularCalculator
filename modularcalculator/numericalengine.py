@@ -17,6 +17,7 @@ class NumericalEngine(Engine):
         self.number_set_rounding('ROUND_HALF_UP')
 
         self.number_casters = []
+        self.number_casters_dict = {}
         self.validators['number'] = NumericalEngine.validate_number
 
     def number_size_set(self, size):
@@ -43,7 +44,7 @@ class NumericalEngine(Engine):
         if isinstance(val, Number):
             return val
         for caster in self.number_casters:
-            num = caster['ref'](self, val)
+            num = caster.convert_from(self, val)
             if num is not None:
                 return num
         raise CalculatorException("Can't cast to number: {0}".format(str(val)))
@@ -54,13 +55,3 @@ class NumericalEngine(Engine):
             return True
         except Exception:
             return False
-
-
-class NumberType():
-
-    def __init__(self, func, opts=None):
-        self.func = func
-        self.opts = opts
-
-    def restore(self, calculator, num):
-        return self.func(calculator, num, self.opts)

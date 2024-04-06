@@ -4,7 +4,6 @@ from modularcalculator.objects.exceptions import *
 from modularcalculator.features.numerical.bases import BasesFeature
 from modularcalculator.features.structure.functions import *
 from modularcalculator.features.feature import Feature
-from modularcalculator.numericalengine import NumberType
 
 import re
 
@@ -26,6 +25,9 @@ class OctalNumbersFeature(Feature):
     def dependencies():
         return ['numerical.bases']
 
+    def after():
+        return ['numerical.numericalrepresentation']
+
     @classmethod
     def install(cls, calculator):
         calculator.add_parser('number_oct', OctalNumbersFeature.parse_oct)
@@ -39,7 +41,7 @@ class OctalNumbersFeature(Feature):
             1,
             'number')
         calculator.funcs['oct'].auto_convert_numerical_result = False
-        calculator.add_number_caster('octal', 'Octal', OctalNumbersFeature.number_oct, OctalNumbersFeature.restore_oct)
+        calculator.add_number_type(OctalNumericalRepresentation)
 
     oct_prefix = '0o'
     oct_regex = re.compile(r'(\-?' + oct_prefix + r'[0-7]+(\.[0-7]+)?)', re.IGNORECASE)
@@ -77,3 +79,22 @@ class OctalNumbersFeature(Feature):
             val.number_cast = {'ref': OctalNumbersFeature.restore_oct, 'args': [], 'base': 8}
             return val
         return None
+
+
+class OctalNumericalRepresentation:
+
+    @staticmethod
+    def name():
+        return 'octal'
+
+    @staticmethod
+    def desc():
+        return 'Octal'
+
+    @staticmethod
+    def convert_to(calculator, val):
+        return OctalNumbersFeature.force_oct(calculator, val)
+
+    @staticmethod
+    def convert_from(calculator, val):
+        return OctalNumbersFeature.number_oct(calculator, val)

@@ -86,6 +86,10 @@ class TestScientificCalculator(CalculatorTestCase):
         { 'test': r"scientific(123.456789 miles)", 'cast': str,  'expected': ('1.23456789E2', 'miles') },
         { 'test': r"scientific(123.4) * 2", 'cast': str,  'expected': '2.468E2' },
 
+        { 'test': r"100%", 'expected': Number('1') },
+        { 'test': r"200% * 4", 'expected': Number('8') },
+        { 'test': r"200% * 4", 'cast': str, 'expected': '800%' },
+
         { 'test': r"3 meters to feet", 'expected': (Number(1250, 127), 'feet') },
         { 'test': r"3.5 meters to feet", 'expected': (Number(4375, 381), 'feet') },
         { 'test': r"0.035 meters to feet", 'expected': (Number(175, 1524), 'feet') },

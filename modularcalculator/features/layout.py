@@ -11,6 +11,7 @@ parser_map = [
     'number_hex',
     'number_arbbase',
     'numberexp',
+    'percentagenumber',
     'number',
     'operator',
     'string',
@@ -23,6 +24,7 @@ parser_map = [
     'constant',
     'units',
     'unitsystems',
+    'numericalrepresentation',
     'array',
     'array_range',
     'array_step',
@@ -47,7 +49,7 @@ op_map = [
     { '|', '^^' },
     { 'and', 'or', 'xor' },
     { 'then' },
-    { 'to' },
+    { 'to', 'as' },
     { '=', '++', '--', '+=', '-=', '*=', '/=', '^=', '%=', '\\=', '||=' },
 ]
 
@@ -57,7 +59,8 @@ number_caster_map = [
     'binary',
     'hexadecimal',
     'octal',
-    'exp',
+    'scientific',
     'boolean',
+    'percentage',
     'string',
 ]

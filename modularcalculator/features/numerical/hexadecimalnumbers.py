@@ -4,7 +4,6 @@ from modularcalculator.objects.exceptions import *
 from modularcalculator.features.numerical.bases import BasesFeature
 from modularcalculator.features.structure.functions import *
 from modularcalculator.features.feature import Feature
-from modularcalculator.numericalengine import NumberType
 
 import re
 
@@ -26,6 +25,9 @@ class HexadecimalNumbersFeature(Feature):
     def dependencies():
         return ['numerical.bases']
 
+    def after():
+        return ['numerical.numericalrepresentation']
+
     @classmethod
     def install(cls, calculator):
         calculator.add_parser('number_hex', HexadecimalNumbersFeature.parse_hex)
@@ -39,7 +41,7 @@ class HexadecimalNumbersFeature(Feature):
             1,
             'number')
         calculator.funcs['hex'].auto_convert_numerical_result = False
-        calculator.add_number_caster('hexadecimal', 'Hexadecimal', HexadecimalNumbersFeature.number_hex, HexadecimalNumbersFeature.restore_hex)
+        calculator.add_number_type(HexadecimalNumericalRepresentation)
 
     hex_prefix = '0x'
     hex_regex = re.compile(r'(\-?' + hex_prefix + r'[0-9A-F]+(\.[0-9A-F]+)?)', re.IGNORECASE)
@@ -77,3 +79,22 @@ class HexadecimalNumbersFeature(Feature):
             val.number_cast = {'ref': HexadecimalNumbersFeature.restore_hex, 'args': [], 'base': 16}
             return val
         return None
+
+
+class HexadecimalNumericalRepresentation:
+
+    @staticmethod
+    def name():
+        return 'hexadecimal'
+
+    @staticmethod
+    def desc():
+        return 'Hexadecimal'
+
+    @staticmethod
+    def convert_to(calculator, val):
+        return HexadecimalNumbersFeature.force_hex(calculator, val)
+
+    @staticmethod
+    def convert_from(calculator, val):
+        return HexadecimalNumbersFeature.number_hex(calculator, val)

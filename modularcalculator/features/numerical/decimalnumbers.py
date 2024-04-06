@@ -24,10 +24,13 @@ class DecimalNumbersFeature(Feature):
     def dependencies():
         return []
 
+    def after():
+        return ['numerical.numericalrepresentation']
+
     @classmethod
     def install(cls, calculator):
         calculator.add_parser('number', DecimalNumbersFeature.parse_number)
-        calculator.add_number_caster('decimal', 'Decimal', DecimalNumbersFeature.number_decimal, DecimalNumbersFeature.restore_decimal)
+        calculator.add_number_type(DecimalNumericalRepresentation)
 
     num_pattern = r'(\-?\d+(\.\d+)?)'
     num_regex = re.compile(num_pattern)
@@ -61,3 +64,22 @@ class DecimalNumbersFeature(Feature):
             val.number_cast = {'ref': DecimalNumbersFeature.restore_decimal, 'args': []}
             return val
         return None
+
+
+class DecimalNumericalRepresentation:
+
+    @staticmethod
+    def name():
+        return 'decimal'
+
+    @staticmethod
+    def desc():
+        return 'Decimal'
+
+    @staticmethod
+    def convert_to(calculator, val):
+        return DecimalNumbersFeature.force_decimal(calculator, val)
+
+    @staticmethod
+    def convert_from(calculator, val):
+        return DecimalNumbersFeature.number_decimal(calculator, val)
