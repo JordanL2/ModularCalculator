@@ -53,7 +53,7 @@ op_map = [
     { '=', '++', '--', '+=', '-=', '*=', '/=', '^=', '%=', '\\=', '||=' },
 ]
 
-number_caster_map = [
+number_type_map = [
     'decimal',
     'arbitrarybase',
     'binary',

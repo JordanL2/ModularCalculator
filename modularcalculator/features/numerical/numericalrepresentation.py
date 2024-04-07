@@ -40,7 +40,7 @@ class NumericalRepresentationFeature(Feature):
     def parse_numericalrepresentation(self, expr, i, items, flags):
         next = expr[i:]
 
-        for numrep in self.number_casters:
+        for numrep in self.number_types:
             numrep_name = numrep.name()
             if next.startswith(numrep_name) and (len(next) == len(numrep_name) or not next[len(numrep_name)].isalpha()):
                 return [NumericalRepresentationItem(numrep_name)], len(numrep_name), None
@@ -48,14 +48,14 @@ class NumericalRepresentationFeature(Feature):
         return None, None, None
 
     def validate_numericalrepresentation(self, value, unit, ref):
-        return value in self.number_casters_dict.keys()
+        return value in self.number_types_dict.keys()
 
     def op_as(self, vals, units, refs, flags):
         numrep = vals[1]
-        if numrep not in self.number_casters_dict.keys():
+        if numrep not in self.number_types_dict.keys():
             raise CalculatorException("Could not find numerical representation '{}'".format(numrep))
-        caster = self.number_casters_dict[numrep]
-        val = caster.convert_to(self, vals[0])
+        number_type = self.number_types_dict[numrep]
+        val = number_type.convert_to(self, vals[0])
         return OperationResult(val)
 
 
