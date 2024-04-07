@@ -30,22 +30,22 @@ class AssignmentFeature(Feature):
         calculator.add_parser('var', AssignmentFeature.parse_var)
 
         calculator.add_op(OperatorDefinition(
-            'Assignment', 
-            '=', 
+            'Assignment',
+            '=',
             'Assign a value to a variable',
-            AssignmentFeature.op_var_set, 
-            1, 
-            1, 
-            ['variable', [None, 'array']]), 
+            AssignmentFeature.op_var_set,
+            1,
+            1,
+            ['variable', [None, 'array']]),
         {'units_normalise': False})
         calculator.add_op(OperatorDefinition(
-            'Assignment', 
-            '||=', 
+            'Assignment',
+            '||=',
             'Assign a value to a variable only if the variable doesn\'t exist yet',
-            AssignmentFeature.op_var_set_if_empty, 
-            1, 
-            1, 
-            ['variable', [None, 'array']]), 
+            AssignmentFeature.op_var_set_if_empty,
+            1,
+            1,
+            ['variable', [None, 'array']]),
         {'units_normalise': False})
 
         calculator.vars = {}
@@ -98,6 +98,9 @@ class VariableItem(OperandItem):
         self.calculator = calculator
 
     def desc(self):
+        return 'variable'
+
+    def category(self):
         return 'variable'
 
     def value(self, flags):

@@ -59,9 +59,12 @@ class InnerExpressionItem(RecursiveOperandItem):
 
     def __init__(self, text, items, calculator):
         super().__init__(text, items, calculator)
-    
+
     def desc(self):
         return 'inner_expr'
+
+    def category(self):
+        return 'structural'
 
     def value(self, flags):
         try:
@@ -91,6 +94,9 @@ class InnerExpressionStartItem(NonFunctionalItem):
     def desc(self):
         return 'inner_expr_start'
 
+    def category(self):
+        return 'structural'
+
     def copy(self, classtype=None):
         copy = super().copy(classtype or self.__class__)
         return copy
@@ -103,6 +109,9 @@ class InnerExpressionEndItem(NonFunctionalItem):
 
     def desc(self):
         return 'inner_expr_end'
+
+    def category(self):
+        return 'structural'
 
     def copy(self, classtype=None):
         copy = super().copy(classtype or self.__class__)

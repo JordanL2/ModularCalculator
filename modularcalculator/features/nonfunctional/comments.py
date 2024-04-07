@@ -29,7 +29,7 @@ class CommentsFeature(Feature):
     @classmethod
     def install(cls, calculator):
         calculator.add_parser('comment', CommentsFeature.parse_comment)
-        
+
         calculator.feature_options['nonfunctional.comments'] = cls.default_options()
 
     def parse_comment(self, expr, i, items, flags):
@@ -45,6 +45,9 @@ class CommentsFeature(Feature):
 class CommentItem(NonFunctionalItem):
 
     def desc(self):
+        return 'comment'
+
+    def category(self):
         return 'comment'
 
     def copy(self, classtype=None):

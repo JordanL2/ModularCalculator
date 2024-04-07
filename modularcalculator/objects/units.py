@@ -309,11 +309,11 @@ class UnitPowerList(AbstractPowerList):
                 unitname = mult.unit.plural()
             multstrings.append((' ', 'space'))
             if mult.power.to_decimal() != 1:
-                multstrings.append((unitname, 'unit'))
+                multstrings.append((unitname, 'special'))
                 multstrings.append(('^', 'op'))
                 multstrings.append((str(mult.power.to_decimal()), 'literal'))
             else:
-                multstrings.append((unitname, 'unit'))
+                multstrings.append((unitname, 'special'))
         if len(multstrings) > 0:
             multstrings.pop(0)
 
@@ -326,14 +326,14 @@ class UnitPowerList(AbstractPowerList):
                 unitname = div.unit.plural()
             divstrings.append((' ', 'space'))
             if div.power != Number(-1) or negative_powers:
-                divstrings.append((unitname, 'unit'))
+                divstrings.append((unitname, 'special'))
                 divstrings.append(('^', 'op'))
                 if negative_powers:
                     divstrings.append((str(div.power.to_decimal()), 'literal'))
                 else:
                     divstrings.append((str(-div.power.to_decimal()), 'literal'))
             else:
-                divstrings.append((unitname, 'unit'))
+                divstrings.append((unitname, 'special'))
         if len(divstrings) > 0:
             divstrings.pop(0)
         if len(mults) > 0 and len(divs) > 1 and not negative_powers:

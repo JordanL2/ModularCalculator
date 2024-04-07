@@ -173,6 +173,9 @@ class ArrayItem(RecursiveOperandItem):
     def desc(self):
         return 'array'
 
+    def category(self):
+        return 'structural'
+
     def value(self, flags):
         array = []
         state = {'items': 0}
@@ -268,6 +271,9 @@ class ArrayStartItem(NonFunctionalItem):
     def desc(self):
         return 'array_start'
 
+    def category(self):
+        return 'structural'
+
     def copy(self, classtype=None):
         copy = super().copy(classtype or self.__class__)
         return copy
@@ -280,6 +286,9 @@ class ArrayRangeItem(NonFunctionalItem):
 
     def desc(self):
         return 'array_range'
+
+    def category(self):
+        return 'structural'
 
     def copy(self, classtype=None):
         copy = super().copy(classtype or self.__class__)
@@ -294,6 +303,9 @@ class ArrayStepItem(NonFunctionalItem):
     def desc(self):
         return 'array_step'
 
+    def category(self):
+        return 'structural'
+
     def copy(self, classtype=None):
         copy = super().copy(classtype or self.__class__)
         return copy
@@ -307,6 +319,9 @@ class ArrayParamItem(NonFunctionalItem):
     def desc(self):
         return 'array_param'
 
+    def category(self):
+        return 'structural'
+
     def copy(self, classtype=None):
         copy = super().copy(classtype or self.__class__)
         return copy
@@ -319,6 +334,9 @@ class ArrayEndItem(NonFunctionalItem):
 
     def desc(self):
         return 'array_end'
+
+    def category(self):
+        return 'structural'
 
     def copy(self, classtype=None):
         copy = super().copy(classtype or self.__class__)

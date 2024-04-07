@@ -55,6 +55,9 @@ class ConstantItem(OperandItem):
     def desc(self):
         return 'constant'
 
+    def category(self):
+        return 'constant'
+
     def value(self, flags):
         if self.unit is not None:
             return OperandResult(self.val, self.unit.copy(), self)

@@ -39,11 +39,11 @@ class UnitSystemsFeature(Feature):
 
     def parse_unitsystems(self, expr, i, items, flags):
         next = expr[i:]
-        
+
         for system in self.unit_normaliser.systems.keys():
             if next.startswith(system) and (len(next) == len(system) or not next[len(system)].isalpha()):
                 return [UnitSystemItem(system)], len(system), None
-            
+
         return None, None, None
 
     def validate_unit_system(self, value, unit, ref):
@@ -57,6 +57,9 @@ class UnitSystemItem(OperandItem):
 
     def desc(self):
         return 'unitsystem'
+
+    def category(self):
+        return 'special'
 
     def value(self, flags):
         return self.text

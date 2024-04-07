@@ -74,6 +74,9 @@ class TerminatorItem(NonFunctionalItem):
     def desc(self):
         return 'terminator'
 
+    def category(self):
+        return 'structural'
+
     def copy(self, classtype=None):
         copy = super().copy(classtype or self.__class__)
         return copy

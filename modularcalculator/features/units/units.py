@@ -154,6 +154,9 @@ class UnitItem(OperandItem):
     def desc(self):
         return 'unit'
 
+    def category(self):
+        return 'special'
+
     def value(self, flags):
         return self.unit
 

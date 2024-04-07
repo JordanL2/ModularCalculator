@@ -84,6 +84,9 @@ class ExternalFunctionItem(RecursiveOperandItem):
     def desc(self):
         return 'ext_function'
 
+    def category(self):
+        return 'function'
+
     def value(self, flags):
         if self.name not in self.calculator.vars:
             raise ExecuteException("Variable {} not found".format(self.name), [self], '', True)
@@ -222,6 +225,9 @@ class ExternalFunctionNameItem(NonFunctionalItem):
 
     def desc(self):
         return 'ext_function_name'
+
+    def category(self):
+        return 'function'
 
     def copy(self, classtype=None):
         copy = super().copy(classtype or self.__class__)

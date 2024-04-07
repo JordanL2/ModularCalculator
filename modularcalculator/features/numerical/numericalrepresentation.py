@@ -66,6 +66,9 @@ class NumericalRepresentationItem(OperandItem):
     def desc(self):
         return 'numericalrepresentation'
 
+    def category(self):
+        return 'special'
+
     def value(self, flags):
         return self.text
 

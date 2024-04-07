@@ -39,6 +39,10 @@ class Item:
     def desc(self):
         raise CalculatorException("Must override this method")
 
+    def category(self):
+        print(repr(self))
+        raise CalculatorException("Must override this method")
+
     def functional(self):
         return True
 
@@ -60,6 +64,9 @@ class OperatorItem(Item):
 
     def desc(self):
         return 'op'
+
+    def category(self):
+        return 'structural'
 
     def copy(self, classtype=None):
         copy = super().copy(classtype or self.__class__)
@@ -97,6 +104,9 @@ class LiteralItem(OperandItem):
         self.number_type = number_type
 
     def desc(self):
+        return 'literal'
+
+    def category(self):
         return 'literal'
 
     def value(self, flags):

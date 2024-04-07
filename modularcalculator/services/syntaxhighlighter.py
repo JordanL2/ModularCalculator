@@ -7,7 +7,7 @@ import re
 
 
 class SyntaxHighlighter:
-    
+
     defaulttype = 'default'
 
     def highlight_statements(self, statements):
@@ -35,7 +35,7 @@ class SyntaxHighlighter:
                     print("End of items.\n")
                 highlight.append((self.defaulttype, text[i:ii]))
                 i = ii
-            itemtype = item.desc()
+            itemtype = item.category()
             if isinstance(item, RecursiveOperandItem):
                 inner_highlight = self.highlight(itemtext, item.items)
                 highlight.extend(inner_highlight)

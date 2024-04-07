@@ -43,6 +43,9 @@ class SpaceItem(NonFunctionalItem):
     def desc(self):
         return 'space'
 
+    def category(self):
+        return 'whitespace'
+
     def copy(self, classtype=None):
         copy = super().copy(classtype or self.__class__)
         return copy

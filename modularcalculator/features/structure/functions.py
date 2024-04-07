@@ -98,6 +98,9 @@ class FunctionItem(RecursiveOperandItem):
     def desc(self):
         return 'function'
 
+    def category(self):
+        return 'function'
+
     def value(self, flags):
         func = self.calculator.funcs[self.name]
         inputs = []
@@ -144,6 +147,9 @@ class FunctionNameItem(NonFunctionalItem):
     def desc(self):
         return 'function_name'
 
+    def category(self):
+        return 'function'
+
     def copy(self, classtype=None):
         copy = super().copy(classtype or self.__class__)
         return copy
@@ -156,6 +162,9 @@ class FunctionStartItem(NonFunctionalItem):
 
     def desc(self):
         return 'function_start'
+
+    def category(self):
+        return 'structural'
 
     def copy(self, classtype=None):
         copy = super().copy(classtype or self.__class__)
@@ -170,6 +179,9 @@ class FunctionParamItem(NonFunctionalItem):
     def desc(self):
         return 'function_param'
 
+    def category(self):
+        return 'structural'
+
     def copy(self, classtype=None):
         copy = super().copy(classtype or self.__class__)
         return copy
@@ -182,6 +194,9 @@ class FunctionEndItem(NonFunctionalItem):
 
     def desc(self):
         return 'function_end'
+
+    def category(self):
+        return 'structural'
 
     def copy(self, classtype=None):
         copy = super().copy(classtype or self.__class__)
