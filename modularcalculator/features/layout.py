@@ -62,5 +62,4 @@ number_caster_map = [
     'scientific',
     'boolean',
     'percentage',
-    'string',
 ]
