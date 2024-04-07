@@ -24,7 +24,6 @@ class ModularCalculator(NumericalEngine):
         self.preset_list = modularcalculator.features.presets.presets
         self.parser_map = modularcalculator.features.layout.parser_map
         self.op_map = modularcalculator.features.layout.op_map
-        self.number_type_map = modularcalculator.features.layout.number_type_map
 
         self.installed_features = set()
         self.features_to_install = set()
@@ -169,9 +168,4 @@ class ModularCalculator(NumericalEngine):
         self.ops.append({sym: op})
 
     def add_number_type(self, number_type):
-        if self.number_type_map is None:
-            raise CalculatorException('Can\'t add number type before setting number_type_map')
-        self.number_types.append(number_type)
-        self.number_types_dict[number_type.name()] = number_type
-        type_names = dict([(c.name(), c) for c in self.number_types])
-        self.number_types = [type_names[c] for c in self.number_type_map if c in type_names]
+        self.number_types[number_type.name()] = number_type

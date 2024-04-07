@@ -52,14 +52,3 @@ op_map = [
     { 'to', 'as' },
     { '=', '++', '--', '+=', '-=', '*=', '/=', '^=', '%=', '\\=', '||=' },
 ]
-
-number_type_map = [
-    'decimal',
-    'arbitrarybase',
-    'binary',
-    'hexadecimal',
-    'octal',
-    'scientific',
-    'boolean',
-    'percentage',
-]

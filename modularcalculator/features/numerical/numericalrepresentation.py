@@ -40,21 +40,20 @@ class NumericalRepresentationFeature(Feature):
     def parse_numericalrepresentation(self, expr, i, items, flags):
         next = expr[i:]
 
-        for numrep in self.number_types:
-            numrep_name = numrep.name()
-            if next.startswith(numrep_name) and (len(next) == len(numrep_name) or not next[len(numrep_name)].isalpha()):
-                return [NumericalRepresentationItem(numrep_name)], len(numrep_name), None
+        for numrep in self.number_types.keys():
+            if next.startswith(numrep) and (len(next) == len(numrep) or not next[len(numrep)].isalpha()):
+                return [NumericalRepresentationItem(numrep)], len(numrep), None
 
         return None, None, None
 
     def validate_numericalrepresentation(self, value, unit, ref):
-        return value in self.number_types_dict.keys()
+        return value in self.number_types.keys()
 
     def op_as(self, vals, units, refs, flags):
         numrep = vals[1]
-        if numrep not in self.number_types_dict.keys():
+        if numrep not in self.number_types.keys():
             raise CalculatorException("Could not find numerical representation '{}'".format(numrep))
-        number_type = self.number_types_dict[numrep]
+        number_type = self.number_types[numrep]
         val = number_type.convert_to(self, vals[0])
         return OperationResult(val)
 
