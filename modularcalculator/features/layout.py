@@ -15,7 +15,7 @@ parser_map = [
     'number',
     'operator',
     'string',
-    'ext_function',
+    'function_pointer',
     'function',
     'function_param',
     'function_end',

@@ -7,8 +7,9 @@ from modularcalculator.objects.operators import *
 from modularcalculator.features.feature import Feature
 from modularcalculator.features.structure.functions import *
 
-import re
+from functools import partial
 import os.path
+import re
 
 
 class ExternalFunctionsFeature(Feature):
@@ -26,100 +27,22 @@ class ExternalFunctionsFeature(Feature):
         return 'Enables functions defined by the user'
 
     def dependencies():
-        return ['state.assignment', 'structure.functions', 'strings.strings', 'structure.terminator']
-
-    def default_options():
-        return {
-            'Symbol' : '@'
-        }
+        return ['structure.functionpointers', 'strings.strings', 'structure.terminator']
 
     @classmethod
     def install(cls, calculator):
-        calculator.add_parser('ext_function', ExternalFunctionsFeature.parse_ext_function)
-
-        calculator.feature_options['structure.externalfunctions'] = cls.default_options()
-
-    def parse_ext_function(self, expr, i, items, flags):
-        symbol = self.feature_options['structure.externalfunctions']['Symbol']
-        ext_func_invoke_regex = re.compile(re.escape(symbol) + r'([a-zA-Z_][a-zA-Z0-9_]*)\(')
-
-        next = expr[i:]
-        ext_func_match = ext_func_invoke_regex.match(next)
-        if ext_func_match:
-            ext_func_name = ext_func_match.group(1)
-
-            i = len(ext_func_name) + 1 + len(symbol)
-            return_flags = {}
-            args = []
-            func_items = [ExternalFunctionNameItem(symbol + ext_func_name), FunctionStartItem()]
-            while 'end_func' not in return_flags and i < len(next):
-                try:
-                    inner_items, length, return_flags = self.parse(next[i:], {'func': ext_func_name, 'ignore_terminators': True})
-                    inner_items = inner_items[0]
-                    i += length + 1
-                    if len(inner_items) > 0:
-                        args.append(inner_items)
-                        func_items.extend(inner_items)
-                    if 'end_func' in return_flags:
-                        func_items.append(FunctionEndItem())
-                    else:
-                        func_items.append(FunctionParamItem())
-                except ParsingException as err:
-                    newitems = func_items + err.statements[0]
-                    err.statements = [newitems]
-                    raise ParseException(err.message, [FunctionItem(err.truncate(next), newitems, self, ext_func_name, [])], err.next)
-            if 'end_func' not in return_flags:
-                raise ParseException('Function missing close symbol', [], next)
-            return [ExternalFunctionItem(next[0:i], func_items, self, ext_func_name, args)], i, None
-        return None, None, None
+        calculator.function_pointer_handlers.append(ExternalFunctionsPointerHandler)
 
 
-class ExternalFunctionItem(RecursiveOperandItem):
+class ExternalFunctionsPointerHandler:
 
-    def __init__(self, text, items, calculator, name, args):
-        super().__init__(text, items, calculator)
-        self.name = name
-        self.args = args
+    @staticmethod
+    def should_handle(ref):
+        return type(ref) == str
 
-    def desc(self):
-        return 'ext_function'
-
-    def category(self):
-        return 'function'
-
-    def value(self, flags):
-        if self.name not in self.calculator.vars:
-            raise ExecuteException("Variable {} not found".format(self.name), [self], '', True)
-
-        # Path of function file
-        path = self.calculator.vars[self.name][0]
-        path = os.path.expanduser(path)
-
-        # Execute the items for each argument, put the results in a list of inputs
-        inputs = []
-        itemsi = 2
-        for i, arg in enumerate(self.args):
-            old_itemsi = itemsi
-            try:
-                argresult = self.calculator.execute(arg, flags)
-                itemsi += len(arg) + 1
-                inputs.append(argresult)
-            except ExecuteException as err:
-                self.items = self.items[0:itemsi]
-                self.items.extend(err.items)
-                err.items = self.items
-                self.text = err.truncate(self.text)
-                self.truncated = True
-                raise ExecuteException(err.message, [self], err.next, True)
-            if isinstance(argresult.value, Exception):
-                err = argresult.value
-                itemsi = old_itemsi
-                self.items = self.items[0:itemsi]
-                self.items.extend(err.items)
-                err.items = self.items
-                self.text = err.truncate(self.text)
-                self.truncated = True
-                raise ExecuteException(err.message, [self], err.next, True)
+    @staticmethod
+    def handle(calculator, ref):
+        path = os.path.expanduser(ref)
 
         # Extract the content of the external function file, add to the end of the argument list
         try:
@@ -127,7 +50,6 @@ class ExternalFunctionItem(RecursiveOperandItem):
                 func_content = str.join("", fh.readlines())
         except:
             raise ExecuteException("Could not read file '{}'".format(path), [], None)
-        inputs.append(OperandResult(func_content, None, None))
 
         # External function definition to execute
         func = FunctionDefinition(
@@ -135,7 +57,7 @@ class ExternalFunctionItem(RecursiveOperandItem):
             'external function',
             path,
             [],
-            ExternalFunctionItem.do_function)
+            partial(ExternalFunctionsPointerHandler.do_function, func_content))
 
         # Disable any kind of auto conversion of inputs
         func.units_normalise = False
@@ -144,7 +66,7 @@ class ExternalFunctionItem(RecursiveOperandItem):
 
         # If function content has a top line declaring the input type, parse it
         topline = func_content.split('\n', 1)[0]
-        input_line_regex = re.compile(r'^' + self.calculator.feature_options['nonfunctional.comments']['Symbol'] + r'INPUT((\s+\S+)+)')
+        input_line_regex = re.compile(r'^' + calculator.feature_options['nonfunctional.comments']['Symbol'] + r'INPUT((\s+\S+)+)')
         input_line_regex_match = input_line_regex.match(topline)
         if input_line_regex_match:
             i = 0
@@ -177,58 +99,30 @@ class ExternalFunctionItem(RecursiveOperandItem):
                     func.add_unit_restriction(i, i, units)
                 i += 1
 
-        return func.call(self.calculator, inputs, flags)
+        return func
 
-    def do_function(self, vals, units, refs, flags):
-        func_content = vals.pop(-1)
-        units.pop(-1)
-        refs.pop(-1)
-
+    @staticmethod
+    def do_function(func_content, calculator, vals, units, refs, flags):
         # Back up the calculator state, then clear it
-        backup_vars = self.vars
-        self.vars = {}
+        backup_vars = calculator.vars
+        calculator.vars = {}
 
         # For each input, set it in the calculator state as a variable called "PARAM" + n
         for i in range(0, len(vals)):
-            self.vars["PARAM{}".format(i + 1)] = (vals[i], units[i])
+            calculator.vars["PARAM{}".format(i + 1)] = (vals[i], units[i])
 
         # Execute the function content
         try:
-            result = self.calculate(func_content)
+            result = calculator.calculate(func_content)
         except Exception as err:
-            self.vars = backup_vars
+            calculator.vars = backup_vars
             raise err
 
         # Restore calculator state
-        self.vars = backup_vars
+        calculator.vars = backup_vars
 
         # The last result of the function is the return value
         last_result = get_last_result(result.results)
         res = OperationResult(last_result.value)
         res.set_unit(last_result.unit)
         return res
-
-    def result(self, flags):
-        return self.value(flags)
-
-    def copy(self, classtype=None):
-        copy = super().copy(classtype or self.__class__)
-        copy.name = self.name
-        copy.args = self.args.copy()
-        return copy
-
-
-class ExternalFunctionNameItem(NonFunctionalItem):
-
-    def __init__(self, name):
-        super().__init__(name)
-
-    def desc(self):
-        return 'ext_function_name'
-
-    def category(self):
-        return 'function'
-
-    def copy(self, classtype=None):
-        copy = super().copy(classtype or self.__class__)
-        return copy
