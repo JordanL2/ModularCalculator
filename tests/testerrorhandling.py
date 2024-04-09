@@ -296,6 +296,23 @@ class TestErrorHandling(CalculatorTestCase):
                                                 'pos': 76,
                                                 'items': ['simplefunc',' ','=',' ',"'./tests/externalfunctions/simplefunc'",'\n','@simplefunc','(','@simplefunc','('] } },
 
+        { 'test': "f = { £ }", 'expected_exception': {
+                                                'exception': ParsingException,
+                                                'message': r"Could not parse: £ }",
+                                                'pos': 6,
+                                                'items': ['f',' ','=',' ','{',' '] } },
+
+        { 'test': "f = {\n£}", 'expected_exception': {
+                                                'exception': ParsingException,
+                                                'message': r"Could not parse: £}",
+                                                'pos': 6,
+                                                'items': ['f',' ','=',' ','{',"\n"] } },
+
+       { 'test': "f = {\nff = {\n£\n}\n}", 'expected_exception': {
+                                                'exception': ParsingException,
+                                                'message': "Could not parse: £\n}\n}",
+                                                'pos': 13,
+                                                'items': ['f',' ','=',' ','{','\n','ff',' ','=',' ','{','\n'] } },
     #    { 'test': r"", 'expected': { 'exception': ParsingException, 'message': r"", 'pos': 0, 'items': [] } },
     ]
 

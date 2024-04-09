@@ -61,4 +61,5 @@ presets['Computing'] = presets['Scientific'] + [
     'strings.stringfunctions',
     'strings.strings',
     'structure.externalfunctions',
+    'structure.inlinefunctions',
 ]

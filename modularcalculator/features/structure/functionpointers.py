@@ -123,8 +123,13 @@ class FunctionPointerItem(RecursiveOperandItem):
 
         for handler in self.calculator.function_pointer_handlers:
             if handler.should_handle(ref):
-                func = handler.handle(self.calculator, ref)
-                return func.call(self.calculator, inputs, flags)
+                try:
+                    func = handler.handle(self.calculator, ref)
+                    return func.call(self.calculator, inputs, flags)
+                except ExecuteException as err:
+                    self.items = []
+                    self.text = ''
+                    raise ExecuteException(err.message, [self], self.text, True)
 
         raise ExecuteException("No function pointer handler found for {}".format(self.text))
 

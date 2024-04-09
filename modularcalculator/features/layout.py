@@ -21,6 +21,8 @@ parser_map = [
     'function_end',
     'inner_expr',
     'inner_expr_end',
+    'inline_function',
+    'inline_function_end',
     'constant',
     'units',
     'unitsystems',

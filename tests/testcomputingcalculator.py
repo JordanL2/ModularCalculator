@@ -363,6 +363,11 @@ class TestComputingCalculator(CalculatorTestCase):
 
         { 'test': "f = './tests/externalfunctions/distance'\n@f([0, 0], [3, 4])", 'expected': Number('5') },
 
+        { 'test': "f = { 10 * PARAM1 }\n@f(2)", 'expected': Number('20') },
+        { 'test': "f = { \n 10 * PARAM1 \n }\n@f(2)", 'expected': Number('20') },
+        { 'test': "f = { 1 + 2 \n 10 * PARAM1 }\n@f(2)", 'expected': Number('20') },
+        { 'test': "a = 2\nf = { b = 4 * a \n b * PARAM1 }\n@f(2)", 'expected': Number('16') },
+
     #    { 'test': r"", 'expected': '' },
     ]
 
