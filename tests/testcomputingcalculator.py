@@ -367,6 +367,8 @@ class TestComputingCalculator(CalculatorTestCase):
         { 'test': "f = { \n 10 * PARAM1 \n }\n@f(2)", 'expected': Number('20') },
         { 'test': "f = { 1 + 2 \n 10 * PARAM1 }\n@f(2)", 'expected': Number('20') },
         { 'test': "a = 2\nf = { b = 4 * a \n b * PARAM1 }\n@f(2)", 'expected': Number('16') },
+        { 'test': "f = [ {PARAM1*2}, {PARAM1*4} ]\n@f(3)", 'expected': [Number('6'), Number('12')] },
+        { 'test': "f = [ {PARAM1*2}, {PARAM1*4} ]\n@f([3, 9])", 'expected': [[Number('6'), Number('18')], [Number('12'), Number('36')]] },
 
     #    { 'test': r"", 'expected': '' },
     ]

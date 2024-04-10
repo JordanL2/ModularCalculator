@@ -14,75 +14,76 @@ class CalculatorTestCase(unittest.TestCase):
 
     def generate_test(test):
         def do_test(self):
-            expr = test['test']
-            response = None
+            try:
+                expr = test['test']
+                response = None
 
-            if 'expected' in test:
-                expected = test['expected']
-                response = self.c.calculate(expr)
-                last_result = [r for r in response.results if r.has_result()][-1]
-                value = last_result.value
-                unit = last_result.unit
-                if type(value) == list:
-                    new_value = []
-                    for v in value:
-                        if v.unit is None:
-                            new_value.append(v.value)
-                        else:
-                            if v.value == Number(1):
-                                new_value.append((v.value, v.unit.singular()))
-                            else:
-                                new_value.append((v.value, v.unit.plural()))
-                    value = new_value
-                elif 'cast' in test:
-                    if test['cast'] == str and isinstance(value, Number):
-                        value = value.to_string(self.c)
-                    else:
-                        value = test['cast'](value)
-                if unit is None:
-                    actual = value
-                else:
-                    if isinstance(value, Number) and value == Number(1):
-                        actual = (value, unit.singular())
-                    else:
-                        actual = (value, unit.plural())
-                self.assertEqual(type(actual), type(expected), msg=expr)
-                self.assertEqual(actual, expected, msg=expr)
-
-            elif 'expected_exception' in test:
-                expected = test['expected_exception']
-                try:
+                if 'expected' in test:
+                    expected = test['expected']
                     response = self.c.calculate(expr)
-                    with self.assertRaises(CalculatorException, msg=expr):
-                        response = self.c.calculate(expr)
-                except CalculatorException as err:
-                    if 'exception' in expected:
-                        self.assertEqual(type(err), expected['exception'], expr)
-                    if 'message' in expected:
-                        self.assertEqual(err.message, expected['message'], expr)
-                    if 'next' in expected:
-                        self.assertEqual(err.next, expected['next'], expr)
-                    if 'pos' in expected:
-                        i = err.find_pos(expr)
-                        self.assertEqual(i, expected['pos'], expr)
-                    if 'items' in expected:
-                        statements = self.hl.highlight_statements(err.statements)
-                        items = [item[1] for items in statements for item in items if item[0] != 'default']
-                        self.assertEqual(items, expected['items'], expr)
+                    last_result = [r for r in response.results if r.has_result()][-1]
+                    actual = self.extract_answer(test, last_result)
+                    self.assertEqual(type(actual), type(expected), msg=expr)
+                    self.assertEqual(actual, expected, msg=expr)
 
-            if response is not None:
-                if 'timings' not in TEST_STATS:
-                    TEST_STATS['timings'] = {}
-                testcase_name = type(self).__name__
-                if testcase_name not in TEST_STATS['timings']:
-                    TEST_STATS['timings'][testcase_name] = {}
-                for result in response.results:
-                    for stage in result.timings.keys():
-                        if stage not in TEST_STATS['timings'][testcase_name]:
-                            TEST_STATS['timings'][testcase_name][stage] = {}
-                        TEST_STATS['timings'][testcase_name][stage][result.expression] = result.timings[stage]
+                elif 'expected_exception' in test:
+                    expected = test['expected_exception']
+                    try:
+                        response = self.c.calculate(expr)
+                        with self.assertRaises(CalculatorException, msg=expr):
+                            response = self.c.calculate(expr)
+                    except CalculatorException as err:
+                        if 'exception' in expected:
+                            self.assertEqual(type(err), expected['exception'], expr)
+                        if 'message' in expected:
+                            self.assertEqual(err.message, expected['message'], expr)
+                        if 'next' in expected:
+                            self.assertEqual(err.next, expected['next'], expr)
+                        if 'pos' in expected:
+                            i = err.find_pos(expr)
+                            self.assertEqual(i, expected['pos'], expr)
+                        if 'items' in expected:
+                            statements = self.hl.highlight_statements(err.statements)
+                            items = [item[1] for items in statements for item in items if item[0] != 'default']
+                            self.assertEqual(items, expected['items'], expr)
+
+                if response is not None:
+                    if 'timings' not in TEST_STATS:
+                        TEST_STATS['timings'] = {}
+                    testcase_name = type(self).__name__
+                    if testcase_name not in TEST_STATS['timings']:
+                        TEST_STATS['timings'][testcase_name] = {}
+                    for result in response.results:
+                        for stage in result.timings.keys():
+                            if stage not in TEST_STATS['timings'][testcase_name]:
+                                TEST_STATS['timings'][testcase_name][stage] = {}
+                            TEST_STATS['timings'][testcase_name][stage][result.expression] = result.timings[stage]
+            except Exception as err:
+                raise TestCaseException(test, err)
 
         return do_test
+
+    def extract_answer(self, test, result):
+        value = result.value
+        unit = result.unit
+        if type(value) == list:
+            new_value = []
+            for v in value:
+                new_value.append(self.extract_answer(test, v))
+            value = new_value
+        elif 'cast' in test:
+            if test['cast'] == str and isinstance(value, Number):
+                value = value.to_string(self.c)
+            else:
+                value = test['cast'](value)
+        if unit is None:
+            return value
+        else:
+            if isinstance(value, Number) and value == Number(1):
+                return (value, unit.singular())
+            else:
+                return (value, unit.plural())
+
 
     @classmethod
     def prepare_tests(test_class):
@@ -116,3 +117,9 @@ def format_timing(timing):
 
 def format_test(test):
     return test.replace("\n", "\\n")
+
+
+class TestCaseException(Exception):
+
+    def __init__(self, test, err):
+        self.test = test

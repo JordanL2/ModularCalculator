@@ -121,20 +121,28 @@ class FunctionPointerItem(RecursiveOperandItem):
                 self.truncated = True
                 raise ExecuteException(err.message, [self], err.next, True)
 
-        for handler in self.calculator.function_pointer_handlers:
-            if handler.should_handle(ref):
-                try:
-                    func = handler.handle(self.calculator, ref)
-                    return func.call(self.calculator, inputs, flags)
-                except ExecuteException as err:
-                    self.items = []
-                    self.text = ''
-                    raise ExecuteException(err.message, [self], self.text, True)
+        is_array = (type(ref) == list)
+        refs = [r.value for r in ref] if is_array else [ref]
+        results = []
+        for this_ref in refs:
+            for handler in self.calculator.function_pointer_handlers:
+                if handler.should_handle(this_ref):
+                    try:
+                        func = handler.handle(self.calculator, this_ref)
+                        results.append(func.call(self.calculator, inputs, flags))
+                        break
+                    except ExecuteException as err:
+                        self.items = []
+                        self.text = ''
+                        raise ExecuteException(err.message, [self], self.text, True)
+            else:
+                self.items = []
+                self.text = ''
+                raise ExecuteException("No function pointer handler found for {}".format(this_ref), [self], self.text, True)
 
-        self.items = []
-        old_text = self.text
-        self.text = ''
-        raise ExecuteException("No function pointer handler found for {}".format(old_text), [self], self.text, True)
+        if is_array:
+            return OperandResult(results, None, None)
+        return results[0]
 
     def result(self, flags):
         return self.value(flags)
