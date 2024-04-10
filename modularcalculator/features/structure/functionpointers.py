@@ -131,7 +131,10 @@ class FunctionPointerItem(RecursiveOperandItem):
                     self.text = ''
                     raise ExecuteException(err.message, [self], self.text, True)
 
-        raise ExecuteException("No function pointer handler found for {}".format(self.text))
+        self.items = []
+        old_text = self.text
+        self.text = ''
+        raise ExecuteException("No function pointer handler found for {}".format(old_text), [self], self.text, True)
 
     def result(self, flags):
         return self.value(flags)
