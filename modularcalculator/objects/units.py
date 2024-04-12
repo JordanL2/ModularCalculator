@@ -307,7 +307,7 @@ class UnitPowerList(AbstractPowerList):
                 unitname = mult.unit.symbol()
             elif plural and last:
                 unitname = mult.unit.plural()
-            multstrings.append((' ', 'space'))
+            multstrings.append((' ', 'whitespace'))
             if mult.power.to_decimal() != 1:
                 multstrings.append((unitname, 'special'))
                 multstrings.append(('^', 'op'))
@@ -324,7 +324,7 @@ class UnitPowerList(AbstractPowerList):
                 unitname = div.unit.symbol()
             elif negative_powers:
                 unitname = div.unit.plural()
-            divstrings.append((' ', 'space'))
+            divstrings.append((' ', 'whitespace'))
             if div.power != Number(-1) or negative_powers:
                 divstrings.append((unitname, 'special'))
                 divstrings.append(('^', 'op'))
