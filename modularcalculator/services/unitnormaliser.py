@@ -62,7 +62,11 @@ class UnitNormaliser:
         hit_min = False
         for prefix in self.prefixes:
             if (minscale is None or minscale <= prefix[2]) and (maxscale is None or maxscale >= prefix[2]):
-                self.add_unit(dimension, unit(prefix))
+                unit_definition = unit(prefix)
+                if prefix[1] is None and prefix[0] is not None:
+                    # If this prefix has no symbol, remove the symbols list from this unit
+                    unit_definition.symbollist = None
+                self.add_unit(dimension, unit_definition)
 
     def add_ambiguous_unit(self, ambiguous_unit, units):
         for unit in units:
