@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.4.0
+- New functions: lcm (lowest common multiple) and gcd (greatest common divisor).
+- Added many special functions from SciPy.
+- Added 'as' operator that can convert a value's numerical type (e.g. convert to binary).
+- Added percentage numerical type.
+- Added inline functions.
+- Nested arrays are now possible.
+- Function names can now contain, but not start with, a number.
+- Fixed a unit assignment not having higher precedence than multiply.
+
 ## 1.3.1
 - Fixed displaying units - divisor in brackets now used closed bracket properly.
 - Fixed potential infinite loop when simplifying units. This has slightly reduced the kind of simplification that can be done.
