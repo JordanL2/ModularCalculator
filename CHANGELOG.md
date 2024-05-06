@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.1
+- Fixed floor and ceil functions when passing the places parameter
+- Fixed round, floor and ceil functions with percentage numbers
+
 ## 1.4.0
 - New functions: lcm (lowest common multiple) and gcd (greatest common divisor).
 - Added many special functions from SciPy.

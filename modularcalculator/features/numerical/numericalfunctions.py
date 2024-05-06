@@ -134,6 +134,8 @@ class NumericalFunctionsFeature(Feature):
         base = 10
         if vals[0].number_cast is not None and 'base' in vals[0].number_cast:
             base = vals[0].number_cast['base']
+        if vals[0].number_cast is not None and 'places_offset' in vals[0].number_cast:
+            places += vals[0].number_cast['places_offset']
         p = Number(base ** places)
         val = vals[0]
         val *= p

@@ -71,7 +71,7 @@ class PercentageNumericalRepresentation:
             symbol = '%'
             num = Number(numperc[0:numperc.lower().find(symbol)])
             num /= Number(100)
-            num.number_cast = {'ref': PercentageNumericalRepresentation.convert_to, 'args': []}
+            num.number_cast = {'ref': PercentageNumericalRepresentation.convert_to, 'args': [], 'places_offset': 2}
             return num
 
         return None
