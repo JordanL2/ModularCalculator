@@ -59,6 +59,8 @@ class CalculatorTestCase(unittest.TestCase):
                                 TEST_STATS['timings'][testcase_name][stage] = {}
                             TEST_STATS['timings'][testcase_name][stage][result.expression] = result.timings[stage]
             except Exception as err:
+                if isinstance(err, AssertionError):
+                    raise err
                 raise TestCaseException(test, err)
 
         return do_test
