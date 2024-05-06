@@ -127,53 +127,30 @@ class NumericalFunctionsFeature(Feature):
         res.set_unit(units[0])
         return res
 
-    def func_floor(self, vals, units, refs, flags):
-        if len(vals) == 1:
-            res = OperationResult(math.floor(vals[0]))
-        else:
-            if vals[0].number_cast is not None and 'base' in vals[0].number_cast:
-                base = vals[0].number_cast['base']
-                base_mult = Number(base) ** vals[1]
-                val = vals[0] * base_mult
-                val = math.floor(val)
-                val = val / base_mult
-                res = OperationResult(val)
-            else:
-                res = OperationResult(math.floor(vals[0], int(vals[1])))
+    def apply_rounding_function(self, vals, units, f):
+        places = 0
+        if len(vals) > 1:
+            places = int(vals[1])
+        base = 10
+        if vals[0].number_cast is not None and 'base' in vals[0].number_cast:
+            base = vals[0].number_cast['base']
+        p = Number(base ** places)
+        val = vals[0]
+        val *= p
+        val = f(val)
+        val /= p
+        res = OperationResult(val)
         res.set_unit(units[0])
         return res
+
+    def func_floor(self, vals, units, refs, flags):
+        return NumericalFunctionsFeature.apply_rounding_function(self, vals, units, math.floor)
 
     def func_ceil(self, vals, units, refs, flags):
-        if len(vals) == 1:
-            res = OperationResult(math.ceil(vals[0]))
-        else:
-            if vals[0].number_cast is not None and 'base' in vals[0].number_cast:
-                base = vals[0].number_cast['base']
-                base_mult = Number(base) ** vals[1]
-                val = vals[0] * base_mult
-                val = math.ceil(val)
-                val = val / base_mult
-                res = OperationResult(val)
-            else:
-                res = OperationResult(math.ceil(vals[0], int(vals[1])))
-        res.set_unit(units[0])
-        return res
+        return NumericalFunctionsFeature.apply_rounding_function(self, vals, units, math.ceil)
 
     def func_round(self, vals, units, refs, flags):
-        if len(vals) == 1:
-            res = OperationResult(round(vals[0]))
-        else:
-            if vals[0].number_cast is not None and 'base' in vals[0].number_cast:
-                base = vals[0].number_cast['base']
-                base_mult = Number(base) ** vals[1]
-                val = vals[0] * base_mult
-                val = round(val)
-                val = val / base_mult
-                res = OperationResult(val)
-            else:
-                res = OperationResult(round(vals[0], int(vals[1])))
-        res.set_unit(units[0])
-        return res
+        return NumericalFunctionsFeature.apply_rounding_function(self, vals, units, round)
 
     def func_fact(self, vals, units, refs, flags):
         res = OperationResult(Number(math.factorial(int(vals[0]))))
