@@ -41,34 +41,9 @@ class PercentageNumberFeature(Feature):
             perc_match = PercentageNumberFeature.perc_regex.match(next)
             if (perc_match):
                 numperc = perc_match.group(1)
-                decnum = PercentageNumberFeature.number_percentage(self, numperc)
+                decnum = PercentageNumericalRepresentation.convert_from(self, numperc)
                 return [LiteralItem(numperc, decnum)], len(numperc), None
         return None, None, None
-
-    def number_percentage(self, val):
-        numperc_regex = PercentageNumberFeature.perc_regex
-        if isinstance(val, str) and numperc_regex.fullmatch(val):
-            numperc_match = numperc_regex.match(val)
-            numperc = numperc_match.group(1)
-            symbol = '%'
-            num = Number(numperc[0:numperc.lower().find(symbol)])
-            num /= Number(100)
-            num = PercentageNumberFeature.force_percentage(self, num)
-            return num
-
-        return None
-
-    def restore_percentage(self, val, opts=None):
-        val *= Number(100)
-        val.number_cast = None
-        return val.to_string(self) + '%'
-
-    def force_percentage(self, val):
-        if isinstance(val, Number):
-            val = val.copy()
-            val.number_cast = {'ref': PercentageNumberFeature.restore_percentage, 'args': []}
-            return val
-        return None
 
 
 class PercentageNumericalRepresentation:
@@ -83,8 +58,20 @@ class PercentageNumericalRepresentation:
 
     @staticmethod
     def convert_to(calculator, val):
-        return PercentageNumberFeature.force_percentage(calculator, val)
+        val *= Number(100)
+        val.number_cast = None
+        return val.to_string(calculator) + '%'
 
     @staticmethod
     def convert_from(calculator, val):
-        return PercentageNumberFeature.number_percentage(calculator, val)
+        numperc_regex = PercentageNumberFeature.perc_regex
+        if isinstance(val, str) and numperc_regex.fullmatch(val):
+            numperc_match = numperc_regex.match(val)
+            numperc = numperc_match.group(1)
+            symbol = '%'
+            num = Number(numperc[0:numperc.lower().find(symbol)])
+            num /= Number(100)
+            num.number_cast = {'ref': PercentageNumericalRepresentation.convert_to, 'args': []}
+            return num
+
+        return None

@@ -46,25 +46,6 @@ class DecimalNumbersFeature(Feature):
                 return [LiteralItem(num, self.number(Number(num)))], len(num), None
         return None, None, None
 
-    def number_decimal(self, val):
-        if isinstance(val, str) and DecimalNumbersFeature.num_is_regex.match(val):
-            dec_num = Number(val)
-            dec_num = DecimalNumbersFeature.force_decimal(self, dec_num)
-            return dec_num
-        return None
-
-    def restore_decimal(self, val, opts=None):
-        val = val.copy()
-        val.number_cast = None
-        return val.to_string()
-
-    def force_decimal(self, val):
-        if isinstance(val, Number):
-            val = val.copy()
-            val.number_cast = {'ref': DecimalNumbersFeature.restore_decimal, 'args': []}
-            return val
-        return None
-
 
 class DecimalNumericalRepresentation:
 
@@ -78,8 +59,14 @@ class DecimalNumericalRepresentation:
 
     @staticmethod
     def convert_to(calculator, val):
-        return DecimalNumbersFeature.force_decimal(calculator, val)
+        val = val.copy()
+        val.number_cast = None
+        return val
 
     @staticmethod
     def convert_from(calculator, val):
-        return DecimalNumbersFeature.number_decimal(calculator, val)
+        if isinstance(val, str) and DecimalNumbersFeature.num_is_regex.match(val):
+            dec_num = Number(val)
+            dec_num.number_cast = {'ref': DecimalNumericalRepresentation.convert_to, 'args': []}
+            return dec_num
+        return None

@@ -53,37 +53,12 @@ class BinaryNumbersFeature(Feature):
             bin_match = BinaryNumbersFeature.bin_regex.match(next)
             if bin_match:
                 binnum = bin_match.group(1)
-                decnum = BinaryNumbersFeature.number_bin(self, binnum)
+                decnum = BinaryNumericalRepresentation.convert_from(self, binnum)
                 return [LiteralItem(binnum, decnum)], len(binnum), None
         return None, None, None
 
     def func_bin(self, vals, units, refs, flags):
-        return OperationResult(BinaryNumbersFeature.force_bin(self, vals[0]))
-
-    def number_bin(self, val):
-        if isinstance(val, str) and BinaryNumbersFeature.bin_regex.fullmatch(val):
-            dec_num = BinaryNumbersFeature.bin_to_dec(self, val)
-            dec_num.number_cast = {'ref': BinaryNumbersFeature.restore_bin, 'args': [], 'base': 2}
-            width = BasesFeature.get_number_width(self, val, BinaryNumbersFeature.bin_prefix)
-            dec_num.binary_number_width = width
-            return dec_num
-        return None
-
-    def restore_bin(self, val, opts=None):
-        binnum = BasesFeature.dec_to_base(self, val, 2)
-        if hasattr(val, 'binary_number_width'):
-            binnum = BasesFeature.force_number_width(self, binnum, val.binary_number_width)
-        return BasesFeature.number_add_prefix(self, binnum, BinaryNumbersFeature.bin_prefix)
-
-    def bin_to_dec(self, val):
-        return BasesFeature.base_to_dec(self, BasesFeature.number_remove_prefix(self, val, BinaryNumbersFeature.bin_prefix), 2)
-
-    def force_bin(self, val):
-        if isinstance(val, Number):
-            val = val.copy()
-            val.number_cast = {'ref': BinaryNumbersFeature.restore_bin, 'args': [], 'base': 2}
-            return val
-        return None
+        return OperationResult(BinaryNumericalRepresentation.convert_to(self, vals[0]))
 
 
 class BinaryNumericalRepresentation:
@@ -98,8 +73,17 @@ class BinaryNumericalRepresentation:
 
     @staticmethod
     def convert_to(calculator, val):
-        return BinaryNumbersFeature.force_bin(calculator, val)
+        binnum = BasesFeature.dec_to_base(calculator, val, 2)
+        if hasattr(val, 'binary_number_width'):
+            binnum = BasesFeature.force_number_width(calculator, binnum, val.binary_number_width)
+        return BasesFeature.number_add_prefix(calculator, binnum, BinaryNumbersFeature.bin_prefix)
 
     @staticmethod
     def convert_from(calculator, val):
-        return BinaryNumbersFeature.number_bin(calculator, val)
+        if isinstance(val, str) and BinaryNumbersFeature.bin_regex.fullmatch(val):
+            dec_num = BasesFeature.base_to_dec(calculator, BasesFeature.number_remove_prefix(calculator, val, BinaryNumbersFeature.bin_prefix), 2)
+            dec_num.number_cast = {'ref': BinaryNumericalRepresentation.convert_to, 'args': [], 'base': 2}
+            width = BasesFeature.get_number_width(calculator, val, BinaryNumbersFeature.bin_prefix)
+            dec_num.binary_number_width = width
+            return dec_num
+        return None

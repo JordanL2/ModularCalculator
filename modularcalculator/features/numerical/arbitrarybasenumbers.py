@@ -49,7 +49,7 @@ class ArbitraryBaseFeature(Feature):
             arbbase_match = ArbitraryBaseFeature.arbbase_regex.match(next)
             if arbbase_match:
                 arbbasenum = arbbase_match.group(1)
-                decnum = ArbitraryBaseFeature.number_arbbase(self, arbbasenum)
+                decnum = ArbitraryBaseNumericalRepresentation.convert_from(self, arbbasenum)
                 if decnum is not None:
                     return [LiteralItem(arbbasenum, decnum)], len(arbbasenum), None
         return None, None, None
@@ -57,32 +57,9 @@ class ArbitraryBaseFeature(Feature):
     def func_base(self, vals, units, refs, flags):
         return OperationResult(ArbitraryBaseFeature.restore_arbbase(self, vals[0], {'base': int(vals[1])}))
 
-    def number_arbbase(self, val):
-        if isinstance(val, str) and ArbitraryBaseFeature.arbbase_regex.fullmatch(val):
-            try:
-                split_point = val.lower().index('z')
-                base = val[0:split_point]
-                if base[0] == '-':
-                    base = base[1:]
-                base = int(base)
-                dec_num = BasesFeature.base_to_dec(self, BasesFeature.number_remove_prefix(self, val, "{0}z".format(base)), base)
-                dec_num = ArbitraryBaseFeature.force_arbbase(self, dec_num, base)
-                return dec_num
-            except CalculatorException:
-                pass
-
-        return None
-
     def restore_arbbase(self, val, opts):
         base = opts['base']
         return BasesFeature.number_add_prefix(self, BasesFeature.dec_to_base(self, val, base), "{0}z".format(base))
-
-    def force_arbbase(self, val, base):
-        if isinstance(val, Number):
-            val = val.copy()
-            val.number_cast = {'ref': ArbitraryBaseFeature.restore_arbbase, 'args': [{'base': base}], 'base': base}
-            return val
-        return None
 
 
 class ArbitraryBaseNumericalRepresentation:
@@ -97,4 +74,17 @@ class ArbitraryBaseNumericalRepresentation:
 
     @staticmethod
     def convert_from(calculator, val):
-        return ArbitraryBaseFeature.number_arbbase(calculator, val)
+        if isinstance(val, str) and ArbitraryBaseFeature.arbbase_regex.fullmatch(val):
+            try:
+                split_point = val.lower().index('z')
+                base = val[0:split_point]
+                if base[0] == '-':
+                    base = base[1:]
+                base = int(base)
+                dec_num = BasesFeature.base_to_dec(calculator, BasesFeature.number_remove_prefix(calculator, val, "{0}z".format(base)), base)
+                dec_num.number_cast = {'ref': ArbitraryBaseFeature.restore_arbbase, 'args': [{'base': base}], 'base': base}
+                return dec_num
+            except CalculatorException:
+                pass
+
+        return None

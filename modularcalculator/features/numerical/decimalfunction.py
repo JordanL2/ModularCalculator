@@ -3,7 +3,7 @@
 from modularcalculator.objects.exceptions import *
 from modularcalculator.features.structure.functions import *
 from modularcalculator.features.feature import Feature
-from modularcalculator.features.numerical.decimalnumbers import DecimalNumbersFeature
+from modularcalculator.features.numerical.decimalnumbers import DecimalNumbersFeature, DecimalNumericalRepresentation
 
 
 class DecimalFunctionFeature(Feature):
@@ -37,5 +37,5 @@ class DecimalFunctionFeature(Feature):
         calculator.funcs['dec'].auto_convert_numerical_result = False
 
     def func_dec(self, vals, units, refs, flags):
-        res = DecimalNumbersFeature.force_decimal(self, vals[0])
+        res = DecimalNumericalRepresentation.convert_to(self, vals[0])
         return OperationResult(res)

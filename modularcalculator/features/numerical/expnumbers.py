@@ -62,7 +62,7 @@ class ExpNumbersFeature(Feature):
             numexp_match = numexp_regex.match(next)
             if (numexp_match):
                 numexp = numexp_match.group(1)
-                decnum = ExpNumbersFeature.number_exp(self, numexp)
+                decnum = ExpNumericalRepresentation.convert_from(self, numexp)
                 return [LiteralItem(numexp, decnum)], len(numexp), None
         return None, None, None
 
@@ -72,7 +72,7 @@ class ExpNumbersFeature(Feature):
             places = vals[1]
 
         if places is None:
-            number = ExpNumbersFeature.force_exp(self, vals[0])
+            number = ExpNumericalRepresentation.convert_to(self, vals[0])
         else:
             formattednumber = ExpNumbersFeature.dec_to_exp(self, vals[0], places)
             number = self.number(formattednumber)
@@ -105,35 +105,11 @@ class ExpNumbersFeature(Feature):
 
         return formattednumber
 
-    def number_exp(self, val):
-        numexp_regex = ExpNumbersFeature.compile_regex(self)
-        if isinstance(val, str) and numexp_regex.fullmatch(val):
-            numexp_match = numexp_regex.match(val)
-            numexp = numexp_match.group(1)
-            symbol = self.feature_options['numerical.expnumbers']['Symbol'].lower()
-            num = Number(numexp[0:numexp.lower().find(symbol)])
-            exp = Number(numexp[numexp.lower().find(symbol) + len(symbol):])
-            num *= (Number(10) ** exp)
-            num = ExpNumbersFeature.force_exp(self, num)
-            return num
-
-        return None
-
-    def restore_exp(self, val, opts=None):
-        return ExpNumbersFeature.dec_to_exp(self, val)
-
     def compile_regex(self):
         if not hasattr(self, 'ExpNumbersFeature_numexp_regex') or not hasattr(self, 'ExpNumbersFeature_numexp_regex_symbol') or self.ExpNumbersFeature_numexp_regex_symbol != self.feature_options['numerical.expnumbers']['Symbol']:
-            self.ExpNumbersFeature_numexp_regex = re.compile(r'(\-?\d+(\.\d+)?' + self.feature_options['numerical.expnumbers']['Symbol'] + '\-?\d+)', re.IGNORECASE)
+            self.ExpNumbersFeature_numexp_regex = re.compile(r'(\-?\d+(\.\d+)?' + self.feature_options['numerical.expnumbers']['Symbol'] + r'\-?\d+)', re.IGNORECASE)
             self.ExpNumbersFeature_numexp_regex_symbol = self.feature_options['numerical.expnumbers']['Symbol']
         return self.ExpNumbersFeature_numexp_regex
-
-    def force_exp(self, val):
-        if isinstance(val, Number):
-            val = val.copy()
-            val.number_cast = {'ref': ExpNumbersFeature.restore_exp, 'args': []}
-            return val
-        return None
 
 
 class ExpNumericalRepresentation:
@@ -148,8 +124,19 @@ class ExpNumericalRepresentation:
 
     @staticmethod
     def convert_to(calculator, val):
-        return ExpNumbersFeature.force_exp(calculator, val)
+        return ExpNumbersFeature.dec_to_exp(calculator, val)
 
     @staticmethod
     def convert_from(calculator, val):
-        return ExpNumbersFeature.number_exp(calculator, val)
+        numexp_regex = ExpNumbersFeature.compile_regex(calculator)
+        if isinstance(val, str) and numexp_regex.fullmatch(val):
+            numexp_match = numexp_regex.match(val)
+            numexp = numexp_match.group(1)
+            symbol = calculator.feature_options['numerical.expnumbers']['Symbol'].lower()
+            num = Number(numexp[0:numexp.lower().find(symbol)])
+            exp = Number(numexp[numexp.lower().find(symbol) + len(symbol):])
+            num *= (Number(10) ** exp)
+            num.number_cast = {'ref': ExpNumericalRepresentation.convert_to, 'args': []}
+            return num
+
+        return None
