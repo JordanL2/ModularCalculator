@@ -16,14 +16,17 @@ class OperationResult:
 
     def set_value(self, value):
         self.value = value
+        return self
 
     def set_unit(self, unit):
         self.unit = unit
         self.unit_override = True
+        return self
 
     def set_ref(self, ref):
         self.ref = ref
         self.ref_override = True
+        return self
 
 
 class Operation:

@@ -149,25 +149,25 @@ class BooleansFeature(Feature):
         return None, None, None
 
     def op_boolean_not(self, vals, units, refs, flags):
-        return OperationResult(not BooleansFeature.boolean(self, vals[0]))
+        return OperationResult(not BooleansFeature.boolean(self, vals[0])).set_unit(None)
 
     def op_number_equals(self, vals, units, refs, flags):
-        return OperationResult(vals[0] == vals[1])
+        return OperationResult(vals[0] == vals[1]).set_unit(None)
 
     def op_number_notequals(self, vals, units, refs, flags):
-        return OperationResult(vals[0] != vals[1])
+        return OperationResult(vals[0] != vals[1]).set_unit(None)
 
     def op_number_lessthan(self, vals, units, refs, flags):
-        return OperationResult(vals[0] < vals[1])
+        return OperationResult(vals[0] < vals[1]).set_unit(None)
 
     def op_number_morethan(self, vals, units, refs, flags):
-        return OperationResult(vals[0] > vals[1])
+        return OperationResult(vals[0] > vals[1]).set_unit(None)
 
     def op_number_lessthanequal(self, vals, units, refs, flags):
-        return OperationResult(vals[0] <= vals[1])
+        return OperationResult(vals[0] <= vals[1]).set_unit(None)
 
     def op_number_morethanequal(self, vals, units, refs, flags):
-        return OperationResult(vals[0] >= vals[1])
+        return OperationResult(vals[0] >= vals[1]).set_unit(None)
 
     def op_boolean_and(self, vals, units, refs, flags):
         return OperationResult(BooleansFeature.boolean(self, vals[0]) and BooleansFeature.boolean(self, vals[1]))
@@ -194,14 +194,6 @@ class BooleansFeature(Feature):
             return val
         raise CalculatorException('Cannot cast to boolean: ' + repr(val))
 
-    def number_bool(self, val):
-        if isinstance(val, bool):
-            if val:
-                return Number(1)
-            else:
-                return Number(0)
-        return None
-
     def validate_boolean(self, value, unit, ref):
         try:
             BooleansFeature.boolean(self, value)
@@ -222,4 +214,9 @@ class BooleanNumericalRepresentation:
 
     @staticmethod
     def convert_from(calculator, val):
-        return BooleansFeature.number_bool(calculator, val)
+        if isinstance(val, bool):
+            if val:
+                return Number(1)
+            else:
+                return Number(0)
+        return None

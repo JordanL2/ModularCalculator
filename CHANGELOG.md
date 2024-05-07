@@ -3,6 +3,7 @@
 ## 1.4.1
 - Fixed floor and ceil functions when passing the places parameter
 - Fixed round, floor and ceil functions with percentage numbers
+- Fixed boolean conditional operators returning value with unit, when inputs have units
 
 ## 1.4.0
 - New functions: lcm (lowest common multiple) and gcd (greatest common divisor).

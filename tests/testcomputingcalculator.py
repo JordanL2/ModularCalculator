@@ -215,6 +215,13 @@ class TestComputingCalculator(CalculatorTestCase):
         { 'test': r"false and (1/0)", 'expected': False },
         { 'test': r"true or (1/0)", 'expected': True },
 
+        { 'test': r"1 minute == 1 minute", 'expected': True },
+        { 'test': r"2 minute < 1 minute", 'expected': False },
+        { 'test': r"2 minute <= 1 minute", 'expected': False },
+        { 'test': r"2 minute > 1 minute", 'expected': True },
+        { 'test': r"2 minute >= 1 minute", 'expected': True },
+        { 'test': r"2 minute != 1 minute", 'expected': True },
+
         { 'test': "1 +\n2", 'expected': Number('3') },
         { 'test': "1 + 2\n3 + 4", 'expected': Number('7') },
         { 'test': "1 + 2 + \n3 + 4", 'expected': Number('10') },
