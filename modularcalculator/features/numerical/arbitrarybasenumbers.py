@@ -55,7 +55,7 @@ class ArbitraryBaseFeature(Feature):
         return None, None, None
 
     def func_base(self, vals, units, refs, flags):
-        return OperationResult(ArbitraryBaseNumericalRepresentation.to_string(self, vals[0], {'base': int(vals[1])}))
+        return OperationResult(ArbitraryBaseNumericalRepresentation.to_string(self, vals[0], int(vals[1])))
 
 
 class ArbitraryBaseNumericalRepresentation:
@@ -78,13 +78,12 @@ class ArbitraryBaseNumericalRepresentation:
                     base = base[1:]
                 base = int(base)
                 dec_num = BasesFeature.base_to_dec(calculator, BasesFeature.number_remove_prefix(calculator, val, "{0}z".format(base)), base)
-                dec_num.number_cast = {'ref': ArbitraryBaseNumericalRepresentation.to_string, 'args': [{'base': base}], 'base': base}
+                dec_num.number_cast = {'ref': ArbitraryBaseNumericalRepresentation.to_string, 'args': [base], 'base': base}
                 return dec_num
             except CalculatorException:
                 pass
 
         return None
 
-    def to_string(calculator, val, opts):
-        base = opts['base']
+    def to_string(calculator, val, base):
         return BasesFeature.number_add_prefix(calculator, BasesFeature.dec_to_base(calculator, val, base), "{0}z".format(base))
