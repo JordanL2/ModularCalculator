@@ -41,7 +41,7 @@ class PercentageNumberFeature(Feature):
             perc_match = PercentageNumberFeature.perc_regex.match(next)
             if (perc_match):
                 numperc = perc_match.group(1)
-                decnum = PercentageNumericalRepresentation.convert_from(self, numperc)
+                decnum = PercentageNumericalRepresentation.parse(self, numperc)
                 return [LiteralItem(numperc, decnum)], len(numperc), None
         return None, None, None
 
@@ -57,13 +57,7 @@ class PercentageNumericalRepresentation:
         return 'Percentage'
 
     @staticmethod
-    def convert_to(calculator, val):
-        val *= Number(100)
-        val.number_cast = None
-        return val.to_string(calculator) + '%'
-
-    @staticmethod
-    def convert_from(calculator, val):
+    def parse(calculator, val):
         numperc_regex = PercentageNumberFeature.perc_regex
         if isinstance(val, str) and numperc_regex.fullmatch(val):
             numperc_match = numperc_regex.match(val)
@@ -71,7 +65,21 @@ class PercentageNumericalRepresentation:
             symbol = '%'
             num = Number(numperc[0:numperc.lower().find(symbol)])
             num /= Number(100)
-            num.number_cast = {'ref': PercentageNumericalRepresentation.convert_to, 'args': [], 'places_offset': 2}
+            num = PercentageNumericalRepresentation.convert_to(calculator, num)
             return num
 
+        return None
+
+    @staticmethod
+    def to_string(calculator, val):
+        val *= Number(100)
+        val.number_cast = None
+        return val.to_string(calculator) + '%'
+
+    @staticmethod
+    def convert_to(calculator, val):
+        if isinstance(val, Number):
+            val = val.copy()
+            val.number_cast = {'ref': PercentageNumericalRepresentation.to_string, 'args': [], 'places_offset': 2}
+            return val
         return None

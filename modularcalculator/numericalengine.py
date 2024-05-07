@@ -43,7 +43,7 @@ class NumericalEngine(Engine):
         if isinstance(val, Number):
             return val
         for number_type in self.number_types.values():
-            num = number_type.convert_from(self, val)
+            num = number_type.parse(self, val)
             if num is not None:
                 return num
         raise CalculatorException("Can't cast to number: {0}".format(str(val)))

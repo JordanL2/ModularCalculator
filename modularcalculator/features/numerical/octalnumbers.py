@@ -53,7 +53,7 @@ class OctalNumbersFeature(Feature):
             oct_match = OctalNumbersFeature.oct_regex.match(next)
             if oct_match:
                 octnum = oct_match.group(1)
-                decnum = OctalNumericalRepresentation.convert_from(self, octnum)
+                decnum = OctalNumericalRepresentation.parse(self, octnum)
                 return [LiteralItem(octnum, decnum)], len(octnum), None
         return None, None, None
 
@@ -72,13 +72,21 @@ class OctalNumericalRepresentation:
         return 'Octal'
 
     @staticmethod
-    def convert_to(calculator, val):
+    def parse(calculator, val):
+        if isinstance(val, str) and OctalNumbersFeature.oct_regex.fullmatch(val):
+            dec_num = BasesFeature.base_to_dec(calculator, BasesFeature.number_remove_prefix(calculator, val, OctalNumbersFeature.oct_prefix), 8)
+            dec_num = OctalNumericalRepresentation.convert_to(calculator, dec_num)
+            return dec_num
+        return None
+
+    @staticmethod
+    def to_string(calculator, val):
         return BasesFeature.number_add_prefix(calculator, BasesFeature.dec_to_base(calculator, val, 8), OctalNumbersFeature.oct_prefix)
 
     @staticmethod
-    def convert_from(calculator, val):
-        if isinstance(val, str) and OctalNumbersFeature.oct_regex.fullmatch(val):
-            dec_num = BasesFeature.base_to_dec(calculator, BasesFeature.number_remove_prefix(calculator, val, OctalNumbersFeature.oct_prefix), 8)
-            dec_num.number_cast = {'ref': OctalNumericalRepresentation.convert_to, 'args': [], 'base': 8}
-            return dec_num
+    def convert_to(calculator, val):
+        if isinstance(val, Number):
+            val = val.copy()
+            val.number_cast = {'ref': OctalNumericalRepresentation.to_string, 'args': [], 'base': 8}
+            return val
         return None

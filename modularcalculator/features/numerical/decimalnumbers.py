@@ -58,15 +58,21 @@ class DecimalNumericalRepresentation:
         return 'Decimal'
 
     @staticmethod
+    def parse(calculator, val):
+        if isinstance(val, str) and DecimalNumbersFeature.num_is_regex.match(val):
+            dec_num = Number(val)
+            dec_num.number_cast = {'ref': DecimalNumericalRepresentation.to_string, 'args': []}
+            return dec_num
+        return None
+
+    @staticmethod
+    def to_string(calculator, val):
+        if isinstance(val, Number):
+            return DecimalNumericalRepresentation.convert_to(calculator, val).to_string(calculator)
+        return None
+
+    @staticmethod
     def convert_to(calculator, val):
         val = val.copy()
         val.number_cast = None
         return val
-
-    @staticmethod
-    def convert_from(calculator, val):
-        if isinstance(val, str) and DecimalNumbersFeature.num_is_regex.match(val):
-            dec_num = Number(val)
-            dec_num.number_cast = {'ref': DecimalNumericalRepresentation.convert_to, 'args': []}
-            return dec_num
-        return None

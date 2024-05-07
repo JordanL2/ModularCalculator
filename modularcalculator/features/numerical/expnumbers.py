@@ -62,7 +62,7 @@ class ExpNumbersFeature(Feature):
             numexp_match = numexp_regex.match(next)
             if (numexp_match):
                 numexp = numexp_match.group(1)
-                decnum = ExpNumericalRepresentation.convert_from(self, numexp)
+                decnum = ExpNumericalRepresentation.parse(self, numexp)
                 return [LiteralItem(numexp, decnum)], len(numexp), None
         return None, None, None
 
@@ -123,11 +123,7 @@ class ExpNumericalRepresentation:
         return 'Scientific E Notation'
 
     @staticmethod
-    def convert_to(calculator, val):
-        return ExpNumbersFeature.dec_to_exp(calculator, val)
-
-    @staticmethod
-    def convert_from(calculator, val):
+    def parse(calculator, val):
         numexp_regex = ExpNumbersFeature.compile_regex(calculator)
         if isinstance(val, str) and numexp_regex.fullmatch(val):
             numexp_match = numexp_regex.match(val)
@@ -136,7 +132,19 @@ class ExpNumericalRepresentation:
             num = Number(numexp[0:numexp.lower().find(symbol)])
             exp = Number(numexp[numexp.lower().find(symbol) + len(symbol):])
             num *= (Number(10) ** exp)
-            num.number_cast = {'ref': ExpNumericalRepresentation.convert_to, 'args': []}
+            num = ExpNumericalRepresentation.convert_to(calculator, num)
             return num
 
+        return None
+
+    @staticmethod
+    def to_string(calculator, val):
+        return ExpNumbersFeature.dec_to_exp(calculator, val)
+
+    @staticmethod
+    def convert_to(calculator, val):
+        if isinstance(val, Number):
+            val = val.copy()
+            val.number_cast = {'ref': ExpNumericalRepresentation.to_string, 'args': []}
+            return val
         return None

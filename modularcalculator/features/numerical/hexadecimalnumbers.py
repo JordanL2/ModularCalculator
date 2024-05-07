@@ -53,7 +53,7 @@ class HexadecimalNumbersFeature(Feature):
             hex_match = HexadecimalNumbersFeature.hex_regex.match(next)
             if hex_match:
                 hexnum = hex_match.group(1)
-                decnum = HexadecimalNumericalRepresentation.convert_from(self, hexnum)
+                decnum = HexadecimalNumericalRepresentation.parse(self, hexnum)
                 return [LiteralItem(hexnum, decnum)], len(hexnum), None
         return None, None, None
 
@@ -72,13 +72,21 @@ class HexadecimalNumericalRepresentation:
         return 'Hexadecimal'
 
     @staticmethod
-    def convert_to(calculator, val):
+    def parse(calculator, val):
+        if isinstance(val, str) and HexadecimalNumbersFeature.hex_regex.fullmatch(val):
+            dec_num = BasesFeature.base_to_dec(calculator, BasesFeature.number_remove_prefix(calculator, val, HexadecimalNumbersFeature.hex_prefix), 16)
+            dec_num = HexadecimalNumericalRepresentation.convert_to(calculator, dec_num)
+            return dec_num
+        return None
+
+    @staticmethod
+    def to_string(calculator, val):
         return BasesFeature.number_add_prefix(calculator, BasesFeature.dec_to_base(calculator, val, 16), HexadecimalNumbersFeature.hex_prefix)
 
     @staticmethod
-    def convert_from(calculator, val):
-        if isinstance(val, str) and HexadecimalNumbersFeature.hex_regex.fullmatch(val):
-            dec_num = BasesFeature.base_to_dec(calculator, BasesFeature.number_remove_prefix(calculator, val, HexadecimalNumbersFeature.hex_prefix), 16)
-            dec_num.number_cast = {'ref': HexadecimalNumericalRepresentation.convert_to, 'args': [], 'base': 16}
-            return dec_num
+    def convert_to(calculator, val):
+        if isinstance(val, Number):
+            val = val.copy()
+            val.number_cast = {'ref': HexadecimalNumericalRepresentation.to_string, 'args': [], 'base': 16}
+            return val
         return None

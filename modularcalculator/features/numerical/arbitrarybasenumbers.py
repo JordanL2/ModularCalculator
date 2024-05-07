@@ -49,17 +49,13 @@ class ArbitraryBaseFeature(Feature):
             arbbase_match = ArbitraryBaseFeature.arbbase_regex.match(next)
             if arbbase_match:
                 arbbasenum = arbbase_match.group(1)
-                decnum = ArbitraryBaseNumericalRepresentation.convert_from(self, arbbasenum)
+                decnum = ArbitraryBaseNumericalRepresentation.parse(self, arbbasenum)
                 if decnum is not None:
                     return [LiteralItem(arbbasenum, decnum)], len(arbbasenum), None
         return None, None, None
 
     def func_base(self, vals, units, refs, flags):
-        return OperationResult(ArbitraryBaseFeature.restore_arbbase(self, vals[0], {'base': int(vals[1])}))
-
-    def restore_arbbase(self, val, opts):
-        base = opts['base']
-        return BasesFeature.number_add_prefix(self, BasesFeature.dec_to_base(self, val, base), "{0}z".format(base))
+        return OperationResult(ArbitraryBaseNumericalRepresentation.to_string(self, vals[0], {'base': int(vals[1])}))
 
 
 class ArbitraryBaseNumericalRepresentation:
@@ -73,7 +69,7 @@ class ArbitraryBaseNumericalRepresentation:
         return 'Arbitrary Base'
 
     @staticmethod
-    def convert_from(calculator, val):
+    def parse(calculator, val):
         if isinstance(val, str) and ArbitraryBaseFeature.arbbase_regex.fullmatch(val):
             try:
                 split_point = val.lower().index('z')
@@ -82,9 +78,13 @@ class ArbitraryBaseNumericalRepresentation:
                     base = base[1:]
                 base = int(base)
                 dec_num = BasesFeature.base_to_dec(calculator, BasesFeature.number_remove_prefix(calculator, val, "{0}z".format(base)), base)
-                dec_num.number_cast = {'ref': ArbitraryBaseFeature.restore_arbbase, 'args': [{'base': base}], 'base': base}
+                dec_num.number_cast = {'ref': ArbitraryBaseNumericalRepresentation.to_string, 'args': [{'base': base}], 'base': base}
                 return dec_num
             except CalculatorException:
                 pass
 
         return None
+
+    def to_string(calculator, val, opts):
+        base = opts['base']
+        return BasesFeature.number_add_prefix(calculator, BasesFeature.dec_to_base(calculator, val, base), "{0}z".format(base))

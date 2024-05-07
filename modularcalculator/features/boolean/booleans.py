@@ -213,7 +213,7 @@ class BooleanNumericalRepresentation:
         return 'Boolean'
 
     @staticmethod
-    def convert_from(calculator, val):
+    def parse(calculator, val):
         if isinstance(val, bool):
             if val:
                 return Number(1)

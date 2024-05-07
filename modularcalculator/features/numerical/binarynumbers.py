@@ -53,7 +53,7 @@ class BinaryNumbersFeature(Feature):
             bin_match = BinaryNumbersFeature.bin_regex.match(next)
             if bin_match:
                 binnum = bin_match.group(1)
-                decnum = BinaryNumericalRepresentation.convert_from(self, binnum)
+                decnum = BinaryNumericalRepresentation.parse(self, binnum)
                 return [LiteralItem(binnum, decnum)], len(binnum), None
         return None, None, None
 
@@ -72,18 +72,26 @@ class BinaryNumericalRepresentation:
         return 'Binary'
 
     @staticmethod
-    def convert_to(calculator, val):
+    def parse(calculator, val):
+        if isinstance(val, str) and BinaryNumbersFeature.bin_regex.fullmatch(val):
+            dec_num = BasesFeature.base_to_dec(calculator, BasesFeature.number_remove_prefix(calculator, val, BinaryNumbersFeature.bin_prefix), 2)
+            dec_num = BinaryNumericalRepresentation.convert_to(calculator, dec_num)
+            width = BasesFeature.get_number_width(calculator, val, BinaryNumbersFeature.bin_prefix)
+            dec_num.binary_number_width = width
+            return dec_num
+        return None
+
+    @staticmethod
+    def to_string(calculator, val):
         binnum = BasesFeature.dec_to_base(calculator, val, 2)
         if hasattr(val, 'binary_number_width'):
             binnum = BasesFeature.force_number_width(calculator, binnum, val.binary_number_width)
         return BasesFeature.number_add_prefix(calculator, binnum, BinaryNumbersFeature.bin_prefix)
 
     @staticmethod
-    def convert_from(calculator, val):
-        if isinstance(val, str) and BinaryNumbersFeature.bin_regex.fullmatch(val):
-            dec_num = BasesFeature.base_to_dec(calculator, BasesFeature.number_remove_prefix(calculator, val, BinaryNumbersFeature.bin_prefix), 2)
-            dec_num.number_cast = {'ref': BinaryNumericalRepresentation.convert_to, 'args': [], 'base': 2}
-            width = BasesFeature.get_number_width(calculator, val, BinaryNumbersFeature.bin_prefix)
-            dec_num.binary_number_width = width
-            return dec_num
+    def convert_to(calculator, val):
+        if isinstance(val, Number):
+            val = val.copy()
+            val.number_cast = {'ref': BinaryNumericalRepresentation.to_string, 'args': [], 'base': 2}
+            return val
         return None
