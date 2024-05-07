@@ -80,6 +80,6 @@ class PercentageNumericalRepresentation:
     def convert_to(calculator, val):
         if isinstance(val, Number):
             val = val.copy()
-            val.number_cast = {'ref': PercentageNumericalRepresentation.to_string, 'args': [], 'places_offset': 2}
+            val.number_cast = {'to_string': PercentageNumericalRepresentation.to_string, 'places_offset': 2}
             return val
         return None

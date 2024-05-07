@@ -59,8 +59,11 @@ class Number:
         raise Exception("Use to_string(calculator)")
 
     def to_string(self, calculator=None):
-        if hasattr(self, 'number_cast') and self.number_cast is not None:
-            return self.number_cast['ref'](calculator, self, *self.number_cast['args'])
+        if hasattr(self, 'number_cast') and self.number_cast is not None and 'to_string' in self.number_cast:
+            return self.number_cast['to_string'](
+                calculator,
+                self,
+                *(self.number_cast['args'] if 'args' in self.number_cast else []))
         dec_num = self.to_decimal()
         if dec_num == 0:
             # This is to avoid getting '-0'

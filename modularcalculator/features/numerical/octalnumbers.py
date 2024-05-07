@@ -87,6 +87,6 @@ class OctalNumericalRepresentation:
     def convert_to(calculator, val):
         if isinstance(val, Number):
             val = val.copy()
-            val.number_cast = {'ref': OctalNumericalRepresentation.to_string, 'args': [], 'base': 8}
+            val.number_cast = {'to_string': OctalNumericalRepresentation.to_string, 'base': 8}
             return val
         return None

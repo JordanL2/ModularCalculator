@@ -145,6 +145,6 @@ class ExpNumericalRepresentation:
     def convert_to(calculator, val):
         if isinstance(val, Number):
             val = val.copy()
-            val.number_cast = {'ref': ExpNumericalRepresentation.to_string, 'args': []}
+            val.number_cast = {'to_string': ExpNumericalRepresentation.to_string}
             return val
         return None

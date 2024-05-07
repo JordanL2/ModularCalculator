@@ -78,7 +78,7 @@ class ArbitraryBaseNumericalRepresentation:
                     base = base[1:]
                 base = int(base)
                 dec_num = BasesFeature.base_to_dec(calculator, BasesFeature.number_remove_prefix(calculator, val, "{0}z".format(base)), base)
-                dec_num.number_cast = {'ref': ArbitraryBaseNumericalRepresentation.to_string, 'args': [base], 'base': base}
+                dec_num.number_cast = {'to_string': ArbitraryBaseNumericalRepresentation.to_string, 'args': [base], 'base': base}
                 return dec_num
             except CalculatorException:
                 pass

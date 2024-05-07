@@ -92,6 +92,6 @@ class BinaryNumericalRepresentation:
     def convert_to(calculator, val):
         if isinstance(val, Number):
             val = val.copy()
-            val.number_cast = {'ref': BinaryNumericalRepresentation.to_string, 'args': [], 'base': 2}
+            val.number_cast = {'to_string': BinaryNumericalRepresentation.to_string, 'base': 2}
             return val
         return None

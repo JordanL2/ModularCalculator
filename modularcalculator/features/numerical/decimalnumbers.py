@@ -61,7 +61,7 @@ class DecimalNumericalRepresentation:
     def parse(calculator, val):
         if isinstance(val, str) and DecimalNumbersFeature.num_is_regex.match(val):
             dec_num = Number(val)
-            dec_num.number_cast = {'ref': DecimalNumericalRepresentation.to_string, 'args': []}
+            dec_num.number_cast = {'to_string': DecimalNumericalRepresentation.to_string}
             return dec_num
         return None
 

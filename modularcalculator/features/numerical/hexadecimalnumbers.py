@@ -87,6 +87,6 @@ class HexadecimalNumericalRepresentation:
     def convert_to(calculator, val):
         if isinstance(val, Number):
             val = val.copy()
-            val.number_cast = {'ref': HexadecimalNumericalRepresentation.to_string, 'args': [], 'base': 16}
+            val.number_cast = {'to_string': HexadecimalNumericalRepresentation.to_string, 'base': 16}
             return val
         return None
