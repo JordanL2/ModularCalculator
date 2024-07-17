@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.4.2
+- Fixed trigonometry functions not returning Number instances
+
 ## 1.4.1
 - Fixed floor and ceil functions when passing the places parameter
 - Fixed round, floor and ceil functions with percentage numbers
