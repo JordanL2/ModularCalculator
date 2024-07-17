@@ -139,37 +139,37 @@ class TrigonometryFunctionsFeature(Feature):
 
 
     def func_sin(self, vals, units, refs, flags):
-        return OperationResult(math.sin(vals[0]))
+        return OperationResult(Number(Decimal(math.sin(vals[0]))))
 
     def func_cos(self, vals, units, refs, flags):
-        return OperationResult(math.cos(vals[0]))
+        return OperationResult(Number(Decimal(math.cos(vals[0]))))
 
     def func_tan(self, vals, units, refs, flags):
-        return OperationResult(math.tan(vals[0]))
+        return OperationResult(Number(Decimal(math.tan(vals[0]))))
 
     def func_asin(self, vals, units, refs, flags):
-        return OperationResult(math.asin(vals[0]))
+        return OperationResult(Number(Decimal(math.asin(vals[0]))))
 
     def func_acos(self, vals, units, refs, flags):
-        return OperationResult(math.acos(vals[0]))
+        return OperationResult(Number(Decimal(math.acos(vals[0]))))
 
     def func_atan(self, vals, units, refs, flags):
-        return OperationResult(math.atan(vals[0]))
+        return OperationResult(Number(Decimal(math.atan(vals[0]))))
 
     def func_sinh(self, vals, units, refs, flags):
-        return OperationResult(math.sinh(vals[0]))
+        return OperationResult(Number(Decimal(math.sinh(vals[0]))))
 
     def func_cosh(self, vals, units, refs, flags):
-        return OperationResult(math.cosh(vals[0]))
+        return OperationResult(Number(Decimal(math.cosh(vals[0]))))
 
     def func_tanh(self, vals, units, refs, flags):
-        return OperationResult(math.tanh(vals[0]))
+        return OperationResult(Number(Decimal(math.tanh(vals[0]))))
 
     def func_asinh(self, vals, units, refs, flags):
-        return OperationResult(math.asinh(vals[0]))
+        return OperationResult(Number(Decimal(math.asinh(vals[0]))))
 
     def func_acosh(self, vals, units, refs, flags):
-        return OperationResult(math.acosh(vals[0]))
+        return OperationResult(Number(Decimal(math.acosh(vals[0]))))
 
     def func_atanh(self, vals, units, refs, flags):
-        return OperationResult(math.atanh(vals[0]))
+        return OperationResult(Number(Decimal(math.atanh(vals[0]))))
