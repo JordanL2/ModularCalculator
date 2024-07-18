@@ -292,7 +292,7 @@ class Engine:
                 op_result = op.call(self, inputs, flags)
                 op_result._INDEX = item_index
             except CalculatorException as err:
-                values = str.join(', ', [("'" + op_input + "'") if (type(op_input) == str) else str(op_input) for op_input in inputs])
+                values = str.join(', ', [op_input.to_string(self) for op_input in inputs])
                 itemtext = None
                 if op_item is not None:
                     itemtext = op_item.text

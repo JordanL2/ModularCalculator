@@ -33,6 +33,9 @@ class Item:
     def __str__(self):
         return self.text
 
+    def to_string(self, calculator=None):
+        return str(self)
+
     def isop(self):
         raise CalculatorException("Must override this method")
 
@@ -156,8 +159,11 @@ class OperandResult:
         self.ref = ref
 
     def __str__(self):
+        raise Exception("Use to_string(calculator)")
+
+    def to_string(self, calculator=None):
         if isinstance(self.value, Number):
-            value_str = repr(self.value)
+            value_str = self.value.to_string(calculator)
         elif type(self.value) == str:
             value_str = "'" + self.value + "'"
         else:

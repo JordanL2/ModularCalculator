@@ -257,7 +257,7 @@ class TestScientificCalculator(CalculatorTestCase):
         { 'test': "x = 2 T m^2\nx", 'expected': (Number('2'), 'tesla meters^2') },
         { 'test': r"1m/s + 2", 'expected_exception': {
                                                 'exception': ExecutionException,
-                                                'message': r"Could not execute operator + with operands: Number('1') meters^1, seconds^-1, Number('2') - From unit is not set" } },
+                                                'message': r"Could not execute operator + with operands: 1 meters^1, seconds^-1, 2 - From unit is not set" } },
         { 'test': """R = 8.31446261815324 J / (Kelvin * moles)
                      volume = 1m^3
                      critical_temp = 33.2K
