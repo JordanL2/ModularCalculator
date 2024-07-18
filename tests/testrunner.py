@@ -9,6 +9,8 @@ import unittest
 
 TEST_STATS = {}
 
+__import__('sys').modules['unittest.util']._MAX_LENGTH = 999999999
+
 
 class CalculatorTestCase(unittest.TestCase):
 

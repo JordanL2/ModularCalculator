@@ -169,7 +169,7 @@ class NumericalFunctionsFeature(Feature):
         if len(vals) == 1:
             res = OperationResult(num.log())
         else:
-            res = OperationResult(num.log(int(vals[1])))
+            res = OperationResult(num.log(float(vals[1])))
         res.set_unit(units[0])
         return res
 
