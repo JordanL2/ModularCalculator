@@ -66,13 +66,13 @@ class TestErrorHandling(CalculatorTestCase):
 
         { 'test': r"min([1, 2, ''])", 'expected_exception': {
                                                 'exception': ExecutionException,
-                                                'message': r"Function min parameter 1 must be of type(s) array[number]",
+                                                'message': r"min parameter 1 must be of type(s) array[number]",
                                                 'pos': 0,
                                                 'items': [] } },
 
         { 'test': r"1 + (min([1, 2, '']))", 'expected_exception': {
                                                 'exception': ExecutionException,
-                                                'message': r"Function min parameter 1 must be of type(s) array[number]",
+                                                'message': r"min parameter 1 must be of type(s) array[number]",
                                                 'pos': 5,
                                                 'items': ['1',' ','+',' ','(',],
                                                 'next': 'min([1, 2, \'\'])' } },
@@ -201,7 +201,7 @@ class TestErrorHandling(CalculatorTestCase):
 
         { 'test': "dateadd('2017-01-01', 3)", 'expected_exception': {
                                                 'exception': ExecutionException,
-                                                'message': r"Function dateadd parameter 2 must have unit dimensions: time^1",
+                                                'message': r"dateadd parameter 2 must have unit dimensions: time^1",
                                                 'pos': 0,
                                                 'items': [] } },
 

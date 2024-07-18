@@ -85,7 +85,7 @@ class FunctionDefinition(Operation):
 
     def __init__(self, category, name, description, syntax, ref, minparams=None, maxparams=None, objtypes=None):
         self.func = name
-        super().__init__(category, "Function " + name, description, syntax, ref, minparams, maxparams, objtypes)
+        super().__init__(category, name, description, syntax, ref, minparams, maxparams, objtypes)
 
 
 class FunctionItem(RecursiveOperandItem):

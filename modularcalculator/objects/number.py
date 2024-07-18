@@ -144,6 +144,8 @@ class Number:
         log = self.num.ln() - self.den.ln()
         if base is None:
             return Number(log, number_cast=self.number_cast)
+        if base <= 0:
+            raise ExecutionException("Cannot use base <= 0 for log function")
         return Number(log / Decimal(base).ln(), number_cast=self.number_cast)
 
 
