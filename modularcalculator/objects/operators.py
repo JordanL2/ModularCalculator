@@ -384,11 +384,11 @@ class OperatorDefinition(Operation):
         if isinstance(objtypes, list):
             if len(objtypes) != num_of_params:
                 raise Exception("List of input allowed types must be same length as number of parameters")
-            super().__init__(category, "Operator " + name, description, syntax, ref, num_of_params, num_of_params)
+            super().__init__(category, "operator " + name, description, syntax, ref, num_of_params, num_of_params)
             for i, objtype in enumerate(objtypes):
                 self.add_value_restriction(i, i, objtype)
         else:
-            super().__init__(category, "Operator " + name, description, syntax, ref, num_of_params, num_of_params, objtypes)
+            super().__init__(category, "operator " + name, description, syntax, ref, num_of_params, num_of_params, objtypes)
 
         self.rtl = False
         self.hidden = False
