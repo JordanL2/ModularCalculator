@@ -27,6 +27,8 @@ def find_pos(self, text, statements):
 
 class CalculatorException(Exception):
 
+    wrapped = False
+
     def __init__(self, message):
         self.message = message
 

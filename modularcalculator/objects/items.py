@@ -169,7 +169,7 @@ class OperandResult:
         else:
             value_str = str(self.value)
         if isinstance(self.value, list):
-            value_str = '[' + ', '.join([str(s) for s in self.value]) + ']'
+            value_str = '[' + ', '.join([s.to_string(calculator) if isinstance(s, OperandResult) else str(s) for s in self.value]) + ']'
         if self.unit is not None:
             return value_str + ' ' + str(self.unit)
         return value_str

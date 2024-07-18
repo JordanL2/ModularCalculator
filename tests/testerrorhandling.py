@@ -66,13 +66,13 @@ class TestErrorHandling(CalculatorTestCase):
 
         { 'test': r"min([1, 2, ''])", 'expected_exception': {
                                                 'exception': ExecutionException,
-                                                'message': r"min parameter 1 must be of type(s) array[number]",
+                                                'message': r"Could not execute min with parameters: [1, 2, ''] - min parameter 1 must be of type(s) array[number]",
                                                 'pos': 0,
                                                 'items': [] } },
 
         { 'test': r"1 + (min([1, 2, '']))", 'expected_exception': {
                                                 'exception': ExecutionException,
-                                                'message': r"min parameter 1 must be of type(s) array[number]",
+                                                'message': r"Could not execute min with parameters: [1, 2, ''] - min parameter 1 must be of type(s) array[number]",
                                                 'pos': 5,
                                                 'items': ['1',' ','+',' ','(',],
                                                 'next': 'min([1, 2, \'\'])' } },
@@ -111,31 +111,31 @@ class TestErrorHandling(CalculatorTestCase):
 
         { 'test': r"1 / 0", 'expected_exception': {
                                                 'exception': ExecutionException,
-                                                'message': r"Could not execute operator / with operands: 1, 0 - Could not execute Operator /",
+                                                'message': r"Could not execute Operator / with parameters: 1, 0",
                                                 'pos': 2,
                                                 'items': ['1',' '] } },
 
         { 'test': r"2 + (1 / 0) + 3", 'expected_exception': {
                                                 'exception': ExecutionException,
-                                                'message': r"Could not execute operator / with operands: 1, 0 - Could not execute Operator /",
+                                                'message': r"Could not execute Operator / with parameters: 1, 0",
                                                 'pos': 7,
                                                 'items': ['2',' ','+',' ','(','1',' '] } },
 
         { 'test': "(2 + #comment\n(1 / 0) + 3)", 'expected_exception': {
                                                 'exception': ExecutionException,
-                                                'message': r"Could not execute operator / with operands: 1, 0 - Could not execute Operator /",
+                                                'message': r"Could not execute Operator / with parameters: 1, 0",
                                                 'pos': 17,
                                                 'items': ['(','2',' ','+',' ','#comment',"\n",'(','1',' '] } },
 
         { 'test': r"(2 + (((1 / 0)) + 3))", 'expected_exception': {
                                                 'exception': ExecutionException,
-                                                'message': r"Could not execute operator / with operands: 1, 0 - Could not execute Operator /",
+                                                'message': r"Could not execute Operator / with parameters: 1, 0",
                                                 'pos': 10,
                                                 'items': ['(','2',' ','+',' ','(','(','(','1',' '] } },
 
         { 'test': r"1 + ''", 'expected_exception': {
                                                 'exception': ExecutionException,
-                                                'message': r"Could not execute operator + with operands: 1, '' - Operator + parameter 2 must be of type(s) number",
+                                                'message': r"Could not execute Operator + with parameters: 1, '' - Operator + parameter 2 must be of type(s) number",
                                                 'pos': 2,
                                                 'items': ['1',' '] } },
 
@@ -177,31 +177,31 @@ class TestErrorHandling(CalculatorTestCase):
 
         { 'test': r"(1 hectare to 2)^0.5", 'expected_exception': {
                                                 'exception': ExecutionException,
-                                                'message': r"Could not execute operator to with operands: 1 hectares^1, 2 - Operator to parameter 2 must be of type(s) unit",
+                                                'message': r"Could not execute Operator to with parameters: 1 hectares^1, 2 - Operator to parameter 2 must be of type(s) unit",
                                                 'pos': 11,
                                                 'items': ['(','1',' ','hectare',' '] } },
 
         { 'test': r"(1 hectare to 2) ^ 0.5", 'expected_exception': {
                                                 'exception': ExecutionException,
-                                                'message': r"Could not execute operator to with operands: 1 hectares^1, 2 - Operator to parameter 2 must be of type(s) unit",
+                                                'message': r"Could not execute Operator to with parameters: 1 hectares^1, 2 - Operator to parameter 2 must be of type(s) unit",
                                                 'pos': 11,
                                                 'items': ['(','1',' ','hectare',' '] } },
 
         { 'test': "(1 hectare to 2)#comment\n^ 0.5", 'expected_exception': {
                                                 'exception': ExecutionException,
-                                                'message': r"Could not execute operator to with operands: 1 hectares^1, 2 - Operator to parameter 2 must be of type(s) unit",
+                                                'message': r"Could not execute Operator to with parameters: 1 hectares^1, 2 - Operator to parameter 2 must be of type(s) unit",
                                                 'pos': 11,
                                                 'items': ['(','1',' ','hectare',' '] } },
 
         { 'test': "#comment\n(1 hectare to 2) ^ 0.5", 'expected_exception': {
                                                 'exception': ExecutionException,
-                                                'message': r"Could not execute operator to with operands: 1 hectares^1, 2 - Operator to parameter 2 must be of type(s) unit",
+                                                'message': r"Could not execute Operator to with parameters: 1 hectares^1, 2 - Operator to parameter 2 must be of type(s) unit",
                                                 'pos': 20,
                                                 'items': ['#comment',"\n",'(','1',' ','hectare',' '] } },
 
         { 'test': "dateadd('2017-01-01', 3)", 'expected_exception': {
                                                 'exception': ExecutionException,
-                                                'message': r"dateadd parameter 2 must have unit dimensions: time^1",
+                                                'message': r"Could not execute dateadd with parameters: '2017-01-01', 3 - dateadd parameter 2 must have unit dimensions: time^1",
                                                 'pos': 0,
                                                 'items': [] } },
 
@@ -219,7 +219,7 @@ class TestErrorHandling(CalculatorTestCase):
 
         { 'test': "f = './tests/externalfunctions/ext_func_addition2'\n@f(1, 2)", 'expected_exception': {
                                                 'exception': ExecutionException,
-                                                'message': r"Could not execute operator + with operands: 3, None - Operator + parameter 2 must be of type(s) number",
+                                                'message': r"Could not execute external function with parameters: 1, 2 - Could not execute Operator + with parameters: 3, None - Operator + parameter 2 must be of type(s) number",
                                                 'pos': 51,
                                                 'items': ['f',' ','=',' ',"'./tests/externalfunctions/ext_func_addition2'","\n"] } },
 
@@ -238,37 +238,37 @@ class TestErrorHandling(CalculatorTestCase):
 
         { 'test': "[1, 2 / 0]", 'expected_exception': {
                                                 'exception': ExecutionException,
-                                                'message': r"Could not execute operator / with operands: 2, 0 - Could not execute Operator /",
+                                                'message': r"Could not execute Operator / with parameters: 2, 0",
                                                 'pos': 6,
                                                 'items': ['[','1',',',' ','2',' '] } },
 
         { 'test': "[1, (2 / 0)]", 'expected_exception': {
                                                 'exception': ExecutionException,
-                                                'message': r"Could not execute operator / with operands: 2, 0 - Could not execute Operator /",
+                                                'message': r"Could not execute Operator / with parameters: 2, 0",
                                                 'pos': 7,
                                                 'items': ['[','1',',',' ','(','2',' '] } },
 
         { 'test': "[1 .. 2 / 0 step 2]", 'expected_exception': {
                                                 'exception': ExecutionException,
-                                                'message': r"Could not execute operator / with operands: 2, 0 - Could not execute Operator /",
+                                                'message': r"Could not execute Operator / with parameters: 2, 0",
                                                 'pos': 8,
                                                 'items': ['[','1',' ','..',' ','2',' '] } },
 
         { 'test': "[1 .. (2 / 0) step 2]", 'expected_exception': {
                                                 'exception': ExecutionException,
-                                                'message': r"Could not execute operator / with operands: 2, 0 - Could not execute Operator /",
+                                                'message': r"Could not execute Operator / with parameters: 2, 0",
                                                 'pos': 9,
                                                 'items': ['[','1',' ','..',' ','(','2',' '] } },
 
         { 'test': "[1 .. 2 step 2 / 0]", 'expected_exception': {
                                                 'exception': ExecutionException,
-                                                'message': r"Could not execute operator / with operands: 2, 0 - Could not execute Operator /",
+                                                'message': r"Could not execute Operator / with parameters: 2, 0",
                                                 'pos': 15,
                                                 'items': ['[','1',' ','..',' ','2',' ','step',' ','2',' '] } },
 
         { 'test': "[1 .. 2 step (2 / 0)]", 'expected_exception': {
                                                 'exception': ExecutionException,
-                                                'message': r"Could not execute operator / with operands: 2, 0 - Could not execute Operator /",
+                                                'message': r"Could not execute Operator / with parameters: 2, 0",
                                                 'pos': 16,
                                                 'items': ['[','1',' ','..',' ','2',' ','step',' ','(','2',' '] } },
 

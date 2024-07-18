@@ -27,10 +27,10 @@ class TestScientificCalculator(CalculatorTestCase):
         { 'test': r"log(1.5, 2.5)", 'expected': Number('4425070493497599327014292680916407655627227037413818231546927105877211294771800184434107969520952601', '10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000') },
         { 'test': r"log(1, 0)", 'expected_exception': {
                                                 'exception': ExecutionException,
-                                                'message': r"Could not execute log" } },
+                                                'message': r"Could not execute log with parameters: 1, 0" } },
         { 'test': r"log(1, -0.5)", 'expected_exception': {
                                                 'exception': ExecutionException,
-                                                'message': r"Could not execute log" } },
+                                                'message': r"Could not execute log with parameters: 1, -0.5" } },
 
         { 'test': r"sin(1)", 'expected': Number(3789648413623927, 4503599627370496) },
         { 'test': r"cos(1)", 'expected': Number(1216652631687587, 2251799813685248) },
@@ -263,7 +263,7 @@ class TestScientificCalculator(CalculatorTestCase):
         { 'test': "x = 2 T m^2\nx", 'expected': (Number('2'), 'tesla meters^2') },
         { 'test': r"1m/s + 2", 'expected_exception': {
                                                 'exception': ExecutionException,
-                                                'message': r"Could not execute operator + with operands: 1 meters^1, seconds^-1, 2 - From unit is not set" } },
+                                                'message': r"Could not execute Operator + with parameters: 1 meters^1, seconds^-1, 2 - From unit is not set" } },
         { 'test': """R = 8.31446261815324 J / (Kelvin * moles)
                      volume = 1m^3
                      critical_temp = 33.2K

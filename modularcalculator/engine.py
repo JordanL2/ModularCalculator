@@ -292,11 +292,10 @@ class Engine:
                 op_result = op.call(self, inputs, flags)
                 op_result._INDEX = item_index
             except CalculatorException as err:
-                values = str.join(', ', [op_input.to_string(self) for op_input in inputs])
                 itemtext = None
                 if op_item is not None:
                     itemtext = op_item.text
-                new_err = ExecuteException("Could not execute operator {0} with operands: {1} - {2}".format(sym, values, err.message), previous_items, itemtext)
+                new_err = ExecuteException(err.message, previous_items, itemtext)
                 op_result = OperandResult(new_err, None, None)
                 op_result._INDEX = item_index
 

@@ -154,57 +154,58 @@ class Operation:
                     if isinstance(i.value, Exception):
                         return i
 
-            # Validate the values and units for this operation
-            values = [i.value for i in inputs]
-            units = [i.unit for i in inputs]
-            refs = [i.ref for i in inputs]
-            self.validate(calculator, values, units, refs)
-
-            # Auto-convert all numbers into decimal numbers. Store the original number type of the first input, this will be used
-            # for the result.
-            result_value, result_unit, result_ref, number_cast = None, None, None, None
-            if self.auto_convert_numerical_inputs:
-                values, number_cast = self.convert_numbers(calculator, values)
-
-            # Normalise the units of all inputs if units_normalise flag is set
-            if len([i for i in range(0, len(values)) if not self.input_can_be_type(i, 'number') or not calculator.validate_number(values[i])]) == 0:
-
-                # All inputs are numbers, normalise them to be all be the same unit
-                if calculator.unit_normaliser is not None and self.units_normalise:
-                    values, units, result_unit = calculator.unit_normaliser.normalise_inputs(values, units, self.units_multi, self.units_relative)
-
-            else:
-
-                # Go through each input and check if it's an array of numbers
-                for i in range(0, len(values)):
-                    if type(values[i]) == list and self.input_must_be_type(i, 'array', 'number'):
-
-                        # This is an array of numbers
-
-                        # Normalise all elements to be decimal
-                        this_values = [v.value for v in values[i]]
-                        for ii in range(0, len(values[i])):
-                            num = calculator.number(this_values[ii])
-                            this_values[ii] = num
-                            if number_cast is None:
-                                # Take the first number type we get as the one we should use for the final result
-                                number_cast = num.number_cast
-
-                        # Normalise all elements to be the same unit
-                        this_units = [v.unit for v in values[i]]
-                        if calculator.unit_normaliser is not None and self.units_normalise:
-                            this_values, this_units, result_unit = calculator.unit_normaliser.normalise_inputs(this_values, this_units, self.units_multi, self.units_relative)
-
-                        values[i] = values[i].copy()
-                        for ii in range(0, len(this_values)):
-                            # Replace the element with a normalised version, saving the original value and unit
-                            original_value = values[i][ii].value
-                            original_unit = values[i][ii].unit
-                            values[i][ii] = OperandResult(this_values[ii], this_units[ii], values[i][ii].ref)
-                            values[i][ii].original_value = original_value
-                            values[i][ii].original_unit = original_unit
-
             try:
+
+                # Validate the values and units for this operation
+                values = [i.value for i in inputs]
+                units = [i.unit for i in inputs]
+                refs = [i.ref for i in inputs]
+                self.validate(calculator, values, units, refs)
+
+                # Auto-convert all numbers into decimal numbers. Store the original number type of the first input, this will be used
+                # for the result.
+                result_value, result_unit, result_ref, number_cast = None, None, None, None
+                if self.auto_convert_numerical_inputs:
+                    values, number_cast = self.convert_numbers(calculator, values)
+
+                # Normalise the units of all inputs if units_normalise flag is set
+                if len([i for i in range(0, len(values)) if not self.input_can_be_type(i, 'number') or not calculator.validate_number(values[i])]) == 0:
+
+                    # All inputs are numbers, normalise them to be all be the same unit
+                    if calculator.unit_normaliser is not None and self.units_normalise:
+                        values, units, result_unit = calculator.unit_normaliser.normalise_inputs(values, units, self.units_multi, self.units_relative)
+
+                else:
+
+                    # Go through each input and check if it's an array of numbers
+                    for i in range(0, len(values)):
+                        if type(values[i]) == list and self.input_must_be_type(i, 'array', 'number'):
+
+                            # This is an array of numbers
+
+                            # Normalise all elements to be decimal
+                            this_values = [v.value for v in values[i]]
+                            for ii in range(0, len(values[i])):
+                                num = calculator.number(this_values[ii])
+                                this_values[ii] = num
+                                if number_cast is None:
+                                    # Take the first number type we get as the one we should use for the final result
+                                    number_cast = num.number_cast
+
+                            # Normalise all elements to be the same unit
+                            this_units = [v.unit for v in values[i]]
+                            if calculator.unit_normaliser is not None and self.units_normalise:
+                                this_values, this_units, result_unit = calculator.unit_normaliser.normalise_inputs(this_values, this_units, self.units_multi, self.units_relative)
+
+                            values[i] = values[i].copy()
+                            for ii in range(0, len(this_values)):
+                                # Replace the element with a normalised version, saving the original value and unit
+                                original_value = values[i][ii].value
+                                original_unit = values[i][ii].unit
+                                values[i][ii] = OperandResult(this_values[ii], this_units[ii], values[i][ii].ref)
+                                values[i][ii].original_value = original_value
+                                values[i][ii].original_unit = original_unit
+
                 result = self.ref(calculator, values, units, refs, flags.copy())
                 result_value = result.value
 
@@ -228,9 +229,15 @@ class Operation:
                 return OperandResult(result_value, result_unit, result_ref)
 
             except CalculatorException as err:
-                raise err
+                if err.wrapped:
+                    raise err
+                values = str.join(', ', [op_input.to_string(self) for op_input in inputs])
+                newerr = CalculatorException("Could not execute {0} with parameters: {1} - {2}".format(self.name, values, err.message))
+                newerr.wrapped = True
+                raise newerr
             except Exception as err:
-                raise CalculatorException("Could not execute {0}".format(self.name))
+                values = str.join(', ', [op_input.to_string(self) for op_input in inputs])
+                raise CalculatorException("Could not execute {0} with parameters: {1}".format(self.name, values))
 
     def validate(self, calculator, values, units, refs):
         # Check if we're been given at least the minimum number of params
