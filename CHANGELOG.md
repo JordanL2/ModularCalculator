@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.3
+- Fixed log function behaviour when base is non-integer, zero, or negative
+- Refactored operator/function error messages to make them more helpful and consistent
+
 ## 1.4.2
 - Fixed trigonometry functions not returning Number instances
 
