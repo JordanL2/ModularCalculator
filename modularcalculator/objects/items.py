@@ -158,6 +158,8 @@ class OperandResult:
     def __str__(self):
         if isinstance(self.value, Number):
             value_str = repr(self.value)
+        elif type(self.value) == str:
+            value_str = "'" + self.value + "'"
         else:
             value_str = str(self.value)
         if isinstance(self.value, list):
