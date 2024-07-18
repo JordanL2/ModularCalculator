@@ -193,15 +193,15 @@ class TestNumber(unittest.TestCase):
 
     def test_repr_1(self):
         a = Number(10)
-        self.assertEqual(repr(a), 'Number(10)')
+        self.assertEqual(repr(a), "Number('10')")
 
     def test_repr_2(self):
         a = Number(10, 3)
-        self.assertEqual(repr(a), 'Number(10, 3)')
+        self.assertEqual(repr(a), "Number('10', '3')")
 
     def test_repr_3(self):
         a = Number(10, 2)
-        self.assertEqual(repr(a), 'Number(5)')
+        self.assertEqual(repr(a), "Number('5')")
 
     def test_as_fraction_1(self):
         a = Number(20, 3)
