@@ -223,7 +223,7 @@ class Engine:
             if not isinstance(items[0], OperandResult):
                 raise ExecuteException("Not a value: \"{0}\"".format(str(items[0])), original_items[0:items[0]._INDEX], None)
 
-            if isinstance(items[0].value, Exception):
+            if isinstance(items[0].value, CalculateException):
                 items[0].value = self.restore_non_functional_items(items[0].value, original_items, very_original_items)
             return items[0]
         except CalculateException as err:

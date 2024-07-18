@@ -319,7 +319,9 @@ class TestScientificCalculator(CalculatorTestCase):
         { 'test': r"[1.5 .. 3.5 step 0.5]", 'expected': [Number('1.5'), Number('2'), Number('2.5'), Number('3'), Number('3.5')] },
         { 'test': r"[1 .. 4, 9, 14 .. 20 step 2]", 'expected': [Number('1'), Number('2'), Number('3'), Number('4'), Number('9'), Number('14'), Number('16'), Number('18'), Number('20')] },
         { 'test': r"[1 cm, 2 seconds, 3]", 'expected': [(Number('1') , 'centimeter'), (Number('2'), 'seconds'), Number('3')] },
-
+        { 'test': "a = [1] / 0\nelement(a, 1)", 'expected_exception': {
+                                                'exception': ExecutionException,
+                                                'message': r"Could not execute operator / with parameters: 1, 0" } },
         { 'test': "a = [1, 2, 3]\na", 'expected': [Number('1'), Number('2'), Number('3')] },
         { 'test': "a = [1, 2, 3]\na = [1, 2, 3]\na", 'expected': [Number('1'), Number('2'), Number('3')] },
         { 'test': r"[1, 2, 3] + 4", 'expected': [Number('5'), Number('6'), Number('7')] },
