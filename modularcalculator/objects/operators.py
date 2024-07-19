@@ -242,11 +242,11 @@ class Operation:
     def validate(self, calculator, values, units, refs):
         # Check if we're been given at least the minimum number of params
         if self.minparams is not None and len(values) < self.minparams:
-            raise CalculatorException("{0} requires at least {1} params, only given {2}".format(self.name, self.minparams, len(values)))
+            raise CalculatorException("{0} requires at least {1} parameters, only given {2}".format(self.name, self.minparams, len(values)))
 
         # Check we've not been given more than the maximum
         if self.maxparams is not None and len(values) > self.maxparams:
-            raise CalculatorException("{0} requires at most {1} params, was given {2}".format(self.name, self.maxparams, len(values)))
+            raise CalculatorException("{0} requires at most {1} parameters, was given {2}".format(self.name, self.maxparams, len(values)))
 
         # Check all restrictions on input values are true
         for restriction in self.value_restrictions:
