@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.4.4
+- Fixed 'as' operator dropping value's unit
+
 ## 1.4.3
 - Fixed log function behaviour when base is non-integer, zero, or negative
 - Refactored operator/function error messages to make them more helpful and consistent

@@ -55,7 +55,10 @@ class NumericalRepresentationFeature(Feature):
             raise CalculatorException("Could not find numerical representation '{}'".format(numrep))
         number_type = self.number_types[numrep]
         val = number_type.convert_to(self, vals[0])
-        return OperationResult(val)
+        res = OperationResult(val)
+        if units[0] is not None:
+            res.set_unit(units[0])
+        return res
 
 
 class NumericalRepresentationItem(OperandItem):
