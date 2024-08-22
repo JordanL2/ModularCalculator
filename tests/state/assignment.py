@@ -14,9 +14,15 @@ class TestStateAssignment(CalculatorTestCase):
 
     c = ModularCalculator('Computing')
     tests = [
-        { 'test': r"x = 1 + 1", 'expected': Number('2') },
-        { 'test': r"3 + (c = 4 * 5)", 'expected': Number('23') },
-        { 'test': r"day_usage = 1", 'expected': Number('1') },
+        { 'test': "x = 1\n x", 'expected': Number('1') },
+        { 'test': "x = 5.5 metres\n x", 'expected': (Number('5.5'), 'meters') },
+        { 'test': "x = 5.5 metres\n x * -1", 'expected': (Number('-5.5'), 'meters') },
+        { 'test': "x = 1\n x * 2", 'expected': Number('2') },
+        { 'test': "x = 1 + 1", 'expected': Number('2') },
+        { 'test': "3 + (c = 4 * 5)", 'expected': Number('23') },
+        { 'test': "3 + (c = 4 * 5)\n c", 'expected': Number('20') },
+        { 'test': "day_usage = 1\n day_usage", 'expected': Number('1') },
+        { 'test': "day_usage_2 = 1\n day_usage_2", 'expected': Number('1') },
     ]
 
     def category(self):

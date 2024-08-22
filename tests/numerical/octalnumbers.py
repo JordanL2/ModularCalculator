@@ -14,6 +14,9 @@ class TestNumericalOctalNumbers(CalculatorTestCase):
 
     c = ModularCalculator('Computing')
     tests = [
+        { 'test': r"0o77", 'expected': Number('63') },
+        { 'test': r"0o77.4", 'expected': Number('63.5') },
+        { 'test': r"-0o77.4", 'expected': Number('-63.5') },
         { 'test': r"oct(63)", 'cast': str, 'expected': '0o77' },
         { 'test': r"dec(oct(63))", 'expected': Number('63') },
         { 'test': r"0o77", 'cast': str, 'expected': '0o77' },

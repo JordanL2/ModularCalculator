@@ -14,7 +14,14 @@ class TestStateAssignmentFunctions(CalculatorTestCase):
 
     c = ModularCalculator('Computing')
     tests = [
-        { 'test': "x = 1\nreset()\nx", 'expected': None },
+        { 'test': "x = 1\n y=2\n reset()\n x", 'expected': None },
+        { 'test': "x = 1\n y=2\n reset()\n y", 'expected': None },
+        { 'test': "x = 1\nreset()\n x", 'expected': None },
+        { 'test': "x = 1\nreset()\n x = 2\n x", 'expected': Number('2') },
+        { 'test': "x = 1\n y=2\n delete(x)\n x", 'expected': None },
+        { 'test': "x = 1\n y=2\n delete(x)\n y", 'expected': Number('2') },
+        { 'test': "x = 1\n y=2\n delete(y)\n x", 'expected': Number('1') },
+        { 'test': "x = 1\n y=2\n delete(y)\n y", 'expected': None },
     ]
 
     def category(self):

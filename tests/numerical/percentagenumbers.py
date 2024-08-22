@@ -18,6 +18,7 @@ class TestNumericalPercentageNumbers(CalculatorTestCase):
         { 'test': r"200% * 4", 'expected': Number('8') },
         { 'test': r"200% * 4", 'cast': str, 'expected': '800%' },
         { 'test': r"51.23%", 'expected': Number('0.5123') },
+        { 'test': r"-51.23%", 'expected': Number('-0.5123') },
         { 'test': r"round(51.23%)", 'expected': Number('0.51') },
         { 'test': r"round(51.23%, 1)", 'expected': Number('0.512') },
         { 'test': r"ceil(51.23%, 1)", 'expected': Number('0.513') },

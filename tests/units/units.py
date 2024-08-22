@@ -50,7 +50,6 @@ class TestUnitsUnits(CalculatorTestCase):
         { 'test': r"12 meters °C / s", 'expected': (Number('12'), 'meter Celsius/second') },
         { 'test': r"0.625 meters/(second^2 celsius) * 4°C", 'expected': (Number('2.5'), 'meters/second^2') },
         { 'test': r"40 TW h / yr", 'expected': (Number('40'), 'terawatt hours/year') },
-        { 'test': r"compact(40 TW h / yr)", 'expected': (Number(2000000, 438291), 'gigawatts') },
         { 'test': r"0.004563084645220168834131873146 TW to TW h / yr", 'expected': (Number(999979466119096509240246406516743, 25000000000000000000000000000000), 'terawatt hours/year') },
         { 'test': r"40 TW h / yr to MW", 'expected': (Number(2000000000, 438291), 'megawatts') },
         { 'test': r"40 TW h / yr to W", 'expected': (Number(2000000000000000, 438291), 'watts') },

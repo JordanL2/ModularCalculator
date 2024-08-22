@@ -9,12 +9,14 @@ from modularcalculator.modularcalculator import *
 from modularcalculator.services.syntaxhighlighter import *
 from modularcalculator.objects.exceptions import *
 from modularcalculator.objects.number import *
+from modularcalculator.features.units.systems import *
 
 
 class TestUnitsSystems(CalculatorTestCase):
 
     c = ModularCalculator('Computing')
     tests = [
+        { 'test': "si", 'expected': 'si' },
     ]
 
     def category(self):

@@ -15,6 +15,8 @@ class TestNumericalDecimalNumbers(CalculatorTestCase):
     c = ModularCalculator('Computing')
     tests = [
         { 'test': '123', 'expected': Number(123) },
+        { 'test': '123.45', 'expected': Number("123.45") },
+        { 'test': '-123.45', 'expected': Number("-123.45") },
     ]
 
     def category(self):

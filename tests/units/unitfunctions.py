@@ -39,6 +39,8 @@ class TestUnitsUnitFunctions(CalculatorTestCase):
         { 'test': r"format(1234 MB)", 'expected': '1.234 gigabytes' },
         { 'test': r"format(1234000000 bytes)", 'expected': '1.234 gigabytes' },
         { 'test': r"format(1234005000 bytes)", 'expected': '1.234005 gigabytes' },
+
+        { 'test': r"compact(40 TW h / yr)", 'expected': (Number(2000000, 438291), 'gigawatts') },
     ]
 
     def category(self):

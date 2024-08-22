@@ -16,6 +16,7 @@ class TestNumericalNumericalRepresentation(CalculatorTestCase):
     tests = [
         { 'test': r"255 as hexadecimal", 'cast': str, 'expected': '0xFF' },
         { 'test': r"0xFF as decimal", 'cast': str, 'expected': '255' },
+        { 'test': r"0xFF as decimal", 'expected': Number(255) },
         { 'test': r"255 as binary", 'cast': str, 'expected': '0b11111111' },
         { 'test': r"0b11111111 as decimal", 'cast': str, 'expected': '255' },
         { 'test': r"255 as octal", 'cast': str, 'expected': '0o377' },
@@ -27,6 +28,7 @@ class TestNumericalNumericalRepresentation(CalculatorTestCase):
         { 'test': "b = 255\nb as binary", 'cast': str, 'expected': '0b11111111' },
         { 'test': "b = 255 as hexadecimal\nb as binary", 'cast': str, 'expected': '0b11111111' },
         { 'test': r"(255 as hexadecimal) as binary", 'cast': str, 'expected': '0b11111111' },
+        { 'test': r"2.55E2 kg as decimal", 'expected': (Number(255), 'kilograms') },
     ]
 
     def category(self):

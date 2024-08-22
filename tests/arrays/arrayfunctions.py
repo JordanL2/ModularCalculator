@@ -21,6 +21,12 @@ class TestArraysArrayFunctions(CalculatorTestCase):
         { 'test': r"element([1, 2, 3], 2)", 'expected': Number('2') },
         { 'test': r"element([1, 2, 3, 4, 5], [2 .. 4])", 'expected': [Number('2'), Number('3'), Number('4')] },
         { 'test': r"element([1 cm, 2 seconds, 3 metres], 2)", 'expected': (Number('2'), 'seconds') },
+        { 'test': "a = [1] / 0\nelement(a, 1)", 'expected_exception': {
+                                                'exception': ExecutionException,
+                                                'message': r"Could not execute operator / with parameters: 1, 0" } },
+        { 'test': "a = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]\nelement(a, 1)", 'expected': [Number('1'), Number('2'), Number('3')] },
+        { 'test': "a = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]\nelement(element(a, 1), 3)", 'expected': Number('3') },
+        { 'test': "a = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]\nelement(a, [1, 3])", 'expected': [[Number('1'), Number('2'), Number('3')], [Number('7'), Number('8'), Number('9')]] },
 
         { 'test': "a = [1 .. 7]\nfilter(a, a % 2 == 0)", 'expected': [Number('2'), Number('4'), Number('6')] },
 

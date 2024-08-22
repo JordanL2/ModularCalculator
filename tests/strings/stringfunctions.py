@@ -15,14 +15,23 @@ class TestStringsStringFunctions(CalculatorTestCase):
     c = ModularCalculator('Computing')
     tests = [
         { 'test': r"length('ABCabc')", 'expected': Number(6) },
+
         { 'test': r"lower('ABCabc')", 'expected': 'abcabc' },
+
         { 'test': r"upper('ABCabc')", 'expected': 'ABCABC' },
+
         { 'test': r"lstrip('   ABCabc   ', ' ')", 'expected': 'ABCabc   ' },
+
         { 'test': r"rstrip('   ABCabc   ', ' ')", 'expected': '   ABCabc' },
+
         { 'test': r"strip('   ABCabc   ', ' ')", 'expected': 'ABCabc' },
+
         { 'test': r"find('ABCabc', 'ab')", 'expected': Number(3) },
+
         { 'test': r"replace('ABCabc', 'BC', 'fgh')", 'expected': 'Afghabc' },
+        { 'test': r"replace('ABCabc', '123', 'fgh')", 'expected': 'ABCabc' },
         { 'test': r"replace('ABCaBCbc', 'BC', 'fgh')", 'expected': 'Afghafghbc' },
+
         { 'test': r"substr('ABCabc', 3)", 'expected': 'abc' },
         { 'test': r"substr('ABCabc', -4)", 'expected': 'Cabc' },
         { 'test': r"substr('ABCabc', 3, 4)", 'expected': 'ab' },

@@ -16,16 +16,26 @@ class TestStringsStringComparison(CalculatorTestCase):
     tests = [
         { 'test': r"true ==$ 'True'", 'expected': True },
         { 'test': r"true ==$ 'TRUE'", 'expected': False },
-        { 'test': r"true ==~ 'TRUE'", 'expected': True },
         { 'test': r"'123' ==$ 123", 'expected': True },
         { 'test': r"'abc' ==$ 'ABC'", 'expected': False },
-        { 'test': r"'abc' ==~ 'ABC'", 'expected': True },
-        { 'test': r"'abc' !=~ 'ABC'", 'expected': False },
+
+        { 'test': r"'abc' !=$ 'ABC'", 'expected': True },
+
         { 'test': r"'a' <$ 'b'", 'expected': True },
-        { 'test': r"'a' <=$ 'A'", 'expected': False },
-        { 'test': r"'a' <=~ 'A'", 'expected': True },
-        { 'test': r"'a' >$ 'b'", 'expected': False },
         { 'test': r"123 <$ 14", 'expected': True },
+        { 'test': r"'a' <=$ 'A'", 'expected': False },
+        { 'test': r"'a' >$ 'b'", 'expected': False },
+        { 'test': r"'b' >=$ 'b'", 'expected': True },
+
+        { 'test': r"true ==~ 'TRUE'", 'expected': True },
+        { 'test': r"'abc' ==~ 'ABC'", 'expected': True },
+
+        { 'test': r"'abc' !=~ 'ABC'", 'expected': False },
+
+        { 'test': r"'a' <~ 'A'", 'expected': False },
+        { 'test': r"'a' <=~ 'A'", 'expected': True },
+        { 'test': r"'a' >~ 'A'", 'expected': False },
+        { 'test': r"'a' >=~ 'A'", 'expected': True },
     ]
 
     def category(self):

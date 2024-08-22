@@ -15,6 +15,7 @@ class TestNonFunctionalSpace(CalculatorTestCase):
     c = ModularCalculator('Computing')
     tests = [
         { 'test': '123 + 456', 'expected': Number('579') },
+        { 'test': "123\t+\t456", 'expected': Number('579') },
     ]
 
     def category(self):

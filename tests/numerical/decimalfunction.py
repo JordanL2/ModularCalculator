@@ -14,6 +14,11 @@ class TestNumericalDecimalFunctions(CalculatorTestCase):
 
     c = ModularCalculator('Computing')
     tests = [
+        { 'test': r"dec(36z1Z)", 'expected': Number('71') },
+        { 'test': r"dec(0b10)", 'expected': Number('2') },
+        { 'test': r"dec(0xff)", 'expected': Number('255') },
+        { 'test': r"dec(0o77)", 'expected': Number('63') },
+        { 'test': r"dec(1.234e1)", 'expected': Number('12.34') },
     ]
 
     def category(self):

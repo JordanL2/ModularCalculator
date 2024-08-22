@@ -21,6 +21,18 @@ class TestNumericalBitwiseOperators(CalculatorTestCase):
         { 'test': r"~0b00111100", 'cast': str, 'expected': '0b11000011' },
         { 'test': r"~60", 'expected': Number('3') },
         { 'test': r"0b10101 << 1", 'cast': str, 'expected': '0b101010' },
+        { 'test': r"0b10101 << 1.5", 'cast': str, 'expected_exception': {
+                                                'exception': ExecutionException,
+                                                'message': r"Could not execute operator << with parameters: 0b10101, 1.5 - Shift amount requires positive integers"} },
+        { 'test': r"0b10101 << -1", 'cast': str, 'expected_exception': {
+                                                'exception': ExecutionException,
+                                                'message': r"Could not execute operator << with parameters: 0b10101, -1 - Shift amount requires positive integers"} },
+        { 'test': r"0b10101 >> 1.5", 'cast': str, 'expected_exception': {
+                                                'exception': ExecutionException,
+                                                'message': r"Could not execute operator >> with parameters: 0b10101, 1.5 - Shift amount requires positive integers"} },
+        { 'test': r"0b10101 >> -1", 'cast': str, 'expected_exception': {
+                                                'exception': ExecutionException,
+                                                'message': r"Could not execute operator >> with parameters: 0b10101, -1 - Shift amount requires positive integers"} },
         { 'test': r"0b10101 << 2", 'cast': str, 'expected': '0b1010100' },
         { 'test': r"0b10101 << 8", 'cast': str, 'expected': '0b1010100000000' },
         { 'test': r"0b10010 >> 1", 'cast': str, 'expected': '0b01001' },

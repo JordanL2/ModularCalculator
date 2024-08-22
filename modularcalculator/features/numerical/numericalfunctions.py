@@ -1,10 +1,12 @@
 #!/usr/bin/python3
 
+from modularcalculator.features.numerical.numericalconstants import *
 from modularcalculator.features.structure.functions import *
 from modularcalculator.features.feature import Feature
 from modularcalculator.objects.exceptions import *
 from modularcalculator.objects.number import *
 
+from decimal import Decimal
 import math
 import statistics
 
@@ -155,12 +157,14 @@ class NumericalFunctionsFeature(Feature):
         return NumericalFunctionsFeature.apply_rounding_function(self, vals, units, round)
 
     def func_fact(self, vals, units, refs, flags):
+        if vals[0].to_decimal() < 0 or (vals[0] % Number(1)).to_decimal() != 0:
+            raise CalculatorException('Operator requires positive integers')
         res = OperationResult(Number(math.factorial(int(vals[0]))))
         res.set_unit(units[0])
         return res
 
     def func_exp(self, vals, units, refs, flags):
-        res = OperationResult(math.exp(vals[0]))
+        res = OperationResult(Number(NumericalConstantsFeature.e) ** vals[0])
         res.set_unit(units[0])
         return res
 
@@ -174,11 +178,15 @@ class NumericalFunctionsFeature(Feature):
         return res
 
     def func_lcm(self, vals, units, refs, flags):
+        if (vals[0] % Number(1)).to_decimal() != 0 or (vals[1] % Number(1)).to_decimal() != 0:
+            raise CalculatorException('Operator requires integers')
         res = OperationResult(Number(math.lcm(int(vals[0]), int(vals[1]))))
         res.set_unit(units[0])
         return res
 
     def func_gcd(self, vals, units, refs, flags):
+        if (vals[0] % Number(1)).to_decimal() != 0 or (vals[1] % Number(1)).to_decimal() != 0:
+            raise CalculatorException('Operator requires integers')
         res = OperationResult(Number(math.gcd(int(vals[0]), int(vals[1]))))
         res.set_unit(units[0])
         return res

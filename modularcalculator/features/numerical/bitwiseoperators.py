@@ -119,11 +119,15 @@ class BitwiseOperatorsFeature(Feature):
         return OperationResult(masked_flipped_val)
 
     def op_bitwise_lshift(self, vals, units, refs, flags):
+        if vals[1].to_decimal() < 0 or (vals[1] % Number(1)).to_decimal() != 0:
+            raise CalculatorException('Shift amount requires positive integers')
         res = Number(int(vals[0]) << int(vals[1]))
         res.binary_number_width = BitwiseOperatorsFeature.get_biggest_width(self, vals)
         return OperationResult(res)
 
     def op_bitwise_rshift(self, vals, units, refs, flags):
+        if vals[1].to_decimal() < 0 or (vals[1] % Number(1)).to_decimal() != 0:
+            raise CalculatorException('Shift amount requires positive integers')
         res = Number(int(vals[0]) >> int(vals[1]))
         res.binary_number_width = BitwiseOperatorsFeature.get_biggest_width(self, vals)
         return OperationResult(res)

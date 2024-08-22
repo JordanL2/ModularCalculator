@@ -16,6 +16,7 @@ class TestStructureInnerExpressions(CalculatorTestCase):
     c = ModularCalculator('Computing')
     tests = [
         { 'test': '4 * (2 + (3)) - 3', 'expected': Number('17') },
+        { 'test': '4 * (2 + (3 + 1)) - 3', 'expected': Number('21') },
         { 'test': r"(10 / 3) * 3", 'expected': Number('10') },
         { 'test': r"10 / 3 (3)", 'expected': Number('10', '9') },
         { 'test': '123 + (1 * 3) - 456', 'expected': Number('-330') },

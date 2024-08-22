@@ -14,6 +14,10 @@ class TestNumericalHexadecimalNumbers(CalculatorTestCase):
 
     c = ModularCalculator('Computing')
     tests = [
+        { 'test': r"0xff", 'expected': Number("255") },
+        { 'test': r"0xFF", 'expected': Number("255") },
+        { 'test': r"0xFF.2", 'expected': Number("255.125") },
+        { 'test': r"-0xFF.2", 'expected': Number("-255.125") },
         { 'test': r"hex(255)", 'cast': str, 'expected': '0xFF' },
         { 'test': r"dec(hex(255))", 'expected': Number('255') },
         { 'test': r"0xff", 'cast': str, 'expected': '0xFF' },

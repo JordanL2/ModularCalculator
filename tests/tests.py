@@ -31,7 +31,6 @@ from numerical.trigonometryfunctions import *
 from state.assignment import *
 from state.assignmentfunctions import *
 from state.assignmentoperators import *
-from state.constants import *
 from strings.regex import *
 from strings.stringarrayfunctions import *
 from strings.stringcomparison import *

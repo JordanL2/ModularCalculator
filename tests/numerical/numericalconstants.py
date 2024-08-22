@@ -14,6 +14,9 @@ class TestNumericalNumericalConstants(CalculatorTestCase):
 
     c = ModularCalculator('Computing')
     tests = [
+        { 'test': r"e", 'expected': Number('2.71828182845904523536028747135266249775724709369995') },
+        { 'test': r"pi", 'expected': Number('3.14159265358979323846264338327950288419716939937511') },
+        { 'test': r"tau", 'expected': Number('6.28318530717958647692528676655900576839433879875022') },
         { 'test': r"tau / 2 pi", 'expected': Number('1') },
     ]
 

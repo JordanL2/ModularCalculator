@@ -14,6 +14,8 @@ class TestNumericalExpNumbers(CalculatorTestCase):
 
     c = ModularCalculator('Computing')
     tests = [
+        { 'test': r"1.234e1", 'expected': Number('12.34') },
+        { 'test': r"-1.234e1", 'expected': Number('-12.34') },
         { 'test': r"dec(1.234e1)", 'expected': Number('12.34') },
         { 'test': r"dec(1.234e10)", 'expected': Number('12340000000') },
         { 'test': r"dec(1.234e2)", 'expected': Number('123.4') },

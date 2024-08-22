@@ -20,12 +20,15 @@ class TestDatesDateFunctions(CalculatorTestCase):
         { 'test': "dateformat('2012-01-02+0100')", 'expected': 'Monday, 02-Jan-2012 (+0100)' },
         { 'test': "dateformat('2012-01-02T11:45:56-0430')", 'expected': 'Monday, 02-Jan-2012 at 11:45:56 (-0430)' },
         { 'test': "dateformat('2012-01-02T11:45:56.123456+1256')", 'expected': 'Monday, 02-Jan-2012 at 11:45:56.123456 (+1256)' },
+
         { 'test': "dateadd('2012-01-02T11:45:56', 5 seconds)", 'expected': '2012-01-02T11:46:01' },
         { 'test': "dateadd('2012-01-02T11:45:56', 0.123456 seconds)", 'expected': '2012-01-02T11:45:56.123456' },
         { 'test': "dateadd('2012-01-02T11:45:56', 5 hours)", 'expected': '2012-01-02T16:45:56' },
         { 'test': "dateadd('2012-01-02T11:45:56', 5 weeks)", 'expected': '2012-02-06T11:45:56' },
         { 'test': "dateadd(dateadd('0900-01-01', 1 year), 1 year)", 'expected': '0902-01-01T11:38:24' },
+
         { 'test': "datesubtract('2012-01-02T11:45:56', 5 seconds)", 'expected': '2012-01-02T11:45:51' },
+
         { 'test': "datedifference('2012-01-02T11:45:56', '2012-01-04T11:45:56', days)", 'expected': (Number('2'), 'days') },
         { 'test': "datedifference('2012-01-02T11:45:56', '2012-01-01T11:45:56', hours)", 'expected': (Number('24'), 'hours') },
         { 'test': "datedifference('2012-01-02T11:45:56', '2012-01-02T11:45:56.123456', seconds)", 'expected': (Number('0.123456'), 'seconds') },

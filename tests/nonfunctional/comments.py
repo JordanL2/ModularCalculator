@@ -16,6 +16,7 @@ class TestNonFunctionalComments(CalculatorTestCase):
     tests = [
         { 'test': "123 + (#comment\n456)", 'expected': Number(579) },
         { 'test': "123 + 456#comment", 'expected': Number(579) },
+        { 'test': "#comment\n123 + 456", 'expected': Number(579) },
     ]
 
     def category(self):
