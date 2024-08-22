@@ -50,16 +50,17 @@ class CalculatorTestCase(unittest.TestCase):
                             self.assertEqual(items, expected['items'], expr)
 
                 if response is not None:
-                    if 'timings' not in TEST_STATS:
-                        TEST_STATS['timings'] = {}
-                    testcase_name = type(self).__name__
-                    if testcase_name not in TEST_STATS['timings']:
-                        TEST_STATS['timings'][testcase_name] = {}
-                    for result in response.results:
-                        for stage in result.timings.keys():
-                            if stage not in TEST_STATS['timings'][testcase_name]:
-                                TEST_STATS['timings'][testcase_name][stage] = {}
-                            TEST_STATS['timings'][testcase_name][stage][result.expression] = result.timings[stage]
+                    testcase_name = self.category()
+                    if testcase_name is not None:
+                        if 'timings' not in TEST_STATS:
+                            TEST_STATS['timings'] = {}
+                        if testcase_name not in TEST_STATS['timings']:
+                            TEST_STATS['timings'][testcase_name] = {}
+                        for result in response.results:
+                            for stage in result.timings.keys():
+                                if stage not in TEST_STATS['timings'][testcase_name]:
+                                    TEST_STATS['timings'][testcase_name][stage] = {}
+                                TEST_STATS['timings'][testcase_name][stage][result.expression] = result.timings[stage]
             except Exception as err:
                 if isinstance(err, AssertionError):
                     raise err
@@ -88,6 +89,8 @@ class CalculatorTestCase(unittest.TestCase):
             else:
                 return (value, unit.plural())
 
+    def category(self):
+        raise Exception("Category has not been set")
 
     @classmethod
     def prepare_tests(test_class):
