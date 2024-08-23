@@ -56,16 +56,16 @@ class BitwiseOperatorsFeature(Feature):
             1,
             'number'))
 
-        bitwise_not = OperatorDefinition(
+        calculator.add_op(OperatorDefinition(
             'Bitwise',
             '~',
             'Bitwise Negation (1\'s Complement)',
             BitwiseOperatorsFeature.op_bitwise_not,
             0,
             1,
-            'number')
-        bitwise_not.auto_convert_numerical_inputs = False
-        calculator.add_op(bitwise_not, {'rtl': True})
+            'number'),
+        {'rtl': True,
+         'auto_convert_numerical_inputs': False})
 
         calculator.add_op(OperatorDefinition(
             'Bitwise',

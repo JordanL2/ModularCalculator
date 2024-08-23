@@ -20,6 +20,7 @@ class TestNumericalBitwiseOperators(CalculatorTestCase):
         { 'test': r"~0b1011101", 'cast': str, 'expected': '0b0100010' },
         { 'test': r"~0b00111100", 'cast': str, 'expected': '0b11000011' },
         { 'test': r"~60", 'expected': Number('3') },
+        { 'test': r"1 + ~60", 'expected': Number('4') },
         { 'test': r"0b10101 << 1", 'cast': str, 'expected': '0b101010' },
         { 'test': r"0b10101 << 1.5", 'cast': str, 'expected_exception': {
                                                 'exception': ExecutionException,
