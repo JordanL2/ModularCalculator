@@ -47,10 +47,11 @@ class NumericalRepresentationFeature(Feature):
         return None, None, None
 
     def validate_numericalrepresentation(self, value, unit, ref):
-        return value in self.number_types.keys()
+        return isinstance(value, NumericalRepresentationValue) and value.name() in self.number_types.keys()
 
     def op_as(self, vals, units, refs, flags):
         numrep = vals[1]
+        numrep = numrep.name()
         if numrep not in self.number_types.keys():
             raise CalculatorException("Could not find numerical representation '{}'".format(numrep))
         number_type = self.number_types[numrep]
@@ -73,7 +74,7 @@ class NumericalRepresentationItem(OperandItem):
         return 'special'
 
     def value(self, flags):
-        return self.text
+        return NumericalRepresentationValue(self.text)
 
     def result(self, flags):
         return OperandResult(self.value(flags), None, self)
@@ -81,3 +82,9 @@ class NumericalRepresentationItem(OperandItem):
     def copy(self, classtype=None):
         copy = super().copy(classtype or self.__class__)
         return copy
+
+
+class NumericalRepresentationValue(ObjectValue):
+
+    def __init__(self, text):
+        super().__init__('numericalrepresentation', text, 'special')

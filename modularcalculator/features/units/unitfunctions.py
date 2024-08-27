@@ -62,7 +62,7 @@ class GeneralUnitFunctionsFeature(Feature):
 
         singleunit = unit.list()[0].unit
         if len(vals) >= 2:
-            system = vals[1]
+            system = vals[1].name()
         else:
             if singleunit.systems is None or len(singleunit.systems) == 0:
                 raise CalculatorException("Unit is not part of a measuring system")

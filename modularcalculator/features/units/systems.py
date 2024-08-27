@@ -47,7 +47,7 @@ class UnitSystemsFeature(Feature):
         return None, None, None
 
     def validate_unit_system(self, value, unit, ref):
-        return value in self.unit_normaliser.systems.keys()
+        return isinstance(value, UnitSystemValue) and value.name() in self.unit_normaliser.systems.keys()
 
 
 class UnitSystemItem(OperandItem):
@@ -62,7 +62,7 @@ class UnitSystemItem(OperandItem):
         return 'special'
 
     def value(self, flags):
-        return self.text
+        return UnitSystemValue(self.text)
 
     def result(self, flags):
         return OperandResult(self.value(flags), None, self)
@@ -70,6 +70,12 @@ class UnitSystemItem(OperandItem):
     def copy(self, classtype=None):
         copy = super().copy(classtype or self.__class__)
         return copy
+
+
+class UnitSystemValue(ObjectValue):
+
+    def __init__(self, text):
+        super().__init__('unitsystem', text, 'special')
 
 
 class UnitSystemGregorian:

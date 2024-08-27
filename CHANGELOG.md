@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.5.0
+- Number Types and Unit Systems are actual objects, rather than strings
+
 ## 1.4.5
 - Fixed crash for operation exceptions with non-decimal numbers
 

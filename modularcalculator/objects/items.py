@@ -173,3 +173,23 @@ class OperandResult:
         if self.unit is not None:
             return value_str + ' ' + str(self.unit)
         return value_str
+
+
+class ObjectValue:
+
+    def __init__(self, objecttype, text, objectcategory):
+        self.objecttype = objecttype
+        self.text = text
+        self.objectcategory = objectcategory
+
+    def type(self):
+        return self.objecttype
+
+    def name(self):
+        return self.text
+
+    def category(self):
+        return self.objectcategory
+
+    def __eq__(self, other):
+        return self.objecttype == other.objecttype and self.text == other.text

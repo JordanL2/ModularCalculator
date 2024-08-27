@@ -16,7 +16,7 @@ class TestUnitsSystems(CalculatorTestCase):
 
     c = ModularCalculator('Computing')
     tests = [
-        { 'test': "si", 'expected': 'si' },
+        { 'test': "si", 'expected': UnitSystemValue('si') },
     ]
 
     def category(self):
