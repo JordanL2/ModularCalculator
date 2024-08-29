@@ -24,7 +24,7 @@ class NumericalRepresentationFeature(Feature):
     @classmethod
     def install(cls, calculator):
         calculator.add_parser('numericalrepresentation', NumericalRepresentationFeature.parse_numericalrepresentation)
-        calculator.validators['numericalrepresentation'] = NumericalRepresentationFeature.validate_numericalrepresentation
+        calculator.add_validator('numericalrepresentation', 'number type', NumericalRepresentationFeature.validate_numericalrepresentation)
 
         op_as_def = OperatorDefinition(
             'Numerical',

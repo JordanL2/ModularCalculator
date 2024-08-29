@@ -27,6 +27,12 @@ class TestStringsRegex(CalculatorTestCase):
         { 'test': r"regexget('123ABC123DEF123GHI123', '[A-Z]+')", 'expected': ['ABC', 'DEF', 'GHI'] },
         { 'test': r"regexget('123456', '[A-Z]+')", 'expected': [] },
         { 'test': r"regexget('123ABC456', '\\d+', 2)", 'expected': '456' },
+        { 'test': r"regexget('123ABC456', '\\d+', -1)", 'expected_exception': {
+                                'exception': ExecutionException,
+                                'message': r"Could not execute regexget with parameters: '123ABC456', '\d+', -1 - regexget parameter 3 must be of type(s) positive integer" } },
+        { 'test': r"regexget('123ABC456', '\\d+', 0.5)", 'expected_exception': {
+                                'exception': ExecutionException,
+                                'message': r"Could not execute regexget with parameters: '123ABC456', '\d+', 0.5 - regexget parameter 3 must be of type(s) positive integer" } },
 
         { 'test': r"regexsplit('123ABC456XYZ789', '[A-Z]+')", 'expected': ['123', '456', '789'] },
         { 'test': r"regexsplit('123456', '[A-Z]+')", 'expected': ['123456'] },
@@ -40,6 +46,12 @@ class TestStringsRegex(CalculatorTestCase):
         { 'test': r"regexsub('123ABC456XYZ789', '[A-Z]+', 'defg')", 'expected': '123defg456defg789' },
         { 'test': r"regexsub('123ABC456XYZ789', '[A-Z]+', 'defg', 1)", 'expected': '123defg456XYZ789' },
         { 'test': r"regexsub('123456789', '[A-Z]+', 'defg')", 'expected': '123456789' },
+        { 'test': r"regexsub('123ABC456XYZ789', '[A-Z]+', 'defg', -1)", 'expected_exception': {
+                                'exception': ExecutionException,
+                                'message': r"Could not execute regexsub with parameters: '123ABC456XYZ789', '[A-Z]+', 'defg', -1 - regexsub parameter 4 must be of type(s) positive integer" } },
+        { 'test': r"regexsub('123ABC456XYZ789', '[A-Z]+', 'defg', 0.5)", 'expected_exception': {
+                                'exception': ExecutionException,
+                                'message': r"Could not execute regexsub with parameters: '123ABC456XYZ789', '[A-Z]+', 'defg', 0.5 - regexsub parameter 4 must be of type(s) positive integer" } },
 
         { 'test': r"regexcount('1abc2def3ghi4', '[a-z]{3}')", 'expected': Number(3) },
         { 'test': r"regexcount('12345', '[a-z]{3}')", 'expected': Number(0) },

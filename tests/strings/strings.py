@@ -34,6 +34,12 @@ class TestStringsStrings(CalculatorTestCase):
         { 'test': r"'123' *$ 2", 'expected': '123123' },
         { 'test': r"'123' *$ 0b10", 'expected': '123123' },
         { 'test': r"'abc' *$ '3'", 'expected': 'abcabcabc' },
+        { 'test': r"'abc' *$ -1", 'expected_exception': {
+                                'exception': ExecutionException,
+                                'message': r"Could not execute operator *$ with parameters: 'abc', -1 - operator *$ parameter 2 must be of type(s) positive integer" } },
+        { 'test': r"'abc' *$ 0.5", 'expected_exception': {
+                                'exception': ExecutionException,
+                                'message': r"Could not execute operator *$ with parameters: 'abc', 0.5 - operator *$ parameter 2 must be of type(s) positive integer" } },
     ]
 
     def category(self):

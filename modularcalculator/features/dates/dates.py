@@ -56,7 +56,7 @@ class DatesFeature(Feature):
 
     @classmethod
     def install(cls, calculator):
-        calculator.validators['date'] = DatesFeature.validate_date
+        calculator.add_validator('date', 'date', DatesFeature.validate_date)
 
         calculator.feature_options['dates.dates'] = cls.default_options()
 
@@ -96,7 +96,7 @@ class DatesFeature(Feature):
     def date_to_string(self, dt):
         dt_format, dt_padding = DatesFeature.correct_format_for_date(self, dt)
         return format(
-            dt.strftime(self.feature_options['dates.dates'][dt_format]), 
+            dt.strftime(self.feature_options['dates.dates'][dt_format]),
             self.feature_options['dates.dates'][dt_padding])
 
     def validate_date(self, value, unit, ref):

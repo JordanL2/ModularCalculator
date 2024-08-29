@@ -15,7 +15,7 @@ class Engine:
         self.parsers = []
         self.ops = []
         self.finalizers = []
-        self.validators = {'exception': Engine.validate_exception}
+        self.validators = { 'exception': { 'desc': 'exception', 'ref': Engine.validate_exception } }
 
         self.multiply_op = None
         self.divide_op = None

@@ -2,6 +2,7 @@
 
 ## 1.5.0
 - Number Types and Unit Systems are actual objects, rather than strings
+- Additional input number type checks (e.g. positivity, integers) for operations that need them
 
 ## 1.4.5
 - Fixed crash for operation exceptions with non-decimal numbers

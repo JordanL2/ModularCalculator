@@ -81,7 +81,7 @@ class NumericalFunctionsFeature(Feature):
             NumericalFunctionsFeature.func_fact,
             1,
             1,
-            'number')
+            'number_int_positive')
 
         calculator.funcs['exp'] = FunctionDefinition(
             'Numerical',
@@ -111,7 +111,7 @@ class NumericalFunctionsFeature(Feature):
             NumericalFunctionsFeature.func_lcm,
             2,
             2,
-            'number')
+            'number_int')
 
         calculator.funcs['gcd'] = FunctionDefinition(
             'Numerical',
@@ -121,7 +121,7 @@ class NumericalFunctionsFeature(Feature):
             NumericalFunctionsFeature.func_gcd,
             2,
             2,
-            'number')
+            'number_int')
 
 
     def func_abs(self, vals, units, refs, flags):
@@ -157,8 +157,6 @@ class NumericalFunctionsFeature(Feature):
         return NumericalFunctionsFeature.apply_rounding_function(self, vals, units, round)
 
     def func_fact(self, vals, units, refs, flags):
-        if vals[0].to_decimal() < 0 or (vals[0] % Number(1)).to_decimal() != 0:
-            raise CalculatorException('Operator requires positive integers')
         res = OperationResult(Number(math.factorial(int(vals[0]))))
         res.set_unit(units[0])
         return res
@@ -178,15 +176,11 @@ class NumericalFunctionsFeature(Feature):
         return res
 
     def func_lcm(self, vals, units, refs, flags):
-        if (vals[0] % Number(1)).to_decimal() != 0 or (vals[1] % Number(1)).to_decimal() != 0:
-            raise CalculatorException('Operator requires integers')
         res = OperationResult(Number(math.lcm(int(vals[0]), int(vals[1]))))
         res.set_unit(units[0])
         return res
 
     def func_gcd(self, vals, units, refs, flags):
-        if (vals[0] % Number(1)).to_decimal() != 0 or (vals[1] % Number(1)).to_decimal() != 0:
-            raise CalculatorException('Operator requires integers')
         res = OperationResult(Number(math.gcd(int(vals[0]), int(vals[1]))))
         res.set_unit(units[0])
         return res

@@ -136,7 +136,7 @@ class BooleansFeature(Feature):
 
         calculator.add_number_type(BooleanNumericalRepresentation)
 
-        calculator.validators['boolean'] = BooleansFeature.validate_boolean
+        calculator.add_validator('boolean', 'boolean', BooleansFeature.validate_boolean)
 
     bool_regex = re.compile(r'(true|false)(\W|$)', re.IGNORECASE)
 

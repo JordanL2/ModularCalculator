@@ -45,7 +45,7 @@ class ArrayFunctionsFeature(Feature):
             2,
             2)
         calculator.funcs['element'].add_value_restriction(0, 0, ['array'])
-        calculator.funcs['element'].add_value_restriction(1, 1, ['number'])
+        calculator.funcs['element'].add_value_restriction(1, 1, ['number_int_positive'])
 
         calculator.funcs['filter'] = FunctionDefinition(
             'Arrays',

@@ -63,7 +63,7 @@ class BitwiseOperatorsFeature(Feature):
             BitwiseOperatorsFeature.op_bitwise_not,
             0,
             1,
-            'number'),
+            'number_int_positive'),
         {'rtl': True,
          'auto_convert_numerical_inputs': False})
 
@@ -74,7 +74,7 @@ class BitwiseOperatorsFeature(Feature):
             BitwiseOperatorsFeature.op_bitwise_lshift,
             1,
             1,
-            'number'))
+            ['number', 'number_int_positive']))
 
         calculator.add_op(OperatorDefinition(
             'Bitwise',
@@ -83,7 +83,7 @@ class BitwiseOperatorsFeature(Feature):
             BitwiseOperatorsFeature.op_bitwise_rshift,
             1,
             1,
-            'number'))
+            ['number', 'number_int_positive']))
 
     def op_bitwise_and(self, vals, units, refs, flags):
         res = Number(int(vals[0]) & int(vals[1]))
@@ -103,9 +103,6 @@ class BitwiseOperatorsFeature(Feature):
     def op_bitwise_not(self, vals, units, refs, flags):
         dec_num = self.number(vals[0])
 
-        if dec_num.to_decimal() < 0 or (dec_num % Number(1)).to_decimal() != 0:
-            raise CalculatorException('Operator requires positive integers')
-
         int_val = int(dec_num)
         if hasattr(dec_num, 'binary_number_width'):
             mask_val = 2**dec_num.binary_number_width - 1
@@ -119,15 +116,11 @@ class BitwiseOperatorsFeature(Feature):
         return OperationResult(masked_flipped_val)
 
     def op_bitwise_lshift(self, vals, units, refs, flags):
-        if vals[1].to_decimal() < 0 or (vals[1] % Number(1)).to_decimal() != 0:
-            raise CalculatorException('Shift amount requires positive integers')
         res = Number(int(vals[0]) << int(vals[1]))
         res.binary_number_width = BitwiseOperatorsFeature.get_biggest_width(self, vals)
         return OperationResult(res)
 
     def op_bitwise_rshift(self, vals, units, refs, flags):
-        if vals[1].to_decimal() < 0 or (vals[1] % Number(1)).to_decimal() != 0:
-            raise CalculatorException('Shift amount requires positive integers')
         res = Number(int(vals[0]) >> int(vals[1]))
         res.binary_number_width = BitwiseOperatorsFeature.get_biggest_width(self, vals)
         return OperationResult(res)

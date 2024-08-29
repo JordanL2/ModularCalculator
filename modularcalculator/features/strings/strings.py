@@ -49,10 +49,10 @@ class StringsFeature(Feature):
             StringsFeature.op_string_multiply,
             1,
             1,
-            ['string', 'number'])
+            ['string', 'number_int_positive'])
         calculator.add_op(string_mult)
 
-        calculator.validators['string'] = StringsFeature.validate_string
+        calculator.add_validator('string', 'string', StringsFeature.validate_string)
 
         calculator.feature_options['strings.strings'] = cls.default_options()
 

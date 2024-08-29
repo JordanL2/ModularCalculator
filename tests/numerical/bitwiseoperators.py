@@ -20,20 +20,26 @@ class TestNumericalBitwiseOperators(CalculatorTestCase):
         { 'test': r"~0b1011101", 'cast': str, 'expected': '0b0100010' },
         { 'test': r"~0b00111100", 'cast': str, 'expected': '0b11000011' },
         { 'test': r"~60", 'expected': Number('3') },
+        { 'test': r"~60.5", 'expected_exception': {
+                            'exception': ExecutionException,
+                            'message': r"Could not execute operator ~ with parameters: 60.5 - operator ~ parameter 1 must be of type(s) positive integer"} },
+        { 'test': r"~-1", 'expected_exception': {
+                            'exception': ExecutionException,
+                            'message': r"Could not execute operator ~ with parameters: -1 - operator ~ parameter 1 must be of type(s) positive integer"} },
         { 'test': r"1 + ~60", 'expected': Number('4') },
         { 'test': r"0b10101 << 1", 'cast': str, 'expected': '0b101010' },
         { 'test': r"0b10101 << 1.5", 'cast': str, 'expected_exception': {
-                                                'exception': ExecutionException,
-                                                'message': r"Could not execute operator << with parameters: 0b10101, 1.5 - Shift amount requires positive integers"} },
+                                                  'exception': ExecutionException,
+                                                  'message': r"Could not execute operator << with parameters: 0b10101, 1.5 - operator << parameter 2 must be of type(s) positive integer"} },
         { 'test': r"0b10101 << -1", 'cast': str, 'expected_exception': {
-                                                'exception': ExecutionException,
-                                                'message': r"Could not execute operator << with parameters: 0b10101, -1 - Shift amount requires positive integers"} },
+                                                 'exception': ExecutionException,
+                                                 'message': r"Could not execute operator << with parameters: 0b10101, -1 - operator << parameter 2 must be of type(s) positive integer"} },
         { 'test': r"0b10101 >> 1.5", 'cast': str, 'expected_exception': {
-                                                'exception': ExecutionException,
-                                                'message': r"Could not execute operator >> with parameters: 0b10101, 1.5 - Shift amount requires positive integers"} },
+                                                  'exception': ExecutionException,
+                                                  'message': r"Could not execute operator >> with parameters: 0b10101, 1.5 - operator >> parameter 2 must be of type(s) positive integer"} },
         { 'test': r"0b10101 >> -1", 'cast': str, 'expected_exception': {
-                                                'exception': ExecutionException,
-                                                'message': r"Could not execute operator >> with parameters: 0b10101, -1 - Shift amount requires positive integers"} },
+                                                 'exception': ExecutionException,
+                                                 'message': r"Could not execute operator >> with parameters: 0b10101, -1 - operator >> parameter 2 must be of type(s) positive integer"} },
         { 'test': r"0b10101 << 2", 'cast': str, 'expected': '0b1010100' },
         { 'test': r"0b10101 << 8", 'cast': str, 'expected': '0b1010100000000' },
         { 'test': r"0b10010 >> 1", 'cast': str, 'expected': '0b01001' },

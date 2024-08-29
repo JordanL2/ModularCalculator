@@ -42,7 +42,7 @@ class ArraysFeature(Feature):
         calculator.add_parser('array_param', ArraysFeature.parse_array_param)
         calculator.add_parser('array_end', ArraysFeature.parse_array_end)
 
-        calculator.validators['array'] = ArraysFeature.validate_array
+        calculator.add_validator('array', 'array', ArraysFeature.validate_array)
 
     def parse_array(self, expr, i, items, flags):
         next = expr[i:]
@@ -158,7 +158,7 @@ class ArraysFeature(Feature):
             return False
         if sub_type is not None:
             for element in value:
-                if sub_type not in self.validators or not self.validators[sub_type](self, element.value, element.unit, element.ref):
+                if sub_type not in self.validators or not self.validators[sub_type]['ref'](self, element.value, element.unit, element.ref):
                     return False
         return True
 

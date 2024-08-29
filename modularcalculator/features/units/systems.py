@@ -35,7 +35,7 @@ class UnitSystemsFeature(Feature):
 
         calculator.add_parser('unitsystems', UnitSystemsFeature.parse_unitsystems)
 
-        calculator.validators['unitsystem'] = UnitSystemsFeature.validate_unit_system
+        calculator.add_validator('unitsystem', 'unit system', UnitSystemsFeature.validate_unit_system)
 
     def parse_unitsystems(self, expr, i, items, flags):
         next = expr[i:]

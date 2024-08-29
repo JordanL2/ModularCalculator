@@ -34,10 +34,10 @@ class TestNumericalNumericalFunctions(CalculatorTestCase):
         { 'test': r"fact(5)", 'expected': Number('120') },
         { 'test': r"fact(-5)", 'expected_exception': {
                                 'exception': ExecutionException,
-                                'message': r"Could not execute fact with parameters: -5 - Operator requires positive integers" } },
+                                'message': r"Could not execute fact with parameters: -5 - fact parameter 1 must be of type(s) positive integer" } },
         { 'test': r"fact(5.5)", 'expected_exception': {
                                 'exception': ExecutionException,
-                                'message': r"Could not execute fact with parameters: 5.5 - Operator requires positive integers" } },
+                                'message': r"Could not execute fact with parameters: 5.5 - fact parameter 1 must be of type(s) positive integer" } },
 
         { 'test': r"exp(2)", 'expected':  Number('2955622439572260090892170984230003125272126228220718107667878170569356139218703132986928341992252001', '400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000') },
 
@@ -55,19 +55,19 @@ class TestNumericalNumericalFunctions(CalculatorTestCase):
         { 'test': r"lcm(4, -5)", 'expected': Number('20') },
         { 'test': r"lcm(0.5, 1)", 'expected_exception': {
                                 'exception': ExecutionException,
-                                'message': r"Could not execute lcm with parameters: 0.5, 1 - Operator requires integers" } },
+                                'message': r"Could not execute lcm with parameters: 0.5, 1 - lcm parameter 1 must be of type(s) integer" } },
         { 'test': r"lcm(1, 0.5)", 'expected_exception': {
                                 'exception': ExecutionException,
-                                'message': r"Could not execute lcm with parameters: 1, 0.5 - Operator requires integers" } },
+                                'message': r"Could not execute lcm with parameters: 1, 0.5 - lcm parameter 2 must be of type(s) integer" } },
 
         { 'test': r"gcd(54, 60)", 'expected': Number('6') },
         { 'test': r"gcd(10, -5)", 'expected': Number('5') },
         { 'test': r"gcd(0.5, 1)", 'expected_exception': {
                                 'exception': ExecutionException,
-                                'message': r"Could not execute gcd with parameters: 0.5, 1 - Operator requires integers" } },
+                                'message': r"Could not execute gcd with parameters: 0.5, 1 - gcd parameter 1 must be of type(s) integer" } },
         { 'test': r"gcd(1, 0.5)", 'expected_exception': {
                                 'exception': ExecutionException,
-                                'message': r"Could not execute gcd with parameters: 1, 0.5 - Operator requires integers" } },
+                                'message': r"Could not execute gcd with parameters: 1, 0.5 - gcd parameter 2 must be of type(s) integer" } },
     ]
 
     def category(self):

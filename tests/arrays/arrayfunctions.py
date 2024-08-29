@@ -21,6 +21,12 @@ class TestArraysArrayFunctions(CalculatorTestCase):
         { 'test': r"element([1, 2, 3], 2)", 'expected': Number('2') },
         { 'test': r"element([1, 2, 3, 4, 5], [2 .. 4])", 'expected': [Number('2'), Number('3'), Number('4')] },
         { 'test': r"element([1 cm, 2 seconds, 3 metres], 2)", 'expected': (Number('2'), 'seconds') },
+        { 'test': "a = [1]\n element(a, -1)", 'expected_exception': {
+                                               'exception': ExecutionException,
+                                               'message': r"Could not execute element with parameters: [1], -1 - element parameter 2 must be of type(s) positive integer" } },
+        { 'test': "a = [1]\n element(a, 0.5)", 'expected_exception': {
+                                               'exception': ExecutionException,
+                                               'message': r"Could not execute element with parameters: [1], 0.5 - element parameter 2 must be of type(s) positive integer" } },
         { 'test': "a = [1] / 0\nelement(a, 1)", 'expected_exception': {
                                                 'exception': ExecutionException,
                                                 'message': r"Could not execute operator / with parameters: 1, 0" } },

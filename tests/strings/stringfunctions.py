@@ -41,6 +41,12 @@ class TestStringsStringFunctions(CalculatorTestCase):
         { 'test': r"substr('ABCabc', -3, -2)", 'expected': 'ab' },
         { 'test': r"substr('123456', 4, 4)", 'expected': '5' },
         { 'test': r"substr('123456', 0b100, 0b100)", 'expected': '5' },
+        { 'test': r"substr('123456', 0.5, 4)", 'expected_exception': {
+                                'exception': ExecutionException,
+                                'message': r"Could not execute substr with parameters: '123456', 0.5, 4 - substr parameter 2 must be of type(s) integer" } },
+        { 'test': r"substr('123456', 4, 0.5)", 'expected_exception': {
+                                'exception': ExecutionException,
+                                'message': r"Could not execute substr with parameters: '123456', 4, 0.5 - substr parameter 3 must be of type(s) integer" } },
     ]
 
     def category(self):

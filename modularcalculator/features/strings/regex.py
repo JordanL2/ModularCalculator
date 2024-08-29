@@ -57,7 +57,7 @@ class RegexFeature(Feature):
             2,
             3)
         calculator.funcs['regexget'].add_value_restriction(0, 1, 'string')
-        calculator.funcs['regexget'].add_value_restriction(2, 2, 'number')
+        calculator.funcs['regexget'].add_value_restriction(2, 2, 'number_int_positive')
 
         calculator.funcs['regexsplit'] = FunctionDefinition(
             'Regular Expression',
@@ -78,7 +78,7 @@ class RegexFeature(Feature):
             3,
             4)
         calculator.funcs['regexsub'].add_value_restriction(0, 2, 'string')
-        calculator.funcs['regexsub'].add_value_restriction(3, 3, 'number')
+        calculator.funcs['regexsub'].add_value_restriction(3, 3, 'number_int_positive')
 
         calculator.funcs['regexcount'] = FunctionDefinition(
             'Regular Expression',

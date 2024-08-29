@@ -169,7 +169,7 @@ class Operation:
                     values, number_cast = self.convert_numbers(calculator, values)
 
                 # Normalise the units of all inputs if units_normalise flag is set
-                if len([i for i in range(0, len(values)) if not self.input_can_be_type(i, 'number') or not calculator.validate_number(values[i])]) == 0:
+                if len([i for i in range(0, len(values)) if not self.input_can_be_numerical_type(calculator, i) or not calculator.validate_number(values[i])]) == 0:
 
                     # All inputs are numbers, normalise them to be all be the same unit
                     if calculator.unit_normaliser is not None and self.units_normalise:
@@ -179,7 +179,7 @@ class Operation:
 
                     # Go through each input and check if it's an array of numbers
                     for i in range(0, len(values)):
-                        if type(values[i]) == list and self.input_must_be_type(i, 'array', 'number'):
+                        if type(values[i]) == list and self.input_must_be_numerical_type(calculator, i, 'array'):
 
                             # This is an array of numbers
 
@@ -261,7 +261,7 @@ class Operation:
                     if self.validate_input(objtype, calculator, values[i], units[i], refs[i]):
                         break
                 else:
-                    raise CalculatorException("{0} parameter {1} must be of type(s) {2}".format(self.name, i + 1, str.join(', ', objtypes)))
+                    raise CalculatorException("{0} parameter {1} must be of type(s) {2}".format(self.name, i + 1, str.join(', ', [self.get_validator_type_name(calculator, o) for o in objtypes])))
 
         # Check all restrictions on input units are true
         for restriction in self.unit_restrictions:
@@ -286,8 +286,8 @@ class Operation:
             return True
         obj_type, obj_sub_type = self.parse_sub_type(obj_type)
         if obj_sub_type is not None:
-            return calculator.validators[obj_type](calculator, value, unit, ref, obj_sub_type)
-        if obj_type in calculator.validators and calculator.validators[obj_type](calculator, value, unit, ref):
+            return calculator.validators[obj_type]['ref'](calculator, value, unit, ref, obj_sub_type)
+        if obj_type in calculator.validators and calculator.validators[obj_type]['ref'](calculator, value, unit, ref):
             return True
         return False
 
@@ -301,6 +301,18 @@ class Operation:
             return (obj_main_type, obj_sub_type)
         return (obj_type, None)
 
+    def get_validator_type_name(self, calculator, name):
+        if name in calculator.validators:
+            return calculator.validators[name]['desc']
+        obj_type, obj_sub_type = self.parse_sub_type(name)
+        if obj_type not in calculator.validators:
+            raise Exception("Validator type {} not valid".format(name))
+        if obj_sub_type not in calculator.validators:
+            raise Exception("Validator type {} not valid".format(name))
+        if obj_sub_type is None:
+            raise Exception("Validator type {} not valid".format(name))
+        return "{} of type {}".format(calculator.validators[obj_type]['desc'], calculator.validators[obj_sub_type]['desc'])
+
     def input_can_be_type(self, i, obj_type, sub_type=None):
         for restriction in self.value_restrictions:
             fromparam = restriction['fromparam']
@@ -311,6 +323,16 @@ class Operation:
             subtypes = [self.parse_sub_type(o)[1] for o in restriction['objtypes']]
             if i >= fromparam and (toparam is None or i <= toparam) and obj_type in objtypes and (sub_type is None or sub_type in subtypes):
                 return True
+        return False
+
+    def input_can_be_numerical_type(self, calculator, i, obj_type=None):
+        for numerical_type in calculator.numerical_validators:
+            if obj_type is None:
+                if self.input_can_be_type(i, numerical_type):
+                    return True
+            else:
+                if self.input_can_be_type(i, obj_type, numerical_type):
+                    return True
         return False
 
     def input_must_be_type(self, i, obj_type, sub_type=None):
@@ -329,6 +351,16 @@ class Operation:
                     return False
         return found_type
 
+    def input_must_be_numerical_type(self, calculator, i, obj_type=None):
+        for numerical_type in calculator.numerical_validators:
+            if obj_type is None:
+                if self.input_must_be_type(i, numerical_type):
+                    return True
+            else:
+                if self.input_must_be_type(i, obj_type, numerical_type):
+                    return True
+        return False
+
     def convert_numbers(self, calculator, values):
         new_values = values.copy()
         number_cast = None
@@ -336,7 +368,8 @@ class Operation:
         # If an input is declared it can be a number, and it contains a numerical value, convert it to a number
         for restriction in self.value_restrictions:
             objtypes = restriction['objtypes']
-            if 'number' in objtypes:
+            # Check if any of the object types are a type of number
+            if len([n for n in calculator.numerical_validators for o in objtypes if n == o]) > 0:
                 fromparam = restriction['fromparam']
                 toparam = len(values)
                 if 'toparam' in restriction and restriction['toparam'] is not None:

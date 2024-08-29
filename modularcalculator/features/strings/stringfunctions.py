@@ -116,7 +116,7 @@ class StringFunctionsFeature(Feature):
             2,
             3)
         calculator.funcs['substr'].add_value_restriction(0, 0, 'string')
-        calculator.funcs['substr'].add_value_restriction(1, 2, 'number')
+        calculator.funcs['substr'].add_value_restriction(1, 2, 'number_int')
 
     def func_length(self, vals, units, refs, flags):
         return OperationResult(Number(len(StringsFeature.string(self, vals[0]))))

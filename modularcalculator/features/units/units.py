@@ -80,8 +80,8 @@ class UnitsFeature(Feature):
             'unit'),
         {'units_normalise': False, 'hidden': True})
 
-        calculator.validators['unit'] = UnitsFeature.validate_unit
-        calculator.validators['number with unit'] = UnitsFeature.validate_number_with_unit
+        calculator.add_validator('unit', 'unit', UnitsFeature.validate_unit)
+        calculator.add_validator('number with unit', 'number with unit', UnitsFeature.validate_number_with_unit)
 
     def parse_units(self, expr, i, items, flags):
         next = expr[i:]

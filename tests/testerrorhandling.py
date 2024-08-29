@@ -66,13 +66,13 @@ class TestErrorHandling(CalculatorTestCase):
 
         { 'test': r"min([1, 2, ''])", 'expected_exception': {
                                                 'exception': ExecutionException,
-                                                'message': r"Could not execute min with parameters: [1, 2, ''] - min parameter 1 must be of type(s) array[number]",
+                                                'message': r"Could not execute min with parameters: [1, 2, ''] - min parameter 1 must be of type(s) array of type number",
                                                 'pos': 0,
                                                 'items': [] } },
 
         { 'test': r"1 + (min([1, 2, '']))", 'expected_exception': {
                                                 'exception': ExecutionException,
-                                                'message': r"Could not execute min with parameters: [1, 2, ''] - min parameter 1 must be of type(s) array[number]",
+                                                'message': r"Could not execute min with parameters: [1, 2, ''] - min parameter 1 must be of type(s) array of type number",
                                                 'pos': 5,
                                                 'items': ['1',' ','+',' ','(',],
                                                 'next': 'min([1, 2, \'\'])' } },
