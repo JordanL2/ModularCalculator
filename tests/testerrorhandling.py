@@ -313,7 +313,13 @@ class TestErrorHandling(CalculatorTestCase):
                                                 'message': "Could not parse: £\n}\n}",
                                                 'pos': 13,
                                                 'items': ['f',' ','=',' ','{','\n','ff',' ','=',' ','{','\n'] } },
-    #    { 'test': r"", 'expected': { 'exception': ParsingException, 'message': r"", 'pos': 0, 'items': [] } },
+       { 'test': r"5.97237e24kg / ", 'expected_exception': {
+                'exception': ExecutionException,
+                'message': r"Missing right operands for operator /",
+                'pos': 13,
+                'items': ['5.97237e24', 'kg', ' '] } },
+
+    #    { 'test': r"", 'expected_exception': { 'exception': ParsingException, 'message': r"", 'pos': 0, 'items': [] } },
     ]
 
     def setUp(self):

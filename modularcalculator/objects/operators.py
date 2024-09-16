@@ -231,12 +231,12 @@ class Operation:
             except CalculatorException as err:
                 if err.wrapped:
                     raise err
-                values = str.join(', ', [op_input.to_string(self) for op_input in inputs])
+                values = str.join(', ', [op_input.to_string(calculator) for op_input in inputs])
                 newerr = CalculatorException("Could not execute {0} with parameters: {1} - {2}".format(self.name, values, err.message))
                 newerr.wrapped = True
                 raise newerr
             except Exception as err:
-                values = str.join(', ', [op_input.to_string(self) for op_input in inputs])
+                values = str.join(', ', [op_input.to_string(calculator) for op_input in inputs])
                 raise CalculatorException("Could not execute {0} with parameters: {1}".format(self.name, values))
 
     def validate(self, calculator, values, units, refs):

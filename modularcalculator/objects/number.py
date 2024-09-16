@@ -59,6 +59,8 @@ class Number:
         raise Exception("Use to_string(calculator)")
 
     def to_string(self, calculator=None):
+        if calculator is not None:
+            assert calculator.__class__.__name__ == "ModularCalculator", "{} != {}".format(calculator.__class__.__name__, "ModularCalculator")
         if hasattr(self, 'number_cast') and self.number_cast is not None and 'to_string' in self.number_cast:
             return self.number_cast['to_string'](
                 calculator,

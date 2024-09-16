@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.4.5
+- Fixed crash for operation exceptions with non-decimal numbers
+
 ## 1.4.4
 - Fixed 'as' operator dropping value's unit
 - exp function has increased precision
