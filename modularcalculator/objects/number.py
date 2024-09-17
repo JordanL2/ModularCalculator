@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 
+from modularcalculator.services.typechecking import *
+
 from decimal import Decimal, getcontext, InvalidOperation
 from importlib import import_module
 import math
@@ -13,6 +15,7 @@ NUMBER = {
 class Number:
 
     def __init__(self, num, den=None, skip_checks=False, number_cast=None):
+        assert_class(Number, self)
         self.number_cast = number_cast
         if skip_checks:
             self.num = num
@@ -56,11 +59,12 @@ class Number:
 
 
     def __str__(self):
+        assert_class(Number, self)
         raise Exception("Use to_string(calculator)")
 
     def to_string(self, calculator=None):
-        if calculator is not None:
-            assert calculator.__class__.__name__ == "ModularCalculator", "{} != {}".format(calculator.__class__.__name__, "ModularCalculator")
+        assert_class(Number, self)
+        assert_optional_classname("ModularCalculator", calculator)
         if hasattr(self, 'number_cast') and self.number_cast is not None and 'to_string' in self.number_cast:
             return self.number_cast['to_string'](
                 calculator,
@@ -77,53 +81,66 @@ class Number:
                 val = val[0:-1]
         return val
 
-    def __format__(self, format_spec):
+    def __format__(self, format_spec: str):
+        assert_class(Number, self)
         return self.to_decimal().__format__(format_spec)
 
     def __repr__(self):
+        assert_class(Number, self)
         if self.den != Decimal('1'):
             return "Number('{0:f}', '{1:f}')".format(self.num, self.den)
         return "Number('{0:f}')".format(self.num)
 
     def as_fraction(self):
+        assert_class(Number, self)
         (whole, num) = divmod(self.num, self.den)
         return (whole, num, self.den)
 
     def is_integer(self):
+        assert_class(Number, self)
         return self.den == Decimal(1)
 
     def copy(self):
+        assert_class(Number, self)
         return Number(self.num, self.den, number_cast=self.number_cast, skip_checks=True)
 
 
     def __add__(self, other):
+        assert_class(Number, self, other)
         (lcm, a_num, b_num) = Number.normalise(self, other)
         return Number(a_num + b_num, lcm, number_cast=self.number_cast)
 
     def __sub__(self, other):
+        assert_class(Number, self, other)
         (lcm, a_num, b_num) = Number.normalise(self, other)
         return Number(a_num - b_num, lcm, number_cast=self.number_cast)
 
     def __mul__(self, other):
+        assert_class(Number, self, other)
         return Number(self.num * other.num, self.den * other.den, number_cast=self.number_cast)
 
     def __truediv__(self, other):
+        assert_class(Number, self, other)
         return Number(self.num * other.den, self.den * other.num, number_cast=self.number_cast)
 
     def __floordiv__(self, other):
+        assert_class(Number, self, other)
         res = self.__truediv__(other)
         return res.__floor__()
 
     def __mod__(self, other):
+        assert_class(Number, self, other)
         (lcm, a_num, b_num) = Number.normalise(self, other)
         return Number(a_num % b_num, lcm, number_cast=self.number_cast)
 
     def __divmod__(self, other):
+        assert_class(Number, self, other)
         div = self // other
         mod = self % other
         return (div, mod)
 
     def __pow__(self, other, modulo=None):
+        assert_class(Number, self, other)
         if other.to_decimal() < 0:
             res = Number(pow(self.den, -other.to_decimal()), pow(self.num, -other.to_decimal()), number_cast=self.number_cast)
         else:
@@ -134,15 +151,20 @@ class Number:
 
 
     def __neg__(self):
+        assert_class(Number, self)
         return Number(-self.num, self.den, skip_checks=True, number_cast=self.number_cast)
 
     def __pos__(self):
+        assert_class(Number, self)
         return self
 
     def __abs__(self):
+        assert_class(Number, self)
         return Number(abs(self.num), self.den, skip_checks=True, number_cast=self.number_cast)
 
     def log(self, base=None):
+        assert_class(Number, self)
+        assert_optional_class((float, int), base)
         log = self.num.ln() - self.den.ln()
         if base is None:
             return Number(log, number_cast=self.number_cast)
@@ -152,51 +174,67 @@ class Number:
 
 
     def to_decimal(self):
+        assert_class(Number, self)
         return self.num / self.den
 
     def __complex__(self):
+        assert_class(Number, self)
         return complex(self.to_decimal())
 
     def __int__(self):
+        assert_class(Number, self)
         return int(self.to_decimal())
 
     def __float__(self):
+        assert_class(Number, self)
         return float(self.to_decimal())
 
 
     def __round__(self, ndigits=0):
+        assert_class(Number, self)
+        assert_optional_class(int, ndigits)
         return Number(round(self.to_decimal(), ndigits), number_cast=self.number_cast)
 
     def __trunc__(self):
+        assert_class(Number, self)
         return Number(Decimal(math.trunc(self.to_decimal())), Decimal(1), skip_checks=True, number_cast=self.number_cast)
 
     def __floor__(self):
+        assert_class(Number, self)
         return Number(Decimal(math.floor(self.to_decimal())), Decimal(1), skip_checks=True, number_cast=self.number_cast)
 
     def __ceil__(self):
+        assert_class(Number, self)
         return Number(Decimal(math.ceil(self.to_decimal())), Decimal(1), skip_checks=True, number_cast=self.number_cast)
 
 
     def __lt__(self, other):
+        assert_class(Number, self, other)
         return self.to_decimal() < other.to_decimal()
 
     def __le__(self, other):
+        assert_class(Number, self, other)
         return self.to_decimal() <= other.to_decimal()
 
     def __eq__(self, other):
+        assert_class(Number, self, other)
         return self.to_decimal() == other.to_decimal()
 
     def __ne__(self, other):
+        assert_class(Number, self, other)
         return self.to_decimal() != other.to_decimal()
 
     def __gt__(self, other):
+        assert_class(Number, self, other)
         return self.to_decimal() > other.to_decimal()
 
     def __ge__(self, other):
+        assert_class(Number, self, other)
         return self.to_decimal() >= other.to_decimal()
 
 
     def __hash__(self):
+        assert_class(Number, self)
         return hash((self.num, self.den))
 
 

@@ -1,8 +1,12 @@
 #!/usr/bin/python3
 
 from testrunner import *
+
+from modularcalculator.services.typechecking import *
+
 from testnumber import *
 from testerrorhandling import *
+from testtypechecking import *
 
 from arrays.arrayfunctions import *
 from arrays.arrays import *
@@ -46,5 +50,7 @@ from units.unitfunctions import *
 from units.units import *
 from units.unitsymbols import *
 
+
+enable_type_checking()
 
 execute_tests()
