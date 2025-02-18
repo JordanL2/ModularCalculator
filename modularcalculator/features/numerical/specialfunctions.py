@@ -186,7 +186,6 @@ class SpecialFunctionsFeature(Feature):
         af('poch', "Gamma and related functions - Pochhammer symbol", ['z', 'm'])
 
         af('lpmv', "Legendre functions - Associated Legendre function of integer order and real degree", ['m', 'v', 'x'])
-        af('sph_harm', "Legendre functions - Compute spherical harmonics", ['m', 'n', 'theta', 'phi'])
 
         af('hyp2f1', "Hypergeometric functions - Gauss hypergeometric function 2F1(a, b; c; z)", ['a', 'b', 'c', 'z'])
         af('hyp1f1', "Hypergeometric functions - Confluent hypergeometric function 1F1", ['a', 'b', 'x'])
