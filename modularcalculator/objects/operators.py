@@ -364,6 +364,7 @@ class Operation:
     def convert_numbers(self, calculator, values):
         new_values = values.copy()
         number_cast = None
+        set_number_cast = False
 
         # If an input is declared it can be a number, and it contains a numerical value, convert it to a number
         for restriction in self.value_restrictions:
@@ -379,8 +380,9 @@ class Operation:
                         # This input is declared it can be a number, check it contains a number
                         if calculator.validate_number(values[i]):
                             num = calculator.number(values[i])
-                            if number_cast is None:
+                            if set_number_cast is False:
                                 number_cast = num.number_cast
+                                set_number_cast = True
                             new_values[i] = num
 
         return new_values, number_cast

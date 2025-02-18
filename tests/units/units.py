@@ -167,7 +167,7 @@ class TestUnitsUnits(CalculatorTestCase):
 
         { 'test': "orbitheight = 36000km\nearthmass = 5.97237e24kg\nearthradius = 6378.1km\ngm = G earthmass\norbitradius = earthradius + orbitheight\ntime = 2 pi (orbitradius^3 / gm)^0.5\ntime to hours",
             'cast': str,
-            'expected': ('2.411684727174723952983470211019E1', 'hours') },
+            'expected': ('24.116847271747239529834702110187', 'hours') },
 
         { 'test': r"gm = G * 5.97237e24kg", 'expected': (Number('398600751696000'), 'meters^3/second^2') },
     ]
