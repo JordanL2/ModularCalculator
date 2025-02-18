@@ -111,7 +111,7 @@ class RegexFeature(Feature):
 
     def func_regexsub(self, vals, units, refs, flags):
         if len(vals) == 4:
-            return OperationResult(re.subn(StringsFeature.string(self, vals[1]), StringsFeature.string(self, vals[2]), StringsFeature.string(self, vals[0]), int(vals[3]))[0])
+            return OperationResult(re.subn(StringsFeature.string(self, vals[1]), StringsFeature.string(self, vals[2]), StringsFeature.string(self, vals[0]), count=int(vals[3]))[0])
         elif len(vals) == 3:
             return OperationResult(re.sub(StringsFeature.string(self, vals[1]), StringsFeature.string(self, vals[2]), StringsFeature.string(self, vals[0])))
         else:
