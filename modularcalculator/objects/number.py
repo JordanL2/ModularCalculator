@@ -240,7 +240,7 @@ class Number:
 
     def set_precision(total, decimal_places):
         getcontext().prec = total
-        NUMBER['decimal_places'] = decimal_places
+        NUMBER['decimal_places'] = min(decimal_places, total - 1)
 
     def set_rounding(rounding):
         getcontext().rounding = getattr(import_module('decimal'), rounding)
