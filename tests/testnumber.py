@@ -13,7 +13,7 @@ class TestNumber(unittest.TestCase):
         return None
 
     def setUp(self):
-        Number.set_precision(100, 30)
+        Number.set_precision(70, 30)
         Number.set_rounding('ROUND_DOWN')
 
     def tearDown(self):

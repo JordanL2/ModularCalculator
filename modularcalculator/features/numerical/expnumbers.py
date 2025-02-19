@@ -87,7 +87,7 @@ class ExpNumbersFeature(Feature):
         if num.to_decimal() == 0:
             return "0{}0".format(symbol)
         if places is None:
-            places = '.' + str(self.number_prec)
+            places = '.' + str(self.number_size_after_decimal_point_get())
         else:
             places = '.' + str(places.to_string())
         scientificformat = '{0:' + places + 'E}'

@@ -238,9 +238,9 @@ class Number:
         return hash((self.num, self.den))
 
 
-    def set_precision(total, decimal_places):
-        getcontext().prec = total
-        NUMBER['decimal_places'] = min(decimal_places, total - 1)
+    def set_precision(number_size_before_decimal_point, number_size_after_decimal_point):
+        getcontext().prec = number_size_before_decimal_point + number_size_after_decimal_point
+        NUMBER['decimal_places'] = number_size_after_decimal_point
 
     def set_rounding(rounding):
         getcontext().rounding = getattr(import_module('decimal'), rounding)

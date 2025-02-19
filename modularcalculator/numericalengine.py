@@ -11,8 +11,8 @@ class NumericalEngine(Engine):
     def __init__(self):
         super().__init__()
 
-        self.number_size = 100
-        self.number_prec = 30
+        self.number_size_before_decimal_point = 70
+        self.number_size_after_decimal_point = 30
         self.update_engine_prec()
         self.number_set_rounding('ROUND_HALF_UP')
 
@@ -22,22 +22,22 @@ class NumericalEngine(Engine):
         self.add_validator('number_int', 'integer', NumericalEngine.validate_number_int, True)
         self.add_validator('number_int_positive', 'positive integer', NumericalEngine.validate_number_int_positive, True)
 
-    def number_size_set(self, size):
-        self.number_size = size
+    def number_size_before_decimal_point_set(self, size):
+        self.number_size_before_decimal_point = size
         self.update_engine_prec()
 
-    def number_size_get(self):
-        return self.number_size
+    def number_size_before_decimal_point_get(self):
+        return self.number_size_before_decimal_point
 
-    def number_prec_set(self, prec):
-        self.number_prec = prec
+    def number_size_after_decimal_point_set(self, prec):
+        self.number_size_after_decimal_point = prec
         self.update_engine_prec()
 
-    def number_prec_get(self):
-        return self.number_prec
+    def number_size_after_decimal_point_get(self):
+        return self.number_size_after_decimal_point
 
     def update_engine_prec(self):
-        Number.set_precision(self.number_size, self.number_prec)
+        Number.set_precision(self.number_size_before_decimal_point, self.number_size_after_decimal_point)
 
     def number_set_rounding(self, rounding):
         Number.set_rounding(rounding)

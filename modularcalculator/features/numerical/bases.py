@@ -114,7 +114,7 @@ class BasesFeature(Feature):
 
         string = ''
         places = 0
-        while power >= 0 or (val.to_decimal() > 0 and places < self.number_prec):
+        while power >= 0 or (val.to_decimal() > 0 and places < self.number_size_after_decimal_point_get()):
             if power == -1:
                 string += '.'
             base_power = Number(base) ** Number(power)
