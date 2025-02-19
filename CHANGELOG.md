@@ -4,6 +4,7 @@
 - sp_sph_harm has been removed for now as it's deprecated in scipy
 - Number Types and Unit Systems are actual objects, rather than strings
 - Additional input number type checks (e.g. positivity, integers) for operations that need them
+- Raise a NumberTooBigException when trying to render a number that is too big for the maximum Number size/prec
 - Fixed the number type of an operation never being decimal, even when the first parameter is decimal
 - Fixed setting the number of decimal places before decimal point, correctly sets the total precision so we don't have more decimal places than total size
 

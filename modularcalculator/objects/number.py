@@ -12,6 +12,12 @@ NUMBER = {
 }
 
 
+class NumberTooBigException(Exception):
+
+    def __init__(self):
+        super().__init__("Number too big for maximum Number size and precision")
+
+
 class Number:
 
     def __init__(self, num, den=None, skip_checks=False, number_cast=None):
@@ -74,7 +80,10 @@ class Number:
         if dec_num == 0:
             # This is to avoid getting '-0'
             dec_num = 0
-        val = "{0:f}".format(round(dec_num, NUMBER['decimal_places']))
+        try:
+            val = "{0:f}".format(round(dec_num, NUMBER['decimal_places']))
+        except InvalidOperation:
+            raise NumberTooBigException()
         if val.find('.') > -1:
             val = val.rstrip('0')
             if val[-1] == '.':
