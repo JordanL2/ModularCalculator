@@ -37,6 +37,8 @@ class TestNumericalBasicArithmetic(CalculatorTestCase):
         { 'test': '4 ^ -1', 'expected': Number("0.25") },
         { 'test': '-4 ^ -1', 'expected': Number("-0.25") },
         { 'test': '43535.4346 ^ 0', 'expected': Number(1) },
+
+        { 'test': '2^2^2^2', 'expected': Number(65536) },
     ]
 
     def category(self):

@@ -33,7 +33,7 @@ class BasicArithmeticFeature(Feature):
             1,
             1,
             [['number', 'unit'], 'number']),
-        {'units_normalise': False})
+        {'units_normalise': False, 'rtl': True})
 
         calculator.add_op(OperatorDefinition(
             'Numerical',
