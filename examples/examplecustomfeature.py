@@ -19,7 +19,7 @@ class ExampleCustomFeature(Feature):
         return 'Example Custom Feature'
 
     def desc():
-        return 'Parses "hello" as the number 123'
+        return 'Interprets "hello" as the number 123'
 
     def dependencies():
         return ['numerical.decimalnumbers']
@@ -33,12 +33,12 @@ class ExampleCustomFeature(Feature):
         calculator.parser_map.insert(calculator.parser_map.index('var'), 'hello')
 
         calculator.add_parser('hello', cls.parse_hello)
-    
+
     def parse_hello(self, expr, i, items, flags):
         next = expr[i:]
         # If the next 5 characters are 'hello':
         if len(next) >= 5 and next.startswith('hello'):
-        	# Returns one item, with original text = 'hello', value is the decimal number 123. Total parse length is 5. No return flags.
-            return [LiteralItem('hello', Decimal('123'))], 5, None
+            # Returns one item, with original text = 'hello', value is the number 123. Total parse length is 5. No return flags.
+            return [LiteralItem('hello', Number('123'))], 5, None
         # Otherwise, nothing found by the parser this time
         return None, None, None

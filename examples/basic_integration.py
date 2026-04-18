@@ -11,10 +11,10 @@ response = c.calculate('3 ^ 2')
 # Display the value of the first result in the response (there will be only one).
 # Take a look at objects/api.py for other information in the response, such as
 # result units, items parsed, time taken etc.
-print(response.results[0].value)
+print(response.results[0].value.to_string(c))
 
 # Initially empty calculator with features manually installed
 c = ModularCalculator()
 c.install_features(['numerical.basicarithmetic', 'numerical.decimalnumbers'])
 response = c.calculate('2+3')
-print(response.results[0].value)
+print(response.results[0].value.to_string(c))

@@ -45,13 +45,15 @@ Otherwise, initialise an empty ModularCalculator and add the features you want, 
 c = ModularCalculator()
 c.install_features(['numerical.basicarithmetic', 'numerical.decimalnumbers', 'structure.operators'])
 ```
-Each feature's dependencies will also be installed automatically. The order of the features doesn't matter, if each feature's dependencies and installation order hints have been defined correctly they will be installed in the correct order. Because installation order matters, it is best to install all your features in one call to add_features().
+Each feature's dependencies will also be installed automatically. The order of the features doesn't matter, if each feature's dependencies and installation order hints have been defined correctly they will be installed in the correct order. Because installation order matters, it is best to install all your features in one call to install_features().
 
 Then, call calculate() with the expression to be calculated. This returns a response object, containing a list of results. Since this is a single statement, there is only one result here.
 
+In order to convert a value to a string, you need to call `.to_string(calculator)` on it to use the calculator's rounding options when rendering it.
+
 ```
 response = c.calculate('2+3')
-print(response.results[0].value)
+print(response.results[0].value.to_string(c))
 ```
 
 These examples are available in examples/basic_integration.py. See examples/advanced_integration.py for a guide to adding custom features.
