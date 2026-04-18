@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.5.1
+- Power operand now evaluates right-to-left
+- Fixed tests for Special Functions for usage with SciPy 1.17
+
 ## 1.5.0
 - sp_sph_harm has been removed for now as it's deprecated in scipy
 - Number Types and Unit Systems are actual objects, rather than strings
